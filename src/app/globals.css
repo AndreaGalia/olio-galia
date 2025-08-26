@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+@theme {
+  --color-olive: #556B2F;      /* verde oliva più scuro e profondo */
+  --color-salvia: #789262;     /* verde salvia intenso */
+  --color-sabbia: #D6C7A1;     /* sabbia, neutro ma meno giallo */
+  --color-beige: #ECE8DF;      /* beige chiaro per sfondi */
+  --color-nocciola: #B2A98C;   /* nocciola, neutro e caldo */
+
+  --font-family-serif: "Cormorant Garamond", serif;
+}
