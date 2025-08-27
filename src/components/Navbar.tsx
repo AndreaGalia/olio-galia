@@ -3,10 +3,14 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useCart } from '@/contexts/CartContext'; // ← Importa il context
 
 export default function Navbar() {
-const [isMenuOpen, setIsMenuOpen] = useState(false);
-const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const { getTotalItems } = useCart(); // ← Usa il context
+  
+  const totalItems = getTotalItems();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -34,8 +38,9 @@ const pathname = usePathname();
               </Link>
             </div>
 
-            {/* Menu Desktop */}
-            <div className="hidden lg:flex flex-1 justify-end">
+            {/* Menu Desktop + Carrello */}
+            <div className="hidden lg:flex flex-1 justify-end items-center gap-6">
+              {/* Menu Items */}
               <ul className="flex gap-8 xl:gap-12 text-olive font-serif text-lg">
                 {menuItems.map((item) => (
                   <li key={item.name}>
@@ -50,24 +55,57 @@ const pathname = usePathname();
                   </li>
                 ))}
               </ul>
+              
+              {/* Carrello Desktop */}
+              <Link href="/cart" className="relative ml-4">
+                <button className="p-2 text-olive hover:text-salvia transition-colors duration-200 relative cursor-pointer">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                  </svg>
+                  {/* Badge con numero elementi */}
+                  {totalItems > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-olive text-beige text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold leading-none">
+                      {totalItems > 99 ? '99+' : totalItems}
+                    </span>
+                  )}
+                </button>
+              </Link>
             </div>
 
-            {/* Hamburger Button */}
-            <button 
-              onClick={toggleMenu}
-              className="lg:hidden flex flex-col gap-1.5 w-8 h-8 justify-center items-center z-50 relative"
-              aria-label="Toggle menu"
-            >
-              <span className={`w-6 h-0.5 bg-olive transition-all duration-300 ${
-                isMenuOpen ? 'rotate-45 translate-y-2' : ''
-              }`}></span>
-              <span className={`w-6 h-0.5 bg-olive transition-all duration-300 ${
-                isMenuOpen ? 'opacity-0' : ''
-              }`}></span>
-              <span className={`w-6 h-0.5 bg-olive transition-all duration-300 ${
-                isMenuOpen ? '-rotate-45 -translate-y-2' : ''
-              }`}></span>
-            </button>
+            {/* Carrello Mobile + Hamburger Button */}
+            <div className="lg:hidden flex items-center gap-3">
+              {/* Carrello Mobile */}
+              <Link href="/cart" className="relative">
+                <button className="p-2 text-olive hover:text-salvia transition-colors duration-200 relative">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                  </svg>
+                  {/* Badge con numero elementi */}
+                  {totalItems > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-olive text-beige text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold leading-none">
+                      {totalItems > 99 ? '99+' : totalItems}
+                    </span>
+                  )}
+                </button>
+              </Link>
+
+              {/* Hamburger Button */}
+              <button 
+                onClick={toggleMenu}
+                className="flex flex-col gap-1.5 w-8 h-8 justify-center items-center z-50 relative"
+                aria-label="Toggle menu"
+              >
+                <span className={`w-6 h-0.5 bg-olive transition-all duration-300 ${
+                  isMenuOpen ? 'rotate-45 translate-y-2' : ''
+                }`}></span>
+                <span className={`w-6 h-0.5 bg-olive transition-all duration-300 ${
+                  isMenuOpen ? 'opacity-0' : ''
+                }`}></span>
+                <span className={`w-6 h-0.5 bg-olive transition-all duration-300 ${
+                  isMenuOpen ? '-rotate-45 -translate-y-2' : ''
+                }`}></span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -113,6 +151,22 @@ const pathname = usePathname();
                   </li>
                 ))}
               </ul>
+
+              {/* Carrello nel menu mobile (alternativo) */}
+              <div className="mt-8 pt-6 border-t border-olive/20">
+                <Link 
+                  href="/cart"
+                  className="flex items-center gap-3 text-olive hover:text-salvia transition-colors duration-200 py-2"
+                  onClick={toggleMenu}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                  </svg>
+                  <span className="text-lg font-serif">
+                    Carrello {totalItems > 0 && `(${totalItems})`}
+                  </span>
+                </Link>
+              </div>
             </nav>
 
             {/* Footer del menu mobile */}

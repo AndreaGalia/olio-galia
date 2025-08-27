@@ -94,7 +94,7 @@ ${customerName}`;
           <h3 className="text-xl md:text-2xl font-serif text-olive">Richiedi Preventivo</h3>
           <button 
             onClick={onClose}
-            className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-nocciola hover:text-olive transition-colors text-lg md:text-xl"
+            className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-nocciola hover:text-olive transition-colors text-lg md:text-xl cursor-pointer"
           >
             ✕
           </button>
@@ -241,13 +241,13 @@ ${customerName}`;
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-6 py-3 md:py-4 border-2 border-olive/20 text-nocciola rounded-lg hover:bg-olive/10 transition-colors text-base md:text-lg"
+              className="flex-1 px-6 py-3 md:py-4 border-2 border-olive/20 text-nocciola rounded-lg hover:bg-olive/10 transition-colors text-base md:text-lg cursor-pointer"
             >
               Annulla
             </button>
             <button
               type="submit"
-              className={`flex-1 px-6 py-3 md:py-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-3 text-base md:text-lg ${
+              className={`flex-1 px-6 py-3 md:py-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-3 text-base md:text-lg cursor-pointer ${
                 submissionMethod === 'whatsapp' 
                   ? 'bg-gradient-to-r from-green-600 to-green-500 text-white hover:shadow-lg' 
                   : 'bg-gradient-to-r from-olive to-salvia text-white hover:shadow-lg'
