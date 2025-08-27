@@ -3,11 +3,17 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { use } from "react";
 import { BulkProposalSection } from '@/components/BulkProposalModal';
+import { useCart } from '@/contexts/CartContext'; // ← Importa il context
+import AddToCartButton from '@/components/AddToCartButton';
 
 export default function ProductDetailPage({ params }: { params: Promise<{ productId: string }> }) {
   const { productId } = use(params);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
+
+  // ← Ottieni le funzioni del carrello
+  const { addToCart } = useCart();
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   const products = [
     {
@@ -148,6 +154,18 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
     return <div>Prodotto non trovato</div>;
   }
 
+  const handleAddToCart = () => {
+    if (product.inStock && !isAddingToCart) {
+      setIsAddingToCart(true);
+      addToCart(product.id, quantity);
+      
+      // Riporta il bottone allo stato normale dopo 2 secondi
+      setTimeout(() => {
+        setIsAddingToCart(false);
+      }, 2000);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige">
       {/* Breadcrumb */}
@@ -187,7 +205,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
-                  className={`aspect-square bg-white rounded-lg p-2 border-2 transition-all duration-300 ${
+                  className={`aspect-square bg-white rounded-lg p-2 border-2 transition-all duration-300 cursor-pointer ${
                     selectedImage === index ? 'border-olive shadow-md' : 'border-olive/10'
                   }`}
                 >
@@ -269,21 +287,19 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
                 </div>
               </div>
               <div className="flex gap-3">
-                <button 
-                  disabled={!product.inStock}
-                  className="flex-1 bg-gradient-to-r from-olive to-salvia text-beige py-4 rounded-full font-medium hover:shadow-xl transition-all duration-300 hover:scale-105 text-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-                  </svg>
-                  Aggiungi al Carrello
-                </button>
-                
-                <button className="px-6 py-4 bg-olive/10 text-olive hover:bg-olive hover:text-beige transition-all duration-300 rounded-full border border-olive/20 cursor-pointer">
+              <AddToCartButton
+                onAddToCart={handleAddToCart}
+                disabled={!product.inStock}
+                quantity={quantity}
+                size="full"  // ← Versione completa (default)
+              />
+                <Link href="/cart"
+                  className="px-6 py-4 bg-olive/10 text-olive hover:bg-olive hover:text-beige transition-all duration-300 rounded-full border border-olive/20 cursor-pointer"
+                  >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                  </svg>
-                </button>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                    </svg>
+                </Link>
               </div>
             </div>
 
