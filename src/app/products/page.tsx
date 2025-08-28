@@ -1,100 +1,81 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from "next/image";
 import Link from 'next/link';
 import { useCart } from '@/contexts/CartContext';
 import AddToCartButton from '@/components/AddToCartButton';
+import type { Product, ProductsData, Category } from '@/types/products';
 
 export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState('tutti');
+  const [productsData, setProductsData] = useState<ProductsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
   const { addToCart } = useCart();
 
-  const products = [
-    {
-      id: "1",
-      name: "Bottiglia Premium Oil",
-      category: "premium",
-      description: "La nostra selezione più pregiata in formato esclusivo. Olio extravergine da olive centenarie, perfetto per degustazioni e regali raffinati.",
-      longDescription: "Questo olio rappresenta l'eccellenza della produzione Galia. Realizzato esclusivamente con olive secolari coltivate nelle nostre terre più antiche, viene estratto con tecniche tradizionali e confezionato in eleganti bottiglie da collezione.",
-      details: "Acidità < 0,2% - Limited Edition - Numerazione progressiva",
-      price: "€89,90",
-      originalPrice: "€99,90",
-      size: "75ml",
-      image: "/bottle-oil.png",
-      badge: "Limited Edition",
-      color: "olive",
-      inStock: true,
-      features: [
-        "Olive centenarie selezionate",
-        "Estrazione a freddo tradizionale",
-        "Bottiglia numerata e sigillata",
-        "Packaging regalo incluso",
-        "Certificato di autenticità"
-      ],
-      bestFor: "Degustazioni, regali esclusivi, collezione"
-    },
-    {
-      id: "2",
-      name: "Beauty Oil",
-      category: "beauty",
-      description: "Olio massaggiante premium per la cura della pelle. Formula esclusiva con olio extravergine arricchito di vitamine naturali.",
-      longDescription: "Il nostro Beauty Oil rappresenta l'innovazione nel settore benessere. Formulato con il nostro olio extravergine di oliva più puro e arricchito con estratti naturali di lavanda e vitamina E.",
-      details: "Dermatologicamente testato - Ingredienti 100% naturali - Cruelty free",
-      price: "€34,90",
-      originalPrice: null,
-      size: "100ml",
-      image: "/bottle-oil.png",
-      badge: "Premium Care",
-      color: "salvia",
-      inStock: true,
-      features: [
-        "Olio extravergine purissimo",
-        "Arricchito con vitamina E",
-        "Estratto naturale di lavanda",
-        "Dermatologicamente testato",
-        "Packaging sostenibile"
-      ],
-      bestFor: "Massaggi, cura della pelle, benessere"
-    },
-    {
-      id: "3",
-      name: "Latta Olio da 5L",
-      category: "famiglia",
-      description: "La scelta ideale per le famiglie e i veri intenditori. Formato convenienza del nostro olio extravergine classico in latta protettiva.",
-      longDescription: "Il formato da 5 litri in latta è perfetto per chi non vuole rinunciare alla qualità del nostro olio extravergine nella vita quotidiana.",
-      details: "Rapporto qualità-prezzo eccellente - Latta protettiva anti-luce - Uso quotidiano",
-      price: "€79,90",
-      originalPrice: "€89,90",
-      size: "5L",
-      image: "/bottle-oil.png",
-      badge: "Famiglia",
-      color: "nocciola",
-      inStock: true,
-      features: [
-        "Formato convenienza famiglia",
-        "Latta protettiva premium",
-        "Olio extravergine classico",
-        "Perfetto per uso quotidiano",
-        "Risparmio garantito"
-      ],
-      bestFor: "Famiglie, uso quotidiano, ristoranti"
+  // Carica i prodotti dall'API
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const response = await fetch('/api/products');
+        if (!response.ok) {
+          throw new Error('Failed to fetch products');
+        }
+        const data: ProductsData = await response.json();
+        setProductsData(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Unknown error');
+      } finally {
+        setLoading(false);
+      }
     }
-  ];
 
-  const categories = [
-    { id: 'tutti', name: 'Tutti i Prodotti' },
-    { id: 'premium', name: 'Premium Collection' },
-    { id: 'beauty', name: 'Beauty & Care' },
-    { id: 'famiglia', name: 'Formato Famiglia' }
+    fetchProducts();
+  }, []);
+
+  // Categorie con "tutti" aggiunto
+  const allCategories = [
+    { id: 'tutti', name: 'Tutti i Prodotti', description: '' },
+    ...(productsData?.categories || [])
   ];
 
   const filteredProducts = selectedCategory === 'tutti' 
-    ? products 
-    : products.filter(product => product.category === selectedCategory);
+    ? productsData?.products || []
+    : productsData?.products.filter(product => product.category === selectedCategory) || [];
 
   const handleAddToCart = (productId: string) => {
     addToCart(productId, 1);
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-olive/20 border-t-olive rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-olive text-lg">Caricamento prodotti...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 text-lg mb-4">Errore: {error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="px-6 py-3 bg-olive text-beige rounded-full hover:bg-olive/80 transition-colors"
+          >
+            Riprova
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige">
@@ -126,7 +107,7 @@ export default function ProductsPage() {
 
           {/* Filtri categoria */}
           <div className="flex flex-wrap justify-center gap-3 mb-12 sm:mb-16 animate-fade-in-slow">
-            {categories.map((category) => (
+            {allCategories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
@@ -146,94 +127,109 @@ export default function ProductsPage() {
       {/* Griglia prodotti */}
       <section className="pb-16 sm:pb-20 lg:pb-24">
         <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {filteredProducts.map((product, index) => (
-              <div 
-                key={product.id}
-                className="group relative bg-white/95 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] border border-olive/5 animate-fade-in-card"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                {/* Badge */}
-                <div className={`absolute -top-2 -right-2 px-3 py-1 rounded-full text-xs font-bold text-white shadow-md rotate-12 z-10 ${
-                  product.color === 'olive' ? 'bg-olive' : 
-                  product.color === 'salvia' ? 'bg-salvia' : 'bg-nocciola'
-                }`}>
-                  {product.badge}
-                </div>
-
-                {/* Sconto se presente */}
-                {product.originalPrice && (
-                  <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold z-10">
-                    SCONTO
-                  </div>
-                )}
-
-                {/* Immagine prodotto */}
-                <div className="relative mb-6 flex justify-center">
-                  <div className="w-full h-48 relative rounded-xl overflow-hidden bg-gradient-to-br from-sabbia/30 to-beige/50">
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      fill
-                      className="object-contain group-hover:scale-105 transition-transform duration-300"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                  </div>
-                </div>
-
-                {/* Contenuto */}
-                <div className="space-y-4">
-                  <div className="text-center">
-                    <h3 className="text-lg sm:text-xl font-serif text-olive mb-2 leading-tight">
-                      {product.name}
-                    </h3>
-                    <p className="text-sm text-nocciola leading-relaxed px-2">
-                      {product.description}
-                    </p>
+          {filteredProducts.length === 0 ? (
+            <div className="text-center py-16">
+              <p className="text-nocciola text-lg">Nessun prodotto trovato per questa categoria.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+              {filteredProducts.map((product, index) => (
+                <div 
+                  key={product.id}
+                  className="group relative bg-white/95 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] border border-olive/5 animate-fade-in-card"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  {/* Badge */}
+                  <div className={`absolute -top-2 -right-2 px-3 py-1 rounded-full text-xs font-bold text-white shadow-md rotate-12 z-10 ${
+                    product.color === 'olive' ? 'bg-olive' : 
+                    product.color === 'salvia' ? 'bg-salvia' : 'bg-nocciola'
+                  }`}>
+                    {product.badge}
                   </div>
 
-                  {/* Caratteristiche principali */}
-                  <div className="text-xs text-nocciola/80 italic border-t border-olive/10 pt-3 px-2">
-                    {product.details}
-                  </div>
+                  {/* Sconto se presente */}
+                  {product.originalPrice && product.originalPrice !== 'null' && (
+                    <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold z-10">
+                      SCONTO
+                    </div>
+                  )}
 
-                  {/* Prezzo */}
-                  <div className="flex justify-center items-center gap-2 pt-3 border-t border-olive/10">
-                    <div className="text-center">
-                      {product.originalPrice && (
-                        <div className="text-sm text-nocciola/60 line-through mb-1">
-                          {product.originalPrice}
-                        </div>
-                      )}
-                      <div className="text-2xl font-serif font-bold text-olive">
-                        {product.price}
-                      </div>
-                      <div className="text-sm text-nocciola mt-1">
-                        {product.size}
-                      </div>
+                  {/* Immagine prodotto */}
+                  <div className="relative mb-6 flex justify-center">
+                    <div className="w-full h-48 relative rounded-xl overflow-hidden bg-gradient-to-br from-sabbia/30 to-beige/50">
+                      <Image
+                        src={product.images[0]}
+                        alt={product.name}
+                        fill
+                        className="object-contain group-hover:scale-105 transition-transform duration-300"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
                     </div>
                   </div>
 
-                  {/* Pulsanti azione */}
-                  <div className="flex gap-2 animate-slide-up-buttons">
-                    <AddToCartButton
-                      onAddToCart={() => handleAddToCart(product.id)}
-                      disabled={!product.inStock}
-                      quantity={1}
-                      size="compact"
-                    />
-                    
-                    <Link 
-                      href={`/products/${product.id}`}
-                      className="flex-1 bg-olive/10 text-olive py-3 px-4 rounded-full font-medium hover:bg-olive/20 hover:shadow-lg transition-all duration-300 text-base border border-olive/20 hover:border-olive/40 flex items-center justify-center hover:scale-105"
-                    >
-                      Dettagli
-                    </Link>
+                  {/* Contenuto */}
+                  <div className="space-y-4">
+                    <div className="text-center">
+                      <h3 className="text-lg sm:text-xl font-serif text-olive mb-2 leading-tight">
+                        {product.name}
+                      </h3>
+                      <p className="text-sm text-nocciola leading-relaxed px-2">
+                        {product.description}
+                      </p>
+                    </div>
+
+                    {/* Caratteristiche principali */}
+                    <div className="text-xs text-nocciola/80 italic border-t border-olive/10 pt-3 px-2">
+                      {product.details}
+                    </div>
+
+                    {/* Prezzo */}
+                    <div className="flex justify-center items-center gap-2 pt-3 border-t border-olive/10">
+                      <div className="text-center">
+                        {product.originalPrice && product.originalPrice !== 'null' && (
+                          <div className="text-sm text-nocciola/60 line-through mb-1">
+                            €{product.originalPrice}
+                          </div>
+                        )}
+                        <div className="text-2xl font-serif font-bold text-olive">
+                          €{product.price}
+                        </div>
+                        <div className="text-sm text-nocciola mt-1">
+                          {product.size}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Stock info */}
+                    <div className="text-center text-xs">
+                      {product.inStock ? (
+                        <span className="text-green-600">✓ Disponibile ({product.stockQuantity} pezzi)</span>
+                      ) : (
+                        <span className="text-red-600">✗ Esaurito</span>
+                      )}
+                    </div>
+
+                    {/* Pulsanti azione */}
+                    <div className="flex gap-2 animate-slide-up-buttons">
+                      <AddToCartButton
+                        onAddToCart={() => handleAddToCart(product.id)}
+                        disabled={!product.inStock}
+                        quantity={1}
+                        size="compact"
+                      />
+                      
+                      <Link 
+                        href={`/products/${product.id}`}
+                        className="flex-1 bg-olive/10 text-olive py-3 px-4 rounded-full font-medium hover:bg-olive/20 hover:shadow-lg transition-all duration-300 text-base border border-olive/20 hover:border-olive/40 flex items-center justify-center hover:scale-105"
+                      >
+                        Dettagli
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
