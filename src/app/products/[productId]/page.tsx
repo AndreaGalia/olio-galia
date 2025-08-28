@@ -1,170 +1,105 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { use } from "react";
 import { BulkProposalSection } from '@/components/BulkProposalModal';
-import { useCart } from '@/contexts/CartContext'; // ← Importa il context
+import { useCart } from '@/contexts/CartContext';
 import AddToCartButton from '@/components/AddToCartButton';
+import type { Product, ProductsData } from '@/types/products';
 
 export default function ProductDetailPage({ params }: { params: Promise<{ productId: string }> }) {
   const { productId } = use(params);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
-
-  // ← Ottieni le funzioni del carrello
-  const { addToCart } = useCart();
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  
+  // Stati per i dati
+  const [productsData, setProductsData] = useState<ProductsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const products = [
-    {
-      id: "1",
-      name: "Bottiglia Premium Oil",
-      category: "Premium Collection",
-      description: "La nostra selezione più pregiata in formato esclusivo...",
-      longDescription:
-        "Questo olio rappresenta l'eccellenza della produzione Galia...",
-      details: "Acidità < 0,2% - Limited Edition - Numerazione progressiva",
-      price: "€89,90",
-      originalPrice: "€99,90",
-      size: "75ml",
-      inStock: true,
-      stockQuantity: 15,
-      badge: "Limited Edition",
-      color: "olive",
-      images: [
-        "/bottle-oil.png",
-        "/bottle-oil.png",
-        "/bottle-oil.png",
-        "/bottle-oil.png",
-      ],
-      features: [
-        "Olive centenarie selezionate a mano",
-        "Estrazione a freddo tradizionale sotto 27°C",
-        "Bottiglia numerata e sigillata individualmente",
-        "Packaging regalo premium incluso",
-        "Certificato di autenticità firmato",
-        "Acidità inferiore allo 0,2%",
-        "Polifenoli > 250 mg/kg",
-        "Produzione limitata a 500 bottiglie/anno",
-      ],
-      nutritionalInfo: {
-        energy: "3700 kJ / 900 kcal",
-        fat: "100g",
-        saturatedFat: "14g",
-        carbs: "0g",
-        protein: "0g",
-        salt: "0g",
-      },
-      bestFor: "Degustazioni esclusive, regali di prestigio, collezione privata",
-      origin: "Sicilia, Italia - Contrada Monte Galia",
-      harvest: "Ottobre 2024 - Raccolta manuale notturna",
-      processing: "Frantoio aziendale - Estrazione continua a freddo",
-      awards: [
-        "Medaglia d'Oro - Concorso Internazionale NYIOOC 2024",
-        "Premio Eccellenza - Gambero Rosso 2024",
-        "3 Foglie - Guida agli Extravergini Slow Food 2024",
-      ],
-    },
-    {
-      id: "2",
-      name: "Beauty Oil",
-      category: "Linea Benessere",
-      description:
-        "Olio extravergine delicato pensato per la cura quotidiana del corpo e dei capelli.",
-      longDescription:
-        "Un olio leggero, ricco di vitamina E e polifenoli, ideale come trattamento naturale per la pelle e i capelli. Estratto a freddo da olive raccolte precocemente, mantiene tutte le proprietà benefiche senza appesantire.",
-      details: "Flacone in vetro scuro con contagocce",
-      price: "€34,90",
-      originalPrice: null,
-      size: "100ml",
-      inStock: true,
-      stockQuantity: 40,
-      badge: "Wellness",
-      color: "salvia",
-      images: [
-        "/bottle-oil.png",
-        "/bottle-oil.png",
-        "/bottle-oil.png",
-        "/bottle-oil.png",
-      ],
-      features: [
-        "Ricco di antiossidanti naturali",
-        "Idratazione profonda senza ungere",
-        "Adatto a tutti i tipi di pelle",
-        "100% naturale e vegan friendly",
-      ],
-      nutritionalInfo: null,
-      bestFor: "Skincare, haircare, massaggi rilassanti",
-      origin: "Sicilia, Italia",
-      harvest: "2024",
-      processing: "Spremitura a freddo",
-      awards: [],
-    },
-    {
-      id: "3",
-      name: "Latta Olio da 5L",
-      category: "Formato Convenienza",
-      description:
-        "La soluzione ideale per famiglie e ristorazione, grande formato al miglior prezzo.",
-      longDescription:
-        "Latta da 5 litri di olio extravergine Galia, ottenuto da olive raccolte manualmente e lavorate in giornata. Perfetta per chi consuma olio regolarmente e cerca convenienza senza rinunciare alla qualità.",
-      details: "Latta in acciaio con tappo dosatore",
-      price: "€79,90",
-      originalPrice: "€89,90",
-      size: "5L",
-      inStock: true,
-      stockQuantity: 100,
-      badge: "Best Seller",
-      color: "nocciola",
-      images: [
-        "/bottle-oil.png",
-        "/bottle-oil.png",
-        "/bottle-oil.png",
-        "/bottle-oil.png",
-      ],
-      features: [
-        "Ottimo rapporto qualità/prezzo",
-        "Conservazione ottimale grazie al packaging",
-        "Raccolta e spremitura in giornata",
-        "Perfetta per uso familiare o professionale",
-      ],
-      nutritionalInfo: {
-        energy: "3700 kJ / 900 kcal",
-        fat: "100g",
-        saturatedFat: "14g",
-        carbs: "0g",
-        protein: "0g",
-        salt: "0g",
-      },
-      bestFor: "Famiglie, ristoranti, catering",
-      origin: "Sicilia, Italia",
-      harvest: "Ottobre 2024",
-      processing: "Frantoio aziendale - Estrazione continua",
-      awards: ["Selezione Miglior Qualità/Prezzo - 2024"],
-    },
-  ];
+  const { addToCart } = useCart();
 
-  // Trova il prodotto in base all'id passato
-  const product = products.find((p) => p.id === productId);
+  // Carica i prodotti dall'API
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const response = await fetch('/api/products');
+        if (!response.ok) {
+          throw new Error('Failed to fetch products');
+        }
+        const data: ProductsData = await response.json();
+        setProductsData(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Unknown error');
+      } finally {
+        setLoading(false);
+      }
+    }
 
-  // Prodotti correlati = tutti tranne quello selezionato
-  const relatedProducts = products.filter((p) => p.id !== productId);
+    fetchProducts();
+  }, []);
 
-  if (!product) {
-    return <div>Prodotto non trovato</div>;
-  }
+  // Trova il prodotto corrente e quelli correlati
+  const product: Product | undefined = productsData?.products.find((p) => p.id === productId);
+  const relatedProducts: Product[] = productsData?.products.filter((p) => p.id !== productId) || [];
 
   const handleAddToCart = () => {
-    if (product.inStock && !isAddingToCart) {
+    if (product?.inStock && !isAddingToCart) {
       setIsAddingToCart(true);
       addToCart(product.id, quantity);
       
-      // Riporta il bottone allo stato normale dopo 2 secondi
       setTimeout(() => {
         setIsAddingToCart(false);
       }, 2000);
     }
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-olive/20 border-t-olive rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-olive text-lg">Caricamento prodotto...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 text-lg mb-4">Errore: {error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="px-6 py-3 bg-olive text-beige rounded-full hover:bg-olive/80 transition-colors"
+          >
+            Riprova
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Product not found
+  if (!product) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-serif text-olive mb-4">Prodotto non trovato</h1>
+          <Link 
+            href="/products" 
+            className="px-6 py-3 bg-olive text-beige rounded-full hover:bg-olive/80 transition-colors inline-block"
+          >
+            Torna ai prodotti
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige">
@@ -190,7 +125,6 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
           <div className="space-y-4">
             <div className="aspect-square bg-white rounded-2xl p-8 shadow-lg border border-olive/10">
               <div className="w-full h-full bg-gradient-to-br from-sabbia/20 to-beige/30 rounded-xl flex items-center justify-center">
-                {/* Bottiglia Premium */}
                 <img 
                   src={product.images[selectedImage]} 
                   alt={product.name} 
@@ -224,7 +158,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
             <div>
               <div className="flex items-center gap-3 mb-2">
                 <span className="bg-olive/10 text-olive px-3 py-1 rounded-full text-sm font-medium">
-                  {product.category}
+                  {product.categoryDisplay}
                 </span>
                 <span className="bg-olive text-beige px-3 py-1 rounded-full text-sm font-bold">
                   {product.badge}
@@ -243,13 +177,13 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
             {/* Prezzo e quantità */}
             <div className="bg-white/80 rounded-2xl p-6 shadow-lg">
               <div className="flex items-end gap-4 mb-4">
-                {product.originalPrice && (
+                {product.originalPrice && product.originalPrice !== 'null' && (
                   <span className="text-xl text-nocciola/60 line-through">
-                    {product.originalPrice}
+                    €{product.originalPrice}
                   </span>
                 )}
                 <span className="text-4xl font-serif font-bold text-olive">
-                  {product.price}
+                  €{product.price}
                 </span>
                 <span className="text-lg text-nocciola mb-1">
                   {product.size}
@@ -270,8 +204,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
                       {quantity}
                     </span>
                     <button 
-                      onClick={() => setQuantity(quantity + 1)}
+                      onClick={() => setQuantity(Math.min(product.stockQuantity, quantity + 1))}
                       className="px-3 py-2 hover:bg-olive/10 transition-colors cursor-pointer"
+                      disabled={quantity >= product.stockQuantity}
                     >
                       +
                     </button>
@@ -287,18 +222,18 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
                 </div>
               </div>
               <div className="flex gap-3">
-              <AddToCartButton
-                onAddToCart={handleAddToCart}
-                disabled={!product.inStock}
-                quantity={quantity}
-                size="full"  // ← Versione completa (default)
-              />
+                <AddToCartButton
+                  onAddToCart={handleAddToCart}
+                  disabled={!product.inStock}
+                  quantity={quantity}
+                  size="full"
+                />
                 <Link href="/cart"
                   className="px-6 py-4 bg-olive/10 text-olive hover:bg-olive hover:text-beige transition-all duration-300 rounded-full border border-olive/20 cursor-pointer"
-                  >
+                >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                    </svg>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                  </svg>
                 </Link>
               </div>
             </div>
@@ -347,14 +282,18 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
           <div className="bg-white/90 rounded-2xl p-6 shadow-lg">
             <h3 className="text-xl font-serif text-olive mb-4">Premi e Riconoscimenti</h3>
             <div className="space-y-3">
-              {product.awards.map((award, index) => (
-                <div key={index} className="flex items-center gap-2 text-sm text-nocciola">
-                  <svg className="w-5 h-5 text-yellow-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                  {award}
-                </div>
-              ))}
+              {product.awards.length > 0 ? (
+                product.awards.map((award, index) => (
+                  <div key={index} className="flex items-center gap-2 text-sm text-nocciola">
+                    <svg className="w-5 h-5 text-yellow-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                    {award}
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-nocciola/70">Nessun premio ancora assegnato.</p>
+              )}
             </div>
           </div>
         </div>
@@ -376,7 +315,10 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
                     />
                   </div>
                   <h3 className="font-serif text-olive text-center mb-2">{related.name}</h3>
-                  <p className="text-center text-2xl font-bold text-olive">{related.price}</p>
+                  <p className="text-center text-2xl font-bold text-olive">€{related.price}</p>
+                  {related.originalPrice && related.originalPrice !== 'null' && (
+                    <p className="text-center text-sm text-gray-500 line-through">€{related.originalPrice}</p>
+                  )}
                 </div>
               </Link>
             ))}

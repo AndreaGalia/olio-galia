@@ -1,53 +1,60 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import { useCart } from '@/contexts/CartContext';
 import Link from 'next/link';
-
-// Stesso array prodotti (in un'app reale, questo verrebbe da un database)
-const products = [
-  {
-    id: "1",
-    name: "Bottiglia Premium Oil",
-    price: 89.90,
-    originalPrice: 99.90,
-    size: "75ml",
-    image: "/bottle-oil.png",
-  },
-  {
-    id: "2",
-    name: "Beauty Oil",
-    price: 34.90,
-    originalPrice: null,
-    size: "100ml",
-    image: "/bottle-oil.png",
-  },
-  {
-    id: "3",
-    name: "Latta Olio da 5L",
-    price: 79.90,
-    originalPrice: 89.90,
-    size: "5L",
-    image: "/bottle-oil.png",
-  },
-];
+import type { Product, ProductsData } from '@/types/products';
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, clearCart, getTotalItems } = useCart();
+  const [productsData, setProductsData] = useState<ProductsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Calcola il totale
+  // Carica i prodotti dall'API
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const response = await fetch('/api/products');
+        if (!response.ok) {
+          throw new Error('Failed to fetch products');
+        }
+        const data: ProductsData = await response.json();
+        setProductsData(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Unknown error');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProducts();
+  }, []);
+
+  // Calcola il totale usando i dati dinamici
   const calculateTotal = () => {
+    if (!productsData) return 0;
+    
     return cart.reduce((total, cartItem) => {
-      const product = products.find(p => p.id === cartItem.id);
-      return total + (product ? product.price * cartItem.quantity : 0);
+      const product = productsData.products.find(p => p.id === cartItem.id);
+      if (product) {
+        const price = parseFloat(product.price);
+        return total + (price * cartItem.quantity);
+      }
+      return total;
     }, 0);
   };
 
-  // Calcola il risparmio totale
+  // Calcola il risparmio totale usando i dati dinamici
   const calculateSavings = () => {
+    if (!productsData) return 0;
+    
     return cart.reduce((savings, cartItem) => {
-      const product = products.find(p => p.id === cartItem.id);
-      if (product && product.originalPrice) {
-        return savings + ((product.originalPrice - product.price) * cartItem.quantity);
+      const product = productsData.products.find(p => p.id === cartItem.id);
+      if (product && product.originalPrice && product.originalPrice !== 'null') {
+        const currentPrice = parseFloat(product.price);
+        const originalPrice = parseFloat(product.originalPrice);
+        return savings + ((originalPrice - currentPrice) * cartItem.quantity);
       }
       return savings;
     }, 0);
@@ -55,6 +62,60 @@ export default function CartPage() {
 
   const total = calculateTotal();
   const savings = calculateSavings();
+  const freeShippingThreshold = productsData?.metadata.freeShippingThreshold 
+    ? parseFloat(productsData.metadata.freeShippingThreshold) 
+    : 50;
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige">
+        <div className="bg-white/50 py-4">
+          <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
+            <nav className="flex items-center gap-2 text-sm">
+              <Link href="/" className="text-nocciola hover:text-olive transition-colors">Home</Link>
+              <span className="text-nocciola/50">→</span>
+              <span className="text-olive font-medium">Carrello</span>
+            </nav>
+          </div>
+        </div>
+        <div className="container mx-auto px-4 sm:px-6 max-w-4xl py-12">
+          <div className="text-center">
+            <div className="w-16 h-16 border-4 border-olive/20 border-t-olive rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-olive text-lg">Caricamento carrello...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige">
+        <div className="bg-white/50 py-4">
+          <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
+            <nav className="flex items-center gap-2 text-sm">
+              <Link href="/" className="text-nocciola hover:text-olive transition-colors">Home</Link>
+              <span className="text-nocciola/50">→</span>
+              <span className="text-olive font-medium">Carrello</span>
+            </nav>
+          </div>
+        </div>
+        <div className="container mx-auto px-4 sm:px-6 max-w-4xl py-12">
+          <div className="text-center">
+            <p className="text-red-600 text-lg mb-4">Errore: {error}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="px-6 py-3 bg-olive text-beige rounded-full hover:bg-olive/80 transition-colors"
+            >
+              Riprova
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (cart.length === 0) {
     return (
@@ -119,12 +180,17 @@ export default function CartPage() {
           {/* Lista prodotti */}
           <div className="lg:col-span-2 space-y-4">
             {cart.map((cartItem) => {
-              const product = products.find(p => p.id === cartItem.id);
+              const product = productsData?.products.find(p => p.id === cartItem.id);
               if (!product) return null;
 
-              const itemTotal = product.price * cartItem.quantity;
-              const itemSavings = product.originalPrice 
-                ? (product.originalPrice - product.price) * cartItem.quantity 
+              const price = parseFloat(product.price);
+              const originalPrice = product.originalPrice && product.originalPrice !== 'null' 
+                ? parseFloat(product.originalPrice) 
+                : null;
+              
+              const itemTotal = price * cartItem.quantity;
+              const itemSavings = originalPrice 
+                ? (originalPrice - price) * cartItem.quantity 
                 : 0;
 
               return (
@@ -134,7 +200,7 @@ export default function CartPage() {
                     <div className="flex gap-4 mb-4">
                       <div className="w-20 h-24 bg-gradient-to-br from-olive/10 to-salvia/10 rounded-xl p-2 flex-shrink-0">
                         <img 
-                          src={product.image} 
+                          src={product.images[0]} 
                           alt={product.name}
                           className="w-full h-full object-contain"
                         />
@@ -143,9 +209,9 @@ export default function CartPage() {
                         <h3 className="font-serif text-olive text-lg font-medium mb-1">{product.name}</h3>
                         <p className="text-nocciola text-sm mb-2">{product.size}</p>
                         <div className="flex items-end gap-2">
-                          <span className="text-olive font-bold text-xl">€{product.price.toFixed(2)}</span>
-                          {product.originalPrice && (
-                            <span className="text-nocciola/60 line-through text-sm">€{product.originalPrice.toFixed(2)}</span>
+                          <span className="text-olive font-bold text-xl">€{price.toFixed(2)}</span>
+                          {originalPrice && (
+                            <span className="text-nocciola/60 line-through text-sm">€{originalPrice.toFixed(2)}</span>
                           )}
                         </div>
                       </div>
@@ -163,6 +229,7 @@ export default function CartPage() {
                         <button 
                           onClick={() => updateQuantity(cartItem.id, cartItem.quantity + 1)}
                           className="w-10 h-10 rounded-full border border-olive/20 flex items-center justify-center hover:bg-olive hover:text-beige transition-colors"
+                          disabled={cartItem.quantity >= product.stockQuantity}
                         >
                           +
                         </button>
@@ -192,7 +259,7 @@ export default function CartPage() {
                   <div className="hidden sm:flex items-center gap-6">
                     <div className="w-20 h-24 bg-gradient-to-br from-olive/10 to-salvia/10 rounded-xl p-2 flex-shrink-0">
                       <img 
-                        src={product.image} 
+                        src={product.images[0]} 
                         alt={product.name}
                         className="w-full h-full object-contain"
                       />
@@ -202,10 +269,13 @@ export default function CartPage() {
                       <h3 className="font-serif text-olive text-xl font-medium mb-1">{product.name}</h3>
                       <p className="text-nocciola text-sm mb-2">{product.size}</p>
                       <div className="flex items-end gap-3">
-                        <span className="text-olive font-bold text-2xl">€{product.price.toFixed(2)}</span>
-                        {product.originalPrice && (
-                          <span className="text-nocciola/60 line-through text-lg">€{product.originalPrice.toFixed(2)}</span>
+                        <span className="text-olive font-bold text-2xl">€{price.toFixed(2)}</span>
+                        {originalPrice && (
+                          <span className="text-nocciola/60 line-through text-lg">€{originalPrice.toFixed(2)}</span>
                         )}
+                      </div>
+                      <div className="text-xs text-nocciola/70 mt-1">
+                        Stock: {product.stockQuantity} disponibili
                       </div>
                     </div>
 
@@ -219,7 +289,8 @@ export default function CartPage() {
                       <span className="w-16 text-center font-bold text-xl text-olive">{cartItem.quantity}</span>
                       <button 
                         onClick={() => updateQuantity(cartItem.id, cartItem.quantity + 1)}
-                        className="w-12 h-12 rounded-full border border-olive/20 flex items-center justify-center hover:bg-olive hover:text-beige transition-colors text-lg font-medium cursor-pointer"
+                        className="w-12 h-12 rounded-full border border-olive/20 flex items-center justify-center hover:bg-olive hover:text-beige transition-colors text-lg font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={cartItem.quantity >= product.stockQuantity}
                       >
                         +
                       </button>
@@ -268,14 +339,22 @@ export default function CartPage() {
                 
                 <div className="flex justify-between text-nocciola">
                   <span>Spedizione</span>
-                  <span className="text-green-600 font-medium">Gratuita</span>
+                  <span className={total >= freeShippingThreshold ? "text-green-600 font-medium" : "text-nocciola"}>
+                    {total >= freeShippingThreshold ? "Gratuita" : "€8,90"}
+                  </span>
                 </div>
+                
+                {total < freeShippingThreshold && (
+                  <div className="text-xs text-nocciola/70 bg-olive/5 p-3 rounded-lg">
+                    Aggiungi €{(freeShippingThreshold - total).toFixed(2)} per la spedizione gratuita
+                  </div>
+                )}
                 
                 <hr className="border-olive/20" />
                 
                 <div className="flex justify-between text-olive font-bold text-xl">
                   <span>Totale</span>
-                  <span>€{total.toFixed(2)}</span>
+                  <span>€{(total + (total >= freeShippingThreshold ? 0 : 8.90)).toFixed(2)}</span>
                 </div>
               </div>
 
@@ -308,7 +387,9 @@ export default function CartPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <div className="text-sm text-nocciola">
-                    <p className="font-medium text-olive mb-1">Spedizione gratuita</p>
+                    <p className="font-medium text-olive mb-1">
+                      {total >= freeShippingThreshold ? "Spedizione gratuita" : "Spedizione €8,90"}
+                    </p>
                     <p>Consegna in 2-3 giorni lavorativi in tutta Italia</p>
                   </div>
                 </div>

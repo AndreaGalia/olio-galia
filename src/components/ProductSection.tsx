@@ -1,69 +1,77 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import CartIconButton from './CartIconButton';
-import { useCart } from '@/contexts/CartContext'; // ← Importa il context
-
-type Product = {
-  id: string;
-  name: string;
-  description: string;
-  details: string;
-  price: string;
-  size: string;
-  image: string;
-  badge: string;
-  color: string;
-  slug: string;
-};
+import { useCart } from '@/contexts/CartContext';
+import type { Product, ProductsData } from '@/types/products';
 
 export default function ProductsSection() {
   const [activeProduct, setActiveProduct] = useState(0);
+  const [productsData, setProductsData] = useState<ProductsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
   const { addToCart } = useCart();
 
-  const products: Product[] = [
-    {
-      id: "1",
-      name: "Olio Extravergine Classico",
-      description: "Il nostro olio di punta, frutto di olive raccolte a mano e molite a freddo entro 24 ore.",
-      details: "Acidità massima 0,3% - Fruttato intenso con note di erba fresca e mandorla",
-      price: "€24,90",
-      size: "500ml",
-      image: "/bottle-oil.png",
-      badge: "Bestseller",
-      color: "olive",
-      slug: "1"
-    },
-    {
-      id: "2",
-      name: "Olio Extravergine Biologico",
-      description: "Certificato biologico, prodotto da olive coltivate senza pesticidi né fertilizzanti chimici.",
-      details: "Certificazione BIO - Sapore delicato con retrogusto piccante equilibrato",
-      price: "€32,90",
-      size: "500ml",
-      image: "/bottle-oil.png",
-      badge: "BIO",
-      color: "salvia",
-      slug: "2"
-    },
-    {
-      id: "3",
-      name: "Olio Extravergine Premium",
-      description: "Limited edition da olive centenarie, prodotto in quantità limitata per gli intenditori.",
-      details: "Produzione limitata - Profilo organolettico complesso e persistente",
-      price: "€45,90",
-      size: "250ml",
-      image: "/bottle-oil.png",
-      badge: "Limited",
-      color: "nocciola",
-      slug: "3"
+  // Carica i prodotti dall'API
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const response = await fetch('/api/products');
+        if (!response.ok) {
+          throw new Error('Failed to fetch products');
+        }
+        const data: ProductsData = await response.json();
+        setProductsData(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Unknown error');
+      } finally {
+        setLoading(false);
+      }
     }
-  ];
+
+    fetchProducts();
+  }, []);
 
   const handleAddToCart = (product: Product) => {
     addToCart(product.id, 1);
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <section className="relative bg-gradient-to-br from-beige via-beige/80 to-olive/5 py-20 sm:py-24 lg:py-32 overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10">
+          <div className="text-center">
+            <div className="w-16 h-16 border-4 border-olive/20 border-t-olive rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-olive text-lg">Caricamento prodotti...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <section className="relative bg-gradient-to-br from-beige via-beige/80 to-olive/5 py-20 sm:py-24 lg:py-32 overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10">
+          <div className="text-center">
+            <p className="text-red-600 text-lg mb-4">Errore: {error}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="px-6 py-3 bg-olive text-beige rounded-full hover:bg-olive/80 transition-colors"
+            >
+              Riprova
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  const products = productsData?.products || [];
 
   return (
     <section className="relative bg-gradient-to-br from-beige via-beige/80 to-olive/5 py-20 sm:py-24 lg:py-32 overflow-hidden">
@@ -125,94 +133,121 @@ export default function ProductsSection() {
         </div>
 
         {/* Grid prodotti ridisegnata */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
-          {products.map((product, index) => (
-            <div 
-              key={product.id}
-              className={`group relative bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-700 hover:scale-[1.02] hover:-translate-y-2 border border-white/50 ${
-                activeProduct === index ? 'ring-2 ring-olive/30 bg-white/90' : ''
-              }`}
-              onClick={() => setActiveProduct(index)}
-            >
-              {/* Badge migliorato */}
-              <div className={`absolute -top-4 -right-4 px-4 py-2 rounded-2xl text-sm font-bold text-white shadow-xl rotate-6 transform transition-transform group-hover:rotate-3 ${
-                product.color === 'olive' ? 'bg-gradient-to-r from-olive to-olive/80' : 
-                product.color === 'salvia' ? 'bg-gradient-to-r from-salvia to-salvia/80' : 'bg-gradient-to-r from-nocciola to-nocciola/80'
-              }`}>
-                {product.badge}
-              </div>
-
-              {/* Immagine prodotto con effetti */}
-              <div className="relative mb-8 flex justify-center">
-                <div className="relative">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    width={180}
-                    height={240}
-                    className="object-contain drop-shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-2"
-                  />
-                  
-                  {/* Riflessi multipli */}
-                  <div className="absolute top-1/4 left-1/2 w-3 h-20 bg-gradient-to-b from-white/60 to-transparent rounded-full blur-sm transform -translate-x-1/2"></div>
-                  <div className="absolute top-1/3 left-1/3 w-1 h-12 bg-gradient-to-b from-white/40 to-transparent rounded-full blur-sm"></div>
-                  
-                  {/* Aura di luce */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/5 to-white/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                </div>
-              </div>
-
-              {/* Contenuto ridisegnato */}
-              <div className="text-center space-y-5">
-                <h3 className="text-2xl sm:text-3xl font-serif text-olive group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-olive group-hover:to-salvia group-hover:bg-clip-text transition-all duration-300">
-                  {product.name}
-                </h3>
-                
-                <p className="text-base text-nocciola leading-relaxed px-2">
-                  {product.description}
-                </p>
-                
-                <div className="bg-gradient-to-r from-olive/5 to-salvia/5 rounded-2xl p-4 border border-olive/10">
-                  <p className="text-sm text-nocciola/90 italic">
-                    {product.details}
-                  </p>
+        {products.length === 0 ? (
+          <div className="text-center py-16">
+            <p className="text-nocciola text-lg">Nessun prodotto disponibile.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+            {products.map((product, index) => (
+              <div 
+                key={product.id}
+                className={`group relative bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-700 hover:scale-[1.02] hover:-translate-y-2 border border-white/50 ${
+                  activeProduct === index ? 'ring-2 ring-olive/30 bg-white/90' : ''
+                }`}
+                onClick={() => setActiveProduct(index)}
+              >
+                {/* Badge migliorato */}
+                <div className={`absolute -top-4 -right-4 px-4 py-2 rounded-2xl text-sm font-bold text-white shadow-xl rotate-6 transform transition-transform group-hover:rotate-3 ${
+                  product.color === 'olive' ? 'bg-gradient-to-r from-olive to-olive/80' : 
+                  product.color === 'salvia' ? 'bg-gradient-to-r from-salvia to-salvia/80' : 'bg-gradient-to-r from-nocciola to-nocciola/80'
+                }`}>
+                  {product.badge}
                 </div>
 
-                {/* Sezione prezzo e pulsanti ridisegnata */}
-                <div className="flex justify-between items-center pt-6 border-t border-gradient-to-r from-olive/20 via-transparent to-olive/20">
-                  <div className="text-left">
-                    <div className="text-3xl sm:text-4xl font-serif font-bold bg-gradient-to-r from-olive to-salvia bg-clip-text text-transparent">
-                      {product.price}
-                    </div>
-                    <div className="text-sm text-nocciola font-medium bg-olive/10 px-3 py-1 rounded-full inline-block">
-                      {product.size}
-                    </div>
+                {/* Sconto se presente */}
+                {product.originalPrice && product.originalPrice !== 'null' && (
+                  <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold z-10">
+                    SCONTO
                   </div>
-                  
-                  <div className="flex gap-3">
-                    {/* Usa il componente AddToCartButton con size="icon" */}
-                    <CartIconButton
-                      onAddToCart={() => handleAddToCart(product)}
-                      disabled={false}
+                )}
+
+                {/* Immagine prodotto con effetti */}
+                <div className="relative mb-8 flex justify-center">
+                  <div className="relative">
+                    <Image
+                      src={product.images[0]}
+                      alt={product.name}
+                      width={180}
+                      height={240}
+                      className="object-contain drop-shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-2"
                     />
                     
-                    {/* Pulsante dettagli ridisegnato per essere coerente */}
-                    <Link
-                      href={`/products/${product.slug}`}
-                      className="bg-gradient-to-r from-nocciola to-nocciola/80 text-white px-6 py-3 rounded-2xl text-sm font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105 text-center"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      Dettagli
-                    </Link>
+                    {/* Riflessi multipli */}
+                    <div className="absolute top-1/4 left-1/2 w-3 h-20 bg-gradient-to-b from-white/60 to-transparent rounded-full blur-sm transform -translate-x-1/2"></div>
+                    <div className="absolute top-1/3 left-1/3 w-1 h-12 bg-gradient-to-b from-white/40 to-transparent rounded-full blur-sm"></div>
+                    
+                    {/* Aura di luce */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/5 to-white/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   </div>
                 </div>
-              </div>
 
-              {/* Overlay di hover ridisegnato */}
-              <div className="absolute inset-0 bg-gradient-to-t from-olive/5 via-transparent to-salvia/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"></div>
-            </div>
-          ))}
-        </div>
+                {/* Contenuto ridisegnato */}
+                <div className="text-center space-y-5">
+                  <h3 className="text-2xl sm:text-3xl font-serif text-olive group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-olive group-hover:to-salvia group-hover:bg-clip-text transition-all duration-300">
+                    {product.name}
+                  </h3>
+                  
+                  <p className="text-base text-nocciola leading-relaxed px-2">
+                    {product.description}
+                  </p>
+                  
+                  <div className="bg-gradient-to-r from-olive/5 to-salvia/5 rounded-2xl p-4 border border-olive/10">
+                    <p className="text-sm text-nocciola/90 italic">
+                      {product.details}
+                    </p>
+                  </div>
+
+                  {/* Stock info */}
+                  <div className="text-center text-xs">
+                    {product.inStock ? (
+                      <span className="text-green-600">✓ Disponibile ({product.stockQuantity} pezzi)</span>
+                    ) : (
+                      <span className="text-red-600">✗ Esaurito</span>
+                    )}
+                  </div>
+
+                  {/* Sezione prezzo e pulsanti ridisegnata */}
+                  <div className="flex justify-between items-center pt-6 border-t border-gradient-to-r from-olive/20 via-transparent to-olive/20">
+                    <div className="text-left">
+                      {product.originalPrice && product.originalPrice !== 'null' && (
+                        <div className="text-sm text-nocciola/60 line-through mb-1">
+                          €{product.originalPrice}
+                        </div>
+                      )}
+                      <div className="text-3xl sm:text-4xl font-serif font-bold bg-gradient-to-r from-olive to-salvia bg-clip-text text-transparent">
+                        €{product.price}
+                      </div>
+                      <div className="text-sm text-nocciola font-medium bg-olive/10 px-3 py-1 rounded-full inline-block">
+                        {product.size}
+                      </div>
+                    </div>
+                    
+                    <div className="flex gap-3">
+                      {/* Usa il componente AddToCartButton con size="icon" */}
+                      <CartIconButton
+                        onAddToCart={() => handleAddToCart(product)}
+                        disabled={!product.inStock}
+                      />
+                      
+                      {/* Pulsante dettagli ridisegnato per essere coerente */}
+                      <Link
+                        href={`/products/${product.id}`}
+                        className="bg-gradient-to-r from-nocciola to-nocciola/80 text-white px-6 py-3 rounded-2xl text-sm font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105 text-center"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        Dettagli
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Overlay di hover ridisegnato */}
+                <div className="absolute inset-0 bg-gradient-to-t from-olive/5 via-transparent to-salvia/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"></div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Sezione informazioni completamente ridisegnata */}
         <div className="mt-24 sm:mt-28">
@@ -243,7 +278,7 @@ export default function ProductsSection() {
                 </svg>
               </div>
               <h4 className="text-xl font-serif text-olive mb-4">Spedizione Rapida</h4>
-              <p className="text-nocciola leading-relaxed">Consegna gratuita in Italia per ordini superiori a €50, packaging sostenibile</p>
+              <p className="text-nocciola leading-relaxed">Consegna gratuita in Italia per ordini superiori a €{productsData?.metadata.freeShippingThreshold || '50'}, packaging sostenibile</p>
             </div>
 
             <div className="group text-center p-8 rounded-3xl bg-gradient-to-br from-white/60 to-white/30 backdrop-blur-sm border border-white/50 hover:bg-white/70 transition-all duration-500 hover:scale-105">

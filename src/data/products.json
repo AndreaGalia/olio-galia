@@ -1,0 +1,180 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "Bottiglia Premium Oil",
+      "slug": "bottiglia-premium-oil",
+      "category": "premium",
+      "categoryDisplay": "Premium Collection",
+      "description": "La nostra selezione più pregiata in formato esclusivo. Olio extravergine da olive centenarie, perfetto per degustazioni e regali raffinati.",
+      "longDescription": "Questo olio rappresenta l'eccellenza della produzione Galia. Realizzato esclusivamente con olive secolari coltivate nelle nostre terre più antiche, viene estratto con tecniche tradizionali e confezionato in eleganti bottiglie da collezione. Numerato e sigillato individualmente per garantire l'autenticità.",
+      "details": "Acidità < 0,2% - Limited Edition - Numerazione progressiva - Fruttato intenso con note di erba fresca e mandorla",
+      "price": "${PRODUCT_1_PRICE}",
+      "originalPrice": "${PRODUCT_1_ORIGINAL_PRICE}",
+      "stripeProductId": "${PRODUCT_1_STRIPE_ID}",
+      "stripePriceId": "${PRODUCT_1_STRIPE_PRICE_ID}",
+      "size": "75ml",
+      "inStock": true,
+      "stockQuantity": "${PRODUCT_1_STOCK}",
+      "badge": "Limited Edition",
+      "color": "olive",
+      "images": [
+        "/bottle-oil.png",
+        "/bottle-oil-detail-1.png",
+        "/bottle-oil-detail-2.png",
+        "/bottle-oil-premium.png"
+      ],
+      "features": [
+        "Olive centenarie selezionate a mano",
+        "Estrazione a freddo tradizionale sotto 27°C",
+        "Bottiglia numerata e sigillata individualmente",
+        "Packaging regalo premium incluso",
+        "Certificato di autenticità firmato",
+        "Acidità inferiore allo 0,2%",
+        "Polifenoli > 250 mg/kg",
+        "Produzione limitata a 500 bottiglie/anno"
+      ],
+      "nutritionalInfo": {
+        "energy": "3700 kJ / 900 kcal",
+        "fat": "100g",
+        "saturatedFat": "14g",
+        "carbs": "0g",
+        "protein": "0g",
+        "salt": "0g"
+      },
+      "bestFor": "Degustazioni esclusive, regali di prestigio, collezione privata",
+      "origin": "Sicilia, Italia - Contrada Monte Galia",
+      "harvest": "Ottobre 2024 - Raccolta manuale notturna",
+      "processing": "Frantoio aziendale - Estrazione continua a freddo",
+      "awards": [
+        "Medaglia d'Oro - Concorso Internazionale NYIOOC 2024",
+        "Premio Eccellenza - Gambero Rosso 2024",
+        "3 Foglie - Guida agli Extravergini Slow Food 2024"
+      ],
+      "seoKeywords": ["olio extravergine premium", "olio biologico siciliano", "limited edition", "olive centenarie"],
+      "tags": ["premium", "limited", "regalo", "collezione"]
+    },
+    {
+      "id": "2",
+      "name": "Beauty Oil",
+      "slug": "beauty-oil",
+      "category": "beauty",
+      "categoryDisplay": "Linea Benessere",
+      "description": "Olio extravergine delicato pensato per la cura quotidiana del corpo e dei capelli. Formula esclusiva con vitamine naturali.",
+      "longDescription": "Un olio leggero, ricco di vitamina E e polifenoli, ideale come trattamento naturale per la pelle e i capelli. Estratto a freddo da olive raccolte precocemente, mantiene tutte le proprietà benefiche senza appesantire. Arricchito con estratti naturali di lavanda per un'esperienza sensoriale unica.",
+      "details": "Flacone in vetro scuro con contagocce - Dermatologicamente testato - Ingredienti 100% naturali - Cruelty free",
+      "price": "${PRODUCT_2_PRICE}",
+      "originalPrice": "${PRODUCT_2_ORIGINAL_PRICE}",
+      "stripeProductId": "${PRODUCT_2_STRIPE_ID}",
+      "stripePriceId": "${PRODUCT_2_STRIPE_PRICE_ID}",
+      "size": "100ml",
+      "inStock": true,
+      "stockQuantity": "${PRODUCT_2_STOCK}",
+      "badge": "Wellness",
+      "color": "salvia",
+      "images": [
+        "/bottle-oil.png",
+        "/beauty-oil-detail-1.png",
+        "/beauty-oil-lifestyle.png",
+        "/beauty-oil-ingredients.png"
+      ],
+      "features": [
+        "Ricco di antiossidanti naturali",
+        "Idratazione profonda senza ungere",
+        "Adatto a tutti i tipi di pelle",
+        "100% naturale e vegan friendly",
+        "Olio extravergine purissimo",
+        "Arricchito con vitamina E",
+        "Estratto naturale di lavanda",
+        "Dermatologicamente testato",
+        "Packaging sostenibile"
+      ],
+      "nutritionalInfo": null,
+      "bestFor": "Skincare, haircare, massaggi rilassanti, benessere quotidiano",
+      "origin": "Sicilia, Italia",
+      "harvest": "2024 - Raccolta precoce per massimi benefici",
+      "processing": "Spremitura a freddo - Filtrazione naturale",
+      "awards": [],
+      "seoKeywords": ["olio per corpo", "beauty oil naturale", "cura capelli", "cosmetica naturale"],
+      "tags": ["beauty", "wellness", "naturale", "vegan"]
+    },
+    {
+      "id": "3",
+      "name": "Latta Olio da 5L",
+      "slug": "latta-olio-5l",
+      "category": "famiglia",
+      "categoryDisplay": "Formato Convenienza",
+      "description": "La soluzione ideale per famiglie e ristorazione, grande formato al miglior prezzo. Olio extravergine classico in latta protettiva.",
+      "longDescription": "Latta da 5 litri di olio extravergine Galia, ottenuto da olive raccolte manualmente e lavorate in giornata. Perfetta per chi consuma olio regolarmente e cerca convenienza senza rinunciare alla qualità. La latta protettiva garantisce una conservazione ottimale preservando tutte le caratteristiche organolettiche.",
+      "details": "Latta in acciaio con tappo dosatore - Rapporto qualità-prezzo eccellente - Latta protettiva anti-luce - Uso quotidiano",
+      "price": "${PRODUCT_3_PRICE}",
+      "originalPrice": "${PRODUCT_3_ORIGINAL_PRICE}",
+      "stripeProductId": "${PRODUCT_3_STRIPE_ID}",
+      "stripePriceId": "${PRODUCT_3_STRIPE_PRICE_ID}",
+      "size": "5L",
+      "inStock": true,
+      "stockQuantity": "${PRODUCT_3_STOCK}",
+      "badge": "Best Seller",
+      "color": "nocciola",
+      "images": [
+        "/bottle-oil.png",
+        "/latta-5l-detail.png",
+        "/latta-family-use.png",
+        "/latta-restaurant.png"
+      ],
+      "features": [
+        "Ottimo rapporto qualità/prezzo",
+        "Conservazione ottimale grazie al packaging",
+        "Raccolta e spremitura in giornata",
+        "Perfetta per uso familiare o professionale",
+        "Formato convenienza famiglia",
+        "Latta protettiva premium",
+        "Olio extravergine classico",
+        "Perfetto per uso quotidiano",
+        "Risparmio garantito"
+      ],
+      "nutritionalInfo": {
+        "energy": "3700 kJ / 900 kcal",
+        "fat": "100g",
+        "saturatedFat": "14g",
+        "carbs": "0g",
+        "protein": "0g",
+        "salt": "0g"
+      },
+      "bestFor": "Famiglie, ristoranti, catering, uso quotidiano",
+      "origin": "Sicilia, Italia",
+      "harvest": "Ottobre 2024",
+      "processing": "Frantoio aziendale - Estrazione continua",
+      "awards": [
+        "Selezione Miglior Qualità/Prezzo - 2024"
+      ],
+      "seoKeywords": ["olio extravergine formato famiglia", "latta 5 litri", "olio ristorante", "convenienza"],
+      "tags": ["famiglia", "convenienza", "ristoranti", "bestseller"]
+    }
+  ],
+  "categories": [
+    {
+      "id": "premium",
+      "name": "Premium Collection",
+      "description": "Selezione esclusiva dei nostri oli più pregiati"
+    },
+    {
+      "id": "beauty",
+      "name": "Linea Benessere",
+      "description": "Prodotti naturali per la cura del corpo"
+    },
+    {
+      "id": "famiglia",
+      "name": "Formato Convenienza",
+      "description": "Formati grandi per famiglie e professionisti"
+    }
+  ],
+  "metadata": {
+    "lastUpdated": "2024-12-28",
+    "version": "1.0.0",
+    "currency": "EUR",
+    "vatRate": "${VAT_RATE}",
+    "freeShippingThreshold": "${FREE_SHIPPING_THRESHOLD}",
+    "defaultLanguage": "it"
+  }
+}
