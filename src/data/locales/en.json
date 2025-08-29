@@ -465,5 +465,110 @@
       "noAwards": "No awards assigned yet.",
       "relatedProducts": "You might also like"
     }
-  }
+  },
+  "bulkProposal": {
+    "section": {
+      "title": "Bulk purchase?",
+      "description": "Request a personalized quote",
+      "button": "Quote"
+    },
+    "modal": {
+      "title": "Request Quote",
+      "description": "Request a personalized quote for {productName}",
+      "form": {
+        "quantityLabel": "Requested quantity *",
+        "quantityMin": "Minimum quantity: 5 pieces",
+        "nameLabel": "Full Name *",
+        "emailLabel": "Email *",
+        "phoneLabel": "Phone",
+        "messageLabel": "Additional message",
+        "messagePlaceholder": "Enter any specific requests...",
+        "methodLabel": "How do you prefer to send the request?",
+        "whatsappOption": "WhatsApp",
+        "whatsappDesc": "Immediate response",
+        "emailOption": "Email",
+        "emailDesc": "Opens your email client",
+        "cancelButton": "Cancel",
+        "whatsappButton": "Open WhatsApp",
+        "emailButton": "Open Email"
+      },
+      "whatsappMessage": "*GALIA OIL QUOTE REQUEST*\n\n *Product:* {productName}\n *Requested quantity:* {quantity} pieces\n\n *Customer Details:*\n• Name: {customerName}\n• Email: {email}{phone}\n\n{message}*Request date:* {date}\n\nThank you for your interest in our products!",
+      "emailSubject": "Quote Request - {productName}",
+      "emailBody": "Hello,\n\nI would like to request a quote for the following product:\n\nPRODUCT: {productName}\nQUANTITY: {quantity} pieces\n\nCUSTOMER DETAILS:\nName: {customerName}\nEmail: {email}{phone}\n\n{message}Request date: {date}\n\nBest regards,\n{customerName}"
+    }
+  },
+  "cartPage": {
+    "loading": "Loading cart...",
+    "error": "Error: {error}",
+    "retry": "Try Again",
+    "breadcrumb": {
+      "home": "Home",
+      "cart": "Cart"
+    },
+    "empty": {
+      "title": "Your cart is empty",
+      "description": "Discover our quality extra virgin oils!",
+      "button": "Discover Products"
+    },
+    "title": "Your cart",
+    "itemCount": {
+      "single": "item",
+      "plural": "items"
+    },
+    "product": {
+      "stock": "Stock: {count} available",
+      "savings": "You save €{amount}",
+      "remove": "Remove product"
+    },
+    "summary": {
+      "title": "Order Summary",
+      "subtotal": "Subtotal ({count} {itemLabel})",
+      "totalSavings": "Total savings",
+      "shipping": "Shipping",
+      "free": "Free",
+      "freeShippingNote": "Add €{amount} for free shipping",
+      "total": "Total",
+      "checkout": "Proceed to Checkout",
+      "continueShopping": "Continue Shopping",
+      "clearCart": "Clear Cart"
+    },
+    "shipping": {
+      "free": "Free shipping",
+      "paid": "Shipping €8.90",
+      "delivery": "Delivery in 2-3 working days throughout Italy"
+    },
+    "itemLabel": {
+      "single": "item",
+      "plural": "items"
+    }
+  },
+  "contactPage": {
+    "hero": {
+      "badge": "Galia Family",
+      "title": {
+        "main": "Contact",
+        "subtitle": "The Three Brothers"
+      },
+      "description": "We are here to answer your questions and help you discover the perfect extra virgin oil for your table. Three generations of passion at your service."
+    },
+    "methods": [
+      {
+        "title": "Email",
+        "value": "info@oliogalia.it",
+        "description": "Write for detailed information about our products"
+      },
+      {
+        "title": "WhatsApp",
+        "value": "+39 366 136 8797",
+        "description": "Direct contact for immediate response"
+      }
+    ],
+    "whatsappMessage": "Hi! I would like information about your extra virgin oils"
+  },
+  "addToCartButton": {
+  "add": "Add",
+  "addToCart": "Add to Cart",
+  "added": "Added", 
+  "productAdded": "Product Added"
+}
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useT } from '@/hooks/useT';
 import { useState } from 'react';
 
 interface AddToCartButtonProps {
@@ -16,6 +17,7 @@ export default function AddToCartButton({
   size = 'full'
 }: AddToCartButtonProps) {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const { t } = useT();
 
   const handleClick = () => {
     if (disabled || isAddingToCart) return;
@@ -26,6 +28,32 @@ export default function AddToCartButton({
     setTimeout(() => {
       setIsAddingToCart(false);
     }, 2500);
+  };
+
+  const getButtonText = () => {
+    if (isAddingToCart) {
+      if (size === 'compact') {
+        return t.addToCartButton.added;
+      } else {
+        return (
+          <>
+            <span className="hidden sm:inline">{t.addToCartButton.productAdded}</span>
+            <span className="sm:hidden">{t.addToCartButton.added}</span>
+          </>
+        );
+      }
+    } else {
+      if (size === 'compact') {
+        return t.addToCartButton.add;
+      } else {
+        return (
+          <>
+            <span className="hidden sm:inline">{t.addToCartButton.addToCart}</span>
+            <span className="sm:hidden">{t.addToCartButton.add}</span>
+          </>
+        );
+      }
+    }
   };
 
   return (
@@ -83,14 +111,7 @@ export default function AddToCartButton({
               </svg>
             </div>
             <span className="font-semibold tracking-wide">
-              {size === 'compact' ? (
-                'Aggiunto!'
-              ) : (
-                <>
-                  <span className="hidden sm:inline">Prodotto aggiunto!</span>
-                  <span className="sm:hidden">Aggiunto!</span>
-                </>
-              )}
+              {getButtonText()}
             </span>
           </>
         ) : (
@@ -114,14 +135,7 @@ export default function AddToCartButton({
               )}
             </div>
             <span className="font-semibold tracking-wide">
-              {size === 'compact' ? (
-                'Aggiungi'
-              ) : (
-                <>
-                  <span className="hidden sm:inline">Aggiungi al Carrello</span>
-                  <span className="sm:hidden">Aggiungi</span>
-                </>
-              )}
+              {getButtonText()}
             </span>
           </>
         )}

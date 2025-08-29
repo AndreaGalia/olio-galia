@@ -465,5 +465,110 @@
       "noAwards": "Nessun premio ancora assegnato.",
       "relatedProducts": "Potrebbe interessarti anche"
     }
-  }
+  },
+  "bulkProposal": {
+    "section": {
+      "title": "Acquisto in quantità?",
+      "description": "Richiedi un preventivo personalizzato",
+      "button": "Preventivo"
+    },
+    "modal": {
+      "title": "Richiedi Preventivo",
+      "description": "Richiedi un preventivo personalizzato per {productName}",
+      "form": {
+        "quantityLabel": "Quantità richiesta *",
+        "quantityMin": "Quantità minima: 5 pezzi",
+        "nameLabel": "Nome e Cognome *",
+        "emailLabel": "Email *",
+        "phoneLabel": "Telefono",
+        "messageLabel": "Messaggio aggiuntivo",
+        "messagePlaceholder": "Inserisci eventuali richieste specifiche...",
+        "methodLabel": "Come preferisci inviare la richiesta?",
+        "whatsappOption": "WhatsApp",
+        "whatsappDesc": "Risposta immediata",
+        "emailOption": "Email",
+        "emailDesc": "Apre il tuo client email",
+        "cancelButton": "Annulla",
+        "whatsappButton": "Apri WhatsApp",
+        "emailButton": "Apri Email"
+      },
+      "whatsappMessage": "*RICHIESTA PREVENTIVO OLIO GALIA*\n\n *Prodotto:* {productName}\n *Quantità richiesta:* {quantity} pezzi\n\n *Dati Cliente:*\n• Nome: {customerName}\n• Email: {email}{phone}\n\n{message}*Data richiesta:* {date}\n\nGrazie per l'interesse nei nostri prodotti!",
+      "emailSubject": "Richiesta Preventivo - {productName}",
+      "emailBody": "Buongiorno,\n\nvorrei richiedere un preventivo per il seguente prodotto:\n\nPRODOTTO: {productName}\nQUANTITÀ: {quantity} pezzi\n\nDATI CLIENTE:\nNome: {customerName}\nEmail: {email}{phone}\n\n{message}Data richiesta: {date}\n\nCordiali saluti,\n{customerName}"
+    }
+  },
+  "cartPage": {
+    "loading": "Caricamento carrello...",
+    "error": "Errore: {error}",
+    "retry": "Riprova",
+    "breadcrumb": {
+      "home": "Home",
+      "cart": "Carrello"
+    },
+    "empty": {
+      "title": "Il tuo carrello è vuoto",
+      "description": "Scopri i nostri oli extravergini di qualità!",
+      "button": "Scopri i Prodotti"
+    },
+    "title": "Il tuo carrello",
+    "itemCount": {
+      "single": "elemento",
+      "plural": "elementi"
+    },
+    "product": {
+      "stock": "Stock: {count} disponibili",
+      "savings": "Risparmi €{amount}",
+      "remove": "Rimuovi prodotto"
+    },
+    "summary": {
+      "title": "Riepilogo Ordine",
+      "subtotal": "Subtotale ({count} {itemLabel})",
+      "totalSavings": "Risparmio totale",
+      "shipping": "Spedizione",
+      "free": "Gratuita",
+      "freeShippingNote": "Aggiungi €{amount} per la spedizione gratuita",
+      "total": "Totale",
+      "checkout": "Procedi al Checkout",
+      "continueShopping": "Continua Shopping",
+      "clearCart": "Svuota Carrello"
+    },
+    "shipping": {
+      "free": "Spedizione gratuita",
+      "paid": "Spedizione €8,90",
+      "delivery": "Consegna in 2-3 giorni lavorativi in tutta Italia"
+    },
+    "itemLabel": {
+      "single": "articolo",
+      "plural": "articoli"
+    }
+  },
+  "contactPage": {
+    "hero": {
+      "badge": "Famiglia Galia",
+      "title": {
+        "main": "Contatta",
+        "subtitle": "I Tre Fratelli"
+      },
+      "description": "Siamo qui per rispondere alle tue domande e aiutarti a scoprire l'olio extravergine perfetto per la tua tavola. Tre generazioni di passione al tuo servizio."
+    },
+    "methods": [
+      {
+        "title": "Email",
+        "value": "info@oliogalia.it",
+        "description": "Scrivi per informazioni dettagliate sui nostri prodotti"
+      },
+      {
+        "title": "WhatsApp",
+        "value": "+39 366 136 8797",
+        "description": "Contatto diretto per risposta immediata"
+      }
+    ],
+    "whatsappMessage": "Ciao! Vorrei informazioni sui vostri oli extravergini"
+  },
+  "addToCartButton": {
+  "add": "Aggiungi",
+  "addToCart": "Aggiungi al Carrello", 
+  "added": "Aggiunto",
+  "productAdded": "Prodotto Aggiunto"
 }
+}   
