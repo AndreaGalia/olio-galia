@@ -6,6 +6,7 @@ import { BulkProposalSection } from '@/components/BulkProposalModal';
 import { useCart } from '@/contexts/CartContext';
 import AddToCartButton from '@/components/AddToCartButton';
 import type { Product, ProductsData } from '@/types/products';
+import { useT } from '@/hooks/useT';
 
 export default function ProductDetailPage({ params }: { params: Promise<{ productId: string }> }) {
   const { productId } = use(params);
@@ -19,6 +20,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
   const [error, setError] = useState<string | null>(null);
 
   const { addToCart } = useCart();
+  const { t, translate } = useT();
 
   // Carica i prodotti dall'API
   useEffect(() => {
@@ -61,7 +63,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
       <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-olive/20 border-t-olive rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-olive text-lg">Caricamento prodotto...</p>
+          <p className="text-olive text-lg">{t.productDetailPage.loading}</p>
         </div>
       </div>
     );
@@ -72,12 +74,12 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
     return (
       <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-600 text-lg mb-4">Errore: {error}</p>
+          <p className="text-red-600 text-lg mb-4">{translate('productDetailPage.error', { error })}</p>
           <button 
             onClick={() => window.location.reload()} 
             className="px-6 py-3 bg-olive text-beige rounded-full hover:bg-olive/80 transition-colors"
           >
-            Riprova
+            {t.productDetailPage.retry}
           </button>
         </div>
       </div>
@@ -89,12 +91,12 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
     return (
       <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-serif text-olive mb-4">Prodotto non trovato</h1>
+          <h1 className="text-2xl font-serif text-olive mb-4">{t.productDetailPage.notFound.title}</h1>
           <Link 
             href="/products" 
             className="px-6 py-3 bg-olive text-beige rounded-full hover:bg-olive/80 transition-colors inline-block"
           >
-            Torna ai prodotti
+            {t.productDetailPage.notFound.button}
           </Link>
         </div>
       </div>
@@ -107,9 +109,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
       <div className="bg-white/50 py-4">
         <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
           <nav className="flex items-center gap-2 text-sm">
-            <Link href="/" className="text-nocciola hover:text-olive transition-colors">Home</Link>
+            <Link href="/" className="text-nocciola hover:text-olive transition-colors">{t.productDetailPage.breadcrumb.home}</Link>
             <span className="text-nocciola/50">→</span>
-            <Link href="/products" className="text-nocciola hover:text-olive transition-colors">Prodotti</Link>
+            <Link href="/products" className="text-nocciola hover:text-olive transition-colors">{t.productDetailPage.breadcrumb.products}</Link>
             <span className="text-nocciola/50">→</span>
             <span className="text-olive font-medium">{product.name}</span>
           </nav>
@@ -192,7 +194,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
               
               <div className="flex items-center gap-4 mb-6">
                 <div className="flex items-center gap-3">
-                  <label className="text-sm font-medium text-olive">Quantità:</label>
+                  <label className="text-sm font-medium text-olive">{t.productDetailPage.product.quantity}</label>
                   <div className="flex items-center border border-olive/20 rounded-full overflow-hidden">
                     <button 
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -215,9 +217,11 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
                 
                 <div className="text-sm text-nocciola">
                   {product.inStock ? (
-                    <span className="text-green-600">✓ Disponibile ({product.stockQuantity} pezzi)</span>
+                    <span className="text-green-600">
+                      {translate('productDetailPage.product.available', { count: product.stockQuantity })}
+                    </span>
                   ) : (
-                    <span className="text-red-600">✗ Esaurito</span>
+                    <span className="text-red-600">{t.productDetailPage.product.outOfStock}</span>
                   )}
                 </div>
               </div>
@@ -248,7 +252,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
           
           {/* Caratteristiche */}
           <div className="bg-white/90 rounded-2xl p-6 shadow-lg">
-            <h3 className="text-xl font-serif text-olive mb-4">Caratteristiche</h3>
+            <h3 className="text-xl font-serif text-olive mb-4">{t.productDetailPage.product.characteristics}</h3>
             <ul className="space-y-2">
               {product.features.map((feature, index) => (
                 <li key={index} className="flex items-start gap-2 text-sm text-nocciola">
@@ -263,9 +267,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
 
           {/* Valori nutrizionali */}
           <div className="bg-white/90 rounded-2xl p-6 shadow-lg">
-            <h3 className="text-xl font-serif text-olive mb-4">Valori Nutrizionali</h3>
+            <h3 className="text-xl font-serif text-olive mb-4">{t.productDetailPage.product.nutritionalInfo}</h3>
             <div className="text-sm text-nocciola">
-              <p className="mb-2 font-medium">Per 100g:</p>
+              <p className="mb-2 font-medium">{t.productDetailPage.product.nutritionalPer100g}</p>
               {product.nutritionalInfo
                 ? Object.entries(product.nutritionalInfo).map(([key, value]) => (
                     <div key={key} className="flex justify-between border-b border-olive/10 py-1">
@@ -273,14 +277,14 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
                       <span>{value}</span>
                     </div>
                   ))
-                : <div className="text-nocciola">Valori nutrizionali non disponibili.</div>
+                : <div className="text-nocciola">{t.productDetailPage.product.nutritionalNotAvailable}</div>
               }
             </div>
           </div>
 
           {/* Premi e riconoscimenti */}
           <div className="bg-white/90 rounded-2xl p-6 shadow-lg">
-            <h3 className="text-xl font-serif text-olive mb-4">Premi e Riconoscimenti</h3>
+            <h3 className="text-xl font-serif text-olive mb-4">{t.productDetailPage.product.awards}</h3>
             <div className="space-y-3">
               {product.awards.length > 0 ? (
                 product.awards.map((award, index) => (
@@ -292,7 +296,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-nocciola/70">Nessun premio ancora assegnato.</p>
+                <p className="text-sm text-nocciola/70">{t.productDetailPage.product.noAwards}</p>
               )}
             </div>
           </div>
@@ -301,7 +305,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
         {/* Prodotti correlati */}
         <div>
           <h2 className="text-2xl sm:text-3xl font-serif text-olive mb-8 text-center">
-            Potrebbe interessarti anche
+            {t.productDetailPage.product.relatedProducts}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {relatedProducts.map((related) => (

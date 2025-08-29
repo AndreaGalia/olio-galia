@@ -3,12 +3,21 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useCart } from '@/contexts/CartContext'; // ← Importa il context
+import { useCart } from '@/contexts/CartContext';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { useT } from '@/hooks/useT';
+
+interface MenuItem {
+  name: string;
+  href: string;
+  translationKey: string;
+}
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
-  const { getTotalItems } = useCart(); // ← Usa il context
+  const { getTotalItems } = useCart();
+  const { t, translate } = useT();
   
   const totalItems = getTotalItems();
 
@@ -16,11 +25,11 @@ export default function Navbar() {
 
   const isActive = (path: string) => pathname === path;
 
-  const menuItems = [
-    { name: 'Home', href: '/' },
-    { name: 'Chi siamo', href: '/about' },
-    { name: 'Prodotti', href: '/products' },
-    { name: 'Contatti', href: '/contact' }
+  const menuItems: MenuItem[] = [
+    { name: t.navbar.menu.home, href: '/', translationKey: 'home' },
+    { name: t.navbar.menu.about, href: '/about', translationKey: 'about' },
+    { name: t.navbar.menu.products, href: '/products', translationKey: 'products' },
+    { name: t.navbar.menu.contact, href: '/contact', translationKey: 'contact' }
   ];
 
   return (
@@ -38,12 +47,12 @@ export default function Navbar() {
               </Link>
             </div>
 
-            {/* Menu Desktop + Carrello */}
+            {/* Menu Desktop + Language Switcher + Carrello */}
             <div className="hidden lg:flex flex-1 justify-end items-center gap-6">
               {/* Menu Items */}
               <ul className="flex gap-8 xl:gap-12 text-olive font-serif text-lg">
                 {menuItems.map((item) => (
-                  <li key={item.name}>
+                  <li key={item.translationKey}>
                     <Link
                       href={item.href}
                       className={`cursor-pointer hover:underline hover:text-salvia transition-colors duration-200 ${
@@ -55,10 +64,18 @@ export default function Navbar() {
                   </li>
                 ))}
               </ul>
+
+              {/* Language Switcher Desktop */}
+              <div className="ml-4">
+                <LanguageSwitcher />
+              </div>
               
               {/* Carrello Desktop */}
               <Link href="/cart" className="relative ml-4">
-                <button className="p-2 text-olive hover:text-salvia transition-colors duration-200 relative cursor-pointer">
+                <button 
+                  className="p-2 text-olive hover:text-salvia transition-colors duration-200 relative cursor-pointer"
+                  aria-label={t.navbar.cart.title}
+                >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
                   </svg>
@@ -76,7 +93,10 @@ export default function Navbar() {
             <div className="lg:hidden flex items-center gap-3">
               {/* Carrello Mobile */}
               <Link href="/cart" className="relative">
-                <button className="p-2 text-olive hover:text-salvia transition-colors duration-200 relative">
+                <button 
+                  className="p-2 text-olive hover:text-salvia transition-colors duration-200 relative"
+                  aria-label={t.navbar.cart.title}
+                >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
                   </svg>
@@ -121,13 +141,13 @@ export default function Navbar() {
           <div className="flex flex-col h-full">
             {/* Header del menu mobile */}
             <div className="flex justify-between items-center p-6 border-b border-olive/20">
-              <h2 className="text-lg font-serif text-olive">Menu</h2>
+              <h2 className="text-lg font-serif text-olive">{t.navbar.mobile.menuTitle}</h2>
               <button 
                 onClick={toggleMenu}
                 className="w-8 h-8 flex items-center justify-center text-olive hover:text-salvia transition-colors duration-200"
-                aria-label="Close menu"
+                aria-label={t.navbar.mobile.closeMenu}
               >
-                <span className="sr-only">Chiudi menu</span>
+                <span className="sr-only">{t.navbar.mobile.closeMenu}</span>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -138,7 +158,7 @@ export default function Navbar() {
             <nav className="flex-1 px-6 py-8">
               <ul className="space-y-6">
                 {menuItems.map((item) => (
-                  <li key={item.name}>
+                  <li key={item.translationKey}>
                     <Link 
                       href={item.href}
                       className={`block text-xl font-serif hover:text-salvia transition-colors duration-200 py-2 ${
@@ -152,8 +172,16 @@ export default function Navbar() {
                 ))}
               </ul>
 
-              {/* Carrello nel menu mobile (alternativo) */}
+              {/* Language Switcher Mobile */}
               <div className="mt-8 pt-6 border-t border-olive/20">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="text-sm font-serif text-olive">{t.navbar.mobile.language}</span>
+                  <LanguageSwitcher />
+                </div>
+              </div>
+
+              {/* Carrello nel menu mobile */}
+              <div className="pt-4 border-t border-olive/20">
                 <Link 
                   href="/cart"
                   className="flex items-center gap-3 text-olive hover:text-salvia transition-colors duration-200 py-2"
@@ -163,7 +191,7 @@ export default function Navbar() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
                   </svg>
                   <span className="text-lg font-serif">
-                    Carrello {totalItems > 0 && `(${totalItems})`}
+                    {t.navbar.mobile.cart} {totalItems > 0 && `(${totalItems})`}
                   </span>
                 </Link>
               </div>
@@ -172,8 +200,8 @@ export default function Navbar() {
             {/* Footer del menu mobile */}
             <div className="p-6 border-t border-olive/20">
               <div className="text-center">
-                <p className="text-sm text-nocciola mb-2">Tradizione Siciliana</p>
-                <p className="text-xs text-nocciola/70">Dal 1950</p>
+                <p className="text-sm text-nocciola mb-2">{t.navbar.mobile.tagline}</p>
+                <p className="text-xs text-nocciola/70">{t.navbar.mobile.since}</p>
               </div>
             </div>
           </div>
