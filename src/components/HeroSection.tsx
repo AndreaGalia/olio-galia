@@ -1,10 +1,12 @@
 "use client";
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useT } from '@/hooks/useT';
 
 export default function HeroSection() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
+  const { t } = useT();
 
   useEffect(() => {
     setIsVisible(true);
@@ -78,7 +80,7 @@ export default function HeroSection() {
                 <div className="w-2.5 h-2.5 md:w-3 md:h-3 bg-gradient-to-r from-olive to-salvia rounded-full animate-pulse" />
                 <div className="absolute inset-0 w-2.5 h-2.5 md:w-3 md:h-3 bg-gradient-to-r from-olive to-salvia rounded-full animate-ping opacity-30" />
               </div>
-              <span>Tradizione Siciliana dal 1950</span>
+              <span>{t.hero.badge}</span>
               <div className="w-1 h-4 md:h-6 bg-gradient-to-b from-olive to-transparent rounded" />
             </div>
 
@@ -88,7 +90,7 @@ export default function HeroSection() {
                 <div className="overflow-hidden">
                   <span className={`block ${isVisible ? 'slide-up' : ''}`} style={{animationDelay: '0.1s'}}>
                     <span className="relative">
-                      Sani e forti
+                      {t.hero.title.line1}
                       <div className="absolute -inset-2 bg-gradient-to-r from-olive/10 to-transparent rounded-lg blur-xl -z-10" />
                     </span>
                   </span>
@@ -96,14 +98,14 @@ export default function HeroSection() {
                 <div className="overflow-hidden">
                   <span className={`block ${isVisible ? 'slide-up' : ''}`} style={{animationDelay: '0.2s'}}>
                     <span className="relative hover:text-salvia transition-colors duration-500">
-                      come Golia,
+                      {t.hero.title.line2}
                     </span>
                   </span>
                 </div>
                 <div className="overflow-hidden">
                   <span className={`block italic relative ${isVisible ? 'slide-up' : ''}`} style={{animationDelay: '0.3s'}}>
                     <span className="text-transparent bg-gradient-to-r from-salvia via-olive via-salvia to-olive bg-clip-text animate-gradient-x">
-                      solo con Olio Galia
+                      {t.hero.title.line3}
                     </span>
                     <div className="absolute -bottom-1 md:-bottom-2 left-1/2 lg:left-0 transform -translate-x-1/2 lg:translate-x-0 h-1 bg-gradient-to-r from-olive via-salvia to-olive rounded expand-line-gradient" />
                   </span>
@@ -114,12 +116,10 @@ export default function HeroSection() {
             {/* Descrizione ottimizzata */}
             <div className={`space-y-3 md:space-y-4 max-w-2xl mx-auto lg:mx-0 ${isVisible ? 'fade-in-up' : ''}`} style={{animationDelay: '0.4s'}}>
               <p className="text-lg sm:text-xl md:text-2xl text-nocciola leading-relaxed font-light">
-                L'olio extravergine è il <span className="text-olive font-medium relative">frutto della nostra terra<span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-olive to-salvia transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left" /></span>, 
-                un equilibrio unico di profumi e tradizione siciliana.
+                {t.hero.description.main}
               </p>
               <p className="text-base md:text-lg text-nocciola/80 leading-relaxed">
-                Ogni goccia racconta una storia di <em>passione</em>, 
-                <em>cura artigianale</em> e <em>rispetto per la natura</em>.
+                {t.hero.description.secondary}
               </p>
             </div>
 
@@ -127,7 +127,7 @@ export default function HeroSection() {
             <div className={`flex flex-col sm:flex-row gap-3 md:gap-4 justify-center lg:justify-start ${isVisible ? 'fade-in-up' : ''}`} style={{animationDelay: '0.5s'}}>
               <Link href="/products"
                 className="group relative bg-gradient-to-r from-olive via-salvia to-olive bg-size-200 bg-pos-0 hover:bg-pos-100 text-beige px-6 py-3 md:px-8 md:py-4 rounded-full font-medium transition-all duration-500 hover:shadow-2xl hover:scale-110 flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg overflow-hidden">  
-                <span className="relative z-10">Scopri i Prodotti</span>
+                <span className="relative z-10">{t.hero.buttons.discover}</span>
                   <svg className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-2 group-hover:scale-110 transition-all duration-300 relative z-10" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
                   </svg>
@@ -139,7 +139,7 @@ export default function HeroSection() {
                 <svg className="w-4 h-4 md:w-5 md:h-5 group-hover:scale-125 group-hover:rotate-12 transition-all duration-300" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
                 </svg>
-                <span>Guarda il Video</span>
+                <span>{t.hero.buttons.watch}</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-olive/10 to-salvia/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </button>
             </div>
@@ -148,15 +148,15 @@ export default function HeroSection() {
             <div className={`grid grid-cols-3 gap-4 md:gap-8 pt-6 md:pt-8 border-t border-olive/20 ${isVisible ? 'fade-in-up' : ''}`} style={{animationDelay: '0.6s'}}>
               <div className="text-center">
                 <div className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold mb-1 md:mb-2 text-olive">100%</div>
-                <div className="text-xs md:text-sm text-nocciola font-medium">Naturale</div>
+                <div className="text-xs md:text-sm text-nocciola font-medium">{t.hero.stats.natural}</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold mb-1 md:mb-2 text-olive">1950</div>
-                <div className="text-xs md:text-sm text-nocciola font-medium">Dal</div>
+                <div className="text-xs md:text-sm text-nocciola font-medium">{t.hero.stats.since}</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold mb-1 md:mb-2 text-olive">3°</div>
-                <div className="text-xs md:text-sm text-nocciola font-medium">Generazione</div>
+                <div className="text-xs md:text-sm text-nocciola font-medium">{t.hero.stats.generation}</div>
               </div>
             </div>
           </div>
@@ -180,7 +180,7 @@ export default function HeroSection() {
               <div className="relative">
                 <img
                   src="/bottle-oil.png"
-                  alt="Bottiglia Olio Galia"
+                  alt={`${t.hero.title.line3} Bottle`}
                   className={`w-56 sm:w-64 md:w-80 lg:w-96 xl:w-[480px] drop-shadow-2xl group-hover:scale-110 transition-all duration-700 ease-out ${isVisible ? 'fade-in-scale' : ''}`}
                 />
                 

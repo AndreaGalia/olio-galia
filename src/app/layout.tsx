@@ -3,6 +3,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import FloatingCart from '@/components/FloatingCart';
 import { CartProvider } from '@/contexts/CartContext';
+import { LocaleProvider } from '@/contexts/LocaleContext';
 
 export const metadata = {
   title: 'Olio Galia',
@@ -13,12 +14,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="it">
       <body>
-        <CartProvider>
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-          <FloatingCart />
-        </CartProvider>
+        <LocaleProvider>
+          <CartProvider>
+            <Navbar />
+            <main>{children}</main>
+            <Footer />
+            <FloatingCart />
+          </CartProvider>
+        </LocaleProvider>
       </body>
     </html>
   );

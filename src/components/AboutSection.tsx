@@ -1,37 +1,38 @@
 "use client";
+import { useT } from '@/hooks/useT';
 import { useState } from 'react';
-import Image from "next/image";
 
 export default function AboutSection() {
   const [activeBrother, setActiveBrother] = useState(0);
+  const { t, translate } = useT();
 
   const brothers = [
     {
       id: 1,
-      name: "Marco Galia",
-      role: "Produzione e Qualità",
-      description: "Esperto in tecniche di coltivazione e spremitura, Marco si occupa di mantenere gli standard qualitativi che hanno reso famoso l'olio della famiglia.",
-      speciality: "Agronomo specializzato in olivicoltura",
-      photo: "/marco-galia.jpg", // Sostituire con il percorso reale
-      quote: "Ogni oliva raccolta porta con sé il sapore della nostra terra"
+      name: t.about.brothers.marco.name,
+      role: t.about.brothers.marco.role,
+      description: t.about.brothers.marco.description,
+      speciality: t.about.brothers.marco.speciality,
+      photo: "/marco-galia.jpg",
+      quote: t.about.brothers.marco.quote
     },
     {
       id: 2,
-      name: "Giuseppe Galia",
-      role: "Commerciale e Marketing",
-      description: "Con una visione moderna del business, Giuseppe cura i rapporti con i clienti e la strategia commerciale dell'azienda.",
-      speciality: "Laurea in Marketing e Comunicazione",
-      photo: "/giuseppe-galia.jpg", // Sostituire con il percorso reale
-      quote: "Portiamo la tradizione siciliana nel mondo"
+      name: t.about.brothers.giuseppe.name,
+      role: t.about.brothers.giuseppe.role,
+      description: t.about.brothers.giuseppe.description,
+      speciality: t.about.brothers.giuseppe.speciality,
+      photo: "/giuseppe-galia.jpg",
+      quote: t.about.brothers.giuseppe.quote
     },
     {
       id: 3,
-      name: "Antonio Galia",
-      role: "Amministrazione e Logistica",
-      description: "Il più giovane dei fratelli, Antonio gestisce l'aspetto amministrativo e organizzativo, garantendo efficienza in ogni processo.",
-      speciality: "Dottore Commercialista",
-      photo: "/antonio-galia.jpg", // Sostituire con il percorso reale
-      quote: "L'organizzazione è il cuore di ogni grande tradizione"
+      name: t.about.brothers.antonio.name,
+      role: t.about.brothers.antonio.role,
+      description: t.about.brothers.antonio.description,
+      speciality: t.about.brothers.antonio.speciality,
+      photo: "/antonio-galia.jpg",
+      quote: t.about.brothers.antonio.quote
     }
   ];
 
@@ -51,18 +52,16 @@ export default function AboutSection() {
         <div className="text-center mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 bg-olive/10 text-olive px-4 py-2 rounded-full text-sm font-medium mb-6">
             <div className="w-2 h-2 bg-olive rounded-full"></div>
-            La Nostra Storia
+            {t.about.badge}
           </div>
           
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif text-olive mb-6 leading-tight">
-            Chi Siamo
-            <span className="block italic text-salvia">I Fratelli Galia</span>
+            {t.about.title.line1}
+            <span className="block italic text-salvia">{t.about.title.line2}</span>
           </h2>
           
           <p className="text-lg text-nocciola max-w-3xl mx-auto leading-relaxed">
-            Tre fratelli uniti dalla passione per la terra e il rispetto per le tradizioni. 
-            Abbiamo deciso di riprendere l'azienda olearia del nostro amato nonno, 
-            portando avanti un'eredità di sapori autentici e valori familiari.
+            {t.about.intro}
           </p>
         </div>
 
@@ -72,43 +71,28 @@ export default function AboutSection() {
             
             <div className="space-y-6">
               <h3 className="text-2xl sm:text-3xl font-serif text-olive">
-                Dal 1950, Una Tradizione di Famiglia
+                {t.about.history.title}
               </h3>
               
               <div className="space-y-4 text-nocciola leading-relaxed">
-                <p>
-                  Tutto iniziò nel 1950, quando nostro nonno Francesco Galia piantò i primi ulivi 
-                  nelle colline siciliane. Con dedizione e amore per la terra, costruì 
-                  un'azienda che divenne sinonimo di qualità e autenticità.
-                </p>
-                
-                <p>
-                  Dopo anni in cui l'azienda rimase inattiva, noi tre fratelli abbiamo deciso 
-                  di riportare in vita questo patrimonio familiare. Ognuno con le proprie 
-                  competenze e specializzazioni, ma tutti accomunati dalla stessa passione 
-                  per l'olio extravergine di oliva.
-                </p>
-                
-                <p>
-                  Oggi, la Galia rappresenta l'incontro perfetto tra tradizione e innovazione, 
-                  mantenendo intatti i valori e i metodi tramandati dal nonno, ma con uno 
-                  sguardo rivolto al futuro.
-                </p>
+                <p>{t.about.history.paragraph1}</p>
+                <p>{t.about.history.paragraph2}</p>
+                <p>{t.about.history.paragraph3}</p>
               </div>
 
               {/* Statistiche famiglia */}
               <div className="grid grid-cols-3 gap-4 pt-6 border-t border-olive/20">
                 <div className="text-center">
-                  <div className="text-2xl font-serif text-olive font-bold">75+</div>
-                  <div className="text-sm text-nocciola">Anni di Storia</div>
+                  <div className="text-2xl font-serif text-olive font-bold">{t.about.history.stats.years}</div>
+                  <div className="text-sm text-nocciola">{t.about.history.stats.yearsLabel}</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-serif text-olive font-bold">3</div>
-                  <div className="text-sm text-nocciola">Generazioni</div>
+                  <div className="text-2xl font-serif text-olive font-bold">{t.about.history.stats.generations}</div>
+                  <div className="text-sm text-nocciola">{t.about.history.stats.generationsLabel}</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-serif text-olive font-bold">100%</div>
-                  <div className="text-sm text-nocciola">Famiglia</div>
+                  <div className="text-2xl font-serif text-olive font-bold">{t.about.history.stats.family}</div>
+                  <div className="text-sm text-nocciola">{t.about.history.stats.familyLabel}</div>
                 </div>
               </div>
             </div>
@@ -122,9 +106,9 @@ export default function AboutSection() {
                   </svg>
                 </div>
                 <p className="text-sm text-nocciola italic">
-                  Foto storica dell'azienda del nonno Francesco
+                  {t.about.history.imageCaption}
                   <br />
-                  <span className="text-xs">(Inserire immagine: /nonno-francesco-1950.jpg)</span>
+                  <span className="text-xs">{t.about.history.imageNote}</span>
                 </p>
               </div>
               
@@ -140,7 +124,7 @@ export default function AboutSection() {
         {/* I tre fratelli */}
         <div className="mb-12">
           <h3 className="text-2xl sm:text-3xl font-serif text-olive text-center mb-8 sm:mb-12">
-            I Tre Fratelli
+            {t.about.brothers.title}
           </h3>
 
           {/* Selector fratelli - Mobile */}
@@ -177,7 +161,7 @@ export default function AboutSection() {
                     </svg>
                   </div>
                   <p className="text-xs text-center text-nocciola/60 italic">
-                    Inserire: {brother.photo}
+                    {translate('about.brothers.imageNote', { photo: brother.photo })}
                   </p>
                   
                   {/* Badge ruolo */}
@@ -223,7 +207,7 @@ export default function AboutSection() {
                     </svg>
                   </div>
                   <p className="text-xs text-center text-nocciola/60 italic mt-2">
-                    Inserire: {brothers[activeBrother].photo}
+                    {translate('about.brothers.imageNote', { photo: brothers[activeBrother].photo })}
                   </p>
                 </div>
 
@@ -254,7 +238,7 @@ export default function AboutSection() {
         {/* Valori aziendali */}
         <div className="bg-gradient-to-r from-olive/10 to-salvia/10 rounded-2xl p-6 sm:p-8 lg:p-10 mb-12">
           <h3 className="text-2xl sm:text-3xl font-serif text-olive text-center mb-8">
-            I Nostri Valori
+            {t.about.values.title}
           </h3>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
@@ -265,10 +249,9 @@ export default function AboutSection() {
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
               </div>
-              <h4 className="text-lg font-serif text-olive">Qualità</h4>
+              <h4 className="text-lg font-serif text-olive">{t.about.values.quality.title}</h4>
               <p className="text-sm text-nocciola">
-                Non scendiamo mai a compromessi sulla qualità. 
-                Ogni bottiglia rispecchia i nostri standard più elevati.
+                {t.about.values.quality.description}
               </p>
             </div>
 
@@ -278,10 +261,9 @@ export default function AboutSection() {
                   <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
                 </svg>
               </div>
-              <h4 className="text-lg font-serif text-olive">Famiglia</h4>
+              <h4 className="text-lg font-serif text-olive">{t.about.values.family.title}</h4>
               <p className="text-sm text-nocciola">
-                L'azienda è il riflesso dei nostri legami familiari. 
-                Ogni decisione è presa insieme, con rispetto reciproco.
+                {t.about.values.family.description}
               </p>
             </div>
 
@@ -291,10 +273,9 @@ export default function AboutSection() {
                   <path fillRule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clipRule="evenodd" />
                 </svg>
               </div>
-              <h4 className="text-lg font-serif text-olive">Tradizione</h4>
+              <h4 className="text-lg font-serif text-olive">{t.about.values.tradition.title}</h4>
               <p className="text-sm text-nocciola">
-                Rispettiamo e preserviamo i metodi tradizionali, 
-                tramandando la saggezza del nostro nonno.
+                {t.about.values.tradition.description}
               </p>
             </div>
 
@@ -304,7 +285,7 @@ export default function AboutSection() {
         {/* Call to action */}
         <div className="text-center">
           <button className="bg-gradient-to-r from-olive to-salvia text-beige px-8 sm:px-10 py-4 rounded-full text-lg font-medium hover:shadow-xl transition-all duration-300 hover:scale-105 inline-flex items-center gap-3">
-            Conosci la Nostra Storia
+            {t.about.cta}
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
             </svg>

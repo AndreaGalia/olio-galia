@@ -1,0 +1,469 @@
+{
+  "hero": {
+    "badge": "Tradizione Siciliana dal 1950",
+    "title": {
+      "line1": "Sani e forti",
+      "line2": "come Golia,",
+      "line3": "solo con Olio Galia"
+    },
+    "description": {
+      "main": "L'olio extravergine è il frutto della nostra terra, un equilibrio unico di profumi e tradizione siciliana.",
+      "secondary": "Ogni goccia racconta una storia di passione, cura artigianale e rispetto per la natura."
+    },
+    "buttons": {
+      "discover": "Scopri i Prodotti",
+      "watch": "Guarda il Video"
+    },
+    "stats": {
+      "natural": "Naturale",
+      "since": "Dal",
+      "generation": "Generazione"
+    }
+  },
+  "products": {
+    "loading": "Caricamento prodotti...",
+    "error": "Errore: {error}",
+    "retry": "Riprova",
+    "noProducts": "Nessun prodotto disponibile.",
+    "badge": "La Nostra Eccellenza",
+    "title": {
+      "line1": "Oli Extravergini",
+      "line2": "Siciliani Autentici"
+    },
+    "description": "Ogni goccia racconta una storia di tradizione, passione e dedizione tramandati attraverso tre generazioni di maestri oleari.",
+    "features": {
+      "handPicked": "Raccolto a mano",
+      "coldPressed": "Molito a freddo",
+      "sicilian": "100% Siciliano"
+    },
+    "product": {
+      "discount": "SCONTO",
+      "available": "✓ Disponibile ({count} pezzi)",
+      "outOfStock": "✗ Esaurito",
+      "details": "Dettagli",
+      "addToCart": "Aggiungi"
+    },
+    "whyChoose": {
+      "title": "Perché Scegliere",
+      "subtitle": "Olio Galia",
+      "description": "La nostra dedizione alla qualità si riflette in ogni aspetto della produzione",
+      "quality": {
+        "title": "Qualità Certificata",
+        "description": "Controlli rigorosi e certificazioni di qualità garantiscono l'eccellenza di ogni bottiglia"
+      },
+      "shipping": {
+        "title": "Spedizione Rapida",
+        "description": "Consegna gratuita in Italia per ordini superiori a €{threshold}, packaging sostenibile"
+      },
+      "tradition": {
+        "title": "Tradizione Autentica",
+        "description": "Tre generazioni di esperienza e amore per la terra siciliana in ogni goccia"
+      }
+    },
+    "cta": {
+      "button": "Esplora Tutta la Collezione",
+      "description": "Scopri l'intera gamma dei nostri oli extravergini e trova quello perfetto per la tua tavola"
+    }
+  },
+  "about": {
+    "badge": "La Nostra Storia",
+    "title": {
+      "line1": "Chi Siamo",
+      "line2": "I Fratelli Galia"
+    },
+    "intro": "Tre fratelli uniti dalla passione per la terra e il rispetto per le tradizioni. Abbiamo deciso di riprendere l'azienda olearia del nostro amato nonno, portando avanti un'eredità di sapori autentici e valori familiari.",
+    "history": {
+      "title": "Dal 1950, Una Tradizione di Famiglia",
+      "paragraph1": "Tutto iniziò nel 1950, quando nostro nonno Francesco Galia piantò i primi ulivi nelle colline siciliane. Con dedizione e amore per la terra, costruì un'azienda che divenne sinonimo di qualità e autenticità.",
+      "paragraph2": "Dopo anni in cui l'azienda rimase inattiva, noi tre fratelli abbiamo deciso di riportare in vita questo patrimonio familiare. Ognuno con le proprie competenze e specializzazioni, ma tutti accomunati dalla stessa passione per l'olio extravergine di oliva.",
+      "paragraph3": "Oggi, la Galia rappresenta l'incontro perfetto tra tradizione e innovazione, mantenendo intatti i valori e i metodi tramandati dal nonno, ma con uno sguardo rivolto al futuro.",
+      "imageCaption": "Foto storica dell'azienda del nonno Francesco",
+      "imageNote": "(Inserire immagine: /nonno-francesco-1950.jpg)",
+      "stats": {
+        "years": "75+",
+        "yearsLabel": "Anni di Storia",
+        "generations": "3",
+        "generationsLabel": "Generazioni",
+        "family": "100%",
+        "familyLabel": "Famiglia"
+      }
+    },
+    "brothers": {
+      "title": "I Tre Fratelli",
+      "marco": {
+        "name": "Marco Galia",
+        "role": "Produzione e Qualità",
+        "description": "Esperto in tecniche di coltivazione e spremitura, Marco si occupa di mantenere gli standard qualitativi che hanno reso famoso l'olio della famiglia.",
+        "speciality": "Agronomo specializzato in olivicoltura",
+        "quote": "Ogni oliva raccolta porta con sé il sapore della nostra terra"
+      },
+      "giuseppe": {
+        "name": "Giuseppe Galia",
+        "role": "Commerciale e Marketing",
+        "description": "Con una visione moderna del business, Giuseppe cura i rapporti con i clienti e la strategia commerciale dell'azienda.",
+        "speciality": "Laurea in Marketing e Comunicazione",
+        "quote": "Portiamo la tradizione siciliana nel mondo"
+      },
+      "antonio": {
+        "name": "Antonio Galia",
+        "role": "Amministrazione e Logistica",
+        "description": "Il più giovane dei fratelli, Antonio gestisce l'aspetto amministrativo e organizzativo, garantendo efficienza in ogni processo.",
+        "speciality": "Dottore Commercialista",
+        "quote": "L'organizzazione è il cuore di ogni grande tradizione"
+      },
+      "imageNote": "Inserire: {photo}"
+    },
+    "values": {
+      "title": "I Nostri Valori",
+      "quality": {
+        "title": "Qualità",
+        "description": "Non scendiamo mai a compromessi sulla qualità. Ogni bottiglia rispecchia i nostri standard più elevati."
+      },
+      "family": {
+        "title": "Famiglia",
+        "description": "L'azienda è il riflesso dei nostri legami familiari. Ogni decisione è presa insieme, con rispetto reciproco."
+      },
+      "tradition": {
+        "title": "Tradizione",
+        "description": "Rispettiamo e preserviamo i metodi tradizionali, tramandando la saggezza del nostro nonno."
+      }
+    },
+    "cta": "Conosci la Nostra Storia"
+  },
+  "faq": {
+    "badge": "Hai Domande?",
+    "title": {
+      "line1": "Domande",
+      "line2": "Frequenti"
+    },
+    "description": "Trova le risposte alle domande più comuni sui nostri oli extravergini, la produzione e i servizi offerti dalla famiglia Galia.",
+    "categories": {
+      "production": "Produzione",
+      "products": "Prodotti", 
+      "conservation": "Conservazione",
+      "shipping": "Spedizioni",
+      "origin": "Origine",
+      "certifications": "Certificazioni",
+      "visits": "Visite",
+      "quality": "Qualità"
+    },
+    "questions": [
+      {
+        "question": "Come viene prodotto il vostro olio extravergine?",
+        "answer": "Il nostro olio viene prodotto seguendo metodi tradizionali tramandati dal nostro nonno. Le olive vengono raccolte rigorosamente a mano al giusto grado di maturazione, poi molite a freddo entro 24 ore dalla raccolta. Utilizziamo solo processi meccanici senza alcun trattamento chimico, garantendo un prodotto 100% naturale.",
+        "category": "production"
+      },
+      {
+        "question": "Qual è la differenza tra i vostri oli?",
+        "answer": "Offriamo tre tipologie: l'Olio Classico con fruttato intenso e note di erba fresca, l'Olio Biologico certificato con sapore delicato e retrogusto piccante equilibrato, e l'Olio Premium da olive centenarie con profilo organolettico complesso. Ogni olio ha caratteristiche uniche adatte a diversi palati e utilizzi.",
+        "category": "products"
+      },
+      {
+        "question": "Come conservare al meglio l'olio extravergine?",
+        "answer": "Per mantenere intatte le proprietà organolettiche, conservate l'olio in luogo fresco e asciutto, lontano da fonti di luce e calore. La temperatura ideale è tra 14-18°C. Chiudete sempre bene il tappo dopo l'uso e consumate entro 18 mesi dall'apertura. Le nostre bottiglie scure proteggono già l'olio dalla luce.",
+        "category": "conservation"
+      },
+      {
+        "question": "Fate spedizioni in tutta Italia?",
+        "answer": "Sì, spediamo in tutta Italia con corriere espresso. Per ordini superiori a €50 la spedizione è gratuita. Utilizziamo imballaggi speciali per proteggere le bottiglie durante il trasporto. I tempi di consegna sono generalmente di 2-3 giorni lavorativi. Per ordini internazionali, contattateci per informazioni specifiche.",
+        "category": "shipping"
+      },
+      {
+        "question": "L'olio è davvero prodotto in Sicilia?",
+        "answer": "Assolutamente sì. I nostri uliveti si trovano nelle colline siciliane dove il nostro nonno piantò i primi alberi nel 1950. Ogni fase della produzione avviene in loco: dalla coltivazione alla raccolta, dalla molitura all'imbottigliamento. Siamo orgogliosi della nostra origine 100% siciliana.",
+        "category": "origin"
+      },
+      {
+        "question": "Che certificazioni ha il vostro olio?",
+        "answer": "I nostri oli sono certificati DOP (Denominazione di Origine Protetta) e rispettano tutti gli standard di qualità italiani ed europei. L'olio biologico ha certificazione BIO rilasciata da ente accreditato. Effettuiamo regolari analisi chimiche e organolettiche per garantire acidità inferiore allo 0,3% e parametri qualitativi eccellenti.",
+        "category": "certifications"
+      },
+      {
+        "question": "È possibile visitare l'azienda?",
+        "answer": "Certamente! Organizziamo visite guidate su prenotazione dove potrete conoscere personalmente noi tre fratelli, visitare gli uliveti, assistere al processo di produzione e degustare i nostri oli. Le visite includono anche racconti sulla storia della famiglia e della tradizione olearia siciliana. Contattateci per programmare la vostra visita.",
+        "category": "visits"
+      },
+      {
+        "question": "Come posso essere sicuro della qualità del vostro olio?",
+        "answer": "La qualità è garantita da tre generazioni di esperienza, analisi chimiche certificate, raccolta manuale delle olive, spremitura a freddo entro 24 ore e controlli rigorosi in ogni fase. Ogni bottiglia riporta il numero di lotto per la tracciabilità completa. Offriamo inoltre la garanzia soddisfatti o rimborsati.",
+        "category": "quality"
+      }
+    ],
+    "contact": {
+      "title": "Non hai trovato la risposta?",
+      "description": "I fratelli Galia sono sempre disponibili per rispondere alle tue domande e aiutarti a scegliere l'olio perfetto per te.",
+      "buttons": {
+        "email": "Scrivi una Email",
+        "phone": "Chiamaci",
+        "whatsapp": "WhatsApp"
+      },
+      "info": {
+        "email": "Email",
+        "phone": "Telefono",
+        "whatsapp": "WhatsApp",
+        "emailAddress": "info@oliogalia.it",
+        "phoneNumber": "+39 123 456 7890",
+        "whatsappNumber": "+39 123 456 7890"
+      }
+    }
+  },
+  "navbar": {
+    "menu": {
+      "home": "Home",
+      "about": "Chi siamo",
+      "products": "Prodotti",
+      "contact": "Contatti"
+    },
+    "mobile": {
+      "menuTitle": "Menu",
+      "closeMenu": "Chiudi menu",
+      "language": "Lingua:",
+      "cart": "Carrello",
+      "tagline": "Tradizione Siciliana",
+      "since": "Dal 1950"
+    },
+    "cart": {
+      "title": "Carrello",
+      "itemsCount": "{count} articoli"
+    }
+  },
+  "footer": {
+    "brand": {
+      "description": "Dal 1950, tre generazioni di passione siciliana in ogni goccia. I fratelli Galia continuano la tradizione del nonno Francesco.",
+      "badges": {
+        "dop": "DOP Sicilia",
+        "bio": "Bio Certificato",
+        "natural": "100% Naturale"
+      }
+    },
+    "products": {
+      "title": "I Nostri Oli",
+      "classic": "Olio Extravergine Classico",
+      "organic": "Olio Extravergine Biologico",
+      "premium": "Olio Extravergine Premium",
+      "gifts": "Confezioni Regalo",
+      "tastings": "Degustazioni"
+    },
+    "info": {
+      "title": "Informazioni",
+      "story": "La Nostra Storia",
+      "production": "Come Produciamo",
+      "certifications": "Certificazioni",
+      "visits": "Visite Aziendali",
+      "shipping": "Spedizioni e Resi"
+    },
+    "contact": {
+      "title": "Contatti",
+      "address": "Via degli Ulivi 123, Sicilia",
+      "phone": "+39 123 456 7890",
+      "email": "info@oliogalia.it",
+      "social": "Seguici su"
+    },
+    "newsletter": {
+      "title": "Resta sempre aggiornato",
+      "description": "Ricevi le nostre novità, ricette esclusive e offerte speciali direttamente nella tua casella email",
+      "placeholder": "Il tuo indirizzo email",
+      "button": "Iscriviti",
+      "privacy": "Rispettiamo la tua privacy. Puoi annullare l'iscrizione in qualsiasi momento."
+    },
+    "bottom": {
+      "copyright": "© 2024 Olio Galia. Tutti i diritti riservati. | P.IVA: 12345678901",
+      "privacy": "Privacy Policy",
+      "cookies": "Cookie Policy",
+      "terms": "Termini di Servizio"
+    }
+  },
+  "aboutPage": {
+    "hero": {
+      "badge": "La Famiglia Galia",
+      "title": {
+        "main": "Chi Siamo",
+        "subtitle": "Una Storia di Passione"
+      },
+      "description": "Tre fratelli uniti dalla passione per la terra siciliana e il rispetto per le tradizioni. La nostra storia inizia nel 1950 con nostro nonno Francesco e continua oggi con la stessa dedizione e amore per l'olio extravergine di qualità superiore."
+    },
+    "timeline": {
+      "title": "La Nostra Storia",
+      "events": [
+        {
+          "year": "1950",
+          "title": "Gli Inizi",
+          "description": "Francesco Galia pianta i primi 100 ulivi nelle colline di Castelvetrano, iniziando quella che sarebbe diventata una tradizione familiare.",
+          "details": "Con soli 25 anni e un prestito dalla banca locale, Francesco acquista 5 ettari di terreno collinare. La scelta della varietà Nocellara del Belice si rivela vincente."
+        },
+        {
+          "year": "1965",
+          "title": "L'Espansione",
+          "description": "L'azienda cresce: Francesco acquista nuovi terreni e costruisce il primo frantoio con macine in pietra.",
+          "details": "Grazie ai primi successi, l'azienda si espande fino a 15 ettari. Il frantoio viene costruito seguendo i progetti tradizionali siciliani, con macine in pietra lavica dell'Etna."
+        },
+        {
+          "year": "1978",
+          "title": "La Generazione Successiva",
+          "description": "I figli di Francesco, Salvatore e Maria, entrano in azienda portando nuove idee e tecnologie.",
+          "details": "Salvatore introduce le prime tecniche di agricoltura sostenibile, mentre Maria si occupa della commercializzazione locale. L'azienda raggiunge 25 ettari."
+        },
+        {
+          "year": "1995",
+          "title": "Il Periodo Difficile",
+          "description": "Dopo la morte di Francesco, l'azienda attraversa un periodo di difficoltà e viene temporaneamente chiusa.",
+          "details": "Le difficoltà economiche e familiari portano alla decisione di sospendere l'attività. Gli uliveti vengono affidati a coltivatori locali per la manutenzione."
+        },
+        {
+          "year": "2018",
+          "title": "La Rinascita",
+          "description": "I tre nipoti di Francesco decidono di riportare in vita l'azienda del nonno, unendo tradizione e innovazione.",
+          "details": "Marco, Giuseppe e Antonio investono i loro risparmi per ristrutturare il frantoio e modernizzare gli impianti, mantenendo i metodi tradizionali di produzione."
+        },
+        {
+          "year": "2024",
+          "title": "Il Presente",
+          "description": "Oggi l'azienda Galia è riconosciuta per la qualità del suo olio extravergine e la sostenibilità ambientale.",
+          "details": "Con 30 ettari coltivati biologicamente e 3000 piante di ulivo, l'azienda produce 15.000 litri di olio extravergine all'anno, esportando in tutta Europa."
+        }
+      ]
+    },
+    "brothers": {
+      "title": "I Tre Fratelli",
+      "subtitle": "Ognuno con le proprie competenze e specializzazioni, ma tutti uniti dalla stessa passione per l'eccellenza e l'amore per la nostra terra.",
+      "achievements": "Risultati raggiunti:",
+      "profiles": [
+        {
+          "name": "Marco Galia",
+          "role": "Produzione e Qualità",
+          "age": "45 anni",
+          "description": "Il più grande dei fratelli, Marco ha ereditato la passione per la terra dal nonno Francesco. Dopo la laurea in Agraria, ha trascorso anni a perfezionare le tecniche di coltivazione biologica e spremitura a freddo.",
+          "speciality": "Agronomo specializzato in olivicoltura biologica",
+          "quote": "Ogni oliva raccolta porta con sé il sapore della nostra terra",
+          "details": "Marco si alza ogni mattina all'alba per controllare personalmente gli uliveti. La sua esperienza gli permette di riconoscere il momento perfetto per la raccolta, quando le olive hanno raggiunto il giusto grado di maturazione.",
+          "achievements": ["Certificazione Biologica EU", "Premio Regionale Qualità Olio 2023", "Corso Mastro Frantoiano"]
+        },
+        {
+          "name": "Giuseppe Galia",
+          "role": "Commerciale e Marketing",
+          "age": "42 anni",
+          "description": "Giuseppe ha portato una ventata di modernità nell'azienda familiare. La sua visione commerciale ha permesso all'olio Galia di raggiungere mercati nazionali e internazionali, mantenendo sempre l'autenticità del prodotto.",
+          "speciality": "Laurea in Marketing e Comunicazione - Master in Export Management",
+          "quote": "Portiamo la tradizione siciliana nel mondo, una bottiglia alla volta",
+          "details": "Giuseppe ha sviluppato una rete di distributori in tutta Europa e ha creato partnership con ristoranti stellati che apprezzano la qualità dell'olio Galia.",
+          "achievements": ["Export in 12 Paesi", "Partnership con 50+ Ristoranti", "Certificazione ISO 22000"]
+        },
+        {
+          "name": "Antonio Galia",
+          "role": "Amministrazione e Logistica",
+          "age": "38 anni",
+          "description": "Il più giovane e metodico dei fratelli, Antonio ha modernizzato tutti i processi aziendali. La sua precisione amministrativa e organizzativa garantisce che ogni aspetto del business funzioni alla perfezione.",
+          "speciality": "Dottore Commercialista - Specializzazione in Controllo di Gestione",
+          "quote": "L'organizzazione è il cuore di ogni grande tradizione",
+          "details": "Antonio ha implementato un sistema di tracciabilità completa del prodotto, dalla pianta alla bottiglia, garantendo massima trasparenza ai clienti.",
+          "achievements": ["Sistema Tracciabilità Completa", "Certificazione HACCP", "Software Gestionale Personalizzato"]
+        }
+      ]
+    },
+    "values": {
+      "title": "I Nostri Valori",
+      "subtitle": "Questi principi guidano ogni nostra decisione e si riflettono nella qualità del nostro olio extravergine di oliva.",
+      "items": [
+        {
+          "title": "Qualità Suprema",
+          "description": "Ogni bottiglia rappresenta l'eccellenza dell'olio extravergine siciliano, ottenuto con spremitura a freddo e metodi tradizionali."
+        },
+        {
+          "title": "Valori Familiari",
+          "description": "L'azienda riflette i nostri legami familiari: rispetto, collaborazione e la passione condivisa per la nostra terra."
+        },
+        {
+          "title": "Tradizione Autentica",
+          "description": "Preserviamo e trasmettiamo i metodi tramandati da nostro nonno Francesco, adattandoli alle esigenze moderne."
+        },
+        {
+          "title": "Sostenibilità",
+          "description": "Coltiviamo con metodi biologici certificati, rispettando l'ambiente e garantendo un futuro sostenibile alle prossime generazioni."
+        }
+      ]
+    },
+    "stats": {
+      "hectares": "Ettari Coltivati",
+      "plants": "Piante di Ulivo",
+      "liters": "Litri/Anno",
+      "countries": "Paesi Export"
+    },
+    "cta": {
+      "title": "Scopri il Nostro Olio",
+      "description": "Assapora l'autenticità dell'olio extravergine di oliva siciliano, prodotto con passione e tradizione dalla famiglia Galia.",
+      "catalog": "Vai al Catalogo",
+      "contact": "Contattaci"
+    }
+  },
+  "productsPage": {
+    "loading": "Caricamento prodotti...",
+    "error": "Errore: {error}",
+    "retry": "Riprova",
+    "noProducts": "Nessun prodotto trovato per questa categoria.",
+    "hero": {
+      "badge": "Catalogo Completo",
+      "title": {
+        "main": "I Nostri",
+        "highlight": "Prodotti"
+      },
+      "description": "Dalla tradizione siciliana, una selezione esclusiva che spazia dall'olio extravergine premium ai prodotti per il benessere, fino ai formati famiglia per l'uso quotidiano."
+    },
+    "categories": {
+      "all": "Tutti i Prodotti"
+    },
+    "product": {
+      "discount": "SCONTO",
+      "available": "✓ Disponibile ({count} pezzi)",
+      "outOfStock": "✗ Esaurito",
+      "details": "Dettagli",
+      "addToCart": "Aggiungi al Carrello"
+    },
+    "benefits": {
+      "title": "Perché Scegliere Galia",
+      "subtitle": "Ogni prodotto rappresenta l'eccellenza della tradizione siciliana",
+      "items": [
+        {
+          "title": "Qualità Premium",
+          "description": "Controlli rigorosi e certificazioni di qualità"
+        },
+        {
+          "title": "Spedizione Sicura",
+          "description": "Imballaggi protettivi e consegna garantita"
+        },
+        {
+          "title": "Tradizione Familiare",
+          "description": "75 anni di passione e sapienza siciliana"
+        },
+        {
+          "title": "Soddisfazione Garantita",
+          "description": "Rimborso completo se non sei soddisfatto"
+        }
+      ]
+    }
+  },
+  "productDetailPage": {
+    "loading": "Caricamento prodotto...",
+    "error": "Errore: {error}",
+    "retry": "Riprova",
+    "notFound": {
+      "title": "Prodotto non trovato",
+      "button": "Torna ai prodotti"
+    },
+    "breadcrumb": {
+      "home": "Home",
+      "products": "Prodotti"
+    },
+    "product": {
+      "quantity": "Quantità:",
+      "available": "✓ Disponibile ({count} pezzi)",
+      "outOfStock": "✗ Esaurito",
+      "characteristics": "Caratteristiche",
+      "nutritionalInfo": "Valori Nutrizionali",
+      "nutritionalPer100g": "Per 100g:",
+      "nutritionalNotAvailable": "Valori nutrizionali non disponibili.",
+      "awards": "Premi e Riconoscimenti",
+      "noAwards": "Nessun premio ancora assegnato.",
+      "relatedProducts": "Potrebbe interessarti anche"
+    }
+  }
+}

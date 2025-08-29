@@ -1,6 +1,15 @@
 "use client";
 
+import { useT } from "@/hooks/useT";
+
+
 export default function Footer() {
+  const { t } = useT();
+
+  const handleWhatsAppClick = () => {
+    window.open('https://wa.me/391234567890', '_blank');
+  };
+
   return (
     <>
       <footer className="relative bg-gradient-to-br from-olive to-salvia text-beige overflow-hidden">
@@ -23,66 +32,65 @@ export default function Footer() {
                 <div className="space-y-4">
                   <h3 className="text-2xl sm:text-3xl font-serif">Olio Galia</h3>
                   <p className="text-beige/80 leading-relaxed text-sm sm:text-base">
-                    Dal 1950, tre generazioni di passione siciliana in ogni goccia. 
-                    I fratelli Galia continuano la tradizione del nonno Francesco.
+                    {t.footer.brand.description}
                   </p>
                 </div>
                 
                 {/* Badge qualità */}
                 <div className="flex flex-wrap gap-2">
                   <span className="bg-beige/20 text-beige px-3 py-1 rounded-full text-xs font-medium">
-                    DOP Sicilia
+                    {t.footer.brand.badges.dop}
                   </span>
                   <span className="bg-beige/20 text-beige px-3 py-1 rounded-full text-xs font-medium">
-                    Bio Certificato
+                    {t.footer.brand.badges.bio}
                   </span>
                   <span className="bg-beige/20 text-beige px-3 py-1 rounded-full text-xs font-medium">
-                    100% Naturale
+                    {t.footer.brand.badges.natural}
                   </span>
                 </div>
               </div>
 
               {/* Prodotti */}
               <div className="space-y-4 sm:space-y-6">
-                <h4 className="text-lg sm:text-xl font-serif">I Nostri Oli</h4>
+                <h4 className="text-lg sm:text-xl font-serif">{t.footer.products.title}</h4>
                 <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base">
-                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">Olio Extravergine Classico</a></li>
-                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">Olio Extravergine Biologico</a></li>
-                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">Olio Extravergine Premium</a></li>
-                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">Confezioni Regalo</a></li>
-                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">Degustazioni</a></li>
+                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.products.classic}</a></li>
+                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.products.organic}</a></li>
+                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.products.premium}</a></li>
+                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.products.gifts}</a></li>
+                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.products.tastings}</a></li>
                 </ul>
               </div>
 
               {/* Informazioni */}
               <div className="space-y-4 sm:space-y-6">
-                <h4 className="text-lg sm:text-xl font-serif">Informazioni</h4>
+                <h4 className="text-lg sm:text-xl font-serif">{t.footer.info.title}</h4>
                 <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base">
-                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">La Nostra Storia</a></li>
-                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">Come Produciamo</a></li>
-                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">Certificazioni</a></li>
-                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">Visite Aziendali</a></li>
-                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">Spedizioni e Resi</a></li>
+                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.story}</a></li>
+                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.production}</a></li>
+                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.certifications}</a></li>
+                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.visits}</a></li>
+                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.shipping}</a></li>
                 </ul>
               </div>
 
               {/* Contatti e social */}
               <div className="space-y-4 sm:space-y-6">
-                <h4 className="text-lg sm:text-xl font-serif">Contatti</h4>
+                <h4 className="text-lg sm:text-xl font-serif">{t.footer.contact.title}</h4>
                 
                 <div className="space-y-3 sm:space-y-4">
                   <div className="flex items-center gap-3">
                     <svg className="w-4 h-4 text-beige/60 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                     </svg>
-                    <span className="text-beige/80 text-sm sm:text-base">Via degli Ulivi 123, Sicilia</span>
+                    <span className="text-beige/80 text-sm sm:text-base">{t.footer.contact.address}</span>
                   </div>
                   
                   <div className="flex items-center gap-3">
                     <svg className="w-4 h-4 text-beige/60 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                     </svg>
-                    <span className="text-beige/80 text-sm sm:text-base">+39 123 456 7890</span>
+                    <span className="text-beige/80 text-sm sm:text-base">{t.footer.contact.phone}</span>
                   </div>
                   
                   <div className="flex items-center gap-3">
@@ -90,13 +98,13 @@ export default function Footer() {
                       <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                       <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                     </svg>
-                    <span className="text-beige/80 text-sm sm:text-base">info@oliogalia.it</span>
+                    <span className="text-beige/80 text-sm sm:text-base">{t.footer.contact.email}</span>
                   </div>
                 </div>
 
                 {/* Social media */}
                 <div className="space-y-3">
-                  <h5 className="text-sm font-medium">Seguici su</h5>
+                  <h5 className="text-sm font-medium">{t.footer.contact.social}</h5>
                   <div className="flex gap-3">
                     <button className="w-10 h-10 bg-beige/20 hover:bg-beige/30 rounded-full flex items-center justify-center transition-colors duration-300 group">
                       <svg className="w-5 h-5 text-beige group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
@@ -117,7 +125,7 @@ export default function Footer() {
                     </button>
                     
                     <button 
-                      onClick={() => window.open('https://wa.me/391234567890', '_blank')}
+                      onClick={handleWhatsAppClick}
                       className="w-10 h-10 bg-green-500/20 hover:bg-green-500/30 rounded-full flex items-center justify-center transition-colors duration-300 group"
                     >
                       <svg className="w-5 h-5 text-beige group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
@@ -134,24 +142,24 @@ export default function Footer() {
           {/* Newsletter */}
           <div className="border-t border-beige/20 py-8 sm:py-12">
             <div className="max-w-2xl mx-auto text-center space-y-4 sm:space-y-6">
-              <h4 className="text-xl sm:text-2xl font-serif">Resta sempre aggiornato</h4>
+              <h4 className="text-xl sm:text-2xl font-serif">{t.footer.newsletter.title}</h4>
               <p className="text-beige/80 text-sm sm:text-base">
-                Ricevi le nostre novità, ricette esclusive e offerte speciali direttamente nella tua casella email
+                {t.footer.newsletter.description}
               </p>
               
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 max-w-md mx-auto">
                 <input 
                   type="email" 
-                  placeholder="Il tuo indirizzo email"
+                  placeholder={t.footer.newsletter.placeholder}
                   className="flex-1 px-4 py-3 rounded-full bg-beige/20 border border-beige/30 text-beige placeholder-beige/60 focus:outline-none focus:ring-2 focus:ring-beige/50 focus:border-transparent"
                 />
                 <button className="bg-beige text-olive px-6 py-3 rounded-full font-medium hover:bg-sabbia transition-colors duration-300 whitespace-nowrap cursor-pointer">
-                  Iscriviti
+                  {t.footer.newsletter.button}
                 </button>
               </div>
               
               <p className="text-xs text-beige/60">
-                Rispettiamo la tua privacy. Puoi annullare l'iscrizione in qualsiasi momento.
+                {t.footer.newsletter.privacy}
               </p>
             </div>
           </div>
@@ -160,13 +168,13 @@ export default function Footer() {
           <div className="border-t border-beige/20 py-6 sm:py-8">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
               <div className="text-sm text-beige/60 text-center sm:text-left">
-                © 2024 Olio Galia. Tutti i diritti riservati. | P.IVA: 12345678901
+                {t.footer.bottom.copyright}
               </div>
               
               <div className="flex flex-wrap justify-center sm:justify-end gap-4 sm:gap-6 text-sm">
-                <a href="#" className="text-beige/60 hover:text-beige transition-colors duration-300">Privacy Policy</a>
-                <a href="#" className="text-beige/60 hover:text-beige transition-colors duration-300">Cookie Policy</a>
-                <a href="#" className="text-beige/60 hover:text-beige transition-colors duration-300">Termini di Servizio</a>
+                <a href="#" className="text-beige/60 hover:text-beige transition-colors duration-300">{t.footer.bottom.privacy}</a>
+                <a href="#" className="text-beige/60 hover:text-beige transition-colors duration-300">{t.footer.bottom.cookies}</a>
+                <a href="#" className="text-beige/60 hover:text-beige transition-colors duration-300">{t.footer.bottom.terms}</a>
               </div>
             </div>
           </div>

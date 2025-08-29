@@ -1,0 +1,469 @@
+{
+  "hero": {
+    "badge": "Sicilian Tradition since 1950",
+    "title": {
+      "line1": "Healthy and strong",
+      "line2": "like Goliath,",
+      "line3": "only with Galia Oil"
+    },
+    "description": {
+      "main": "Extra virgin oil is the fruit of our land, a unique balance of aromas and Sicilian tradition.",
+      "secondary": "Each drop tells a story of passion, artisanal care and respect for nature."
+    },
+    "buttons": {
+      "discover": "Discover Products",
+      "watch": "Watch Video"
+    },
+    "stats": {
+      "natural": "Natural",
+      "since": "Since",
+      "generation": "Generation"
+    }
+  },
+  "products": {
+    "loading": "Loading products...",
+    "error": "Error: {error}",
+    "retry": "Try Again",
+    "noProducts": "No products available.",
+    "badge": "Our Excellence",
+    "title": {
+      "line1": "Extra Virgin Oils",
+      "line2": "Authentic Sicilian"
+    },
+    "description": "Each drop tells a story of tradition, passion and dedication passed down through three generations of oil masters.",
+    "features": {
+      "handPicked": "Hand picked",
+      "coldPressed": "Cold pressed",
+      "sicilian": "100% Sicilian"
+    },
+    "product": {
+      "discount": "DISCOUNT",
+      "available": "✓ Available ({count} pieces)",
+      "outOfStock": "✗ Out of stock",
+      "details": "Details",
+      "addToCart": "Add"
+    },
+    "whyChoose": {
+      "title": "Why Choose",
+      "subtitle": "Galia Oil",
+      "description": "Our dedication to quality is reflected in every aspect of production",
+      "quality": {
+        "title": "Certified Quality",
+        "description": "Rigorous controls and quality certifications guarantee the excellence of every bottle"
+      },
+      "shipping": {
+        "title": "Fast Shipping",
+        "description": "Free delivery in Italy for orders over €{threshold}, sustainable packaging"
+      },
+      "tradition": {
+        "title": "Authentic Tradition",
+        "description": "Three generations of experience and love for Sicilian land in every drop"
+      }
+    },
+    "cta": {
+      "button": "Explore the Full Collection",
+      "description": "Discover our complete range of extra virgin oils and find the perfect one for your table"
+    }
+  },
+  "about": {
+    "badge": "Our Story",
+    "title": {
+      "line1": "Who We Are",
+      "line2": "The Galia Brothers"
+    },
+    "intro": "Three brothers united by passion for the land and respect for traditions. We decided to revive our beloved grandfather's oil company, carrying forward a legacy of authentic flavors and family values.",
+    "history": {
+      "title": "Since 1950, A Family Tradition",
+      "paragraph1": "It all began in 1950, when our grandfather Francesco Galia planted the first olive trees in the Sicilian hills. With dedication and love for the land, he built a company that became synonymous with quality and authenticity.",
+      "paragraph2": "After years when the company remained inactive, we three brothers decided to bring this family heritage back to life. Each with our own skills and specializations, but all united by the same passion for extra virgin olive oil.",
+      "paragraph3": "Today, Galia represents the perfect meeting between tradition and innovation, keeping intact the values and methods passed down by our grandfather, but with an eye to the future.",
+      "imageCaption": "Historical photo of grandfather Francesco's company",
+      "imageNote": "(Insert image: /nonno-francesco-1950.jpg)",
+      "stats": {
+        "years": "75+",
+        "yearsLabel": "Years of History",
+        "generations": "3",
+        "generationsLabel": "Generations",
+        "family": "100%",
+        "familyLabel": "Family"
+      }
+    },
+    "brothers": {
+      "title": "The Three Brothers",
+      "marco": {
+        "name": "Marco Galia",
+        "role": "Production and Quality",
+        "description": "Expert in cultivation and pressing techniques, Marco is responsible for maintaining the quality standards that made the family oil famous.",
+        "speciality": "Agronomist specialized in olive growing",
+        "quote": "Each harvested olive carries the flavor of our land"
+      },
+      "giuseppe": {
+        "name": "Giuseppe Galia",
+        "role": "Sales and Marketing",
+        "description": "With a modern business vision, Giuseppe takes care of customer relations and the company's commercial strategy.",
+        "speciality": "Degree in Marketing and Communication",
+        "quote": "We bring Sicilian tradition to the world"
+      },
+      "antonio": {
+        "name": "Antonio Galia",
+        "role": "Administration and Logistics",
+        "description": "The youngest of the brothers, Antonio manages the administrative and organizational aspect, ensuring efficiency in every process.",
+        "speciality": "Chartered Accountant",
+        "quote": "Organization is the heart of every great tradition"
+      },
+      "imageNote": "Insert: {photo}"
+    },
+    "values": {
+      "title": "Our Values",
+      "quality": {
+        "title": "Quality",
+        "description": "We never compromise on quality. Each bottle reflects our highest standards."
+      },
+      "family": {
+        "title": "Family",
+        "description": "The company is a reflection of our family bonds. Every decision is made together, with mutual respect."
+      },
+      "tradition": {
+        "title": "Tradition",
+        "description": "We respect and preserve traditional methods, passing down our grandfather's wisdom."
+      }
+    },
+    "cta": "Learn Our Story"
+  },
+  "faq": {
+    "badge": "Have Questions?",
+    "title": {
+      "line1": "Frequently",
+      "line2": "Asked Questions"
+    },
+    "description": "Find answers to the most common questions about our extra virgin oils, production and services offered by the Galia family.",
+    "categories": {
+      "production": "Production",
+      "products": "Products",
+      "conservation": "Storage",
+      "shipping": "Shipping",
+      "origin": "Origin",
+      "certifications": "Certifications",
+      "visits": "Visits",
+      "quality": "Quality"
+    },
+    "questions": [
+      {
+        "question": "How is your extra virgin oil produced?",
+        "answer": "Our oil is produced following traditional methods passed down from our grandfather. Olives are strictly hand-picked at the right degree of ripeness, then cold-milled within 24 hours of harvest. We use only mechanical processes without any chemical treatment, guaranteeing a 100% natural product.",
+        "category": "production"
+      },
+      {
+        "question": "What is the difference between your oils?",
+        "answer": "We offer three types: Classic Oil with intense fruity and fresh grass notes, certified Organic Oil with delicate flavor and balanced spicy aftertaste, and Premium Oil from century-old olives with complex organoleptic profile. Each oil has unique characteristics suitable for different palates and uses.",
+        "category": "products"
+      },
+      {
+        "question": "How to best store extra virgin oil?",
+        "answer": "To keep the organoleptic properties intact, store the oil in a cool and dry place, away from light and heat sources. The ideal temperature is between 14-18°C. Always close the cap tightly after use and consume within 18 months of opening. Our dark bottles already protect the oil from light.",
+        "category": "conservation"
+      },
+      {
+        "question": "Do you ship throughout Italy?",
+        "answer": "Yes, we ship throughout Italy with express courier. For orders over €50, shipping is free. We use special packaging to protect bottles during transport. Delivery times are generally 2-3 working days. For international orders, contact us for specific information.",
+        "category": "shipping"
+      },
+      {
+        "question": "Is the oil really produced in Sicily?",
+        "answer": "Absolutely yes. Our olive groves are located in the Sicilian hills where our grandfather planted the first trees in 1950. Every phase of production takes place on site: from cultivation to harvesting, from milling to bottling. We are proud of our 100% Sicilian origin.",
+        "category": "origin"
+      },
+      {
+        "question": "What certifications does your oil have?",
+        "answer": "Our oils are DOP (Protected Designation of Origin) certified and comply with all Italian and European quality standards. Organic oil has BIO certification issued by an accredited body. We carry out regular chemical and organoleptic analyses to guarantee acidity below 0.3% and excellent quality parameters.",
+        "category": "certifications"
+      },
+      {
+        "question": "Is it possible to visit the company?",
+        "answer": "Certainly! We organize guided tours by reservation where you can personally meet us three brothers, visit the olive groves, witness the production process and taste our oils. The visits also include stories about the family history and Sicilian olive oil tradition. Contact us to schedule your visit.",
+        "category": "visits"
+      },
+      {
+        "question": "How can I be sure of the quality of your oil?",
+        "answer": "Quality is guaranteed by three generations of experience, certified chemical analyses, manual olive harvesting, cold pressing within 24 hours and rigorous controls at every stage. Each bottle bears the batch number for complete traceability. We also offer a satisfaction or money-back guarantee.",
+        "category": "quality"
+      }
+    ],
+    "contact": {
+      "title": "Didn't find the answer?",
+      "description": "The Galia brothers are always available to answer your questions and help you choose the perfect oil for you.",
+      "buttons": {
+        "email": "Send an Email",
+        "phone": "Call Us",
+        "whatsapp": "WhatsApp"
+      },
+      "info": {
+        "email": "Email",
+        "phone": "Phone",
+        "whatsapp": "WhatsApp",
+        "emailAddress": "info@oliogalia.it",
+        "phoneNumber": "+39 123 456 7890",
+        "whatsappNumber": "+39 123 456 7890"
+      }
+    }
+  },
+  "navbar": {
+    "menu": {
+      "home": "Home",
+      "about": "About Us",
+      "products": "Products", 
+      "contact": "Contact"
+    },
+    "mobile": {
+      "menuTitle": "Menu",
+      "closeMenu": "Close menu",
+      "language": "Language:",
+      "cart": "Cart",
+      "tagline": "Sicilian Tradition",
+      "since": "Since 1950"
+    },
+    "cart": {
+      "title": "Cart",
+      "itemsCount": "{count} items"
+    }
+  },
+  "footer": {
+    "brand": {
+      "description": "Since 1950, three generations of Sicilian passion in every drop. The Galia brothers continue grandfather Francesco's tradition.",
+      "badges": {
+        "dop": "DOP Sicily",
+        "bio": "Certified Organic",
+        "natural": "100% Natural"
+      }
+    },
+    "products": {
+      "title": "Our Oils",
+      "classic": "Classic Extra Virgin Oil",
+      "organic": "Organic Extra Virgin Oil",
+      "premium": "Premium Extra Virgin Oil",
+      "gifts": "Gift Sets",
+      "tastings": "Tastings"
+    },
+    "info": {
+      "title": "Information",
+      "story": "Our Story",
+      "production": "How We Produce",
+      "certifications": "Certifications",
+      "visits": "Company Visits",
+      "shipping": "Shipping & Returns"
+    },
+    "contact": {
+      "title": "Contact",
+      "address": "Via degli Ulivi 123, Sicily",
+      "phone": "+39 123 456 7890",
+      "email": "info@oliogalia.it",
+      "social": "Follow us"
+    },
+    "newsletter": {
+      "title": "Stay always updated",
+      "description": "Receive our news, exclusive recipes and special offers directly in your email inbox",
+      "placeholder": "Your email address",
+      "button": "Subscribe",
+      "privacy": "We respect your privacy. You can unsubscribe at any time."
+    },
+    "bottom": {
+      "copyright": "© 2024 Olio Galia. All rights reserved. | VAT: 12345678901",
+      "privacy": "Privacy Policy",
+      "cookies": "Cookie Policy",
+      "terms": "Terms of Service"
+    }
+  },
+  "aboutPage": {
+    "hero": {
+      "badge": "The Galia Family",
+      "title": {
+        "main": "Who We Are",
+        "subtitle": "A Story of Passion"
+      },
+      "description": "Three brothers united by passion for Sicilian land and respect for traditions. Our story begins in 1950 with our grandfather Francesco and continues today with the same dedication and love for superior quality extra virgin oil."
+    },
+    "timeline": {
+      "title": "Our Story",
+      "events": [
+        {
+          "year": "1950",
+          "title": "The Beginning",
+          "description": "Francesco Galia plants the first 100 olive trees in the hills of Castelvetrano, starting what would become a family tradition.",
+          "details": "At only 25 years old and with a loan from the local bank, Francesco buys 5 hectares of hilly land. The choice of the Nocellara del Belice variety proves to be a winner."
+        },
+        {
+          "year": "1965",
+          "title": "The Expansion",
+          "description": "The company grows: Francesco buys new land and builds the first oil mill with stone millstones.",
+          "details": "Thanks to the first successes, the company expands to 15 hectares. The oil mill is built following traditional Sicilian designs, with Etna lava stone millstones."
+        },
+        {
+          "year": "1978",
+          "title": "The Next Generation",
+          "description": "Francesco's children, Salvatore and Maria, enter the company bringing new ideas and technologies.",
+          "details": "Salvatore introduces the first sustainable agriculture techniques, while Maria takes care of local marketing. The company reaches 25 hectares."
+        },
+        {
+          "year": "1995",
+          "title": "The Difficult Period",
+          "description": "After Francesco's death, the company goes through a difficult period and is temporarily closed.",
+          "details": "Economic and family difficulties lead to the decision to suspend activity. The olive groves are entrusted to local farmers for maintenance."
+        },
+        {
+          "year": "2018",
+          "title": "The Rebirth",
+          "description": "Francesco's three grandsons decide to bring their grandfather's company back to life, combining tradition and innovation.",
+          "details": "Marco, Giuseppe and Antonio invest their savings to renovate the oil mill and modernize the facilities, maintaining traditional production methods."
+        },
+        {
+          "year": "2024",
+          "title": "The Present",
+          "description": "Today the Galia company is recognized for the quality of its extra virgin oil and environmental sustainability.",
+          "details": "With 30 organically cultivated hectares and 3000 olive trees, the company produces 15,000 liters of extra virgin oil per year, exporting throughout Europe."
+        }
+      ]
+    },
+    "brothers": {
+      "title": "The Three Brothers",
+      "subtitle": "Each with their own skills and specializations, but all united by the same passion for excellence and love for our land.",
+      "achievements": "Achievements:",
+      "profiles": [
+        {
+          "name": "Marco Galia",
+          "role": "Production and Quality",
+          "age": "45 years old",
+          "description": "The eldest of the brothers, Marco inherited the passion for the land from his grandfather Francesco. After graduating in Agriculture, he spent years perfecting organic cultivation and cold pressing techniques.",
+          "speciality": "Agronomist specialized in organic olive growing",
+          "quote": "Each harvested olive carries the flavor of our land",
+          "details": "Marco gets up every morning at dawn to personally check the olive groves. His experience allows him to recognize the perfect moment for harvesting, when the olives have reached the right degree of ripeness.",
+          "achievements": ["EU Organic Certification", "Regional Oil Quality Award 2023", "Master Oil Miller Course"]
+        },
+        {
+          "name": "Giuseppe Galia",
+          "role": "Sales and Marketing",
+          "age": "42 years old",
+          "description": "Giuseppe brought a breath of modernity to the family business. His commercial vision has allowed Galia oil to reach national and international markets, always maintaining product authenticity.",
+          "speciality": "Degree in Marketing and Communication - Master in Export Management",
+          "quote": "We bring Sicilian tradition to the world, one bottle at a time",
+          "details": "Giuseppe has developed a network of distributors throughout Europe and created partnerships with starred restaurants that appreciate the quality of Galia oil.",
+          "achievements": ["Export to 12 Countries", "Partnership with 50+ Restaurants", "ISO 22000 Certification"]
+        },
+        {
+          "name": "Antonio Galia",
+          "role": "Administration and Logistics",
+          "age": "38 years old",
+          "description": "The youngest and most methodical of the brothers, Antonio has modernized all business processes. His administrative and organizational precision ensures that every aspect of the business works perfectly.",
+          "speciality": "Chartered Accountant - Specialization in Management Control",
+          "quote": "Organization is the heart of every great tradition",
+          "details": "Antonio has implemented a complete product traceability system, from plant to bottle, guaranteeing maximum transparency to customers.",
+          "achievements": ["Complete Traceability System", "HACCP Certification", "Custom Management Software"]
+        }
+      ]
+    },
+    "values": {
+      "title": "Our Values",
+      "subtitle": "These principles guide every decision we make and are reflected in the quality of our extra virgin olive oil.",
+      "items": [
+        {
+          "title": "Supreme Quality",
+          "description": "Each bottle represents the excellence of Sicilian extra virgin oil, obtained with cold pressing and traditional methods."
+        },
+        {
+          "title": "Family Values",
+          "description": "The company reflects our family bonds: respect, collaboration and shared passion for our land."
+        },
+        {
+          "title": "Authentic Tradition",
+          "description": "We preserve and transmit the methods passed down by our grandfather Francesco, adapting them to modern needs."
+        },
+        {
+          "title": "Sustainability",
+          "description": "We cultivate with certified organic methods, respecting the environment and ensuring a sustainable future for the next generations."
+        }
+      ]
+    },
+    "stats": {
+      "hectares": "Cultivated Hectares",
+      "plants": "Olive Trees",
+      "liters": "Liters/Year",
+      "countries": "Export Countries"
+    },
+    "cta": {
+      "title": "Discover Our Oil",
+      "description": "Taste the authenticity of Sicilian extra virgin olive oil, produced with passion and tradition by the Galia family.",
+      "catalog": "Go to Catalog",
+      "contact": "Contact Us"
+    }
+  },
+  "productsPage": {
+    "loading": "Loading products...",
+    "error": "Error: {error}",
+    "retry": "Try Again",
+    "noProducts": "No products found for this category.",
+    "hero": {
+      "badge": "Complete Catalog",
+      "title": {
+        "main": "Our",
+        "highlight": "Products"
+      },
+      "description": "From Sicilian tradition, an exclusive selection ranging from premium extra virgin oil to wellness products, up to family formats for daily use."
+    },
+    "categories": {
+      "all": "All Products"
+    },
+    "product": {
+      "discount": "DISCOUNT",
+      "available": "✓ Available ({count} pieces)",
+      "outOfStock": "✗ Out of stock",
+      "details": "Details",
+      "addToCart": "Add to Cart"
+    },
+    "benefits": {
+      "title": "Why Choose Galia",
+      "subtitle": "Each product represents the excellence of Sicilian tradition",
+      "items": [
+        {
+          "title": "Premium Quality",
+          "description": "Rigorous controls and quality certifications"
+        },
+        {
+          "title": "Safe Shipping",
+          "description": "Protective packaging and guaranteed delivery"
+        },
+        {
+          "title": "Family Tradition",
+          "description": "75 years of passion and Sicilian wisdom"
+        },
+        {
+          "title": "Satisfaction Guaranteed",
+          "description": "Full refund if you are not satisfied"
+        }
+      ]
+    }
+  },
+  "productDetailPage": {
+    "loading": "Loading product...",
+    "error": "Error: {error}",
+    "retry": "Try Again",
+    "notFound": {
+      "title": "Product not found",
+      "button": "Back to products"
+    },
+    "breadcrumb": {
+      "home": "Home",
+      "products": "Products"
+    },
+    "product": {
+      "quantity": "Quantity:",
+      "available": "✓ Available ({count} pieces)",
+      "outOfStock": "✗ Out of stock",
+      "characteristics": "Characteristics",
+      "nutritionalInfo": "Nutritional Information",
+      "nutritionalPer100g": "Per 100g:",
+      "nutritionalNotAvailable": "Nutritional values not available.",
+      "awards": "Awards and Recognition",
+      "noAwards": "No awards assigned yet.",
+      "relatedProducts": "You might also like"
+    }
+  }
+}
