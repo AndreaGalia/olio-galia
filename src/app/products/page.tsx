@@ -1,50 +1,28 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from "next/image";
 import Link from 'next/link';
 import { useCart } from '@/contexts/CartContext';
 import AddToCartButton from '@/components/AddToCartButton';
-import type { Product, ProductsData, Category } from '@/types/products';
+import { useProducts } from '@/hooks/useProducts';
 import { useT } from '@/hooks/useT';
 
 export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState('tutti');
-  const [productsData, setProductsData] = useState<ProductsData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   
   const { addToCart } = useCart();
   const { t, translate } = useT();
-
-  // Carica i prodotti dall'API
-  useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const response = await fetch('/api/products');
-        if (!response.ok) {
-          throw new Error('Failed to fetch products');
-        }
-        const data: ProductsData = await response.json();
-        setProductsData(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchProducts();
-  }, []);
+  const { products, categories, loading, error } = useProducts();
 
   // Categorie con "tutti" aggiunto
   const allCategories = [
     { id: 'tutti', name: t.productsPage.categories.all, description: '' },
-    ...(productsData?.categories || [])
+    ...categories
   ];
 
   const filteredProducts = selectedCategory === 'tutti' 
-    ? productsData?.products || []
-    : productsData?.products.filter(product => product.category === selectedCategory) || [];
+    ? products
+    : products.filter(product => product.category === selectedCategory);
 
   const handleAddToCart = (productId: string) => {
     addToCart(productId, 1);

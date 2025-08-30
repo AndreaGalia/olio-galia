@@ -1,0 +1,101 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "Premium Oil Bottle",
+      "description": "Our most precious selection in exclusive format. Extra virgin oil from centenary olives, perfect for tastings and refined gifts.",
+      "longDescription": "This oil represents the excellence of Galia production. Made exclusively with secular olives grown in our oldest lands, it is extracted with traditional techniques and packaged in elegant collector bottles. Numbered and individually sealed to guarantee authenticity.",
+      "details": "Acidity < 0.2% - Limited Edition - Progressive numbering - Intense fruity with fresh grass and almond notes",
+      "categoryDisplay": "Premium Collection",
+      "badge": "Limited Edition",
+      "features": [
+        "Hand-selected centenary olives",
+        "Traditional cold extraction under 27°C",
+        "Individually numbered and sealed bottle",
+        "Premium gift packaging included",
+        "Signed certificate of authenticity",
+        "Acidity below 0.2%",
+        "Polyphenols > 250 mg/kg",
+        "Limited production to 500 bottles/year"
+      ],
+      "bestFor": "Exclusive tastings, prestige gifts, private collection",
+      "origin": "Sicily, Italy - Contrada Monte Galia",
+      "harvest": "October 2024 - Night manual harvest",
+      "processing": "Company mill - Continuous cold extraction",
+      "awards": [
+        "Gold Medal - NYIOOC International Competition 2024",
+        "Excellence Award - Gambero Rosso 2024",
+        "3 Leaves - Slow Food Extra Virgin Guide 2024"
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Beauty Oil",
+      "description": "Delicate extra virgin oil designed for daily body and hair care. Exclusive formula with natural vitamins.",
+      "longDescription": "A light oil, rich in vitamin E and polyphenols, ideal as a natural treatment for skin and hair. Cold-extracted from early-harvested olives, it maintains all beneficial properties without weighing down. Enriched with natural lavender extracts for a unique sensory experience.",
+      "details": "Dark glass bottle with dropper - Dermatologically tested - 100% natural ingredients - Cruelty free",
+      "categoryDisplay": "Wellness Line",
+      "badge": "Wellness",
+      "features": [
+        "Rich in natural antioxidants",
+        "Deep hydration without greasiness",
+        "Suitable for all skin types",
+        "100% natural and vegan friendly",
+        "Pure extra virgin oil",
+        "Enriched with vitamin E",
+        "Natural lavender extract",
+        "Dermatologically tested",
+        "Sustainable packaging"
+      ],
+      "bestFor": "Skincare, haircare, relaxing massages, daily wellness",
+      "origin": "Sicily, Italy",
+      "harvest": "2024 - Early harvest for maximum benefits",
+      "processing": "Cold pressing - Natural filtration",
+      "awards": []
+    },
+    {
+      "id": "3",
+      "name": "5L Oil Can",
+      "description": "The ideal solution for families and restaurants, large format at the best price. Classic extra virgin oil in protective can.",
+      "longDescription": "5-liter can of Galia extra virgin oil, obtained from manually harvested olives and processed the same day. Perfect for those who consume oil regularly and seek convenience without sacrificing quality. The protective can ensures optimal preservation while maintaining all organoleptic characteristics.",
+      "details": "Steel can with dosing cap - Excellent quality-price ratio - Anti-light protective can - Daily use",
+      "categoryDisplay": "Convenience Format",
+      "badge": "Best Seller",
+      "features": [
+        "Excellent quality/price ratio",
+        "Optimal preservation thanks to packaging",
+        "Harvest and pressing on the same day",
+        "Perfect for family or professional use",
+        "Family convenience format",
+        "Premium protective can",
+        "Classic extra virgin oil",
+        "Perfect for daily use",
+        "Guaranteed savings"
+      ],
+      "bestFor": "Families, restaurants, catering, daily use",
+      "origin": "Sicily, Italy",
+      "harvest": "October 2024",
+      "processing": "Company mill - Continuous extraction",
+      "awards": [
+        "Best Quality/Price Selection - 2024"
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "id": "premium",
+      "name": "Premium Collection",
+      "description": "Exclusive selection of our finest oils"
+    },
+    {
+      "id": "beauty",
+      "name": "Wellness Line",
+      "description": "Natural products for body care"
+    },
+    {
+      "id": "famiglia",
+      "name": "Convenience Format",
+      "description": "Large formats for families and professionals"
+    }
+  ]
+}

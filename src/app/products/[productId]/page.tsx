@@ -1,11 +1,11 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { use } from "react";
 import { BulkProposalSection } from '@/components/BulkProposalModal';
 import { useCart } from '@/contexts/CartContext';
 import AddToCartButton from '@/components/AddToCartButton';
-import type { Product, ProductsData } from '@/types/products';
+import { useProducts, useProduct } from '@/hooks/useProducts';
 import { useT } from '@/hooks/useT';
 
 export default function ProductDetailPage({ params }: { params: Promise<{ productId: string }> }) {
@@ -13,38 +13,14 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
-  
-  // Stati per i dati
-  const [productsData, setProductsData] = useState<ProductsData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const { addToCart } = useCart();
   const { t, translate } = useT();
-
-  // Carica i prodotti dall'API
-  useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const response = await fetch('/api/products');
-        if (!response.ok) {
-          throw new Error('Failed to fetch products');
-        }
-        const data: ProductsData = await response.json();
-        setProductsData(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchProducts();
-  }, []);
-
-  // Trova il prodotto corrente e quelli correlati
-  const product: Product | undefined = productsData?.products.find((p) => p.id === productId);
-  const relatedProducts: Product[] = productsData?.products.filter((p) => p.id !== productId) || [];
+  
+  // Usa i nuovi hook per prodotti tradotti
+  const { product, loading, error, notFound } = useProduct(productId);
+  const { products: allProducts } = useProducts();
+  const relatedProducts = allProducts.filter((p) => p.id !== productId);
 
   const handleAddToCart = () => {
     if (product?.inStock && !isAddingToCart) {
@@ -87,7 +63,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
   }
 
   // Product not found
-  if (!product) {
+  if (notFound) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige flex items-center justify-center">
         <div className="text-center">
@@ -102,6 +78,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
       </div>
     );
   }
+
+  if (!product) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige">
@@ -286,7 +264,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
           <div className="bg-white/90 rounded-2xl p-6 shadow-lg">
             <h3 className="text-xl font-serif text-olive mb-4">{t.productDetailPage.product.awards}</h3>
             <div className="space-y-3">
-              {product.awards.length > 0 ? (
+              {product.awards && product.awards.length > 0 ? (
                 product.awards.map((award, index) => (
                   <div key={index} className="flex items-center gap-2 text-sm text-nocciola">
                     <svg className="w-5 h-5 text-yellow-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
