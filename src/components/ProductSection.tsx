@@ -1,40 +1,19 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import CartIconButton from './CartIconButton';
 import { useCart } from '@/contexts/CartContext';
-import type { Product, ProductsData } from '@/types/products';
+import { useProducts } from '@/hooks/useProducts';
+import type { Product } from '@/types/products';
 import { useT } from '@/hooks/useT';
 
 export default function ProductsSection() {
   const [activeProduct, setActiveProduct] = useState(0);
-  const [productsData, setProductsData] = useState<ProductsData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   
   const { addToCart } = useCart();
   const { t, translate } = useT();
-
-  // Carica i prodotti dall'API
-  useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const response = await fetch('/api/products');
-        if (!response.ok) {
-          throw new Error('Failed to fetch products');
-        }
-        const data: ProductsData = await response.json();
-        setProductsData(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchProducts();
-  }, []);
+  const { products, loading, error } = useProducts();
 
   const handleAddToCart = (product: Product) => {
     addToCart(product.id, 1);
@@ -72,8 +51,6 @@ export default function ProductsSection() {
       </section>
     );
   }
-
-  const products = productsData?.products || [];
 
   return (
     <section className="relative bg-gradient-to-br from-beige via-beige/80 to-olive/5 py-20 sm:py-24 lg:py-32 overflow-hidden">
@@ -283,7 +260,7 @@ export default function ProductsSection() {
               <h4 className="text-xl font-serif text-olive mb-4">{t.products.whyChoose.shipping.title}</h4>
               <p className="text-nocciola leading-relaxed">
                 {translate('products.whyChoose.shipping.description', { 
-                  threshold: productsData?.metadata.freeShippingThreshold || '50' 
+                  threshold: '50'
                 })}
               </p>
             </div>

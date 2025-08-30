@@ -1,44 +1,20 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useCart } from '@/contexts/CartContext';
 import Link from 'next/link';
-import type { Product, ProductsData } from '@/types/products';
+import { useProducts } from '@/hooks/useProducts';
 import { useT } from '@/hooks/useT';
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, clearCart, getTotalItems } = useCart();
-  const [productsData, setProductsData] = useState<ProductsData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { products, loading, error } = useProducts();
   const { t, translate } = useT();
 
-  // Carica i prodotti dall'API
-  useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const response = await fetch('/api/products');
-        if (!response.ok) {
-          throw new Error('Failed to fetch products');
-        }
-        const data: ProductsData = await response.json();
-        setProductsData(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchProducts();
-  }, []);
-
-  // Calcola il totale usando i dati dinamici
+  // Calcola il totale usando i prodotti tradotti
   const calculateTotal = () => {
-    if (!productsData) return 0;
-    
     return cart.reduce((total, cartItem) => {
-      const product = productsData.products.find(p => p.id === cartItem.id);
+      const product = products.find(p => p.id === cartItem.id);
       if (product) {
         const price = parseFloat(product.price);
         return total + (price * cartItem.quantity);
@@ -47,12 +23,10 @@ export default function CartPage() {
     }, 0);
   };
 
-  // Calcola il risparmio totale usando i dati dinamici
+  // Calcola il risparmio totale
   const calculateSavings = () => {
-    if (!productsData) return 0;
-    
     return cart.reduce((savings, cartItem) => {
-      const product = productsData.products.find(p => p.id === cartItem.id);
+      const product = products.find(p => p.id === cartItem.id);
       if (product && product.originalPrice && product.originalPrice !== 'null') {
         const currentPrice = parseFloat(product.price);
         const originalPrice = parseFloat(product.originalPrice);
@@ -64,9 +38,7 @@ export default function CartPage() {
 
   const total = calculateTotal();
   const savings = calculateSavings();
-  const freeShippingThreshold = productsData?.metadata.freeShippingThreshold 
-    ? parseFloat(productsData.metadata.freeShippingThreshold) 
-    : 50;
+  const freeShippingThreshold = 50; // Valore fisso o da configurazione
   
   const totalItems = getTotalItems();
   const itemCountLabel = totalItems === 1 ? t.cartPage.itemCount.single : t.cartPage.itemCount.plural;
@@ -186,7 +158,7 @@ export default function CartPage() {
           {/* Lista prodotti */}
           <div className="lg:col-span-2 space-y-4">
             {cart.map((cartItem) => {
-              const product = productsData?.products.find(p => p.id === cartItem.id);
+              const product = products.find(p => p.id === cartItem.id);
               if (!product) return null;
 
               const price = parseFloat(product.price);

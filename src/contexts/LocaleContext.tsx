@@ -11,25 +11,39 @@ const LocaleContext = createContext<LocaleContextType | undefined>(undefined)
 
 export function LocaleProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>('it')
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
-    // Carica locale dal localStorage
-    const savedLocale = localStorage.getItem('locale') as Locale
-    if (savedLocale && ['it', 'en'].includes(savedLocale)) {
-      setLocaleState(savedLocale)
+    setIsClient(true)
+    
+    // Solo sul client, prova a caricare il locale salvato
+    if (typeof window !== 'undefined') {
+      const savedLocale = window.localStorage?.getItem('locale') as Locale
+      if (savedLocale && ['it', 'en'].includes(savedLocale)) {
+        setLocaleState(savedLocale)
+      }
     }
   }, [])
 
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale)
-    localStorage.setItem('locale', newLocale)
+    
+    // Solo sul client, salva nel localStorage
+    if (typeof window !== 'undefined') {
+      window.localStorage?.setItem('locale', newLocale)
+    }
     
     // Aggiorna la lingua del documento
-    document.documentElement.lang = newLocale
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = newLocale
+    }
   }
 
+  // Durante l'hydration, usa il locale default per evitare mismatch
+  const currentLocale = isClient ? locale : 'it'
+
   return (
-    <LocaleContext.Provider value={{ locale, setLocale }}>
+    <LocaleContext.Provider value={{ locale: currentLocale, setLocale }}>
       {children}
     </LocaleContext.Provider>
   )
