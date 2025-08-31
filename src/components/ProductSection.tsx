@@ -16,7 +16,10 @@ export default function ProductsSection() {
   const { products, loading, error } = useProducts();
 
   const handleAddToCart = (product: Product) => {
-    addToCart(product.id, 1);
+    // Controllo aggiuntivo per sicurezza
+    if (product.inStock && product.stockQuantity > 0) {
+      addToCart(product.id, 1);
+    }
   };
 
   // Loading state
@@ -117,115 +120,157 @@ export default function ProductsSection() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
-            {products.map((product, index) => (
-              <div 
-                key={product.id}
-                className={`group relative bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-700 hover:scale-[1.02] hover:-translate-y-2 border border-white/50 ${
-                  activeProduct === index ? 'ring-2 ring-olive/30 bg-white/90' : ''
-                }`}
-                onClick={() => setActiveProduct(index)}
-              >
-                {/* Badge migliorato */}
-                <div className={`absolute -top-4 -right-4 px-4 py-2 rounded-2xl text-sm font-bold text-white shadow-xl rotate-6 transform transition-transform group-hover:rotate-3 ${
-                  product.color === 'olive' ? 'bg-gradient-to-r from-olive to-olive/80' : 
-                  product.color === 'salvia' ? 'bg-gradient-to-r from-salvia to-salvia/80' : 'bg-gradient-to-r from-nocciola to-nocciola/80'
-                }`}>
-                  {product.badge}
-                </div>
-
-                {/* Sconto se presente */}
-                {product.originalPrice && product.originalPrice !== 'null' && (
-                  <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold z-10">
-                    {t.products.product.discount}
-                  </div>
-                )}
-
-                {/* Immagine prodotto con effetti */}
-                <div className="relative mb-8 flex justify-center">
-                  <div className="relative">
-                    <Image
-                      src={product.images[0]}
-                      alt={product.name}
-                      width={180}
-                      height={240}
-                      className="object-contain drop-shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-2"
-                    />
-                    
-                    {/* Riflessi multipli */}
-                    <div className="absolute top-1/4 left-1/2 w-3 h-20 bg-gradient-to-b from-white/60 to-transparent rounded-full blur-sm transform -translate-x-1/2"></div>
-                    <div className="absolute top-1/3 left-1/3 w-1 h-12 bg-gradient-to-b from-white/40 to-transparent rounded-full blur-sm"></div>
-                    
-                    {/* Aura di luce */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/5 to-white/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  </div>
-                </div>
-
-                {/* Contenuto ridisegnato */}
-                <div className="text-center space-y-5">
-                  <h3 className="text-2xl sm:text-3xl font-serif text-olive group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-olive group-hover:to-salvia group-hover:bg-clip-text transition-all duration-300">
-                    {product.name}
-                  </h3>
-                  
-                  <p className="text-base text-nocciola leading-relaxed px-2">
-                    {product.description}
-                  </p>
-                  
-                  <div className="bg-gradient-to-r from-olive/5 to-salvia/5 rounded-2xl p-4 border border-olive/10">
-                    <p className="text-sm text-nocciola/90 italic">
-                      {product.details}
-                    </p>
+            {products.map((product, index) => {
+              const isOutOfStock = !product.inStock || product.stockQuantity === 0;
+              
+              return (
+                <div 
+                  key={product.id}
+                  className={`group relative bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-700 hover:scale-[1.02] hover:-translate-y-2 border border-white/50 ${
+                    activeProduct === index ? 'ring-2 ring-olive/30 bg-white/90' : ''
+                  } ${isOutOfStock ? 'opacity-75 grayscale' : ''}`}
+                  onClick={() => setActiveProduct(index)}
+                >
+                  {/* Badge migliorato */}
+                  <div className={`absolute -top-4 -right-4 px-4 py-2 rounded-2xl text-sm font-bold text-white shadow-xl rotate-6 transform transition-transform group-hover:rotate-3 ${
+                    product.color === 'olive' ? 'bg-gradient-to-r from-olive to-olive/80' : 
+                    product.color === 'salvia' ? 'bg-gradient-to-r from-salvia to-salvia/80' : 'bg-gradient-to-r from-nocciola to-nocciola/80'
+                  }`}>
+                    {product.badge}
                   </div>
 
-                  {/* Stock info */}
-                  <div className="text-center text-xs">
-                    {product.inStock ? (
-                      <span className="text-green-600">
-                        {translate('products.product.available', { count: product.stockQuantity })}
-                      </span>
-                    ) : (
-                      <span className="text-red-600">{t.products.product.outOfStock}</span>
-                    )}
-                  </div>
-
-                  {/* Sezione prezzo e pulsanti ridisegnata */}
-                  <div className="flex justify-between items-center pt-6 border-t border-gradient-to-r from-olive/20 via-transparent to-olive/20">
-                    <div className="text-left">
-                      {product.originalPrice && product.originalPrice !== 'null' && (
-                        <div className="text-sm text-nocciola/60 line-through mb-1">
-                          €{product.originalPrice}
-                        </div>
-                      )}
-                      <div className="text-3xl sm:text-4xl font-serif font-bold bg-gradient-to-r from-olive to-salvia bg-clip-text text-transparent">
-                        €{product.price}
-                      </div>
-                      <div className="text-sm text-nocciola font-medium bg-olive/10 px-3 py-1 rounded-full inline-block">
-                        {product.size}
-                      </div>
+                  {/* SOLD OUT Badge - posizionato prominentemente */}
+                  {isOutOfStock && (
+                    <div className="absolute top-4 left-4 bg-gradient-to-r from-red-600 to-red-700 text-white px-4 py-2 rounded-full text-sm font-bold z-20 shadow-lg animate-pulse">
+                      SOLD OUT
                     </div>
-                    
-                    <div className="flex gap-3">
-                      {/* Usa il componente AddToCartButton con size="icon" */}
-                      <CartIconButton
-                        onAddToCart={() => handleAddToCart(product)}
-                        disabled={!product.inStock}
+                  )}
+
+                  {/* Sconto se presente e non è sold out */}
+                  {!isOutOfStock && product.originalPrice && product.originalPrice !== 'null' && (
+                    <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold z-10">
+                      {t.products.product.discount}
+                    </div>
+                  )}
+
+                  {/* Immagine prodotto con effetti */}
+                  <div className={`relative mb-8 flex justify-center ${isOutOfStock ? 'relative' : ''}`}>
+                    <div className="relative">
+                      <Image
+                        src={product.images[0]}
+                        alt={product.name}
+                        width={180}
+                        height={240}
+                        className={`object-contain drop-shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-2 ${
+                          isOutOfStock ? 'opacity-60' : ''
+                        }`}
                       />
                       
-                      {/* Pulsante dettagli ridisegnato per essere coerente */}
-                      <Link
-                        href={`/products/${product.id}`}
-                        className="bg-gradient-to-r from-nocciola to-nocciola/80 text-white px-6 py-3 rounded-2xl text-sm font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105 text-center"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        {t.products.product.details}
-                      </Link>
+                      {/* Overlay SOLD OUT sull'immagine */}
+                      {isOutOfStock && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-lg">
+                          <div className="bg-red-600/90 text-white px-6 py-3 rounded-xl font-bold text-lg shadow-xl transform -rotate-12">
+                            SOLD OUT
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Riflessi multipli - solo se non sold out */}
+                      {!isOutOfStock && (
+                        <>
+                          <div className="absolute top-1/4 left-1/2 w-3 h-20 bg-gradient-to-b from-white/60 to-transparent rounded-full blur-sm transform -translate-x-1/2"></div>
+                          <div className="absolute top-1/3 left-1/3 w-1 h-12 bg-gradient-to-b from-white/40 to-transparent rounded-full blur-sm"></div>
+                          
+                          {/* Aura di luce */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/5 to-white/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        </>
+                      )}
                     </div>
                   </div>
-                </div>
 
-                {/* Overlay di hover ridisegnato */}
-                <div className="absolute inset-0 bg-gradient-to-t from-olive/5 via-transparent to-salvia/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"></div>
-              </div>
-            ))}
+                  {/* Contenuto ridisegnato */}
+                  <div className="text-center space-y-5">
+                    <h3 className={`text-2xl sm:text-3xl font-serif text-olive group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-olive group-hover:to-salvia group-hover:bg-clip-text transition-all duration-300 ${
+                      isOutOfStock ? 'opacity-60' : ''
+                    }`}>
+                      {product.name}
+                    </h3>
+                    
+                    <p className={`text-base text-nocciola leading-relaxed px-2 ${
+                      isOutOfStock ? 'opacity-60' : ''
+                    }`}>
+                      {product.description}
+                    </p>
+                    
+                    <div className={`bg-gradient-to-r from-olive/5 to-salvia/5 rounded-2xl p-4 border border-olive/10 ${
+                      isOutOfStock ? 'opacity-60' : ''
+                    }`}>
+                      <p className="text-sm text-nocciola/90 italic">
+                        {product.details}
+                      </p>
+                    </div>
+
+                    {/* Stock info */}
+                    <div className="text-center text-xs">
+                      {isOutOfStock ? (
+                        <span className="text-red-600 font-bold bg-red-50 px-3 py-1 rounded-full border border-red-200">
+                          {t.products.product.outOfStock}
+                        </span>
+                      ) : (
+                        <span className="text-green-600 bg-green-50 px-3 py-1 rounded-full border border-green-200">
+                          {translate('products.product.available', { count: product.stockQuantity })}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Sezione prezzo e pulsanti ridisegnata */}
+                    <div className="flex justify-between items-center pt-6 border-t border-gradient-to-r from-olive/20 via-transparent to-olive/20">
+                      <div className="text-left">
+                        {!isOutOfStock && product.originalPrice && product.originalPrice !== 'null' && (
+                          <div className="text-sm text-nocciola/60 line-through mb-1">
+                            €{product.originalPrice}
+                          </div>
+                        )}
+                        <div className={`text-3xl sm:text-4xl font-serif font-bold bg-gradient-to-r from-olive to-salvia bg-clip-text text-transparent ${
+                          isOutOfStock ? 'opacity-50' : ''
+                        }`}>
+                          €{product.price}
+                        </div>
+                        <div className={`text-sm text-nocciola font-medium bg-olive/10 px-3 py-1 rounded-full inline-block ${
+                          isOutOfStock ? 'opacity-50' : ''
+                        }`}>
+                          {product.size}
+                        </div>
+                      </div>
+                      
+                      <div className="flex gap-3">
+                        {/* Usa il componente AddToCartButton con size="icon" - disabilitato se sold out */}
+                        <CartIconButton
+                          onAddToCart={() => handleAddToCart(product)}
+                          disabled={isOutOfStock}
+                        />
+                        
+                        {/* Pulsante dettagli ridisegnato per essere coerente */}
+                        <Link
+                          href={`/products/${product.id}`}
+                          className={`bg-gradient-to-r from-nocciola to-nocciola/80 text-white px-6 py-3 rounded-2xl text-sm font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105 text-center ${
+                            isOutOfStock ? 'opacity-50 cursor-not-allowed hover:scale-100 hover:shadow-lg' : ''
+                          }`}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {t.products.product.details}
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Overlay di hover ridisegnato - modificato per sold out */}
+                  <div className={`absolute inset-0 bg-gradient-to-t from-olive/5 via-transparent to-salvia/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none ${
+                    isOutOfStock ? 'group-hover:opacity-30' : ''
+                  }`}></div>
+                </div>
+              );
+            })}
           </div>
         )}
 
