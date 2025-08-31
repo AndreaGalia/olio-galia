@@ -9,8 +9,8 @@
       "stripeProductId": "prod_premium_oil",
       "stripePriceId": "price_premium_oil",
       "size": "75ml",
-      "inStock": true,
-      "stockQuantity": 25,
+      "inStock": false,
+      "stockQuantity": 0,
       "color": "olive",
       "images": [
         "/bottle-oil.png",
