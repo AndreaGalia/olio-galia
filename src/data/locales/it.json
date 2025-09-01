@@ -530,7 +530,8 @@
       "total": "Totale",
       "checkout": "Procedi al Checkout",
       "continueShopping": "Continua Shopping",
-      "clearCart": "Svuota Carrello"
+      "clearCart": "Svuota Carrello",
+      "processing": "Elaborazione..."
     },
     "shipping": {
       "free": "Spedizione gratuita",
@@ -540,7 +541,27 @@
     "itemLabel": {
       "single": "articolo",
       "plural": "articoli"
-    }
+    },
+    "checkoutError": {
+    "title": "Errore nel Checkout",
+    "close": "Chiudi", 
+    "retry": "Riprova"
+  },
+  "freeShipping": {
+    "title": "Spedizione gratuita",
+    "remaining": "Aggiungi €{amount} di prodotti per la spedizione gratuita!",
+    "qualified": "🎉 Hai diritto alla spedizione gratuita!"
+  },
+  "shippingNote": "*Prezzo per l'Europa. €{worldPrice} per spedizioni internazionali.",
+  "invoice": {
+    "title": "Richiedo fattura",
+    "description": "Verranno richiesti codice fiscale e dati di fatturazione",
+    "checkoutNote": "Durante il checkout ti verranno richiesti il codice fiscale e i dati per la fattura. La partita IVA è opzionale."
+  },
+  "security": {
+    "title": "Checkout Sicuro",
+    "description": "Pagamenti protetti da Stripe. I tuoi dati sono al sicuro."
+  }
   },
   "contactPage": {
     "hero": {
@@ -570,5 +591,82 @@
   "addToCart": "Aggiungi al Carrello", 
   "added": "Aggiunto",
   "productAdded": "Prodotto Aggiunto"
-}
+},
+  "checkoutSuccess": {
+    "hero": {
+      "title": "Grazie!",
+      "subtitle": "Il tuo ordine è stato confermato",
+      "description": "Riceverai una conferma via email con tutti i dettagli del tuo acquisto e le informazioni per il tracking della spedizione.",
+      "orderNumber": "Numero Ordine",
+      "whatsapp": "Richiedi Info via WhatsApp",
+      "documents": "Visualizza Documenti",
+      "receipt": "Visualizza Ricevuta",
+      "documentsChecking": "Controllo documenti...",
+      "receiptAndInvoiceIncluded": "Ricevuta e fattura incluse",
+      "opensNewWindow": "Apre in nuova finestra"
+    },
+    "orderSummary": {
+      "title": "Riepilogo del tuo Ordine",
+      "customerData": "Dati Cliente",
+      "name": "Nome:",
+      "email": "Email:",
+      "shipping": "Spedizione",
+      "address": "Indirizzo:",
+      "asPerCheckout": "Come da checkout",
+      "productsOrdered": "Prodotti Ordinati",
+      "quantity": "Quantità:",
+      "each": "cad.",
+      "subtotal": "Subtotale:",
+      "shippingCost": "Spedizione:",
+      "total": "Totale:",
+      "productDetailsNotAvailable": "Dettagli prodotti non disponibili"
+    },
+    "timeline": {
+      "title": "Il tuo ordine in viaggio",
+      "steps": {
+        "confirmation": {
+          "title": "Conferma Ricevuta",
+          "description": "Ti invieremo una email di conferma con tutti i dettagli",
+          "status": "Completato"
+        },
+        "preparation": {
+          "title": "Preparazione",
+          "description": "Il tuo ordine verrà preparato con cura (1-2 giorni lavorativi)",
+          "status": "In corso"
+        },
+        "shipping": {
+          "title": "Spedizione",
+          "description": "Riceverai il codice di tracking per seguire la consegna",
+          "status": "Prossimo"
+        }
+      }
+    },
+    "cta": {
+      "title": "Continua l'esperienza",
+      "description": "Scopri altri prodotti della nostra collezione o torna alla homepage per esplorare tutte le nostre offerte.",
+      "discoverProducts": "Scopri Altri Prodotti",
+      "backToHome": "Torna alla Home"
+    },
+    "loading": {
+      "orderSummary": "Caricamento riepilogo ordine...",
+      "processing": "Elaborazione..."
+    },
+    "whatsappMessage": {
+      "greeting": "Salve,\n\n",
+      "intro": "Vi scrivo per avere informazioni sul mio ordine:\n\n",
+      "orderNumber": "*Ordine #{orderNumber}*\n",
+      "orderDate": "*Data ordine:* {date}\n",
+      "customerName": "*Nome:* {name}\n",
+      "customerEmail": "*Email:* {email}\n\n",
+      "productsTitle": "*Prodotti ordinati:*\n",
+      "productLine": "• {name} (x{quantity})\n",
+      "totalPaid": "\n*Totale pagato:* €{total}\n\n",
+      "question": "Potreste aggiornarmi sullo stato della preparazione e sui tempi di spedizione?\n\n",
+      "thanks": "Grazie mille!\n",
+      "regards": "Cordiali saluti"
+    },
+    "badges": {
+      "invoiceIncluded": "+ Fattura"
+    }
+  }
 }   

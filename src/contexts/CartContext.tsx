@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 
 type CartItem = {
   id: string;
@@ -11,17 +11,17 @@ type CartContextType = {
   cart: CartItem[];
   addToCart: (id: string, quantity: number) => void;
   removeFromCart: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void; // ← Nuova funzione
+  updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
-  getTotalItems: () => number; // ← Nuova funzione
-  getItemQuantity: (id: string) => number; // ← Nuova funzione
+  getTotalItems: () => number;
+  getItemQuantity: (id: string) => number;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false); // ← Per evitare errori di hydration
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Carica dal localStorage solo sul client
   useEffect(() => {
@@ -39,12 +39,13 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Salva sul localStorage quando il carrello cambia
   useEffect(() => {
-    if (isLoaded) { // Salva solo dopo il primo caricamento
+    if (isLoaded) {
       localStorage.setItem("cart", JSON.stringify(cart));
     }
   }, [cart, isLoaded]);
 
-  const addToCart = (id: string, quantity: number) => {
+  // Memoizza tutte le funzioni con useCallback
+  const addToCart = useCallback((id: string, quantity: number) => {
     setCart((prev) => {
       const existing = prev.find((item) => item.id === id);
       if (existing) {
@@ -56,13 +57,13 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       return [...prev, { id, quantity }];
     });
-  };
+  }, []);
 
-  const removeFromCart = (id: string) => {
+  const removeFromCart = useCallback((id: string) => {
     setCart((prev) => prev.filter((item) => item.id !== id));
-  };
+  }, []);
 
-  const updateQuantity = (id: string, quantity: number) => {
+  const updateQuantity = useCallback((id: string, quantity: number) => {
     if (quantity <= 0) {
       removeFromCart(id);
       return;
@@ -73,18 +74,18 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         item.id === id ? { ...item, quantity } : item
       )
     );
-  };
+  }, [removeFromCart]);
 
-  const clearCart = () => setCart([]);
+  const clearCart = useCallback(() => setCart([]), []);
 
-  const getTotalItems = (): number => {
+  const getTotalItems = useCallback((): number => {
     return cart.reduce((total, item) => total + item.quantity, 0);
-  };
+  }, [cart]);
 
-  const getItemQuantity = (id: string): number => {
+  const getItemQuantity = useCallback((id: string): number => {
     const item = cart.find((item) => item.id === id);
     return item ? item.quantity : 0;
-  };
+  }, [cart]);
 
   return (
     <CartContext.Provider value={{ 

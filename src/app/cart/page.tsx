@@ -1,20 +1,68 @@
+// app/cart/page.tsx
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCart } from '@/contexts/CartContext';
+import { useCheckout } from '@/hooks/useCheckout';
 import Link from 'next/link';
 import { useProducts } from '@/hooks/useProducts';
 import { useT } from '@/hooks/useT';
 
+interface Product {
+  id: string;
+  name: string;
+  price: string;
+  originalPrice?: string | null;
+  size: string;
+  images: string[];
+  stockQuantity: number;
+}
+
+interface ShopConfig {
+  freeShippingThreshold: number;
+  shippingCosts: {
+    eu: number;
+    world: number;
+  };
+  euCountries: string[];
+}
+
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, clearCart, getTotalItems } = useCart();
   const { products, loading, error } = useProducts();
+  const { startCheckout, loading: checkoutLoading, error: checkoutError, clearError } = useCheckout();
   const { t, translate } = useT();
+  
+  // Stati per la configurazione shop e fattura
+  const [shopConfig, setShopConfig] = useState<ShopConfig>({ 
+    freeShippingThreshold: 100, 
+    shippingCosts: { eu: 8.90, world: 25.00 },
+    euCountries: []
+  });
+  const [needsInvoice, setNeedsInvoice] = useState<boolean>(false);
+  const [showCheckoutError, setShowCheckoutError] = useState<boolean>(false);
+
+  // Carica configurazione shop al mount
+  useEffect(() => {
+    fetch('/api/shop-config')
+      .then(res => res.json())
+      .then(config => {
+        setShopConfig({
+          freeShippingThreshold: config.freeShippingThreshold || 100,
+          shippingCosts: config.shippingCosts || { eu: 8.90, world: 25.00 },
+          euCountries: config.euCountries || []
+        });
+      })
+      .catch(err => {
+        console.error('Errore nel caricare la configurazione:', err);
+        // Mantieni valori di default
+      });
+  }, []);
 
   // Calcola il totale usando i prodotti tradotti
-  const calculateTotal = () => {
+  const calculateTotal = (): number => {
     return cart.reduce((total, cartItem) => {
-      const product = products.find(p => p.id === cartItem.id);
+      const product = products.find((p: Product) => p.id === cartItem.id);
       if (product) {
         const price = parseFloat(product.price);
         return total + (price * cartItem.quantity);
@@ -24,9 +72,9 @@ export default function CartPage() {
   };
 
   // Calcola il risparmio totale
-  const calculateSavings = () => {
+  const calculateSavings = (): number => {
     return cart.reduce((savings, cartItem) => {
-      const product = products.find(p => p.id === cartItem.id);
+      const product = products.find((p: Product) => p.id === cartItem.id);
       if (product && product.originalPrice && product.originalPrice !== 'null') {
         const currentPrice = parseFloat(product.price);
         const originalPrice = parseFloat(product.originalPrice);
@@ -38,11 +86,73 @@ export default function CartPage() {
 
   const total = calculateTotal();
   const savings = calculateSavings();
-  const freeShippingThreshold = 50; // Valore fisso o da configurazione
+  const { freeShippingThreshold, shippingCosts } = shopConfig;
+  // Per semplicità nel riepilogo, mostra il prezzo EU (l'utente sceglierà durante il checkout)
+  const displayShippingCost = total >= freeShippingThreshold ? 0 : shippingCosts.eu;
+  const finalTotal = total + displayShippingCost;
+  const remainingForFreeShipping = Math.max(0, freeShippingThreshold - total);
   
   const totalItems = getTotalItems();
   const itemCountLabel = totalItems === 1 ? t.cartPage.itemCount.single : t.cartPage.itemCount.plural;
   const itemLabel = totalItems === 1 ? t.cartPage.itemLabel.single : t.cartPage.itemLabel.plural;
+
+  // Gestione del checkout con fattura
+  const handleCheckout = async () => {
+    if (cart.length === 0) return;
+    
+    clearError();
+    setShowCheckoutError(false);
+    
+    try {
+      // Modifica la chiamata per includere needsInvoice
+      await startCheckout(cart, needsInvoice);
+      // Il carrello si svuoterà SOLO dopo il pagamento completato
+    } catch (err) {
+      setShowCheckoutError(true);
+    }
+  };
+
+  // Componente per mostrare errori di checkout
+  const CheckoutErrorModal = () => {
+    if (!showCheckoutError || !checkoutError) return null;
+
+    return (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+        <div className="bg-white rounded-2xl p-6 max-w-md w-full max-h-[80vh] overflow-y-auto">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+              <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 18.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-serif text-olive">{t.cartPage.checkoutError.title}</h3>
+          </div>
+          
+          <div className="mb-6 text-nocciola whitespace-pre-line">
+            {checkoutError}
+          </div>
+          
+          <div className="flex gap-3">
+            <button
+              onClick={() => setShowCheckoutError(false)}
+              className="flex-1 px-4 py-2 border border-olive text-olive rounded-full hover:bg-olive/5 transition-colors"
+            >
+              {t.cartPage.checkoutError.close}
+            </button>
+            <button
+              onClick={() => {
+                setShowCheckoutError(false);
+                clearError();
+              }}
+              className="flex-1 px-4 py-2 bg-olive text-beige rounded-full hover:bg-olive/80 transition-colors"
+            >
+              {t.cartPage.checkoutError.retry}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   // Loading state
   if (loading) {
@@ -95,10 +205,10 @@ export default function CartPage() {
     );
   }
 
+  // Empty cart
   if (cart.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige">
-        {/* Breadcrumb */}
         <div className="bg-white/50 py-4">
           <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
             <nav className="flex items-center gap-2 text-sm">
@@ -133,8 +243,12 @@ export default function CartPage() {
     );
   }
 
+  // Main cart content
   return (
     <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige">
+      {/* Modal per errori di checkout */}
+      <CheckoutErrorModal />
+
       {/* Breadcrumb */}
       <div className="bg-white/50 py-4">
         <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
@@ -158,7 +272,7 @@ export default function CartPage() {
           {/* Lista prodotti */}
           <div className="lg:col-span-2 space-y-4">
             {cart.map((cartItem) => {
-              const product = products.find(p => p.id === cartItem.id);
+              const product = products.find((p: Product) => p.id === cartItem.id);
               if (!product) return null;
 
               const price = parseFloat(product.price);
@@ -261,14 +375,14 @@ export default function CartPage() {
                     <div className="flex items-center gap-4">
                       <button 
                         onClick={() => updateQuantity(cartItem.id, cartItem.quantity - 1)}
-                        className="w-12 h-12 rounded-full border border-olive/20 flex items-center justify-center hover:bg-olive hover:text-beige transition-colors text-lg font-medium cursor-pointer"
+                        className="w-12 h-12 rounded-full border border-olive/20 flex items-center justify-center hover:bg-olive hover:text-beige transition-colors text-lg font-medium"
                       >
                         −
                       </button>
                       <span className="w-16 text-center font-bold text-xl text-olive">{cartItem.quantity}</span>
                       <button 
                         onClick={() => updateQuantity(cartItem.id, cartItem.quantity + 1)}
-                        className="w-12 h-12 rounded-full border border-olive/20 flex items-center justify-center hover:bg-olive hover:text-beige transition-colors text-lg font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-12 h-12 rounded-full border border-olive/20 flex items-center justify-center hover:bg-olive hover:text-beige transition-colors text-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={cartItem.quantity >= product.stockQuantity}
                       >
                         +
@@ -286,7 +400,7 @@ export default function CartPage() {
 
                     <button 
                       onClick={() => removeFromCart(cartItem.id)}
-                      className="text-red-500 hover:text-red-700 p-3 hover:bg-red-50 rounded-full transition-colors cursor-pointer"
+                      className="text-red-500 hover:text-red-700 p-3 hover:bg-red-50 rounded-full transition-colors"
                       aria-label={t.cartPage.product.remove}
                     >
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -304,6 +418,32 @@ export default function CartPage() {
             <div className="bg-white/90 rounded-2xl p-6 shadow-lg sticky top-4">
               <h2 className="text-xl font-serif text-olive mb-6">{t.cartPage.summary.title}</h2>
               
+              {/* Indicatore spedizione gratuita */}
+              {remainingForFreeShipping > 0 ? (
+                <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-xl mb-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <svg className="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span className="text-yellow-800 font-medium text-sm">{t.cartPage.freeShipping.title}</span>
+                  </div>
+                  <p className="text-yellow-800 text-sm">
+                    {translate('cartPage.freeShipping.remaining', { amount: remainingForFreeShipping.toFixed(2) })}
+                  </p>
+                </div>
+              ) : (
+                <div className="p-4 bg-green-50 border border-green-200 rounded-xl mb-4">
+                  <div className="flex items-center gap-2">
+                    <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-green-800 font-medium text-sm">
+                      {t.cartPage.freeShipping.qualified}
+                    </span>
+                  </div>
+                </div>
+              )}
+              
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between text-nocciola">
                   <span>{translate('cartPage.summary.subtotal', { count: totalItems, itemLabel })}</span>
@@ -319,14 +459,14 @@ export default function CartPage() {
                 
                 <div className="flex justify-between text-nocciola">
                   <span>{t.cartPage.summary.shipping}</span>
-                  <span className={total >= freeShippingThreshold ? "text-green-600 font-medium" : "text-nocciola"}>
-                    {total >= freeShippingThreshold ? t.cartPage.summary.free : "€8,90"}
+                  <span className={displayShippingCost === 0 ? "text-green-600 font-medium" : "text-nocciola"}>
+                    {displayShippingCost === 0 ? t.cartPage.summary.free : `€${displayShippingCost.toFixed(2)}*`}
                   </span>
                 </div>
                 
-                {total < freeShippingThreshold && (
-                  <div className="text-xs text-nocciola/70 bg-olive/5 p-3 rounded-lg">
-                    {translate('cartPage.summary.freeShippingNote', { amount: (freeShippingThreshold - total).toFixed(2) })}
+                {displayShippingCost > 0 && (
+                  <div className="text-xs text-nocciola/70 bg-blue-50 p-3 rounded-lg">
+                    {translate('cartPage.shippingNote', { worldPrice: shippingCosts.world.toFixed(2) })}
                   </div>
                 )}
                 
@@ -334,13 +474,49 @@ export default function CartPage() {
                 
                 <div className="flex justify-between text-olive font-bold text-xl">
                   <span>{t.cartPage.summary.total}</span>
-                  <span>€{(total + (total >= freeShippingThreshold ? 0 : 8.90)).toFixed(2)}</span>
+                  <span>€{finalTotal.toFixed(2)}</span>
                 </div>
               </div>
 
+              {/* Checkbox per fattura */}
+              <div className="mb-4 p-4 bg-olive/5 rounded-xl">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={needsInvoice}
+                    onChange={(e) => setNeedsInvoice(e.target.checked)}
+                    className="mt-1 rounded border-olive/30 text-olive focus:ring-olive focus:ring-offset-0"
+                  />
+                  <div>
+                    <span className="text-olive font-medium text-sm block">
+                      {t.cartPage.invoice.title}
+                    </span>
+                    <span className="text-nocciola text-xs">
+                      {t.cartPage.invoice.description}
+                    </span>
+                  </div>
+                </label>
+              </div>
+
               <div className="space-y-3">
-                <button className="w-full bg-gradient-to-r from-olive to-salvia text-beige py-4 rounded-full font-medium hover:shadow-xl transition-all duration-300 hover:scale-105 text-lg cursor-pointer">
-                  {t.cartPage.summary.checkout}
+                <button 
+                  onClick={handleCheckout}
+                  disabled={checkoutLoading || cart.length === 0}
+                  className="w-full cursor-pointer bg-gradient-to-r from-olive to-salvia text-beige py-4 rounded-full font-medium hover:shadow-xl transition-all duration-300 hover:scale-105 text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+                >
+                  {checkoutLoading ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-beige/30 border-t-beige rounded-full animate-spin"></div>
+                      {t.cartPage.summary.processing}
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                      </svg>
+                      {t.cartPage.summary.checkout}
+                    </>
+                  )}
                 </button>
                 
                 <Link 
@@ -351,10 +527,18 @@ export default function CartPage() {
                 </Link>
               </div>
 
+              {needsInvoice && (
+                <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                  <p className="text-blue-800 text-xs">
+                    {t.cartPage.invoice.checkoutNote}
+                  </p>
+                </div>
+              )}
+
               <div className="mt-6 pt-4 border-t border-olive/20">
                 <button 
                   onClick={clearCart}
-                  className="w-full text-center text-red-500 hover:text-red-700 text-sm font-medium py-2 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                  className="w-full cursor-pointer text-center text-red-500 hover:text-red-700 text-sm font-medium py-2 hover:bg-red-50 rounded-lg transition-colors"
                 >
                   {t.cartPage.summary.clearCart}
                 </button>
@@ -368,11 +552,24 @@ export default function CartPage() {
                   </svg>
                   <div className="text-sm text-nocciola">
                     <p className="font-medium text-olive mb-1">
-                      {total >= freeShippingThreshold ? t.cartPage.shipping.free : t.cartPage.shipping.paid}
+                      {displayShippingCost === 0 ? t.cartPage.shipping.free : t.cartPage.shipping.paid}
                     </p>
                     <p>{t.cartPage.shipping.delivery}</p>
                   </div>
                 </div>
+              </div>
+
+              {/* Sicurezza checkout */}
+              <div className="mt-4 p-4 bg-green-50 rounded-xl">
+                <div className="flex items-center gap-2 mb-2">
+                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                  <span className="text-green-800 font-medium text-sm">{t.cartPage.security.title}</span>
+                </div>
+                <p className="text-green-700 text-xs">
+                  {t.cartPage.security.description}
+                </p>
               </div>
             </div>
           </div>

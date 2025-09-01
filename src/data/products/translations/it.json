@@ -1,7 +1,7 @@
 {
   "products": [
     {
-      "id": "1",
+      "id": "prod_SyOsBvLB3NksU0",
       "name": "Bottiglia Premium Oil",
       "description": "La nostra selezione più pregiata in formato esclusivo. Olio extravergine da olive centenarie, perfetto per degustazioni e regali raffinati.",
       "longDescription": "Questo olio rappresenta l'eccellenza della produzione Galia. Realizzato esclusivamente con olive secolari coltivate nelle nostre terre più antiche, viene estratto con tecniche tradizionali e confezionato in eleganti bottiglie da collezione. Numerato e sigillato individualmente per garantire l'autenticità.",
@@ -29,7 +29,7 @@
       ]
     },
     {
-      "id": "2",
+      "id": "prod_SyOtjIPVPcKWDR",
       "name": "Beauty Oil",
       "description": "Olio extravergine delicato pensato per la cura quotidiana del corpo e dei capelli. Formula esclusiva con vitamine naturali.",
       "longDescription": "Un olio leggero, ricco di vitamina E e polifenoli, ideale come trattamento naturale per la pelle e i capelli. Estratto a freddo da olive raccolte precocemente, mantiene tutte le proprietà benefiche senza appesantire. Arricchito con estratti naturali di lavanda per un'esperienza sensoriale unica.",
@@ -54,7 +54,7 @@
       "awards": []
     },
     {
-      "id": "3",
+      "id": "prod_SyOvEBfTptTDXn",
       "name": "Latta Olio da 5L",
       "description": "La soluzione ideale per famiglie e ristorazione, grande formato al miglior prezzo. Olio extravergine classico in latta protettiva.",
       "longDescription": "Latta da 5 litri di olio extravergine Galia, ottenuto da olive raccolte manualmente e lavorate in giornata. Perfetta per chi consuma olio regolarmente e cerca convenienza senza rinunciare alla qualità. La latta protettiva garantisce una conservazione ottimale preservando tutte le caratteristiche organolettiche.",

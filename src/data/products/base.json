@@ -1,16 +1,16 @@
 {
   "products": [
     {
-      "id": "1",
+      "id": "prod_SyOsBvLB3NksU0",
       "slug": "bottiglia-premium-oil",
       "category": "premium",
       "price": "89.90",
       "originalPrice": "120.00",
-      "stripeProductId": "prod_premium_oil",
-      "stripePriceId": "price_premium_oil",
+      "stripeProductId": "prod_SyOsBvLB3NksU0",
+      "stripePriceId": "price_1S2S4fGg7Z7XTuViNSq3E3Ph",
       "size": "75ml",
-      "inStock": false,
-      "stockQuantity": 0,
+      "inStock": true,
+      "stockQuantity": 100,
       "color": "olive",
       "images": [
         "/bottle-oil.png",
@@ -30,13 +30,13 @@
       "tags": ["premium", "limited", "regalo", "gift"]
     },
     {
-      "id": "2",
+      "id": "prod_SyOtjIPVPcKWDR",
       "slug": "beauty-oil",
       "category": "beauty",
       "price": "24.90",
       "originalPrice": "35.00",
-      "stripeProductId": "prod_beauty_oil",
-      "stripePriceId": "price_beauty_oil",
+      "stripeProductId": "prod_SyOtjIPVPcKWDR",
+      "stripePriceId": "price_1S2S5sGg7Z7XTuVi1uOtIHLP",
       "size": "100ml",
       "inStock": true,
       "stockQuantity": 50,
@@ -52,13 +52,13 @@
       "tags": ["beauty", "wellness", "naturale", "vegan"]
     },
     {
-      "id": "3",
+      "id": "prod_SyOvEBfTptTDXn",
       "slug": "latta-olio-5l",
       "category": "famiglia",
       "price": "65.00",
       "originalPrice": "78.00",
-      "stripeProductId": "prod_family_oil",
-      "stripePriceId": "price_family_oil",
+      "stripeProductId": "prod_SyOvEBfTptTDXn",
+      "stripePriceId": "price_1S2S7CGg7Z7XTuViTOXkq7Nh",
       "size": "5L",
       "inStock": true,
       "stockQuantity": 15,

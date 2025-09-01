@@ -530,7 +530,8 @@
       "total": "Total",
       "checkout": "Proceed to Checkout",
       "continueShopping": "Continue Shopping",
-      "clearCart": "Clear Cart"
+      "clearCart": "Clear Cart",
+      "processing": "Processing..."
     },
     "shipping": {
       "free": "Free shipping",
@@ -540,7 +541,27 @@
     "itemLabel": {
       "single": "item",
       "plural": "items"
-    }
+    },
+    "checkoutError": {
+    "title": "Checkout Error",
+    "close": "Close",
+    "retry": "Retry"
+  },
+  "freeShipping": {
+    "title": "Free shipping",
+    "remaining": "Add €{amount} of products for free shipping!",
+    "qualified": "🎉 You qualify for free shipping!"
+  },
+  "shippingNote": "*Price for Europe. €{worldPrice} for international shipping.",
+  "invoice": {
+    "title": "Request invoice",
+    "description": "Tax code and billing information will be required",
+    "checkoutNote": "During checkout you will be asked for your tax code and invoice data. VAT number is optional."
+  },
+  "security": {
+    "title": "Secure Checkout",
+    "description": "Payments protected by Stripe. Your data is safe."
+  }
   },
   "contactPage": {
     "hero": {
@@ -570,5 +591,82 @@
   "addToCart": "Add to Cart",
   "added": "Added", 
   "productAdded": "Product Added"
-}
+},
+"checkoutSuccess": {
+    "hero": {
+      "title": "Thank you!",
+      "subtitle": "Your order has been confirmed",
+      "description": "You will receive an email confirmation with all the details of your purchase and information for tracking the shipment.",
+      "orderNumber": "Order Number",
+      "whatsapp": "Request Info via WhatsApp",
+      "documents": "View Documents",
+      "receipt": "View Receipt",
+      "documentsChecking": "Checking documents...",
+      "receiptAndInvoiceIncluded": "Receipt and invoice included",
+      "opensNewWindow": "Opens in new window"
+    },
+    "orderSummary": {
+      "title": "Summary of your Order",
+      "customerData": "Customer Details",
+      "name": "Name:",
+      "email": "Email:",
+      "address": "Address:",
+      "asPerCheckout": "As per checkout",
+      "productsOrdered": "Products Ordered",
+      "quantity": "Quantity:",
+      "each": "each",
+      "subtotal": "Subtotal:",
+      "shipping": "Shipping",
+      "shippingCost": "Shipping:",
+      "total": "Total:",
+      "productDetailsNotAvailable": "Product details not available"
+    },
+    "timeline": {
+      "title": "Your order journey",
+      "steps": {
+        "confirmation": {
+          "title": "Confirmation Received",
+          "description": "We will send you a confirmation email with all the details",
+          "status": "Completed"
+        },
+        "preparation": {
+          "title": "Preparation",
+          "description": "Your order will be carefully prepared (1-2 business days)",
+          "status": "In progress"
+        },
+        "shipping": {
+          "title": "Shipping",
+          "description": "You will receive the tracking code to follow the delivery",
+          "status": "Next"
+        }
+      }
+    },
+    "cta": {
+      "title": "Continue the experience",
+      "description": "Discover other products from our collection or return to the homepage to explore all our offers.",
+      "discoverProducts": "Discover Other Products",
+      "backToHome": "Back to Home"
+    },
+    "loading": {
+      "orderSummary": "Loading order summary...",
+      "processing": "Processing..."
+    },
+    "whatsappMessage": {
+      "greeting": "Hello,\n\n",
+      "intro": "I am writing to get information about my order:\n\n",
+      "orderNumber": "*Order #{orderNumber}*\n",
+      "orderDate": "*Order date:* {date}\n",
+      "customerName": "*Name:* {name}\n",
+      "customerEmail": "*Email:* {email}\n\n",
+      "productsTitle": "*Products ordered:*\n",
+      "productLine": "• {name} (x{quantity})\n",
+      "totalPaid": "\n*Total paid:* €{total}\n\n",
+      "question": "Could you update me on the preparation status and shipping times?\n\n",
+      "thanks": "Thank you very much!\n",
+      "regards": "Best regards"
+    },
+    "badges": {
+      "invoiceIncluded": "+ Invoice"
+    }
+  }
 }

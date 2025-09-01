@@ -1,7 +1,7 @@
 {
   "products": [
     {
-      "id": "1",
+      "id": "prod_SyOsBvLB3NksU0",
       "name": "Premium Oil Bottle",
       "description": "Our most precious selection in exclusive format. Extra virgin oil from centenary olives, perfect for tastings and refined gifts.",
       "longDescription": "This oil represents the excellence of Galia production. Made exclusively with secular olives grown in our oldest lands, it is extracted with traditional techniques and packaged in elegant collector bottles. Numbered and individually sealed to guarantee authenticity.",
@@ -29,7 +29,7 @@
       ]
     },
     {
-      "id": "2",
+      "id": "prod_SyOtjIPVPcKWDR",
       "name": "Beauty Oil",
       "description": "Delicate extra virgin oil designed for daily body and hair care. Exclusive formula with natural vitamins.",
       "longDescription": "A light oil, rich in vitamin E and polyphenols, ideal as a natural treatment for skin and hair. Cold-extracted from early-harvested olives, it maintains all beneficial properties without weighing down. Enriched with natural lavender extracts for a unique sensory experience.",
@@ -54,7 +54,7 @@
       "awards": []
     },
     {
-      "id": "3",
+      "id": "prod_SyOvEBfTptTDXn",
       "name": "5L Oil Can",
       "description": "The ideal solution for families and restaurants, large format at the best price. Classic extra virgin oil in protective can.",
       "longDescription": "5-liter can of Galia extra virgin oil, obtained from manually harvested olives and processed the same day. Perfect for those who consume oil regularly and seek convenience without sacrificing quality. The protective can ensures optimal preservation while maintaining all organoleptic characteristics.",
@@ -97,5 +97,71 @@
       "name": "Convenience Format",
       "description": "Large formats for families and professionals"
     }
-  ]
+  ],
+  
+  "cartPage": {
+    "title": "Your Cart",
+    "loading": "Loading cart...",
+    "retry": "Retry",
+    "breadcrumb": {
+      "home": "Home",
+      "cart": "Cart"
+    },
+    "itemCount": {
+      "single": "item",
+      "plural": "items"
+    },
+    "itemLabel": {
+      "single": "product",
+      "plural": "products"
+    },
+    "empty": {
+      "title": "Your cart is empty",
+      "description": "Looks like you haven't added any products to your cart yet. Explore our collection!",
+      "button": "Discover Products"
+    },
+    "product": {
+      "remove": "Remove product",
+      "stock": "{{count}} available",
+      "savings": "Save €{{amount}}"
+    },
+    "summary": {
+      "title": "Order Summary",
+      "subtotal": "Subtotal ({{count}} {{itemLabel}})",
+      "totalSavings": "Total savings",
+      "shipping": "Shipping",
+      "free": "Free",
+      "total": "Total",
+      "checkout": "Proceed to Checkout",
+      "continueShopping": "Continue Shopping",
+      "clearCart": "Clear Cart"
+    },
+    "shipping": {
+      "free": "Free shipping for orders over €100",
+      "paid": "Shipping calculated at checkout",
+      "delivery": "Delivery in 2-3 working days"
+    },
+    "freeShipping": {
+      "title": "Free shipping",
+      "remaining": "Add €{{amount}} of products for free shipping!",
+      "qualified": "You qualify for free shipping!"
+    },
+    "shippingNote": "Price for Europe. €{{worldPrice}} for international shipping.",
+    "invoice": {
+      "title": "Request invoice",
+      "description": "Tax code and billing information will be required",
+      "checkoutNote": "During checkout you will be asked for your tax code and invoice data. VAT number is optional."
+    },
+    "security": {
+      "title": "Secure Checkout",
+      "description": "Payments protected by Stripe. Your data is safe."
+    },
+    "error": {
+      "title": "Checkout Error",
+      "close": "Close",
+      "retry": "Retry",
+      "processing": "Processing...",
+      "loadingProducts": "Error loading products: {{error}}"
+    }
+  }
 }
