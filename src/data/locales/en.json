@@ -669,6 +669,8 @@
     },
     "badges": {
       "invoiceIncluded": "+ Invoice"
-    }
+    },
+    "shippingMethod": "Shipping method:",
+    "freeShipping": "Free!"
   }
 }
