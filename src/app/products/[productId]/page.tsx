@@ -7,6 +7,7 @@ import { useCart } from '@/contexts/CartContext';
 import AddToCartButton from '@/components/AddToCartButton';
 import { useProducts, useProduct } from '@/hooks/useProducts';
 import { useT } from '@/hooks/useT';
+import { useRouter } from 'next/navigation';
 
 export default function ProductDetailPage({ params }: { params: Promise<{ productId: string }> }) {
   const { productId } = use(params);
@@ -21,6 +22,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
   const { product, loading, error, notFound } = useProduct(productId);
   const { products: allProducts } = useProducts();
   const relatedProducts = allProducts.filter((p) => p.id !== productId);
+
+  const router = useRouter();
 
   const handleAddToCart = () => {
     if (product?.inStock && product.stockQuantity > 0 && !isAddingToCart) {
@@ -257,7 +260,13 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
                   quantity={quantity}
                   size="full"
                 />
-                <Link href="/cart"
+                <Link 
+                  href="/cart"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleAddToCart();
+                    router.push('/cart');
+                  }}
                   className={`px-6 py-4 bg-olive/10 text-olive hover:bg-olive hover:text-beige transition-all duration-300 rounded-full border border-olive/20 cursor-pointer ${
                     isOutOfStock ? 'opacity-50 pointer-events-none' : ''
                   }`}
@@ -390,9 +399,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
                     {/* Stock status per prodotti correlati */}
                     <div className="text-center text-xs mt-2">
                       {relatedIsOutOfStock ? (
-                        <span className="text-red-600 font-bold bg-red-50 px-2 py-1 rounded-full">NON DISPONIBILE</span>
+                        <span className="text-red-600 font-bold bg-red-50 px-2 py-1 rounded-full">{t.productDetailPage.stockNotAvaible}</span>
                       ) : (
-                        <span className="text-green-600 bg-green-50 px-2 py-1 rounded-full">DISPONIBILE</span>
+                        <span className="text-green-600 bg-green-50 px-2 py-1 rounded-full">{t.productDetailPage.stockAvaible}</span>
                       )}
                     </div>
                   </div>

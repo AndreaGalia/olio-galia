@@ -464,7 +464,9 @@
       "awards": "Awards and Recognition",
       "noAwards": "No awards assigned yet.",
       "relatedProducts": "You might also like"
-    }
+    },
+    "stockAvaible": "AVAILABLE",
+    "stockNotAvaible": "OUT OF STOCK"
   },
   "bulkProposal": {
     "section": {
