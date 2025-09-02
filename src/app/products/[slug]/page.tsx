@@ -5,12 +5,12 @@ import { use } from "react";
 import { BulkProposalSection } from '@/components/BulkProposalModal';
 import { useCart } from '@/contexts/CartContext';
 import AddToCartButton from '@/components/AddToCartButton';
-import { useProducts, useProduct } from '@/hooks/useProducts';
+import { useProducts, useProductBySlug } from '@/hooks/useProducts';
 import { useT } from '@/hooks/useT';
 import { useRouter } from 'next/navigation';
 
-export default function ProductDetailPage({ params }: { params: Promise<{ productId: string }> }) {
-  const { productId } = use(params);
+export default function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = use(params);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
@@ -18,10 +18,10 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
   const { addToCart } = useCart();
   const { t, translate } = useT();
   
-  // Usa i nuovi hook per prodotti tradotti
-  const { product, loading, error, notFound } = useProduct(productId);
+  // Usa il nuovo hook per trovare il prodotto per slug
+  const { product, loading, error, notFound } = useProductBySlug(slug);
   const { products: allProducts } = useProducts();
-  const relatedProducts = allProducts.filter((p) => p.id !== productId);
+  const relatedProducts = allProducts.filter((p) => p.slug !== slug);
 
   const router = useRouter();
 
@@ -354,7 +354,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
               const relatedIsOutOfStock = !related.inStock || related.stockQuantity === 0;
               
               return (
-                <Link key={related.id} href={`/products/${related.id}`}>
+                <Link key={related.id} href={`/products/${related.slug}`}>
                   <div className={`bg-white/90 rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] cursor-pointer relative ${
                     relatedIsOutOfStock ? 'opacity-75 grayscale' : ''
                   }`}>

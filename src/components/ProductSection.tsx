@@ -252,7 +252,7 @@ export default function ProductsSection() {
                         
                         {/* Pulsante dettagli ridisegnato per essere coerente */}
                         <Link
-                          href={`/products/${product.id}`}
+                          href={`/products/${product.slug}`}
                           className={`bg-gradient-to-r from-nocciola to-nocciola/80 text-white px-6 py-3 rounded-2xl text-sm font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105 text-center ${
                             isOutOfStock ? 'opacity-50 cursor-not-allowed hover:scale-100 hover:shadow-lg' : ''
                           }`}
