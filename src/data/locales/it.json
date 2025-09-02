@@ -669,6 +669,8 @@
     },
     "badges": {
       "invoiceIncluded": "+ Fattura"
-    }
+    },
+    "shippingMethod": "Metodo spedizione:",
+    "freeShipping": "Gratuita!"
   }
 }   

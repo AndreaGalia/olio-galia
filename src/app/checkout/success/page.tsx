@@ -7,7 +7,6 @@ import { useCart } from '@/contexts/CartContext';
 import { useT } from '@/hooks/useT';
 import Link from 'next/link';
 
-// Definisci i tipi per orderDetails
 interface OrderItem {
   id: string;
   name: string;
@@ -27,14 +26,26 @@ interface Shipping {
   method?: string;
 }
 
+// Interfaccia pricing semplificata - SOLO subtotale, spedizione, totale
+interface Pricing {
+  subtotal: number;
+  shippingCost: number;
+  total: number;
+}
+
+// Interfaccia OrderDetails aggiornata
 interface OrderDetails {
   id: string;
   customer?: Customer;
   shipping?: Shipping;
   items?: OrderItem[];
-  total: number;
+  pricing?: Pricing;        // NUOVO campo per subtotale, spedizione, totale
+  total: number;            // Mantenuto per compatibilità
   status: string;
   created: string;
+  currency?: string;
+  paymentStatus?: string;
+  paymentIntent?: string;
 }
 
 interface InvoiceStatus {
@@ -482,19 +493,52 @@ export default function CheckoutSuccess() {
               {/* Totale */}
               <div className="border-t border-nocciola/20 pt-6">
                 <div className="bg-gradient-to-r from-olive/10 to-salvia/10 rounded-2xl p-6">
+                  
+                  {/* Subtotale prodotti */}
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-nocciola">{t.checkoutSuccess.orderSummary.subtotal}</span>
-                    <span className="text-nocciola">€{((orderDetails.total || 0) * 0.9).toFixed(2)}</span>
+                    <span className="text-nocciola">
+                      €{orderDetails.pricing?.subtotal?.toFixed(2) || 
+                         ((orderDetails.total || 0) - (orderDetails.pricing?.shippingCost || (orderDetails.total || 0) * 0.1)).toFixed(2)}
+                    </span>
                   </div>
+                  
+                  {/* Costo spedizione reale da Stripe */}
                   <div className="flex justify-between items-center mb-4">
-                    <span className="text-nocciola">{t.checkoutSuccess.orderSummary.shippingCost}</span>
-                    <span className="text-nocciola">€{((orderDetails.total || 0) * 0.1).toFixed(2)}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-nocciola">{t.checkoutSuccess.orderSummary.shippingCost}</span>
+                      {orderDetails.pricing?.shippingCost === 0 && (
+                        <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
+                          {t.checkoutSuccess.freeShipping}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-nocciola">
+                      {orderDetails.pricing?.shippingCost !== undefined ? 
+                        `€${orderDetails.pricing.shippingCost.toFixed(2)}` : 
+                        `€${((orderDetails.total || 0) * 0.1).toFixed(2)}`
+                      }
+                    </span>
                   </div>
+                  
+                  {/* Separatore prima del totale */}
                   <div className="border-t border-olive/20 pt-4">
                     <div className="flex justify-between items-center">
                       <span className="text-xl font-serif text-olive font-bold">{t.checkoutSuccess.orderSummary.total}</span>
-                      <span className="text-2xl font-serif text-olive font-bold">€{(orderDetails.total || 0).toFixed(2)}</span>
+                      <span className="text-2xl font-serif text-olive font-bold">
+                        €{(orderDetails.pricing?.total || orderDetails.total || 0).toFixed(2)}
+                      </span>
                     </div>
+                    
+                    {/* Informazioni aggiuntive sul metodo di spedizione */}
+                    {orderDetails.shipping?.method && (
+                      <div className="mt-3 pt-3 border-t border-olive/10">
+                        <p className="text-sm text-nocciola/80 text-center">
+                          <span className="font-medium">{t.checkoutSuccess.shippingMethod}</span> {orderDetails.shipping.method}
+                        </p>
+                      </div>
+                    )}
+                    
                   </div>
                 </div>
               </div>
