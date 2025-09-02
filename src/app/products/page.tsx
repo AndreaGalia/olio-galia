@@ -240,7 +240,7 @@ export default function ProductsPage() {
                         />
                         
                         <Link 
-                          href={`/products/${product.id}`}
+                          href={`/products/${product.slug}`}
                           className={`flex-1 bg-olive/10 text-olive py-3 px-4 rounded-full font-medium hover:bg-olive/20 hover:shadow-lg transition-all duration-300 text-base border border-olive/20 hover:border-olive/40 flex items-center justify-center hover:scale-105 ${
                             isOutOfStock ? 'opacity-50 cursor-not-allowed hover:scale-100 hover:shadow-none hover:bg-olive/10' : ''
                           }`}
