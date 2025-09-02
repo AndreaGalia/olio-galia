@@ -464,7 +464,9 @@
       "awards": "Premi e Riconoscimenti",
       "noAwards": "Nessun premio ancora assegnato.",
       "relatedProducts": "Potrebbe interessarti anche"
-    }
+    },
+    "stockAvaible": "DISPONIBILE",
+    "stockNotAvaible": "NON DISPONIBILE"
   },
   "bulkProposal": {
     "section": {
