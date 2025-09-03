@@ -1,0 +1,255 @@
+/* styles/About.module.css */
+
+/* Animazioni */
+@keyframes slideInUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(30px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  50% { 
+    transform: translateY(-10px); 
+  }
+}
+
+@keyframes bounceSlow {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  50% { 
+    transform: translateY(-15px); 
+  }
+}
+
+@keyframes fadeInStagger {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+/* Classi per animazioni */
+.slideInUp { 
+  animation: slideInUp 0.8s ease-out forwards; 
+  opacity: 0; 
+}
+
+.animateFloat { 
+  animation: float 4s ease-in-out infinite; 
+}
+
+.animateBounceSlow { 
+  animation: bounceSlow 3s ease-in-out infinite; 
+}
+
+.animateFadeInStagger {
+  animation: fadeInStagger 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+/* Colori personalizzati per Tailwind */
+.textOlive { 
+  color: #556B2F; 
+}
+
+.textSalvia { 
+  color: #789262; 
+}
+
+.textSabbia { 
+  color: #D6C7A1; 
+}
+
+.textBeige { 
+  color: #ECE8DF; 
+}
+
+.textNocciola { 
+  color: #B2A98C; 
+}
+
+.bgOlive { 
+  background-color: #556B2F; 
+}
+
+.bgSalvia { 
+  background-color: #789262; 
+}
+
+.bgSabbia { 
+  background-color: #D6C7A1; 
+}
+
+.bgBeige { 
+  background-color: #ECE8DF; 
+}
+
+.bgNocciola { 
+  background-color: #B2A98C; 
+}
+
+.bgOlive5 { 
+  background-color: rgba(85, 107, 47, 0.05); 
+}
+
+.bgOlive10 { 
+  background-color: rgba(85, 107, 47, 0.1); 
+}
+
+.bgOlive20 { 
+  background-color: rgba(85, 107, 47, 0.2); 
+}
+
+.bgSalvia5 { 
+  background-color: rgba(120, 146, 98, 0.05); 
+}
+
+.bgSalvia10 { 
+  background-color: rgba(120, 146, 98, 0.1); 
+}
+
+.bgSalvia20 { 
+  background-color: rgba(120, 146, 98, 0.2); 
+}
+
+.bgNocciola20 { 
+  background-color: rgba(178, 169, 140, 0.2); 
+}
+
+.borderOlive { 
+  border-color: #556B2F; 
+}
+
+.borderOlive10 { 
+  border-color: rgba(85, 107, 47, 0.1); 
+}
+
+.borderOlive30 { 
+  border-color: rgba(85, 107, 47, 0.3); 
+}
+
+.fontSerif { 
+  font-family: "Cormorant Garamond", serif; 
+}
+
+/* Hover effects */
+.hoverTextOlive:hover { 
+  color: #556B2F; 
+}
+
+.hoverTextSalvia:hover { 
+  color: #789262; 
+}
+
+.hoverBgOlive:hover { 
+  background-color: #556B2F; 
+}
+
+.hoverBgBeige:hover { 
+  background-color: #ECE8DF; 
+}
+
+/* Gradient classes */
+.gradientOliveToSalvia {
+  background: linear-gradient(to right, #556B2F, #789262);
+}
+
+.gradientBeigeViaSabbia {
+  background: linear-gradient(135deg, #ECE8DF 0%, #D6C7A1 50%, #ECE8DF 100%);
+}
+
+.gradientOlive5ToSalvia5 {
+  background: linear-gradient(to right, rgba(85, 107, 47, 0.05), rgba(120, 146, 98, 0.05));
+}
+
+.gradientOlive10ToSalvia10 {
+  background: linear-gradient(to right, rgba(85, 107, 47, 0.1), rgba(120, 146, 98, 0.1));
+}
+
+/* Specific component styles */
+.brotherCard {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.brotherCard:hover {
+  transform: scale(1.05);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.brotherAvatar {
+  transition: transform 0.3s ease-in-out;
+}
+
+.brotherCard:hover .brotherAvatar {
+  transform: scale(1.1);
+}
+
+.valueCard {
+  transition: transform 0.3s ease-in-out;
+}
+
+.valueCard:hover {
+  transform: scale(1.05);
+}
+
+.valueIcon {
+  transition: all 0.3s ease-in-out;
+}
+
+.valueCard:hover .valueIcon {
+  transform: scale(1.1);
+}
+
+.timelineItem {
+  transition: all 0.5s ease-in-out;
+}
+
+.timelineItem:hover {
+  transform: scale(1.05);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.timelineItemActive {
+  box-shadow: 0 0 0 2px rgba(85, 107, 47, 0.3);
+}
+
+.ctaButton {
+  transition: all 0.3s ease-in-out;
+}
+
+.ctaButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Accessibilità - riduci animazioni se l'utente le ha disabilitate */
+@media (prefers-reduced-motion: reduce) {
+  .slideInUp,
+  .animateFloat,
+  .animateBounceSlow,
+  .animateFadeInStagger {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  
+  .brotherCard:hover,
+  .valueCard:hover,
+  .timelineItem:hover,
+  .ctaButton:hover {
+    transform: none;
+  }
+}
