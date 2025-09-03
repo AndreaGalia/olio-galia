@@ -1,0 +1,209 @@
+/* components/sections/HeroSection.module.css */
+
+/* Keyframes specifiche per Hero - scoped automaticamente */
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-100px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(50px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeInBounce {
+  0% { opacity: 0; transform: scale(0.3) rotate(12deg); }
+  50% { transform: scale(1.1) rotate(12deg); }
+  100% { opacity: 1; transform: scale(1) rotate(12deg); }
+}
+
+@keyframes expandLineGradient {
+  from { width: 0; }
+  to { width: 6rem; }
+}
+
+@keyframes gradientX {
+  0%, 100% { background-size: 200% 200%; background-position: left center; }
+  50% { background-size: 200% 200%; background-position: right center; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-10px) rotate(5deg); }
+  75% { transform: translateY(-5px) rotate(-5deg); }
+}
+
+@keyframes floatComplex {
+  0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+  25% { transform: translateY(-15px) translateX(5px) scale(1.1); }
+  50% { transform: translateY(-8px) translateX(-3px) scale(0.95); }
+  75% { transform: translateY(-12px) translateX(2px) scale(1.05); }
+}
+
+@keyframes bounceGentle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulseSlow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+@keyframes bounceSlow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes spinVerySlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% { opacity: 0.5; transform: translateX(-5px); }
+  50% { opacity: 1; transform: translateX(0px); }
+  100% { opacity: 0.5; transform: translateX(5px); }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: translateY(0px) scale(0); }
+  50% { opacity: 1; transform: translateY(-10px) scale(1); }
+}
+
+@keyframes scrollIndicator {
+  0% { opacity: 0; transform: translateY(-8px); }
+  50% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(8px); }
+}
+
+@keyframes draw {
+  from { stroke-dasharray: 100; stroke-dashoffset: 100; }
+  to { stroke-dasharray: 100; stroke-dashoffset: 0; }
+}
+
+/* Contenitore Hero con classi scoped */
+.heroSection {
+  /* Può contenere stili specifici per il contenitore Hero se necessari */
+}
+
+/* Classi di animazione - scoped automaticamente da CSS Modules */
+.heroSection :global(.slide-in-left) { 
+  animation: slideInLeft 0.8s ease-out forwards; 
+}
+
+.heroSection :global(.slide-up) { 
+  animation: slideUp 0.8s ease-out forwards; 
+  opacity: 0; 
+}
+
+.heroSection :global(.fade-in-up) { 
+  animation: fadeInUp 0.8s ease-out forwards; 
+  opacity: 0; 
+}
+
+.heroSection :global(.fade-in-scale) { 
+  animation: fadeInScale 1s ease-out forwards; 
+  opacity: 0; 
+}
+
+.heroSection :global(.fade-in-bounce) { 
+  animation: fadeInBounce 1s ease-out forwards; 
+  opacity: 0; 
+}
+
+.heroSection :global(.expand-line-gradient) { 
+  animation: expandLineGradient 1.2s ease-out 0.8s forwards; 
+  width: 0; 
+}
+
+.heroSection :global(.animate-gradient-x) { 
+  animation: gradientX 3s ease infinite; 
+}
+
+.heroSection :global(.animate-float) { 
+  animation: float 4s ease-in-out infinite; 
+}
+
+.heroSection :global(.animate-float-complex) { 
+  animation: floatComplex 5s ease-in-out infinite; 
+}
+
+.heroSection :global(.animate-bounce-gentle) { 
+  animation: bounceGentle 2s ease-in-out infinite; 
+}
+
+.heroSection :global(.animate-pulse-slow) { 
+  animation: pulseSlow 4s ease-in-out infinite; 
+}
+
+.heroSection :global(.animate-bounce-slow) { 
+  animation: bounceSlow 3s ease-in-out infinite; 
+}
+
+.heroSection :global(.animate-spin-very-slow) { 
+  animation: spinVerySlow 30s linear infinite; 
+}
+
+.heroSection :global(.animate-shimmer) { 
+  animation: shimmer 2s ease-in-out infinite; 
+}
+
+.heroSection :global(.animate-sparkle) { 
+  animation: sparkle 2s ease-in-out infinite; 
+}
+
+.heroSection :global(.animate-scroll-indicator) { 
+  animation: scrollIndicator 2s infinite; 
+}
+
+.heroSection :global(.animate-draw) { 
+  animation: draw 3s ease-in-out infinite; 
+}
+
+/* Utility classes per background - scoped */
+.heroSection :global(.bg-size-200) { 
+  background-size: 200% 100%; 
+}
+
+.heroSection :global(.bg-pos-0) { 
+  background-position: 0% 0%; 
+}
+
+.heroSection :global(.bg-pos-100) { 
+  background-position: 100% 0%; 
+}
+
+/* Supporto per reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .heroSection :global(.slide-in-left),
+  .heroSection :global(.slide-up),
+  .heroSection :global(.fade-in-up),
+  .heroSection :global(.fade-in-scale),
+  .heroSection :global(.fade-in-bounce),
+  .heroSection :global(.expand-line-gradient),
+  .heroSection :global(.animate-gradient-x),
+  .heroSection :global(.animate-float),
+  .heroSection :global(.animate-float-complex),
+  .heroSection :global(.animate-bounce-gentle),
+  .heroSection :global(.animate-pulse-slow),
+  .heroSection :global(.animate-bounce-slow),
+  .heroSection :global(.animate-spin-very-slow),
+  .heroSection :global(.animate-shimmer),
+  .heroSection :global(.animate-sparkle),
+  .heroSection :global(.animate-scroll-indicator),
+  .heroSection :global(.animate-draw) {
+    animation-duration: 0.01ms !important; 
+    animation-iteration-count: 1 !important; 
+  }
+}
