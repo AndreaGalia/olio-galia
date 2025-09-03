@@ -1,14 +1,14 @@
 // components/sections/HeroSection.tsx
 "use client";
 import { useState, useEffect } from 'react';
-import { HeroBackground } from './HeroBackground';
-import { HeroBadge } from './HeroBadge';
-import { HeroTitle } from './HeroTitle';
-import { HeroDescription } from './HeroDescription';
-import { HeroButtons } from './HeroButtons';
-import { HeroStats } from './HeroStats';
-import { HeroBottle } from './HeroBottle';
-import styles from './HeroSection.module.css';
+import { HeroBackground } from './hero/HeroBackground';
+import { HeroBadge } from './hero/HeroBadge';
+import { HeroTitle } from './hero/HeroTitle';
+import { HeroDescription } from './hero/HeroDescription';
+import { HeroButtons } from './hero/HeroButtons';
+import { HeroStats } from './hero/HeroStats';
+import { HeroBottle } from './hero/HeroBottle';
+import styles from '../../../styles/HeroSection.module.css';
 
 export default function HeroSection() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
