@@ -6,7 +6,7 @@ import { useCart } from '@/contexts/CartContext';
 import { useProducts } from '@/hooks/useProducts';
 import type { Product } from '@/types/products';
 import { useT } from '@/hooks/useT';
-import CartIconButton from '../CartIconButton';
+import CartIconButton from '../../CartIconButton';
 
 export default function ProductsSection() {
   const [activeProduct, setActiveProduct] = useState(0);
