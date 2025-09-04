@@ -4,121 +4,148 @@ import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const sessionId = searchParams.get('session_id');
+// Types
+interface ReceiptStatus {
+  isPaid: boolean;
+  hasReceipt: boolean;
+  receiptUrl: string | null;
+}
 
+// Utilities
+const validateSessionId = (sessionId: string | null) => {
   if (!sessionId) {
-    return NextResponse.json({ error: 'Session ID richiesto' }, { status: 400 });
+    throw new Error('Session ID richiesto');
+  }
+  return sessionId;
+};
+
+const retrieveSession = async (sessionId: string) => {
+  return await stripe.checkout.sessions.retrieve(sessionId);
+};
+
+const validatePaymentStatus = (session: Stripe.Checkout.Session) => {
+  if (session.payment_status !== 'paid') {
+    throw new Error('Pagamento non completato');
+  }
+};
+
+const extractPaymentIntentId = (paymentIntent: string | Stripe.PaymentIntent | null): string => {
+  if (!paymentIntent) {
+    throw new Error('Payment Intent non trovato');
+  }
+
+  if (typeof paymentIntent === 'string') {
+    return paymentIntent;
+  }
+
+  if (paymentIntent && 'id' in paymentIntent && paymentIntent.id) {
+    return paymentIntent.id;
+  }
+
+  throw new Error('Payment Intent non valido');
+};
+
+const findReceiptUrl = async (paymentIntentId: string): Promise<string> => {
+  const charges = await stripe.charges.list({
+    payment_intent: paymentIntentId,
+    limit: 10
+  });
+
+  const chargeWithReceipt = charges.data.find(charge => charge.receipt_url);
+  
+  if (!chargeWithReceipt?.receipt_url) {
+    throw new Error('Ricevuta non disponibile');
+  }
+
+  return chargeWithReceipt.receipt_url;
+};
+
+const checkReceiptAvailability = async (sessionId: string): Promise<ReceiptStatus> => {
+  const session = await retrieveSession(sessionId);
+  const isPaid = session.payment_status === 'paid';
+
+  if (!isPaid || !session.payment_intent) {
+    return {
+      isPaid,
+      hasReceipt: false,
+      receiptUrl: null,
+    };
   }
 
   try {
-    // Recupera la sessione Stripe
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
-
-    // Controlla se il pagamento è stato completato
-    if (session.payment_status !== 'paid') {
-      return NextResponse.json({ error: 'Pagamento non completato' }, { status: 400 });
-    }
-
-    // Recupera il Payment Intent ID
-    let paymentIntentId: string;
-    if (typeof session.payment_intent === 'string') {
-      paymentIntentId = session.payment_intent;
-    } else if (session.payment_intent && typeof session.payment_intent === 'object' && session.payment_intent.id) {
-      paymentIntentId = session.payment_intent.id;
-    } else {
-      return NextResponse.json({ error: 'Payment Intent non trovato' }, { status: 400 });
-    }
-
-    // Recupera tutti i charges per questo PaymentIntent
-    const charges = await stripe.charges.list({
-      payment_intent: paymentIntentId,
-      limit: 10
-    });
-
-    // Trova il primo charge con receipt_url
-    const chargeWithReceipt = charges.data.find(charge => charge.receipt_url);
+    const paymentIntentId = extractPaymentIntentId(session.payment_intent);
+    await findReceiptUrl(paymentIntentId);
     
-    if (!chargeWithReceipt || !chargeWithReceipt.receipt_url) {
-      return NextResponse.json({ error: 'Ricevuta non disponibile' }, { status: 404 });
-    }
+    return {
+      isPaid: true,
+      hasReceipt: true,
+      receiptUrl: `/api/download-receipt?session_id=${sessionId}`,
+    };
+  } catch {
+    return {
+      isPaid: true,
+      hasReceipt: false,
+      receiptUrl: null,
+    };
+  }
+};
 
-    // Reindirizza alla ricevuta di Stripe
-    return NextResponse.redirect(chargeWithReceipt.receipt_url);
+// GET: Download/redirect to receipt
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const sessionId = validateSessionId(searchParams.get('session_id'));
+
+    // Recupera sessione e valida pagamento
+    const session = await retrieveSession(sessionId);
+    validatePaymentStatus(session);
+
+    // Estrai Payment Intent ID
+    const paymentIntentId = extractPaymentIntentId(session.payment_intent);
+    
+    // Trova URL ricevuta
+    const receiptUrl = await findReceiptUrl(paymentIntentId);
+
+    // Reindirizza alla ricevuta Stripe
+    return NextResponse.redirect(receiptUrl);
 
   } catch (error) {
-    console.error('Errore nel recupero della ricevuta:', error);
+    console.error('Errore recupero ricevuta:', error);
+    
+    const message = error instanceof Error ? error.message : 'Errore nel recupero della ricevuta';
+    
+    // Determina status code appropriato
+    const validationErrors = ['richiesto', 'non completato', 'non trovato', 'non disponibile'];
+    const status = validationErrors.some(err => message.includes(err)) ? 400 : 500;
+    
     return NextResponse.json({ 
-      error: 'Errore nel recupero della ricevuta',
+      error: message,
       details: error instanceof Error ? error.message : 'Errore sconosciuto'
-    }, { status: 500 });
+    }, { status });
   }
 }
 
-// Endpoint per controllare se la ricevuta è disponibile
+// POST: Check receipt availability
 export async function POST(request: NextRequest) {
   try {
     const { sessionId } = await request.json();
+    const validSessionId = validateSessionId(sessionId);
 
-    if (!sessionId) {
-      return NextResponse.json({ error: 'Session ID richiesto' }, { status: 400 });
-    }
-
-    // Recupera la sessione
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    const receiptStatus = await checkReceiptAvailability(validSessionId);
     
-    const isPaid = session.payment_status === 'paid';
-    let hasReceipt = false;
-    let receiptUrl: string | null = null;
-
-    if (isPaid && session.payment_intent) {
-      // Ottieni il Payment Intent ID
-      let paymentIntentId: string;
-      if (typeof session.payment_intent === 'string') {
-        paymentIntentId = session.payment_intent;
-      } else if (session.payment_intent && typeof session.payment_intent === 'object' && session.payment_intent.id) {
-        paymentIntentId = session.payment_intent.id;
-      } else {
-        return NextResponse.json({ 
-          isPaid: false, 
-          hasReceipt: false,
-          receiptUrl: null 
-        });
-      }
-
-      try {
-        // Cerca i charges
-        const charges = await stripe.charges.list({
-          payment_intent: paymentIntentId,
-          limit: 10
-        });
-
-        const chargeWithReceipt = charges.data.find(charge => charge.receipt_url);
-        
-        if (chargeWithReceipt && chargeWithReceipt.receipt_url) {
-          hasReceipt = true;
-          receiptUrl = `/api/download-receipt?session_id=${sessionId}`;
-        }
-      } catch (chargeError) {
-        console.error('Errore nel recuperare i charges:', chargeError);
-        // Continua senza receipt se c'è un errore
-      }
-    }
-
-    return NextResponse.json({
-      isPaid,
-      hasReceipt,
-      receiptUrl,
-    });
+    return NextResponse.json(receiptStatus);
 
   } catch (error) {
-    console.error('Errore nel controllo ricevuta:', error);
+    console.error('Errore controllo ricevuta:', error);
+    
+    const message = error instanceof Error ? error.message : 'Errore nel controllo della ricevuta';
+    const status = message.includes('richiesto') ? 400 : 500;
+    
     return NextResponse.json({ 
-      error: 'Errore nel controllo della ricevuta',
+      error: message,
       isPaid: false,
       hasReceipt: false,
       receiptUrl: null
-    }, { status: 500 });
+    }, { status });
   }
 }
