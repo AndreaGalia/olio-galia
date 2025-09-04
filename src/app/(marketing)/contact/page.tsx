@@ -26,7 +26,7 @@ export default function ContactPage() {
       title: t.contactPage.methods[1].title,
       value: t.contactPage.methods[1].value,
       description: t.contactPage.methods[1].description,
-      action: () => openWhatsApp('3661368797', t.contactPage.whatsappMessage)
+      action: () => openWhatsApp(process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER, t.contactPage.whatsappMessage)
     }
   ];
 

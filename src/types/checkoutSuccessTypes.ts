@@ -133,9 +133,6 @@ export interface UseReceiptStatusReturn {
   checkReceiptStatus: () => Promise<void>;
 }
 
-// ===== CONSTANTS =====
-export const WHATSAPP_PHONE_NUMBER = "393661368797";
-
 export const ORDER_STATUS = {
   PENDING: 'pending',
   CONFIRMED: 'confirmed',

@@ -1,5 +1,5 @@
 import { useT } from '@/hooks/useT';
-import { WhatsAppButtonProps, WHATSAPP_PHONE_NUMBER } from '@/types/checkoutSuccessTypes';
+import { WhatsAppButtonProps } from '@/types/checkoutSuccessTypes';
 
 
 export default function WhatsAppButton({ orderDetails, sessionId }: WhatsAppButtonProps) {
@@ -30,7 +30,7 @@ export default function WhatsAppButton({ orderDetails, sessionId }: WhatsAppButt
     message += t.checkoutSuccess.whatsappMessage.regards;
 
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${encodedMessage}`;
+    const whatsappUrl = `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER}?text=${encodedMessage}`;
     window.open(whatsappUrl, '_blank');
   };
 
