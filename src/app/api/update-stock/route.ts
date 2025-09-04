@@ -4,71 +4,121 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
+// Types
+interface RequestBody {
+  sessionId: string;
+}
+
 // Cache semplice per evitare doppi aggiornamenti
 const processedSessions = new Set<string>();
 
+// Utilities
+const validateInput = (sessionId: string) => {
+  if (!sessionId) {
+    throw new Error('ID sessione richiesto');
+  }
+};
+
+const isAlreadyProcessed = (sessionId: string): boolean => {
+  return processedSessions.has(sessionId);
+};
+
+const markAsProcessed = (sessionId: string) => {
+  processedSessions.add(sessionId);
+  
+  // Pulisci cache dopo 1 ora
+  setTimeout(() => {
+    processedSessions.delete(sessionId);
+  }, 60 * 60 * 1000);
+};
+
+const retrieveSession = async (sessionId: string) => {
+  return await stripe.checkout.sessions.retrieve(sessionId, {
+    expand: ['line_items']
+  });
+};
+
+const validatePaymentStatus = (session: Stripe.Checkout.Session) => {
+  if (session.payment_status !== 'paid') {
+    throw new Error('Pagamento non completato');
+  }
+};
+
+const updateProductStock = async (productId: string, quantityBought: number) => {
+  // Recupera prodotto attuale
+  const product = await stripe.products.retrieve(productId);
+  const currentStock = parseInt(product.metadata?.available_quantity || '0');
+  
+  // Calcola nuovo stock
+  const newStock = Math.max(0, currentStock - quantityBought);
+  
+  // Aggiorna su Stripe
+  await stripe.products.update(productId, {
+    metadata: {
+      ...product.metadata,
+      available_quantity: newStock.toString(),
+      last_updated: new Date().toISOString()
+    }
+  });
+
+  console.log(`${product.name}: ${currentStock} → ${newStock}`);
+};
+
+const processStockUpdates = async (session: Stripe.Checkout.Session) => {
+  if (!session.line_items) {
+    return;
+  }
+
+  for (const item of session.line_items.data) {
+    if (item.price?.product) {
+      const productId = item.price.product as string;
+      const quantityBought = item.quantity || 0;
+      
+      await updateProductStock(productId, quantityBought);
+    }
+  }
+};
+
+// Main handler
 export async function POST(request: NextRequest) {
   try {
-    const { sessionId } = await request.json();
+    const body: RequestBody = await request.json();
+    const { sessionId } = body;
+
+    // Validazione
+    validateInput(sessionId);
 
     // Controlla se già processato
-    if (processedSessions.has(sessionId)) {
+    if (isAlreadyProcessed(sessionId)) {
       return NextResponse.json({ 
         success: true, 
         message: 'Stock già aggiornato per questa sessione' 
       });
     }
 
-    // 1. Recupera sessione da Stripe
-    const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ['line_items']
-    });
+    // Recupera sessione da Stripe
+    const session = await retrieveSession(sessionId);
 
-    // 2. Verifica pagamento completato
-    if (session.payment_status !== 'paid') {
-      return NextResponse.json({ error: 'Pagamento non completato' }, { status: 400 });
-    }
+    // Verifica pagamento completato
+    validatePaymentStatus(session);
 
-    // 3. Per ogni prodotto acquistato, decrementa stock
-    if (session.line_items) {
-      for (const item of session.line_items.data) {
-        if (item.price?.product) {
-          const productId = item.price.product as string;
-          const quantityBought = item.quantity || 0;
-
-          // Recupera prodotto attuale
-          const product = await stripe.products.retrieve(productId);
-          const currentStock = parseInt(product.metadata?.available_quantity || '0');
-          
-          // Calcola nuovo stock
-          const newStock = Math.max(0, currentStock - quantityBought);
-          
-          // Aggiorna su Stripe
-          await stripe.products.update(productId, {
-            metadata: {
-              ...product.metadata,
-              available_quantity: newStock.toString(),
-              last_updated: new Date().toISOString()
-            }
-          });
-
-          console.log(`${product.name}: ${currentStock} → ${newStock}`);
-        }
-      }
-    }
+    // Aggiorna stock per ogni prodotto
+    await processStockUpdates(session);
 
     // Marca come processato
-    processedSessions.add(sessionId);
-    
-    // Pulisci cache dopo 1 ora (opzionale)
-    setTimeout(() => {
-      processedSessions.delete(sessionId);
-    }, 60 * 60 * 1000);
+    markAsProcessed(sessionId);
 
-    return NextResponse.json({ success: true, message: 'Stock aggiornato' });
+    return NextResponse.json({ 
+      success: true, 
+      message: 'Stock aggiornato' 
+    });
 
   } catch (error) {
     console.error('Errore:', error);
-    return NextResponse.json({ error: 'Errore server' }, { status: 500 });
+    
+    const message = error instanceof Error ? error.message : 'Errore server';
+    const status = message.includes('richiesto') || message.includes('completato') ? 400 : 500;
+    
+    return NextResponse.json({ error: message }, { status });
   }
 }

@@ -4,113 +4,93 @@ import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const sessionId = searchParams.get('session_id');
+// Types
+interface InvoiceStatus {
+  hasInvoice: boolean;
+  invoiceReady: boolean;
+  invoiceNumber: string | null;
+}
 
+// Utilities
+const validateSessionId = (sessionId: string | null) => {
   if (!sessionId) {
-    return NextResponse.json({ error: 'Session ID richiesto' }, { status: 400 });
+    throw new Error('Session ID richiesto');
+  }
+  return sessionId;
+};
+
+const retrieveSessionWithInvoice = async (sessionId: string) => {
+  return await stripe.checkout.sessions.retrieve(sessionId, {
+    expand: ['invoice']
+  });
+};
+
+const extractInvoiceId = (invoice: string | Stripe.Invoice | null): string => {
+  if (!invoice) {
+    throw new Error('Fattura non disponibile per questo ordine');
+  }
+
+  if (typeof invoice === 'string') {
+    return invoice;
+  }
+
+  if (invoice && 'id' in invoice && invoice.id) {
+    return invoice.id;
+  }
+
+  throw new Error('ID fattura non valido');
+};
+
+const retrieveInvoiceDetails = async (invoiceId: string) => {
+  return await stripe.invoices.retrieve(invoiceId);
+};
+
+const checkInvoiceAvailability = async (sessionId: string): Promise<InvoiceStatus> => {
+  const session = await retrieveSessionWithInvoice(sessionId);
+  
+  if (!session.invoice) {
+    return {
+      hasInvoice: false,
+      invoiceReady: false,
+      invoiceNumber: null,
+    };
   }
 
   try {
-    // Recupera la sessione Stripe
-    const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ['invoice']
-    });
-
-    // Controlla se è stata richiesta fattura
-    if (!session.invoice) {
-      return NextResponse.json({ error: 'Fattura non disponibile per questo ordine' }, { status: 404 });
-    }
-
-    // Gestisci il tipo di session.invoice correttamente
-    let invoiceId: string;
-    if (typeof session.invoice === 'string') {
-      invoiceId = session.invoice;
-    } else if (session.invoice && 'id' in session.invoice && session.invoice.id) {
-      invoiceId = session.invoice.id;
-    } else {
-      return NextResponse.json({ error: 'ID fattura non valido' }, { status: 400 });
-    }
+    const invoiceId = extractInvoiceId(session.invoice);
+    const invoice = await retrieveInvoiceDetails(invoiceId);
     
-    // Recupera la fattura con tutti i dettagli
-    const invoice = await stripe.invoices.retrieve(invoiceId);
-
-    // Controlla se la fattura ha un PDF disponibile
-    if (!invoice.invoice_pdf) {
-      return NextResponse.json({ error: 'PDF della fattura non ancora disponibile' }, { status: 404 });
-    }
-
-    // Scarica il PDF da Stripe
-    const pdfResponse = await fetch(invoice.invoice_pdf);
-    
-    if (!pdfResponse.ok) {
-      throw new Error('Impossibile scaricare il PDF da Stripe');
-    }
-
-    const pdfBuffer = await pdfResponse.arrayBuffer();
-
-    // Restituisci il PDF
-    return new NextResponse(pdfBuffer, {
-      headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="fattura-${invoice.number || sessionId.slice(-8)}.pdf"`,
-        'Content-Length': pdfBuffer.byteLength.toString(),
-      },
-    });
-
-  } catch (error) {
-    console.error('Errore nel download della fattura:', error);
-    return NextResponse.json({ 
-      error: 'Errore nel download della fattura',
-      details: error instanceof Error ? error.message : 'Errore sconosciuto'
-    }, { status: 500 });
+    return {
+      hasInvoice: true,
+      invoiceReady: !!invoice.invoice_pdf,
+      invoiceNumber: invoice.number,
+    };
+  } catch {
+    return {
+      hasInvoice: true,
+      invoiceReady: false,
+      invoiceNumber: null,
+    };
   }
-}
+};
 
-// Endpoint per controllare se la fattura è disponibile
+
+// POST: Check invoice availability
 export async function POST(request: NextRequest) {
   try {
     const { sessionId } = await request.json();
+    const validSessionId = validateSessionId(sessionId);
 
-    if (!sessionId) {
-      return NextResponse.json({ error: 'Session ID richiesto' }, { status: 400 });
-    }
-
-    const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ['invoice']
-    });
-
-    const hasInvoice = !!session.invoice;
-    let invoiceReady = false;
-    let invoiceNumber = null;
-
-    if (hasInvoice && session.invoice) {
-      // Gestisci il tipo di session.invoice correttamente
-      let invoiceId: string;
-      if (typeof session.invoice === 'string') {
-        invoiceId = session.invoice;
-      } else if (session.invoice && 'id' in session.invoice && session.invoice.id) {
-        invoiceId = session.invoice.id;
-      } else {
-        return NextResponse.json({ error: 'ID fattura non valido' }, { status: 400 });
-      }
-
-      const invoice = await stripe.invoices.retrieve(invoiceId);
-      invoiceReady = !!invoice.invoice_pdf;
-      invoiceNumber = invoice.number;
-    }
-
-    return NextResponse.json({
-      hasInvoice,
-      invoiceReady,
-      invoiceNumber,
-    });
+    const invoiceStatus = await checkInvoiceAvailability(validSessionId);
+    
+    return NextResponse.json(invoiceStatus);
 
   } catch (error) {
-    console.error('Errore nel controllo fattura:', error);
-    return NextResponse.json({ 
-      error: 'Errore nel controllo della fattura' 
-    }, { status: 500 });
+    console.error('Errore controllo fattura:', error);
+    
+    const message = error instanceof Error ? error.message : 'Errore nel controllo della fattura';
+    const status = message.includes('richiesto') ? 400 : 500;
+    
+    return NextResponse.json({ error: message }, { status });
   }
 }
