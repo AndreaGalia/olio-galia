@@ -46,8 +46,7 @@ function BulkProposalModal({ isOpen, onClose, productName }: {
       date
     });
 
-    const whatsappNumber = '393661368797';
-    const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+    const whatsappURL = `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
     
     window.open(whatsappURL , '_blank');
     onClose();

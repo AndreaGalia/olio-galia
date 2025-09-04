@@ -29,7 +29,7 @@ export default function FAQSection() {
 
   const handleWhatsAppClick = () => {
     const message = encodeURIComponent(t.contactPage.whatsappMessage);
-    window.open(`https://wa.me/3661368797?text=${message}`, '_blank');
+    window.open(`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER}?text=${message}`, '_blank');
   };
 
   return (
