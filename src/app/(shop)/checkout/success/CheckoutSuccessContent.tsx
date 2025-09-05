@@ -17,7 +17,6 @@ import CallToAction from '@/components/checkoutSuccessPage/CallToAction';
 import BackgroundDecorations from '@/components/checkoutSuccessPage/BackgroundDecorations';
 import OrderSummaryDisplay from '@/components/checkoutSuccessPage/OrderSummaryDisplay';
 
-
 export default function CheckoutSuccessContent() {
   const { t } = useT();
   const searchParams = useSearchParams();
@@ -29,6 +28,7 @@ export default function CheckoutSuccessContent() {
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
   const [loadingOrder, setLoadingOrder] = useState(true);
   const hasProcessed = useRef(false);
+  const hasOrderSaved = useRef(false);
   
   // Stati per la fattura e ricevuta
   const [invoiceStatus, setInvoiceStatus] = useState<InvoiceStatus>({
@@ -43,6 +43,22 @@ export default function CheckoutSuccessContent() {
     hasReceipt: false,
     receiptUrl: null,
     checking: false,
+  });
+
+  // Stato per il salvataggio ordine
+  const [orderSaveStatus, setOrderSaveStatus] = useState({
+    saving: false,
+    saved: false,
+    error: null as string | null
+  });
+
+  // NUOVO: Stato per l'aggiornamento stock
+  const [stockUpdateStatus, setStockUpdateStatus] = useState({
+    updating: false,
+    updated: false,
+    alreadyProcessed: false,
+    error: null as string | null,
+    source: null as string | null
   });
 
   // Recupera i dettagli dell'ordine
@@ -66,6 +82,126 @@ export default function CheckoutSuccessContent() {
 
     fetchOrderDetails();
   }, [sessionId]);
+
+  // Salva l'ordine in MongoDB dopo aver recuperato i dettagli
+  useEffect(() => {
+    const saveOrderToMongo = async () => {
+      if (!sessionId || !orderDetails || hasOrderSaved.current || orderSaveStatus.saving) {
+        return;
+      }
+
+      hasOrderSaved.current = true;
+      setOrderSaveStatus(prev => ({ ...prev, saving: true, error: null }));
+
+      try {
+        console.log('💾 Salvando ordine in MongoDB...');
+        
+        const response = await fetch('/api/save-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          console.log('✅ Ordine salvato con successo:', result);
+          setOrderSaveStatus(prev => ({ 
+            ...prev, 
+            saved: true, 
+            saving: false 
+          }));
+        } else {
+          throw new Error(result.error || 'Errore nel salvare l\'ordine');
+        }
+
+      } catch (error) {
+        console.error('❌ Errore nel salvare l\'ordine:', error);
+        hasOrderSaved.current = false;
+        setOrderSaveStatus(prev => ({ 
+          ...prev, 
+          saving: false, 
+          error: error instanceof Error ? error.message : 'Errore sconosciuto'
+        }));
+      }
+    };
+
+    if (orderDetails && !loadingOrder) {
+      const timer = setTimeout(() => {
+        saveOrderToMongo();
+      }, 500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [sessionId, orderDetails, loadingOrder, orderSaveStatus.saving]);
+
+  // AGGIORNATO: Aggiorna stock con controllo ordine esistente
+  useEffect(() => {
+    const updateStock = async () => {
+      if (!sessionId || hasProcessed.current || processing) return;
+
+      hasProcessed.current = true;
+      setProcessing(true);
+      setStockUpdateStatus(prev => ({ 
+        ...prev, 
+        updating: true, 
+        error: null,
+        source: null 
+      }));
+
+      try {
+        console.log('📦 Controllando e aggiornando stock...');
+        
+        const response = await fetch('/api/update-stock', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          if (result.alreadyProcessed) {
+            const source = result.source || 'unknown';
+            console.log(`⏭️ Ordine già processato (${source}), stock non modificato`);
+            setStockUpdateStatus(prev => ({ 
+              ...prev, 
+              updating: false, 
+              alreadyProcessed: true,
+              source: source
+            }));
+          } else {
+            console.log('✅ Stock aggiornato con successo:', result.updates);
+            setStockUpdateStatus(prev => ({ 
+              ...prev, 
+              updating: false, 
+              updated: true 
+            }));
+          }
+        } else {
+          throw new Error(result.error || 'Errore nell\'aggiornamento stock');
+        }
+
+      } catch (error) {
+        console.error('❌ Errore nell\'aggiornamento stock:', error);
+        hasProcessed.current = false; // Permetti retry
+        setStockUpdateStatus(prev => ({ 
+          ...prev, 
+          updating: false, 
+          error: error instanceof Error ? error.message : 'Errore sconosciuto',
+          source: null
+        }));
+      } finally {
+        setProcessing(false);
+      }
+    };
+
+    const timer = setTimeout(() => {
+      updateStock();
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [sessionId, processing]);
 
   // Controlla lo stato della fattura
   useEffect(() => {
@@ -97,10 +233,8 @@ export default function CheckoutSuccessContent() {
       }
     };
 
-    // Controlla subito
     checkInvoiceStatus();
 
-    // Se la fattura non è pronta, ricontrolla ogni 10 secondi
     const interval = setInterval(() => {
       if (!invoiceStatus.invoiceReady && invoiceStatus.hasInvoice) {
         checkInvoiceStatus();
@@ -140,7 +274,6 @@ export default function CheckoutSuccessContent() {
       }
     };
 
-    // Controlla subito
     checkReceiptStatus();
   }, [sessionId]);
 
@@ -150,7 +283,6 @@ export default function CheckoutSuccessContent() {
       try {
         clearCart();
         
-        // Salva anche nel localStorage come backup
         if (typeof window !== 'undefined') {
           localStorage.removeItem('cart');
           localStorage.setItem('cartCleared', 'true');
@@ -160,40 +292,6 @@ export default function CheckoutSuccessContent() {
       }
     }
   }, [sessionId, clearCart]);
-
-  // Aggiorna stock separatamente
-  useEffect(() => {
-    const updateStock = async () => {
-      if (!sessionId || hasProcessed.current || processing) return;
-
-      hasProcessed.current = true;
-      setProcessing(true);
-
-      try {
-        const response = await fetch('/api/update-stock', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sessionId }),
-        });
-
-        if (!response.ok) {
-          hasProcessed.current = false;
-        }
-
-      } catch (error) {
-        console.error('Errore:', error);
-        hasProcessed.current = false;
-      } finally {
-        setProcessing(false);
-      }
-    };
-
-    const timer = setTimeout(() => {
-      updateStock();
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, [sessionId, processing]);
 
   // Effetto di backup per pulire il carrello
   useEffect(() => {
@@ -210,7 +308,6 @@ export default function CheckoutSuccessContent() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-sabbia via-beige to-sabbia/80">
       <div className="container mx-auto px-4 py-16">
-        
         {/* Hero Section */}
         <SuccessHeroSection
           sessionId={sessionId}
