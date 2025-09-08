@@ -1,4 +1,3 @@
-// types/products.ts
 export interface ProductTranslations {
   name: string;
   description: string;
@@ -12,11 +11,12 @@ export interface ProductTranslations {
   harvest: string;
   processing: string;
   awards: string[];
+  seoKeywords: string[];
+  tags: string[];
 }
 
 export interface BaseProduct {
   id: string;
-  slug: string;
   category: string;
   price: string;
   originalPrice?: string;
@@ -28,24 +28,48 @@ export interface BaseProduct {
   color: string;
   images: string[];
   nutritionalInfo?: Record<string, string>;
-  seoKeywords: string[];
-  tags: string[];
 }
 
-export interface Product extends BaseProduct {
-  // Campi tradotti (si popolano dinamicamente)
+// Prodotto come salvato in MongoDB (con tutte le traduzioni)
+export interface ProductDocument extends BaseProduct {
+  _id?: string;
+  slug: {
+    it: string;
+    en: string;
+  };
+  translations: {
+    it: ProductTranslations;
+    en: ProductTranslations;
+  };
+  metadata: {
+    createdAt: Date;
+    updatedAt: Date;
+    isActive: boolean;
+  };
+}
+
+// Prodotto come restituito dalle API (localizzato)
+export interface Product extends BaseProduct, ProductTranslations {
+  slug: string; // Slug localizzato per la lingua corrente
+}
+
+export interface CategoryTranslations {
   name: string;
   description: string;
-  longDescription: string;
-  details: string;
-  categoryDisplay: string;
-  badge: string;
-  features: string[];
-  bestFor: string;
-  origin: string;
-  harvest: string;
-  processing: string;
-  awards: string[];
+}
+
+export interface CategoryDocument {
+  _id?: string;
+  id: string;
+  translations: {
+    it: CategoryTranslations;
+    en: CategoryTranslations;
+  };
+  metadata: {
+    createdAt: Date;
+    updatedAt: Date;
+    isActive: boolean;
+  };
 }
 
 export interface Category {
@@ -58,11 +82,14 @@ export interface ProductsData {
   products: Product[];
   categories: Category[];
   metadata: {
-    lastUpdated: string;
-    version: string;
-    currency: string;
-    vatRate: string;
-    freeShippingThreshold: string;
-    defaultLanguage: string;
+    locale: string;
+    count: number;
+    timestamp: string;
   };
+}
+
+export type SupportedLocale = 'it' | 'en';
+
+export function isValidLocale(locale: string): locale is SupportedLocale {
+  return ['it', 'en'].includes(locale);
 }

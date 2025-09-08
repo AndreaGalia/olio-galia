@@ -1,6 +1,7 @@
 "use client";
 import { use } from "react";
-import { useProductBySlug, useProducts } from '@/hooks/useProducts';
+import { useProducts } from '@/hooks/useProducts';
+import { useProductBySlug } from '@/hooks/useProductBySlug';
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import NotFoundState from "@/components/singleProductPage/NotFoundState";

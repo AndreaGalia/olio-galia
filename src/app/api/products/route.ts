@@ -1,31 +1,37 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { ProductService } from '@/services/productService';
+import { isValidLocale } from '@/types/products';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-08-27.basil',
 });
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
-    // Estrai locale dalla query string o usa italiano come default
     const { searchParams } = new URL(request.url);
-    const locale = searchParams.get('locale') || 'it';
+    const localeParam = searchParams.get('locale') || 'it';
+    const category = searchParams.get('category');
     
-    // Carica dati base
-    const baseResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/products/base`);
-    const baseData = await baseResponse.json();
+    // Valida la lingua
+    if (!isValidLocale(localeParam)) {
+      return NextResponse.json(
+        { error: 'Unsupported locale. Use: it, en' },
+        { status: 400 }
+      );
+    }
     
-    // Carica traduzioni
-    const translationsResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/products/translations/${locale}`);
-    const translations = await translationsResponse.json();
+    // Carica prodotti da MongoDB
+    const products = await ProductService.getProducts(localeParam, category || undefined);
+    const categories = await ProductService.getCategories(localeParam);
     
-    // Recupera i dati di stock da Stripe per tutti i prodotti
+    // Recupera dati stock da Stripe
     const stripeProducts = await stripe.products.list({
       active: true,
-      limit: 100 // Aumenta se hai più di 100 prodotti
+      limit: 100
     });
     
-    // Crea una mappa dei dati di stock da Stripe
+    // Mappa stock data da Stripe
     const stockMap = new Map();
     stripeProducts.data.forEach(stripeProduct => {
       const stockQuantity = parseInt(stripeProduct.metadata.available_quantity || '0');
@@ -37,28 +43,31 @@ export async function GET(request: Request) {
       });
     });
     
-    // Combina i dati
-    const translatedProducts = baseData.products.map((baseProduct: any) => {
-      const translation = translations.products.find((t: any) => t.id === baseProduct.id);
-      const stockData = stockMap.get(baseProduct.stripeProductId) || {
-        inStock: false,
-        stockQuantity: 0
+    // Aggiorna prodotti con stock Stripe
+    const productsWithStock = products.map(product => {
+      const stockData = stockMap.get(product.stripeProductId) || {
+        inStock: product.inStock,
+        stockQuantity: product.stockQuantity
       };
       
       return {
-        ...baseProduct,
-        ...translation,
-        ...stockData // Sovrascrivi i dati di stock con quelli di Stripe
+        ...product,
+        ...stockData
       };
     });
     
     return NextResponse.json({
-      ...baseData,
-      products: translatedProducts,
-      categories: translations.categories
+      products: productsWithStock,
+      categories,
+      metadata: {
+        locale: localeParam,
+        count: productsWithStock.length,
+        timestamp: new Date().toISOString()
+      }
     });
+    
   } catch (error) {
-    console.error('Error loading products with stock data:', error);
+    console.error('Error in products API:', error);
     return NextResponse.json(
       { error: 'Failed to load products' },
       { status: 500 }

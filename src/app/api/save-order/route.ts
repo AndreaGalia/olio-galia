@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { OrderService } from '@/services/orderService';
 import { OrderDetails } from '@/types/checkoutSuccessTypes';
-import { EmailOrderData } from '@/types/email';
+import { EmailOrderData, EmailOrderDataExtended } from '@/types/email';
 import { EmailService } from '@/lib/email/resend';
 import { log } from 'console';
 
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
 
     // Prepara dati per l'email
     // Prepara dati per l'email
-const emailData: EmailOrderData = {
+const emailData: EmailOrderDataExtended = {
   customerName: orderDetails.customer?.name || 'Cliente',
   customerEmail: orderDetails.customer?.email || '',
   orderNumber: typeof orderDetails.paymentIntent === 'string' 
