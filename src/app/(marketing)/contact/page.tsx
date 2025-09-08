@@ -8,7 +8,6 @@ import { EmailIcon, WhatsAppIcon } from "@/components/contactPage/ContactIcons";
 import ContactBackground from "@/components/contactPage/ContactBackground";
 import ContactHero from "@/components/contactPage/ContactHero";
 import ContactMethods from "@/components/contactPage/ContactMethods";
-import styles from '../../../styles/ContactPage.module.css';
 
 export default function ContactPage() {
   const { t } = useT();
