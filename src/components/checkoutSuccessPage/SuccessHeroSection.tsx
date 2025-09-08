@@ -43,19 +43,19 @@ export default function SuccessHeroSection({
       </div>
 
       {/* ID Ordine, WhatsApp e Ricevuta */}
-      {sessionId && (
+      {orderDetails?.paymentIntent && (
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mb-8 flex-wrap">
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl px-8 py-4 shadow-lg border border-olive/10">
             <p className="text-sm text-nocciola/80 mb-1">{t.checkoutSuccess.hero.orderNumber}</p>
             <p className="text-xl font-serif text-olive font-semibold tracking-wider">
-              #{sessionId.slice(-8).toUpperCase()}
+              #{orderDetails.paymentIntent.slice(-8).toUpperCase()}
             </p>
           </div>
           
           {orderDetails && (
             <WhatsAppButton 
               orderDetails={orderDetails} 
-              sessionId={sessionId} 
+              sessionId={orderDetails.paymentIntent} 
             />
           )}
 
