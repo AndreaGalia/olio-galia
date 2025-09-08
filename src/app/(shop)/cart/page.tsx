@@ -1,10 +1,15 @@
 "use client";
 
-import { useState } from 'react';
 import { useCart } from '@/contexts/CartContext';
-import { useCheckout } from '@/hooks/useCheckout';
 import { useProducts } from '@/hooks/useProducts';
 import { useT } from '@/hooks/useT';
+
+// Import degli hook personalizzati
+import { useCartCalculations } from '@/hooks/useCartCalculations';
+import { useCartLabels } from '@/hooks/useCartLabels';
+import { useCheckoutHandler } from '@/hooks/useCheckoutHandler';
+
+// Import dei componenti
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import CartEmptyState from '@/components/cartPage/CartEmptyState';
@@ -14,71 +19,25 @@ import CartItem from '@/components/cartPage/CartItem';
 import OrderSummary from '@/components/cartPage/OrderSummary';
 import { Product } from '@/types/products';
 
-
 export default function CartPage() {
   const { cart, getTotalItems } = useCart();
   const { products, loading, error } = useProducts();
-  const { startCheckout, loading: checkoutLoading, error: checkoutError, clearError } = useCheckout();
-  const { t, translate } = useT();
+  const { t } = useT();
   
-  // Stati locali
-  const [needsInvoice, setNeedsInvoice] = useState<boolean>(false);
-  const [showCheckoutError, setShowCheckoutError] = useState<boolean>(false);
-
-  // Calcola il totale usando i prodotti
-  const calculateTotal = (): number => {
-    return cart.reduce((total, cartItem) => {
-      const product = products.find((p: Product) => p.id === cartItem.id);
-      if (product) {
-        const price = parseFloat(product.price);
-        return total + (price * cartItem.quantity);
-      }
-      return total;
-    }, 0);
-  };
-
-  // Calcola il risparmio totale
-  const calculateSavings = (): number => {
-    return cart.reduce((savings, cartItem) => {
-      const product = products.find((p: Product) => p.id === cartItem.id);
-      if (product && product.originalPrice && product.originalPrice !== 'null') {
-        const currentPrice = parseFloat(product.price);
-        const originalPrice = parseFloat(product.originalPrice);
-        return savings + ((originalPrice - currentPrice) * cartItem.quantity);
-      }
-      return savings;
-    }, 0);
-  };
-
-  const total = calculateTotal();
-  const savings = calculateSavings();
+  // Hook personalizzati
   const totalItems = getTotalItems();
-  const itemCountLabel = totalItems === 1 ? t.cartPage.itemCount.single : t.cartPage.itemCount.plural;
-  const itemLabel = totalItems === 1 ? t.cartPage.itemLabel.single : t.cartPage.itemLabel.plural;
-
-  // Gestione del checkout con fattura
-  const handleCheckout = async () => {
-    if (cart.length === 0) return;
-    
-    clearError();
-    setShowCheckoutError(false);
-    
-    try {
-      await startCheckout(cart, needsInvoice);
-    } catch (err) {
-      setShowCheckoutError(true);
-    }
-  };
-
-  // Gestori per il modal di errore
-  const handleCloseError = () => {
-    setShowCheckoutError(false);
-  };
-
-  const handleRetryCheckout = () => {
-    setShowCheckoutError(false);
-    clearError();
-  };
+  const { total, savings } = useCartCalculations(cart, products);
+  const { itemCountLabel, itemLabel } = useCartLabels(totalItems);
+  const {
+    needsInvoice,
+    setNeedsInvoice,
+    showCheckoutError,
+    checkoutLoading,
+    checkoutError,
+    handleCheckout,
+    handleCloseError,
+    handleRetryCheckout
+  } = useCheckoutHandler();
 
   // Stati di caricamento, errore e carrello vuoto
   if (loading) return <LoadingSpinner message={t.cartPage.loading} />;
@@ -101,7 +60,9 @@ export default function CartPage() {
 
       <div className="container mx-auto px-4 sm:px-6 max-w-6xl py-8 sm:py-12">
         <div className="flex items-center gap-3 mb-8">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif text-olive">{t.cartPage.title}</h1>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif text-olive">
+            {t.cartPage.title}
+          </h1>
           <span className="bg-olive text-beige px-3 py-1 rounded-full text-sm font-bold">
             {totalItems} {itemCountLabel}
           </span>
@@ -131,7 +92,7 @@ export default function CartPage() {
               savings={savings}
               totalItems={totalItems}
               itemLabel={itemLabel}
-              onCheckout={handleCheckout}
+              onCheckout={() => handleCheckout(cart)}
               needsInvoice={needsInvoice}
               setNeedsInvoice={setNeedsInvoice}
               checkoutLoading={checkoutLoading}
