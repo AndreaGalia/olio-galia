@@ -20,6 +20,9 @@ export interface EmailOrderData {
     postalCode: string;
     country: string;
   };
+}
+
+export interface EmailOrderDataExtended extends EmailOrderData {
   receiptUrl?: string | null;
   hasInvoice?: boolean;
 }

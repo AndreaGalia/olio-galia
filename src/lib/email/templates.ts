@@ -1,10 +1,4 @@
-import { EmailOrderData } from "@/types/email";
-
-// Estendi il tipo per includere i dati della ricevuta
-interface EmailOrderDataExtended extends EmailOrderData {
-  receiptUrl?: string;
-  hasInvoice?: boolean;
-}
+import { EmailOrderDataExtended } from "@/types/email";
 
 export const createOrderConfirmationHTML = (orderData: EmailOrderDataExtended): string => {
   const { 

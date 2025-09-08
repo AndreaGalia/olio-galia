@@ -1,4 +1,3 @@
-// lib/mongodb.ts
 import { MongoClient, Db } from 'mongodb';
 
 if (!process.env.MONGODB_URI) {
@@ -32,7 +31,16 @@ if (process.env.NODE_ENV === 'development') {
 // Funzione helper per ottenere il database
 export async function getDatabase(): Promise<Db> {
   const client = await clientPromise;
-  return client.db('ecommerce'); // Cambia con il nome del tuo database
+  const dbName = process.env.MONGODB_DB_NAME || 'galia-shop'; // Usa variabile ambiente o default
+  return client.db(dbName);
+}
+
+// Funzione compatibile con il nostro ProductService
+export async function connectToDatabase(): Promise<{ client: MongoClient; db: Db }> {
+  const client = await clientPromise;
+  const dbName = process.env.MONGODB_DB_NAME || 'galia-shop';
+  const db = client.db(dbName);
+  return { client, db };
 }
 
 export default clientPromise;
