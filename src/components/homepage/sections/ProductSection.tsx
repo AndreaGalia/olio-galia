@@ -1,6 +1,5 @@
 // components/sections/ProductsSection.tsx
 "use client";
-import { useCart } from '@/contexts/CartContext';
 import { useProducts } from '@/hooks/useProducts';
 import { ProductsBackground } from './products/ProductsBackground';
 import { ProductsHeader } from './products/ProductsHeader';
@@ -10,18 +9,12 @@ import ProductsGrid from '@/components/productsPage/ProductsGrid';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { useT } from '@/hooks/useT';
+import { useAddToCart } from '@/hooks/useAddToCart';
 
 export default function ProductsSection() {
-  const { addToCart } = useCart();
   const { t } = useT();
   const { products, loading, error } = useProducts();
-
-  const handleAddToCart = (productId: string) => {
-    const product = products.find(p => p.id === productId);
-    if (product && product.inStock && product.stockQuantity > 0) {
-      addToCart(productId, 1);
-    }
-  };
+  const { handleAddToCart } = useAddToCart({ products });
 
   // Loading state
   if (loading) {
