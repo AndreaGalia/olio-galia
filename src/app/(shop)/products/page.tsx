@@ -1,6 +1,5 @@
 "use client";
 import { useState } from 'react';
-import { useCart } from '@/contexts/CartContext';
 import { useProducts } from '@/hooks/useProducts';
 import { useT } from '@/hooks/useT';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -9,10 +8,10 @@ import ProductsHero from '@/components/productsPage/ProductsHero';
 import CategoryFilter from '@/components/productsPage/CategoryFilter';
 import ProductsGrid from '@/components/productsPage/ProductsGrid';
 import BenefitsSection from '@/components/productsPage/BenefitsSection';
+import { useAddToCart } from '@/hooks/useAddToCart';
 
 export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState('tutti');
-  const { addToCart } = useCart();
   const { t } = useT();
   const { products, categories, loading, error } = useProducts();
 
@@ -25,12 +24,7 @@ export default function ProductsPage() {
     ? products
     : products.filter(product => product.category === selectedCategory);
 
-  const handleAddToCart = (productId: string) => {
-    const product = products.find(p => p.id === productId);
-    if (product && product.inStock && product.stockQuantity > 0) {
-      addToCart(productId, 1);
-    }
-  };
+    const { handleAddToCart } = useAddToCart({ products });
 
   if (loading) return <LoadingSpinner message={t.productsPage.loading} />;
   if (error) return <ErrorMessage error={error} onRetry={() => window.location.reload()} />;
