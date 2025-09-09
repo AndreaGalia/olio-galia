@@ -18,6 +18,7 @@ import CartBreadcrumb from '@/components/cartPage/CartBreadcrumb';
 import CartItem from '@/components/cartPage/CartItem';
 import OrderSummary from '@/components/cartPage/OrderSummary';
 import { Product } from '@/types/products';
+import CheckoutTorinoButton from '@/components/cartPage/CheckoutTorinoButton';
 
 export default function CartPage() {
   const { cart, getTotalItems } = useCart();
@@ -69,20 +70,26 @@ export default function CartPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Lista prodotti */}
-          <div className="lg:col-span-2 space-y-4">
-            {cart.map((cartItem) => {
-              const product = products.find((p: Product) => p.id === cartItem.id);
-              if (!product) return null;
+          {/* Sezione sinistra: prodotti + bottone Torino */}
+          <div className="lg:col-span-2">
+            {/* Lista prodotti */}
+            <div className="space-y-4 mb-6">
+              {cart.map((cartItem) => {
+                const product = products.find((p: Product) => p.id === cartItem.id);
+                if (!product) return null;
 
-              return (
-                <CartItem
-                  key={cartItem.id}
-                  cartItem={cartItem}
-                  product={product}
-                />
-              );
-            })}
+                return (
+                  <CartItem
+                    key={cartItem.id}
+                    cartItem={cartItem}
+                    product={product}
+                  />
+                );
+              })}
+            </div>
+
+            {/* Bottone checkout Torino sotto i prodotti */}
+            <CheckoutTorinoButton />
           </div>
 
           {/* Riepilogo ordine */}

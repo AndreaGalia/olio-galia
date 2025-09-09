@@ -672,5 +672,77 @@
     },
     "shippingMethod": "Metodo spedizione:",
     "freeShipping": "Gratuita!"
+  },
+  "torinoCheckout": {
+    "button": {
+      "title": "Sei di Torino?",
+      "subtitle": "Preventivo consegna locale",
+      "freeShipping": "Spedizione gratuita",
+      "itemCount": "{count} {itemLabel}",
+      "itemSingle": "articolo",
+      "itemPlural": "articoli",
+      "emptyCartMessage": "Aggiungi prodotti al carrello per richiedere un preventivo"
+    },
+    "modal": {
+      "title": "Checkout Torino",
+      "freeShippingInfo": {
+        "title": "Spedizione gratuita nell'area di Torino",
+        "description": "Per ordini grandi sono previsti sconti aggiuntivi."
+      },
+      "paymentInfo": "Dopo aver inviato la richiesta riceverai un preventivo con le modalità di pagamento disponibili: PayPal, Satispay o Bonifico bancario",
+      "cartSummary": {
+        "title": "Riepilogo carrello",
+        "quantity": "Quantità:"
+      },
+      "form": {
+        "firstName": "Nome",
+        "lastName": "Cognome", 
+        "address": "Indirizzo",
+        "email": "Email",
+        "phone": "Numero di telefono",
+        "province": "Torino",
+        "buttons": {
+          "cancel": "Annulla",
+          "submit": "Richiedi preventivo",
+          "submitting": "Invio in corso..."
+        }
+      },
+      "errors": {
+        "submitError": "Errore nell'invio della richiesta: {error}"
+      }
+    }
+  },
+  "orderConfirmation": {
+    "hero": {
+      "title": "Richiesta inviata!",
+      "subtitle": "La tua richiesta di preventivo è stata ricevuta con successo",
+      "orderNumber": "Numero ordine"
+    },
+    "steps": {
+      "title": "Prossimi passi",
+      "processing": {
+        "title": "Elaborazione richiesta",
+        "description": "Stiamo preparando il tuo preventivo personalizzato per la consegna nell'area di Torino"
+      },
+      "contact": {
+        "title": "Contatto entro 24 ore",
+        "description": "Riceverai il preventivo con le modalità di pagamento disponibili: PayPal, Satispay o Bonifico bancario"
+      },
+      "delivery": {
+        "title": "Consegna gratuita",
+        "description": "Una volta confermato l'ordine, organizzeremo la consegna gratuita nella zona di Torino"
+      }
+    },
+    "whatsapp": {
+      "title": "Vuoi accelerare i tempi?",
+      "description": "Contattaci direttamente su WhatsApp con il numero del tuo ordine per ricevere il preventivo più rapidamente",
+      "button": "Contatta su WhatsApp",
+      "message": "Ciao! Ho appena inviato una richiesta di preventivo per la consegna a Torino.\n\nNumero ordine: {orderId}\n\nVorrei accelerare i tempi per ricevere il preventivo e le informazioni sui metodi di pagamento.\n\nGrazie!"
+    },
+    "navigation": {
+      "backToShop": "Torna al negozio",
+      "myOrders": "I miei ordini"
+    },
+    "footer": "Grazie per aver scelto Olio Galia per la tua spesa di qualità a Torino"
   }
 }   
