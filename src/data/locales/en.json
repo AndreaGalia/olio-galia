@@ -672,5 +672,77 @@
     },
     "shippingMethod": "Shipping method:",
     "freeShipping": "Free!"
+  },
+  "torinoCheckout": {
+    "button": {
+      "title": "Are you from Turin?",
+      "subtitle": "Local delivery quote",
+      "freeShipping": "Free shipping",
+      "itemCount": "{count} {itemLabel}",
+      "itemSingle": "item",
+      "itemPlural": "items",
+      "emptyCartMessage": "Add products to cart to request a quote"
+    },
+    "modal": {
+      "title": "Turin Checkout",
+      "freeShippingInfo": {
+        "title": "Free shipping in the Turin area",
+        "description": "Additional discounts are available for large orders."
+      },
+      "paymentInfo": "After sending the request you will receive a quote with available payment methods: PayPal, Satispay or Bank transfer",
+      "cartSummary": {
+        "title": "Cart summary",
+        "quantity": "Quantity:"
+      },
+      "form": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "address": "Address", 
+        "email": "Email",
+        "phone": "Phone Number",
+        "province": "Turin",
+        "buttons": {
+          "cancel": "Cancel",
+          "submit": "Request quote",
+          "submitting": "Sending..."
+        }
+      },
+      "errors": {
+        "submitError": "Error sending request: {error}"
+      }
+    }
+  },
+  "orderConfirmation": {
+    "hero": {
+      "title": "Request sent!",
+      "subtitle": "Your quote request has been received successfully",
+      "orderNumber": "Order number"
+    },
+    "steps": {
+      "title": "Next steps",
+      "processing": {
+        "title": "Request processing",
+        "description": "We are preparing your personalized quote for delivery in the Turin area"
+      },
+      "contact": {
+        "title": "Contact within 24 hours",
+        "description": "You will receive the quote with available payment methods: PayPal, Satispay or Bank transfer"
+      },
+      "delivery": {
+        "title": "Free delivery",
+        "description": "Once the order is confirmed, we will organize free delivery in the Turin area"
+      }
+    },
+    "whatsapp": {
+      "title": "Want to speed up the process?",
+      "description": "Contact us directly on WhatsApp with your order number to receive the quote more quickly",
+      "button": "Contact on WhatsApp",
+      "message": "Hi! I just sent a quote request for delivery in Turin.\n\nOrder number: {orderId}\n\nI would like to speed up the process to receive the quote and payment method information.\n\nThank you!"
+    },
+    "navigation": {
+      "backToShop": "Back to shop",
+      "myOrders": "My orders"
+    },
+    "footer": "Thank you for choosing Olio Galia for your quality shopping in Turin"
   }
 }
