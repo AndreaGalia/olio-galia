@@ -15,415 +15,424 @@ export const createOrderConfirmationHTML = (orderData: EmailOrderDataExtended): 
   } = orderData;
   
   return `
-    <!DOCTYPE html>
-    <html lang="it">
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" lang="it">
     <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>Conferma Ordine - Olio Galia</title>
-      <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&display=swap');
-        
+      <!--[if mso]>
+      <noscript>
+        <xml>
+          <o:OfficeDocumentSettings>
+            <o:PixelsPerInch>96</o:PixelsPerInch>
+          </o:OfficeDocumentSettings>
+        </xml>
+      </noscript>
+      <![endif]-->
+      <style type="text/css">
+        /* Reset styles for email clients */
         * {
           margin: 0;
           padding: 0;
-          box-sizing: border-box;
+          -webkit-text-size-adjust: 100%;
+          -ms-text-size-adjust: 100%;
         }
         
-        /* Sfondo scuro per tutti i client */
-        html {
-          background-color: #2C3E2D !important;
-          min-height: 100vh;
+        table, td {
+          border-collapse: collapse;
+          mso-table-lspace: 0pt;
+          mso-table-rspace: 0pt;
         }
         
-        body {
-          font-family: Arial, sans-serif;
-          line-height: 1.6;
-          color: #E8E8E8;
-          background-color: #2C3E2D !important;
-          padding: 20px;
-          min-height: 100vh;
-          margin: 0 !important;
+        img {
+          border: 0;
+          height: auto;
+          line-height: 100%;
+          outline: none;
+          text-decoration: none;
+          -ms-interpolation-mode: bicubic;
         }
         
-        /* Wrapper esterno per garantire sfondo scuro */
+        /* Email-safe fonts */
+        .email-font {
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        .serif-font {
+          font-family: Georgia, "Times New Roman", Times, serif;
+        }
+        
+        /* Main container */
         .email-wrapper {
-          background-color: #2C3E2D !important;
-          width: 100%;
-          min-height: 100vh;
-          padding: 20px 0;
+          width: 100% !important;
+          background-color: #f5f5f5;
           margin: 0;
+          padding: 0;
         }
         
-        .container {
+        .email-container {
           max-width: 600px;
           margin: 0 auto;
-          background-color: #FFFFFF;
-          border-radius: 8px;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-          overflow: hidden;
+          background-color: #ffffff;
+          border: 1px solid #e0e0e0;
         }
         
-        .header {
+        /* Header styles */
+        .header-section {
           background-color: #556B2F;
-          color: #ECE8DF;
-          padding: 40px 30px;
+          padding: 30px 20px;
           text-align: center;
         }
         
-        .logo {
-          font-family: "Cormorant Garamond", serif;
-          font-size: 32px;
-          font-weight: 700;
-          margin-bottom: 8px;
+        .logo-text {
+          color: #ffffff;
+          font-size: 28px;
+          font-weight: bold;
           letter-spacing: 2px;
+          margin: 0 0 8px 0;
+          font-family: Georgia, "Times New Roman", Times, serif;
         }
         
-        .tagline {
+        .tagline-text {
+          color: #D6C7A1;
           font-size: 14px;
           font-style: italic;
-          color: #D6C7A1;
+          margin: 0;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         
-        .content {
-          padding: 40px 30px;
-          background-color: #FFFFFF;
+        /* Content styles */
+        .content-section {
+          padding: 30px 20px;
+          background-color: #ffffff;
         }
         
-        .greeting {
-          font-family: "Cormorant Garamond", serif;
-          font-size: 24px;
+        .greeting-text {
           color: #556B2F;
-          margin-bottom: 20px;
-          font-weight: 600;
+          font-size: 22px;
+          font-weight: bold;
+          margin: 0 0 20px 0;
+          font-family: Georgia, "Times New Roman", Times, serif;
         }
         
-        .thank-you {
-          margin-bottom: 30px;
-          color: #556B2F;
+        .thank-you-text {
+          color: #333333;
           font-size: 16px;
-          line-height: 1.6;
+          line-height: 24px;
+          margin: 0 0 30px 0;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         
-        .order-info {
-          background-color: #ECE8DF;
-          padding: 25px;
-          border-radius: 8px;
-          margin: 30px 0;
+        /* Order info box */
+        .order-info-box {
+          background-color: #f8f8f8;
           border-left: 4px solid #789262;
+          padding: 20px;
+          margin: 20px 0;
         }
         
-        .order-info h3 {
-          font-family: "Cormorant Garamond", serif;
+        .order-info-title {
           color: #556B2F;
-          font-size: 20px;
-          margin-bottom: 15px;
-          font-weight: 600;
+          font-size: 18px;
+          font-weight: bold;
+          margin: 0 0 15px 0;
+          font-family: Georgia, "Times New Roman", Times, serif;
         }
         
-        .order-detail {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 10px;
+        .order-detail-row {
+          margin-bottom: 8px;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        .order-detail-label {
+          color: #666666;
+          font-size: 14px;
+        }
+        
+        .order-detail-value {
+          color: #333333;
+          font-size: 14px;
+          font-weight: bold;
+          float: right;
+        }
+        
+        /* Items table */
+        .items-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 20px 0;
+        }
+        
+        .items-title {
           color: #556B2F;
+          font-size: 18px;
+          font-weight: bold;
+          margin: 20px 0 15px 0;
+          font-family: Georgia, "Times New Roman", Times, serif;
         }
         
-        .order-detail span {
-          color: #789262;
+        .item-row {
+          border-bottom: 1px solid #e0e0e0;
         }
         
-        .order-detail strong {
-          font-weight: 600;
-        }
-        
-        .items-list {
-          margin: 30px 0;
-        }
-        
-        .items-list h3 {
-          font-family: "Cormorant Garamond", serif;
-          color: #556B2F;
-          font-size: 20px;
-          margin-bottom: 20px;
-          font-weight: 600;
-        }
-        
-        .item {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 15px 0;
-          border-bottom: 1px solid #ECE8DF;
-        }
-        
-        .item:last-child {
-          border-bottom: none;
-        }
-        
-        .item-details {
-          flex: 1;
+        .item-cell {
+          padding: 12px 0;
+          vertical-align: top;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         
         .item-name {
-          font-weight: 600;
-          color: #556B2F;
+          color: #333333;
+          font-size: 16px;
+          font-weight: bold;
           margin-bottom: 4px;
         }
         
         .item-quantity {
-          color: #789262;
+          color: #666666;
           font-size: 14px;
         }
         
         .item-price {
-          font-weight: 600;
           color: #556B2F;
           font-size: 16px;
+          font-weight: bold;
+          text-align: right;
         }
         
-        .total-section {
-          background-color: #789262;
-          color: #FFFFFF;
-          padding: 25px;
-          border-radius: 8px;
-          margin: 30px 0;
+        /* Total section */
+        .total-box {
+          background-color: #556B2F;
+          color: #ffffff;
+          padding: 20px;
+          margin: 20px 0;
         }
         
         .total-row {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 10px;
-          font-size: 16px;
+          margin-bottom: 8px;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         
-        .total-final {
-          display: flex;
-          justify-content: space-between;
-          font-size: 20px;
-          font-weight: 700;
-          padding-top: 15px;
+        .total-label {
+          font-size: 14px;
+        }
+        
+        .total-value {
+          font-size: 14px;
+          float: right;
+        }
+        
+        .total-final-row {
           border-top: 1px solid rgba(255, 255, 255, 0.3);
-          margin-top: 15px;
-          font-family: "Cormorant Garamond", serif;
+          margin-top: 12px;
+          padding-top: 12px;
+          font-family: Georgia, "Times New Roman", Times, serif;
         }
         
-        /* Stili per il bottone ricevuta/fattura */
+        .total-final-label {
+          font-size: 18px;
+          font-weight: bold;
+        }
+        
+        .total-final-value {
+          font-size: 18px;
+          font-weight: bold;
+          float: right;
+        }
+        
+        /* Receipt button */
         .receipt-section {
-          margin: 30px 0;
           text-align: center;
+          margin: 30px 0;
         }
         
         .receipt-button {
           display: inline-block;
-          background: linear-gradient(135deg, #556B2F 0%, #789262 100%);
-          color: #FFFFFF;
+          background-color: #556B2F;
+          color: #ffffff !important;
           text-decoration: none;
           padding: 16px 32px;
-          border-radius: 8px;
-          font-family: "Cormorant Garamond", serif;
-          font-size: 18px;
-          font-weight: 600;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 12px rgba(85, 107, 47, 0.3);
-          position: relative;
-          overflow: hidden;
-        }
-        
-        .receipt-button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 16px rgba(85, 107, 47, 0.4);
-        }
-        
-        .receipt-button-icon {
-          display: inline-block;
-          width: 20px;
-          height: 20px;
-          margin-right: 8px;
-          vertical-align: middle;
-          fill: currentColor;
-        }
-        
-        .invoice-badge {
-          display: inline-block;
-          background: linear-gradient(45deg, #D6C7A1, #C8B99C);
-          font-size: 11px;
-          padding: 4px 8px;
-          border-radius: 12px;
-          margin-left: 8px;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
+          border-radius: 4px;
+          font-size: 16px;
+          font-weight: bold;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         
         .receipt-description {
           margin-top: 12px;
-          color: #789262;
+          color: #666666;
           font-size: 14px;
           font-style: italic;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         
-        .footer {
-          background-color: #ECE8DF;
-          color: #789262;
-          padding: 30px;
+        /* Footer */
+        .footer-section {
+          background-color: #f8f8f8;
+          padding: 20px;
           text-align: center;
-          font-size: 14px;
+          border-top: 1px solid #e0e0e0;
         }
         
         .footer-brand {
-          font-family: "Cormorant Garamond", serif;
-          font-size: 20px;
-          font-weight: 600;
-          margin-bottom: 10px;
           color: #556B2F;
+          font-size: 18px;
+          font-weight: bold;
+          margin: 0 0 8px 0;
+          font-family: Georgia, "Times New Roman", Times, serif;
         }
         
-        /* Stili specifici per client desktop */
-        @media screen and (min-width: 600px) {
-          .email-wrapper {
-            background-color: #2C3E2D !important;
-          }
-          
-          body {
-            background-color: #2C3E2D !important;
-          }
-          
-          html {
-            background-color: #2C3E2D !important;
-          }
+        .footer-text {
+          color: #666666;
+          font-size: 14px;
+          margin: 0;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         
-        @media (max-width: 600px) {
-          .email-wrapper {
-            padding: 10px 0;
+        /* Mobile responsive */
+        @media only screen and (max-width: 600px) {
+          .email-container {
+            width: 100% !important;
           }
           
-          body {
-            padding: 10px;
+          .header-section,
+          .content-section,
+          .footer-section {
+            padding: 20px 15px !important;
           }
           
-          .header, .content, .footer {
-            padding: 25px 20px;
+          .logo-text {
+            font-size: 24px !important;
           }
           
-          .logo {
-            font-size: 28px;
+          .greeting-text {
+            font-size: 20px !important;
           }
           
-          .greeting {
-            font-size: 20px;
-          }
-          
-          .item {
-            flex-direction: column;
-            align-items: flex-start;
+          .item-cell {
+            display: block !important;
+            width: 100% !important;
           }
           
           .item-price {
+            text-align: left !important;
             margin-top: 8px;
           }
           
           .receipt-button {
-            padding: 14px 24px;
-            font-size: 16px;
+            padding: 12px 24px !important;
+            font-size: 14px !important;
           }
+        }
+        
+        /* Clear floats */
+        .clearfix:after {
+          content: "";
+          display: table;
+          clear: both;
         }
       </style>
     </head>
-    <body bgcolor="#2C3E2D">
-      <div class="email-wrapper">
-        <div class="container">
-          <!-- Header -->
-          <div class="header">
-            <div class="logo">OLIO GALIA</div>
-            <div class="tagline">Eccellenza dell'olio extravergine d'oliva</div>
-          </div>
-          
-          <!-- Content -->
-          <div class="content">
-            <div class="greeting">
-              Gentile ${customerName},
-            </div>
-            
-            <p class="thank-you">
-              La ringraziamo per aver scelto <strong>Olio Galia</strong>. 
-              Il suo ordine è stato ricevuto con successo e verrà preparato con la massima cura.
-            </p>
-            
-            <!-- Order Info -->
-            <div class="order-info">
-              <h3>Dettagli Ordine</h3>
-              <div class="order-detail">
-                <span>Numero Ordine:</span>
-                <strong>#${orderNumber}</strong>
-              </div>
-              <div class="order-detail">
-                <span>Data:</span>
-                <strong>${orderDate}</strong>
-              </div>
-            </div>
-            
-            <!-- Items -->
-            <div class="items-list">
-              <h3>Riepilogo Ordine</h3>
-              ${items.map(item => `
-                <div class="item">
-                  <div class="item-details">
-                    <div class="item-name">${item.name}</div>
-                    <div class="item-quantity">Quantità: ${item.quantity}</div>
+    <body bgcolor="#f5f5f5" style="margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
+      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" class="email-wrapper">
+        <tr>
+          <td style="padding: 20px 0;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" class="email-container" style="margin: 0 auto;">
+              
+              <!-- Header -->
+              <tr>
+                <td class="header-section">
+                  <h1 class="logo-text">OLIO GALIA</h1>
+                  <p class="tagline-text">Eccellenza dell'olio extravergine d'oliva</p>
+                </td>
+              </tr>
+              
+              <!-- Content -->
+              <tr>
+                <td class="content-section">
+                  
+                  <!-- Greeting -->
+                  <h2 class="greeting-text">Gentile ${customerName},</h2>
+                  
+                  <p class="thank-you-text">
+                    La ringraziamo per aver scelto <strong>Olio Galia</strong>. 
+                    Il suo ordine è stato ricevuto con successo e verrà preparato con la massima cura.
+                  </p>
+                  
+                  <!-- Order Info -->
+                  <div class="order-info-box">
+                    <h3 class="order-info-title">Dettagli Ordine</h3>
+                    <div class="order-detail-row clearfix">
+                      <span class="order-detail-label">Numero Ordine:</span>
+                      <strong class="order-detail-value">#${orderNumber}</strong>
+                    </div>
+                    <div class="order-detail-row clearfix">
+                      <span class="order-detail-label">Data:</span>
+                      <strong class="order-detail-value">${orderDate}</strong>
+                    </div>
                   </div>
-                  <div class="item-price">€${item.price.toFixed(2)}</div>
-                </div>
-              `).join('')}
-            </div>
-            
-            <!-- Total -->
-            <div class="total-section">
-              <div class="total-row">
-                <span>Subtotale:</span>
-                <span>€${subtotal.toFixed(2)}</span>
-              </div>
-              <div class="total-row">
-                <span>Spedizione:</span>
-                <span>€${shipping.toFixed(2)}</span>
-              </div>
-              <div class="total-final">
-                <span>Totale:</span>
-                <span>€${total.toFixed(2)}</span>
-              </div>
-            </div>
-            
-            ${receiptUrl ? `
-            <!-- Receipt/Invoice Button -->
-            <div class="receipt-section">
-              <a href="${receiptUrl}" class="receipt-button" target="_blank" rel="noopener noreferrer">
-                <svg class="receipt-button-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                  <polyline points="14,2 14,8 20,8"></polyline>
-                  <line x1="16" y1="13" x2="8" y2="13"></line>
-                  <line x1="16" y1="17" x2="8" y2="17"></line>
-                  <polyline points="10,9 9,9 8,9"></polyline>
-                </svg>
-                ${hasInvoice ? 'Scarica Ricevuta e Fattura' : 'Scarica Ricevuta'}
-                ${hasInvoice ? '<span class="invoice-badge">Fattura Inclusa</span>' : ''}
-              </a>
-              <div class="receipt-description">
-                ${hasInvoice ? 
-                  'Ricevuta di pagamento e fattura fiscale disponibili per il download' : 
-                  'Ricevuta di pagamento disponibile per il download'
-                }
-              </div>
-            </div>
-            ` : ''}
-          </div>
-          
-          <!-- Footer -->
-          <div class="footer">
-            <div class="footer-brand">OLIO GALIA</div>
-            <p>Grazie per aver scelto la qualità italiana.</p>
-          </div>
-        </div>
-      </div>
+                  
+                  <!-- Items -->
+                  <h3 class="items-title">Riepilogo Ordine</h3>
+                  <table role="presentation" cellspacing="0" cellpadding="0" border="0" class="items-table">
+                    ${items.map(item => `
+                      <tr class="item-row">
+                        <td class="item-cell">
+                          <div class="item-name">${item.name}</div>
+                          <div class="item-quantity">Quantità: ${item.quantity}</div>
+                        </td>
+                        <td class="item-cell item-price">€${item.price.toFixed(2)}</td>
+                      </tr>
+                    `).join('')}
+                  </table>
+                  
+                  <!-- Total -->
+                  <div class="total-box">
+                    <div class="total-row clearfix">
+                      <span class="total-label">Subtotale:</span>
+                      <span class="total-value">€${subtotal.toFixed(2)}</span>
+                    </div>
+                    <div class="total-row clearfix">
+                      <span class="total-label">Spedizione:</span>
+                      <span class="total-value">€${shipping.toFixed(2)}</span>
+                    </div>
+                    <div class="total-final-row clearfix">
+                      <span class="total-final-label">Totale:</span>
+                      <span class="total-final-value">€${total.toFixed(2)}</span>
+                    </div>
+                  </div>
+                  
+                  ${receiptUrl ? `
+                  <!-- Receipt/Invoice Button -->
+                  <div class="receipt-section">
+                    <a href="${receiptUrl}" class="receipt-button">
+                      ${hasInvoice ? 'Scarica Ricevuta e Fattura' : 'Scarica Ricevuta'}
+                    </a>
+                    <p class="receipt-description">
+                      ${hasInvoice ? 
+                        'Ricevuta di pagamento e fattura fiscale disponibili per il download' : 
+                        'Ricevuta di pagamento disponibile per il download'
+                      }
+                    </p>
+                  </div>
+                  ` : ''}
+                  
+                </td>
+              </tr>
+              
+              <!-- Footer -->
+              <tr>
+                <td class="footer-section">
+                  <h4 class="footer-brand">OLIO GALIA</h4>
+                  <p class="footer-text">Grazie per aver scelto la qualità italiana.</p>
+                </td>
+              </tr>
+              
+            </table>
+          </td>
+        </tr>
+      </table>
     </body>
     </html>
   `;
