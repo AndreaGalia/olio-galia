@@ -1,10 +1,11 @@
 import { MongoClient, Db } from 'mongodb';
 
-if (!process.env.MONGODB_URI) {
-  throw new Error('Aggiungi MONGODB_URI alle variabili ambiente');
+function getUri() {
+  if (!process.env.MONGODB_URI) {
+    throw new Error('Aggiungi MONGODB_URI alle variabili ambiente');
+  }
+  return process.env.MONGODB_URI;
 }
-
-const uri = process.env.MONGODB_URI;
 const options = {};
 
 let client: MongoClient;
@@ -14,22 +15,33 @@ declare global {
   var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 
-if (process.env.NODE_ENV === 'development') {
-  // In development, usa una variabile globale per preservare il valore
-  // attraverso i module reload causati da HMR (Hot Module Replacement)
-  if (!global._mongoClientPromise) {
-    client = new MongoClient(uri, options);
-    global._mongoClientPromise = client.connect();
+function getClientPromise(): Promise<MongoClient> {
+  if (clientPromise) {
+    return clientPromise;
   }
-  clientPromise = global._mongoClientPromise;
-} else {
-  // In production, è meglio non usare una variabile globale
-  client = new MongoClient(uri, options);
-  clientPromise = client.connect();
+
+  const uri = getUri();
+  
+  if (process.env.NODE_ENV === 'development') {
+    // In development, usa una variabile globale per preservare il valore
+    // attraverso i module reload causati da HMR (Hot Module Replacement)
+    if (!global._mongoClientPromise) {
+      client = new MongoClient(uri, options);
+      global._mongoClientPromise = client.connect();
+    }
+    clientPromise = global._mongoClientPromise;
+  } else {
+    // In production, è meglio non usare una variabile globale
+    client = new MongoClient(uri, options);
+    clientPromise = client.connect();
+  }
+  
+  return clientPromise;
 }
 
 // Funzione helper per ottenere il database
 export async function getDatabase(): Promise<Db> {
+  const clientPromise = getClientPromise();
   const client = await clientPromise;
   const dbName = process.env.MONGODB_DB_NAME || 'galia-shop'; // Usa variabile ambiente o default
   return client.db(dbName);
@@ -37,10 +49,11 @@ export async function getDatabase(): Promise<Db> {
 
 // Funzione compatibile con il nostro ProductService
 export async function connectToDatabase(): Promise<{ client: MongoClient; db: Db }> {
+  const clientPromise = getClientPromise();
   const client = await clientPromise;
   const dbName = process.env.MONGODB_DB_NAME || 'galia-shop';
   const db = client.db(dbName);
   return { client, db };
 }
 
-export default clientPromise;
+export default getClientPromise;
