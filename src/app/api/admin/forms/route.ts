@@ -8,6 +8,7 @@ export const GET = withAuth(async (request: NextRequest) => {
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '20');
     const status = searchParams.get('status') || 'all';
+    const search = searchParams.get('search') || '';
 
     const skip = (page - 1) * limit;
     const db = await getDatabase();
@@ -17,6 +18,20 @@ export const GET = withAuth(async (request: NextRequest) => {
     let filter: any = { type: 'torino_form' };
     if (status && status !== 'all') {
       filter.status = status;
+    }
+
+    // Aggiungi ricerca unificata
+    if (search.trim()) {
+      const searchRegex = { $regex: search.trim(), $options: 'i' };
+      filter.$or = [
+        { orderId: searchRegex },
+        { firstName: searchRegex },
+        { lastName: searchRegex },
+        { email: searchRegex },
+        { phone: searchRegex },
+        { address: searchRegex },
+        { province: searchRegex }
+      ];
     }
 
     const forms = await collection

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export interface AdminOrderSummary {
   id: string;
@@ -26,7 +26,7 @@ interface UseAdminOrdersReturn {
   totalPages: number;
   currentPage: number;
   total: number;
-  fetchOrders: (page?: number, status?: string) => Promise<void>;
+  fetchOrders: (page?: number, status?: string, search?: string) => Promise<void>;
 }
 
 export function useAdminOrders(): UseAdminOrdersReturn {
@@ -37,7 +37,7 @@ export function useAdminOrders(): UseAdminOrdersReturn {
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
 
-  const fetchOrders = async (page: number = 1, status: string = 'all') => {
+  const fetchOrders = useCallback(async (page: number = 1, status: string = 'all', search: string = '') => {
     try {
       setLoading(true);
       setError(null);
@@ -49,6 +49,10 @@ export function useAdminOrders(): UseAdminOrdersReturn {
 
       if (status && status !== 'all') {
         params.append('status', status);
+      }
+
+      if (search && search.trim()) {
+        params.append('search', search.trim());
       }
 
       const response = await fetch(`/api/admin/orders?${params}`);
@@ -72,11 +76,11 @@ export function useAdminOrders(): UseAdminOrdersReturn {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchOrders();
-  }, []);
+  }, [fetchOrders]);
 
   return {
     orders,
