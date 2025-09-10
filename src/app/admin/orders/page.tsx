@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useAdminOrders } from '@/hooks/useAdminOrders';
@@ -11,6 +11,7 @@ import OrderCard from './components/OrderCard';
 import FormTableRow from './components/FormTableRow';
 import FormCard from './components/FormCard';
 import Pagination from './components/Pagination';
+import SearchBar from './components/SearchBar';
 
 export default function AdminOrdersPage() {
   const { user, loading: authLoading, logout } = useAdminAuth();
@@ -19,6 +20,7 @@ export default function AdminOrdersPage() {
   const router = useRouter();
   const [statusFilter, setStatusFilter] = useState('all');
   const [activeTab, setActiveTab] = useState<'orders' | 'forms'>('orders');
+  const [searchTerm, setSearchTerm] = useState('');
 
 
   useEffect(() => {
@@ -29,30 +31,40 @@ export default function AdminOrdersPage() {
 
   const handlePageChange = (page: number) => {
     if (activeTab === 'orders') {
-      fetchOrders(page, statusFilter);
+      fetchOrders(page, statusFilter, searchTerm);
     } else {
-      fetchForms(page, statusFilter);
+      fetchForms(page, statusFilter, searchTerm);
     }
   };
 
   const handleStatusFilter = (status: string) => {
     setStatusFilter(status);
     if (activeTab === 'orders') {
-      fetchOrders(1, status);
+      fetchOrders(1, status, searchTerm);
     } else {
-      fetchForms(1, status);
+      fetchForms(1, status, searchTerm);
     }
   };
 
   const handleTabChange = (tab: 'orders' | 'forms') => {
     setActiveTab(tab);
     setStatusFilter('all');
+    setSearchTerm('');
     if (tab === 'orders') {
-      fetchOrders(1, 'all');
+      fetchOrders(1, 'all', '');
     } else {
-      fetchForms(1, 'all');
+      fetchForms(1, 'all', '');
     }
   };
+
+  const handleSearch = useCallback((search: string) => {
+    setSearchTerm(search);
+    if (activeTab === 'orders') {
+      fetchOrders(1, statusFilter, search);
+    } else {
+      fetchForms(1, statusFilter, search);
+    }
+  }, [activeTab, statusFilter, fetchOrders, fetchForms]);
 
   const handleLogout = async () => {
     await logout();
@@ -135,6 +147,16 @@ export default function AdminOrdersPage() {
           </div>
         </div>
 
+        <SearchBar
+          onSearch={handleSearch}
+          placeholder={
+            activeTab === 'orders' 
+              ? "Cerca ordini per ID, nome cliente, email..." 
+              : "Cerca preventivi per ID, nome cliente, email, telefono..."
+          }
+          loading={activeTab === 'orders' ? loading : formsLoading}
+        />
+
         <OrderFilters 
           statusFilter={statusFilter}
           onStatusChange={handleStatusFilter}
@@ -148,7 +170,7 @@ export default function AdminOrdersPage() {
                 {activeTab === 'orders' ? 'Ordini' : 'Preventivi'}
               </h2>
               <button
-                onClick={() => activeTab === 'orders' ? fetchOrders(1, statusFilter) : fetchForms(1, statusFilter)}
+                onClick={() => activeTab === 'orders' ? fetchOrders(1, statusFilter, searchTerm) : fetchForms(1, statusFilter, searchTerm)}
                 disabled={activeTab === 'orders' ? loading : formsLoading}
                 className="px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors disabled:opacity-50"
               >

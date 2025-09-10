@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export interface AdminFormSummary {
   id: string;
@@ -25,7 +25,7 @@ interface UseAdminFormsReturn {
   totalPages: number;
   currentPage: number;
   total: number;
-  fetchForms: (page?: number, status?: string) => Promise<void>;
+  fetchForms: (page?: number, status?: string, search?: string) => Promise<void>;
 }
 
 export function useAdminForms(): UseAdminFormsReturn {
@@ -36,7 +36,7 @@ export function useAdminForms(): UseAdminFormsReturn {
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
 
-  const fetchForms = async (page: number = 1, status: string = 'all') => {
+  const fetchForms = useCallback(async (page: number = 1, status: string = 'all', search: string = '') => {
     try {
       setLoading(true);
       setError(null);
@@ -48,6 +48,10 @@ export function useAdminForms(): UseAdminFormsReturn {
 
       if (status && status !== 'all') {
         params.append('status', status);
+      }
+
+      if (search && search.trim()) {
+        params.append('search', search.trim());
       }
 
       const response = await fetch(`/api/admin/forms?${params}`);
@@ -71,11 +75,11 @@ export function useAdminForms(): UseAdminFormsReturn {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchForms();
-  }, []);
+  }, [fetchForms]);
 
   return {
     forms,

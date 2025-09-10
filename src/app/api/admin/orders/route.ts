@@ -8,8 +8,9 @@ export const GET = withAuth(async (request: NextRequest) => {
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '20');
     const status = searchParams.get('status') || 'all';
+    const search = searchParams.get('search') || '';
 
-    const result = await AdminOrderService.getAllOrders(page, limit, status);
+    const result = await AdminOrderService.getAllOrders(page, limit, status, search);
 
     return NextResponse.json({
       success: true,

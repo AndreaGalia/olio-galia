@@ -84,7 +84,8 @@ export class AdminOrderService {
   static async getAllOrders(
     page: number = 1, 
     limit: number = 20,
-    status?: string
+    status?: string,
+    search?: string
   ): Promise<{ orders: AdminOrderSummary[]; total: number; page: number; totalPages: number }> {
     try {
       const skip = (page - 1) * limit;
@@ -101,6 +102,22 @@ export class AdminOrderService {
         } else {
           filter.paymentStatus = status; // fallback per compatibilità
         }
+      }
+
+      // Aggiungi ricerca unificata
+      if (search && search.trim()) {
+        const searchRegex = { $regex: search.trim(), $options: 'i' };
+        filter.$or = [
+          { sessionId: searchRegex },
+          { orderId: searchRegex },
+          { 'customer.name': searchRegex },
+          { 'customer.email': searchRegex },
+          { customerName: searchRegex },
+          { customerEmail: searchRegex },
+          { firstName: searchRegex },
+          { lastName: searchRegex },
+          { email: searchRegex }
+        ];
       }
 
       // Prima prova a recuperare da MongoDB (ordini salvati)
