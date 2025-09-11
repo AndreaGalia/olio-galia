@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
+import Stripe from 'stripe';
 import { ProductService } from '@/services/productService';
 import { isValidLocale } from '@/types/products';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: '2025-08-27.basil',
+});
 
 export async function GET(
   request: NextRequest,
@@ -26,9 +31,37 @@ export async function GET(
         { status: 404 }
       );
     }
+
+    // Recupera dati stock da Stripe se il prodotto ha stripeProductId
+    let stockData = {
+      inStock: product.inStock,
+      stockQuantity: product.stockQuantity
+    };
+
+    if (product.stripeProductId) {
+      try {
+        const stripeProduct = await stripe.products.retrieve(product.stripeProductId);
+        const stockQuantity = parseInt(stripeProduct.metadata?.available_quantity || '0');
+        const inStock = stockQuantity > 0;
+        
+        stockData = {
+          inStock,
+          stockQuantity
+        };
+      } catch (error) {
+        console.error('Error fetching Stripe product data:', error);
+        // Mantieni i dati di stock dal database se Stripe fallisce
+      }
+    }
+
+    // Aggiorna il prodotto con i dati di stock da Stripe
+    const productWithStock = {
+      ...product,
+      ...stockData
+    };
     
     return NextResponse.json({
-      product,
+      product: productWithStock,
       metadata: {
         locale: localeParam,
         timestamp: new Date().toISOString()

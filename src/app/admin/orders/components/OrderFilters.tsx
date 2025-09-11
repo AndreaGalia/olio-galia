@@ -7,8 +7,9 @@ export default function OrderFilters({ statusFilter, onStatusChange }: OrderFilt
   const filters = [
     { value: 'all', label: 'Tutti' },
     { value: 'paid', label: 'Pagati' },
-    { value: 'shipping', label: 'In Spedizione' },
+    { value: 'shipping', label: 'In Preparazione' },
     { value: 'shipped', label: 'Spediti' },
+    { value: 'delivered', label: 'Consegnati' },
   ];
 
   return (

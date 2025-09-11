@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withAuth } from '@/lib/auth/middleware';
 import { AdminOrderService } from '@/services/adminOrderService';
+import { EmailService } from '@/lib/email/resend';
 
 export const GET = withAuth(async (
   request: NextRequest,
@@ -27,6 +28,108 @@ export const GET = withAuth(async (
     console.error('Errore recupero dettagli ordine:', error);
     return NextResponse.json(
       { error: 'Errore nel recupero dei dettagli ordine' },
+      { status: 500 }
+    );
+  }
+});
+
+export const PUT = withAuth(async (
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) => {
+  try {
+    const { id } = await params;
+    const body = await request.json();
+    
+    const { shippingTrackingId, shippingStatus } = body;
+
+    if (!shippingStatus) {
+      return NextResponse.json(
+        { error: 'Stato spedizione è richiesto' },
+        { status: 400 }
+      );
+    }
+
+    // Solo per stato "shipped" è richiesto l'ID spedizione
+    if (shippingStatus === 'shipped' && !shippingTrackingId) {
+      return NextResponse.json(
+        { error: 'ID spedizione è richiesto quando lo stato è "spedito"' },
+        { status: 400 }
+      );
+    }
+
+    const updatedOrder = await AdminOrderService.updateOrderShipping(id, {
+      shippingTrackingId,
+      shippingStatus
+    });
+
+    if (!updatedOrder) {
+      return NextResponse.json(
+        { error: 'Ordine non trovato' },
+        { status: 404 }
+      );
+    }
+
+    // Invia email di notifica spedizione se lo stato è 'shipped'
+    if (shippingStatus === 'shipped') {
+      try {
+        const orderNumber = updatedOrder.orderId || updatedOrder.sessionId || updatedOrder.id;
+        const shippingNotificationData = {
+          customerName: updatedOrder.customerName || updatedOrder.customer?.name || 'Cliente',
+          customerEmail: updatedOrder.customerEmail || updatedOrder.customer?.email || '',
+          orderNumber: orderNumber.slice(-8).toUpperCase(), // Prende gli ultimi 8 caratteri
+          shippingTrackingId,
+          shippingCarrier: 'Corriere Espresso',
+          expectedDelivery: undefined // Può essere aggiunto in futuro
+        };
+
+        const emailSent = await EmailService.sendShippingNotification(shippingNotificationData);
+        
+        if (emailSent) {
+          console.log('✅ Email di spedizione inviata con successo');
+        } else {
+          console.log('⚠️ Errore nell\'invio dell\'email di spedizione');
+        }
+      } catch (emailError) {
+        console.error('❌ Errore nell\'invio dell\'email di spedizione:', emailError);
+        // Non blocchiamo la response per un errore di email
+      }
+    }
+
+    // Invia email di conferma consegna se lo stato è 'delivered'
+    if (shippingStatus === 'delivered') {
+      try {
+        const orderNumber = updatedOrder.orderId || updatedOrder.sessionId || updatedOrder.id;
+        const deliveryNotificationData = {
+          customerName: updatedOrder.customerName || updatedOrder.customer?.name || 'Cliente',
+          customerEmail: updatedOrder.customerEmail || updatedOrder.customer?.email || '',
+          orderNumber: orderNumber.slice(-8).toUpperCase(), // Prende gli ultimi 8 caratteri
+          shippingTrackingId: updatedOrder.shippingTrackingId,
+          deliveryDate: new Date().toLocaleDateString('it-IT')
+        };
+
+        const emailSent = await EmailService.sendDeliveryNotification(deliveryNotificationData);
+        
+        if (emailSent) {
+          console.log('✅ Email di consegna inviata con successo');
+        } else {
+          console.log('⚠️ Errore nell\'invio dell\'email di consegna');
+        }
+      } catch (emailError) {
+        console.error('❌ Errore nell\'invio dell\'email di consegna:', emailError);
+        // Non blocchiamo la response per un errore di email
+      }
+    }
+
+    return NextResponse.json({
+      success: true,
+      order: updatedOrder,
+    });
+
+  } catch (error) {
+    console.error('Errore aggiornamento ordine:', error);
+    return NextResponse.json(
+      { error: 'Errore nell\'aggiornamento dell\'ordine' },
       { status: 500 }
     );
   }
