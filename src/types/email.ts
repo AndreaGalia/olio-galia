@@ -26,3 +26,20 @@ export interface EmailOrderDataExtended extends EmailOrderData {
   receiptUrl?: string | null;
   hasInvoice?: boolean;
 }
+
+export interface ShippingNotificationData {
+  customerName: string;
+  customerEmail: string;
+  orderNumber: string;
+  shippingTrackingId: string;
+  shippingCarrier?: string;
+  expectedDelivery?: string;
+}
+
+export interface DeliveryNotificationData {
+  customerName: string;
+  customerEmail: string;
+  orderNumber: string;
+  shippingTrackingId?: string;
+  deliveryDate?: string;
+}

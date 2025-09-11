@@ -42,6 +42,7 @@ interface AdminOrderDetails {
   };
   createdAt?: string;
   updatedAt?: string;
+  shippingTrackingId?: string;
 }
 
 export default function AdminOrderDetailsPage({
@@ -52,11 +53,18 @@ export default function AdminOrderDetailsPage({
   const [orderId, setOrderId] = useState<string>('');
   const [orderDetails, setOrderDetails] = useState<AdminOrderDetails | null>(null);
   const [loading, setLoading] = useState(true);
+  const [shippingForm, setShippingForm] = useState({
+    trackingId: '',
+    status: 'shipping'
+  });
+  const [isSubmittingShipping, setIsSubmittingShipping] = useState(false);
+  const [shippingSuccess, setShippingSuccess] = useState(false);
+  const [shippingError, setShippingError] = useState<string | null>(null);
 
   const getShippingStatusBadge = (status: string) => {
     const statusConfig = {
       pending: { label: 'In Attesa', color: 'bg-yellow-100 text-yellow-800' },
-      shipping: { label: 'Spedizione', color: 'bg-blue-100 text-blue-800' },
+      shipping: { label: 'In Preparazione', color: 'bg-blue-100 text-blue-800' },
       shipped: { label: 'Spedito', color: 'bg-green-100 text-green-800' },
       delivered: { label: 'Consegnato', color: 'bg-purple-100 text-purple-800' },
     };
@@ -119,6 +127,92 @@ export default function AdminOrderDetailsPage({
   const handleLogout = async () => {
     await logout();
     router.push('/admin/login');
+  };
+
+  const handleDeliverySubmit = async () => {
+    setIsSubmittingShipping(true);
+    setShippingError(null);
+    setShippingSuccess(false);
+
+    try {
+      const response = await fetch(`/api/admin/orders/${orderId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          shippingTrackingId: orderDetails?.shippingTrackingId,
+          shippingStatus: 'delivered',
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Errore nell\'aggiornamento');
+      }
+
+      setOrderDetails(data.order);
+      setShippingSuccess(true);
+      
+      setTimeout(() => {
+        setShippingSuccess(false);
+      }, 3000);
+
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Errore sconosciuto';
+      setShippingError(errorMessage);
+    } finally {
+      setIsSubmittingShipping(false);
+    }
+  };
+
+  const handleShippingSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Verifica che l'ID spedizione sia richiesto solo quando lo stato è "shipped"
+    if (shippingForm.status === 'shipped' && !shippingForm.trackingId.trim()) {
+      setShippingError('ID spedizione è richiesto quando lo stato è "spedito"');
+      return;
+    }
+
+    setIsSubmittingShipping(true);
+    setShippingError(null);
+    setShippingSuccess(false);
+
+    try {
+      const response = await fetch(`/api/admin/orders/${orderId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          shippingTrackingId: shippingForm.status === 'shipped' ? shippingForm.trackingId.trim() : undefined,
+          shippingStatus: shippingForm.status,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Errore nell\'aggiornamento');
+      }
+
+      setOrderDetails(data.order);
+      setShippingSuccess(true);
+      setShippingForm({ trackingId: '', status: 'shipping' });
+      
+      // Nascondi il messaggio di successo dopo 3 secondi
+      setTimeout(() => {
+        setShippingSuccess(false);
+      }, 3000);
+
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Errore sconosciuto';
+      setShippingError(errorMessage);
+    } finally {
+      setIsSubmittingShipping(false);
+    }
   };
 
   if (authLoading) {
@@ -263,7 +357,7 @@ export default function AdminOrderDetailsPage({
                     'bg-purple-100 text-purple-800'
                   }`}>
                     {orderDetails.shippingStatus === 'pending' ? 'In Attesa' :
-                     orderDetails.shippingStatus === 'shipping' ? 'Spedizione' :
+                     orderDetails.shippingStatus === 'shipping' ? 'In Preparazione' :
                      orderDetails.shippingStatus === 'shipped' ? 'Spedito' :
                      'Consegnato'}
                   </span>
@@ -314,6 +408,195 @@ export default function AdminOrderDetailsPage({
                   </p>
                 </div>
               </div>
+            </div>
+
+            <div className="space-y-6">
+              {/* Form Spedizione - Solo se non ancora spedito */}
+              {orderDetails.paymentStatus === 'paid' && orderDetails.shippingStatus !== 'shipped' && orderDetails.shippingStatus !== 'delivered' && (
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-olive/10">
+                  <h2 className="text-lg sm:text-xl font-serif text-olive mb-4 sm:mb-6 flex items-center">
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Gestione Spedizione
+                  </h2>
+
+                  <form onSubmit={handleShippingSubmit} className="space-y-4">
+                    {/* ID Spedizione - Solo quando lo stato è "shipped" */}
+                    {shippingForm.status === 'shipped' && (
+                      <div>
+                        <label htmlFor="trackingId" className="block text-sm font-medium text-nocciola mb-2">
+                          ID Spedizione *
+                        </label>
+                        <input
+                          type="text"
+                          id="trackingId"
+                          value={shippingForm.trackingId}
+                          onChange={(e) => setShippingForm(prev => ({ ...prev, trackingId: e.target.value }))}
+                          placeholder="Inserisci l'ID di tracciamento"
+                          className="w-full px-4 py-2 border border-nocciola/30 rounded-lg focus:ring-2 focus:ring-olive focus:border-olive"
+                          disabled={isSubmittingShipping}
+                        />
+                        <p className="text-xs text-nocciola/70 mt-1">
+                          L'ID spedizione sarà inviato automaticamente al cliente via email
+                        </p>
+                      </div>
+                    )}
+
+                    <div>
+                      <label htmlFor="shippingStatus" className="block text-sm font-medium text-nocciola mb-2">
+                        Stato Spedizione
+                      </label>
+                      <select
+                        id="shippingStatus"
+                        value={shippingForm.status}
+                        onChange={(e) => setShippingForm(prev => ({ ...prev, status: e.target.value, trackingId: e.target.value !== 'shipped' ? '' : prev.trackingId }))}
+                        className="w-full px-4 py-2 border border-nocciola/30 rounded-lg focus:ring-2 focus:ring-olive focus:border-olive"
+                        disabled={isSubmittingShipping}
+                      >
+                        <option value="shipping">In Preparazione</option>
+                        <option value="shipped">Spedito</option>
+                        <option value="delivered">Consegnato</option>
+                      </select>
+                      <p className="text-xs text-nocciola/70 mt-1">
+                        {shippingForm.status === 'shipping' && 'Ordine in preparazione - nessuna email sarà inviata'}
+                        {shippingForm.status === 'shipped' && 'Email di spedizione sarà inviata automaticamente al cliente'}
+                        {shippingForm.status === 'delivered' && 'Ordine consegnato'}
+                      </p>
+                    </div>
+
+                    {shippingError && (
+                      <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                        {shippingError}
+                      </div>
+                    )}
+
+                    {shippingSuccess && (
+                      <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+                        ✅ Stato spedizione aggiornato con successo!
+                        {orderDetails?.shippingStatus === 'shipped' && ' Email inviata al cliente.'}
+                      </div>
+                    )}
+
+                    <button
+                      type="submit"
+                      disabled={isSubmittingShipping || (shippingForm.status === 'shipped' && !shippingForm.trackingId.trim())}
+                      className="w-full sm:w-auto px-6 py-3 bg-olive text-white font-semibold rounded-lg hover:bg-olive/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+                    >
+                      {isSubmittingShipping ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+                          Aggiornamento...
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2 2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414M4 13h2.586a1 1 0 01.707.293l2.414 2.414" />
+                          </svg>
+                          Aggiorna Spedizione
+                        </>
+                      )}
+                    </button>
+                  </form>
+                </div>
+              )}
+
+              {/* Form Consegna - Solo se spedito ma non consegnato */}
+              {orderDetails.shippingStatus === 'shipped' && (
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-olive/10">
+                  <h2 className="text-lg sm:text-xl font-serif text-olive mb-4 sm:mb-6 flex items-center">
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Conferma Consegna
+                  </h2>
+
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                    <p className="text-blue-800 text-sm">
+                      <strong>Ordine spedito:</strong> Clicca il pulsante qui sotto per confermare che l'ordine è stato consegnato. 
+                      Verrà inviata automaticamente una email di conferma al cliente.
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={handleDeliverySubmit}
+                    disabled={isSubmittingShipping}
+                    className="w-full sm:w-auto px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+                  >
+                    {isSubmittingShipping ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+                        Confermando consegna...
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Conferma Consegna
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
+
+              {/* Info Consegna Completata - Solo se consegnato */}
+              {orderDetails.shippingStatus === 'delivered' && (
+                <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-4 sm:p-6 border border-green-200">
+                  <h2 className="text-lg sm:text-xl font-serif text-green-800 mb-4 flex items-center">
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    ✅ Ordine Consegnato
+                  </h2>
+                  <div className="bg-white rounded-lg p-4 border border-green-300">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-medium text-green-700">Stato:</span>
+                        <span className="text-sm font-bold text-green-800 bg-green-100 px-3 py-1 rounded">
+                          ✅ Consegnato
+                        </span>
+                      </div>
+                      {orderDetails.shippingTrackingId && (
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium text-green-700">ID Spedizione:</span>
+                          <span className="text-sm font-mono font-bold text-green-800 bg-green-100 px-3 py-1 rounded">
+                            {orderDetails.shippingTrackingId}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="mt-3 pt-3 border-t border-green-200">
+                      <p className="text-xs text-green-600">
+                        📧 Email di conferma consegna inviata automaticamente al cliente
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Info Tracking - Solo se spedito ma non ancora consegnato */}
+              {orderDetails.shippingTrackingId && orderDetails.shippingStatus !== 'delivered' && (
+                <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-4 sm:p-6 border border-green-200">
+                  <h2 className="text-lg sm:text-xl font-serif text-green-800 mb-4 flex items-center">
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Spedizione Completata
+                  </h2>
+                  <div className="bg-white rounded-lg p-4 border border-green-300">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-green-700">ID Spedizione:</span>
+                      <span className="text-sm font-mono font-bold text-green-800 bg-green-100 px-3 py-1 rounded">
+                        {orderDetails.shippingTrackingId}
+                      </span>
+                    </div>
+                    <p className="text-xs text-green-600 mt-2">
+                      📧 Email di notifica inviata automaticamente al cliente
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="grid lg:grid-cols-2 gap-6">

@@ -17,6 +17,7 @@ export interface AdminOrderSummary {
   shippingStatus: string;
   created: string;
   itemCount: number;
+  shippingTrackingId?: string;
   shipping?: {
     address: string;
     method: string;
@@ -99,6 +100,8 @@ export class AdminOrderService {
           filter.shippingStatus = 'shipping';
         } else if (status === 'shipped') {
           filter.shippingStatus = 'shipped';
+        } else if (status === 'delivered') {
+          filter.shippingStatus = 'delivered';
         } else {
           filter.paymentStatus = status; // fallback per compatibilità
         }
@@ -148,6 +151,7 @@ export class AdminOrderService {
           shippingStatus: order.shippingStatus || 'pending',
           created: order.createdAt?.toISOString() || new Date().toISOString(),
           itemCount: order.items?.length || 0,
+          shippingTrackingId: order.shippingTrackingId,
           shipping: order.shipping,
         }));
 
@@ -251,6 +255,7 @@ export class AdminOrderService {
           },
           createdAt: mongoOrder.createdAt?.toISOString(),
           updatedAt: mongoOrder.updatedAt?.toISOString(),
+          shippingTrackingId: mongoOrder.shippingTrackingId,
         };
       }
 
@@ -362,6 +367,58 @@ export class AdminOrderService {
         ordersToday: 0,
         revenueToday: 0,
       };
+    }
+  }
+
+  // Aggiorna informazioni di spedizione dell'ordine
+  static async updateOrderShipping(sessionId: string, updateData: {
+    shippingTrackingId?: string;
+    shippingStatus: string;
+  }): Promise<AdminOrderDetails | null> {
+    try {
+      const db = await getDatabase();
+      const collection = db.collection(this.ORDERS_COLLECTION);
+      
+      // Cerca l'ordine con sessionId, stripeSessionId o _id
+      let filter: any = {
+        $or: [
+          { sessionId },
+          { stripeSessionId: sessionId }
+        ]
+      };
+
+      // Se sessionId sembra un ObjectId, aggiungi anche la ricerca per _id
+      if (sessionId.match(/^[0-9a-fA-F]{24}$/)) {
+        filter.$or.push({ _id: new ObjectId(sessionId) });
+      }
+
+      // Prepara i dati da aggiornare
+      const updateFields: any = {
+        shippingStatus: updateData.shippingStatus,
+        updatedAt: new Date(),
+      };
+
+      // Solo se viene fornito l'ID spedizione, aggiornalo
+      if (updateData.shippingTrackingId) {
+        updateFields.shippingTrackingId = updateData.shippingTrackingId;
+      }
+
+      const updateResult = await collection.updateOne(
+        filter,
+        { $set: updateFields }
+      );
+
+      if (updateResult.matchedCount === 0) {
+        return null;
+      }
+
+      // Recupera l'ordine aggiornato
+      const updatedOrder = await this.getOrderDetails(sessionId);
+      return updatedOrder;
+
+    } catch (error) {
+      console.error('Errore aggiornamento spedizione ordine:', error);
+      return null;
     }
   }
 
