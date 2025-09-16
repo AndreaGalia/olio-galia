@@ -60,7 +60,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           {searchTerm && (
             <button
               onClick={handleClear}
-              className="p-1 mr-1 hover:text-olive transition-colors"
+              className="p-1 mr-1 hover:text-olive transition-colors cursor-pointer"
               type="button"
               title="Pulisci ricerca"
             >
@@ -83,7 +83,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           <button
             type="submit"
             disabled={loading}
-            className="px-3 py-1 mr-1 text-olive hover:bg-olive hover:text-white rounded transition-colors disabled:opacity-50"
+            className="px-3 py-1 mr-1 text-olive hover:bg-olive hover:text-white rounded transition-colors disabled:opacity-50 cursor-pointer"
             title="Cerca"
           >
             {loading ? (

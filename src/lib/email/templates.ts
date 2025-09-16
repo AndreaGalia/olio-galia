@@ -1,5 +1,21 @@
 import { EmailOrderDataExtended, ShippingNotificationData, DeliveryNotificationData } from "@/types/email";
 
+interface QuoteEmailData {
+  customerName: string;
+  orderId: string;
+  items: Array<{
+    name: string;
+    quantity: number;
+    unitPrice: number;
+    totalPrice: number;
+  }>;
+  subtotal: number;
+  shipping: number;
+  total: number;
+  customerEmail: string;
+  customerPhone: string;
+}
+
 export const createOrderConfirmationHTML = (orderData: EmailOrderDataExtended): string => {
   const { 
     customerName, 

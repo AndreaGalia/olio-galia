@@ -108,7 +108,7 @@ export const GET = withAuth(async (request: NextRequest, { params }: { params: P
 export const PATCH = withAuth(async (request: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   try {
     const { id: formId } = await params;
-    const { status, notes } = await request.json();
+    const { status, notes, finalPricing } = await request.json();
 
     const db = await getDatabase();
     const collection = db.collection('forms');
@@ -119,6 +119,7 @@ export const PATCH = withAuth(async (request: NextRequest, { params }: { params:
 
     if (status) updateData.status = status;
     if (notes !== undefined) updateData.notes = notes;
+    if (finalPricing) updateData.finalPricing = finalPricing;
 
     let result;
     if (formId.match(/^[0-9a-fA-F]{24}$/)) {

@@ -49,13 +49,13 @@ export default function AdminDashboardPage() {
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => router.push('/admin/orders')}
-                className="px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors"
+                className="px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer"
               >
                 Gestisci Ordini
               </button>
               <button
                 onClick={handleLogout}
-                className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors"
+                className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer"
               >
                 Logout
               </button>
@@ -139,7 +139,7 @@ export default function AdminDashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <button
               onClick={() => router.push('/admin/orders')}
-              className="p-6 border-2 border-olive/20 rounded-xl hover:border-olive hover:bg-olive/5 transition-all duration-300 group"
+              className="p-6 border-2 border-olive/20 rounded-xl hover:border-olive hover:bg-olive/5 transition-all duration-300 group cursor-pointer"
             >
               <div className="flex items-center mb-4">
                 <svg className="w-8 h-8 text-olive group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -151,9 +151,22 @@ export default function AdminDashboardPage() {
             </button>
 
             <button
+              onClick={() => router.push('/admin/preventivi')}
+              className="p-6 border-2 border-olive/20 rounded-xl hover:border-olive hover:bg-olive/5 transition-all duration-300 group cursor-pointer"
+            >
+              <div className="flex items-center mb-4">
+                <svg className="w-8 h-8 text-olive group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-olive mb-2">Gestisci Preventivi</h3>
+              <p className="text-nocciola text-sm">Visualizza e gestisci tutti i preventivi</p>
+            </button>
+
+            <button
               onClick={refreshStats}
               disabled={statsLoading}
-              className="p-6 border-2 border-salvia/20 rounded-xl hover:border-salvia hover:bg-salvia/5 transition-all duration-300 group disabled:opacity-50"
+              className="p-6 border-2 border-salvia/20 rounded-xl hover:border-salvia hover:bg-salvia/5 transition-all duration-300 group disabled:opacity-50 cursor-pointer"
             >
               <div className="flex items-center mb-4">
                 <svg className={`w-8 h-8 text-salvia group-hover:scale-110 transition-transform ${statsLoading ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -166,7 +179,7 @@ export default function AdminDashboardPage() {
 
             <button
               onClick={() => router.push('/')}
-              className="p-6 border-2 border-nocciola/20 rounded-xl hover:border-nocciola hover:bg-nocciola/5 transition-all duration-300 group"
+              className="p-6 border-2 border-nocciola/20 rounded-xl hover:border-nocciola hover:bg-nocciola/5 transition-all duration-300 group cursor-pointer"
             >
               <div className="flex items-center mb-4">
                 <svg className="w-8 h-8 text-nocciola group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

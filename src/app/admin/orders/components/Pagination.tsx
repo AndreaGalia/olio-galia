@@ -14,7 +14,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
           <button
             key={page}
             onClick={() => onPageChange(page)}
-            className={`px-3 py-2 rounded-lg transition-colors ${
+            className={`px-3 py-2 rounded-lg transition-colors cursor-pointer ${
               currentPage === page
                 ? 'bg-olive text-white'
                 : 'text-olive hover:bg-olive/10'

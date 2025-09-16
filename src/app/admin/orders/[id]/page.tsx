@@ -248,19 +248,19 @@ export default function AdminOrderDetailsPage({
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => router.push('/admin/orders')}
-                className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors"
+                className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer"
               >
                 ← Indietro
               </button>
               <button
                 onClick={() => router.push('/admin/dashboard')}
-                className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors"
+                className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer"
               >
                 Dashboard
               </button>
               <button
                 onClick={handleLogout}
-                className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors"
+                className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer"
               >
                 Logout
               </button>
@@ -272,7 +272,7 @@ export default function AdminOrderDetailsPage({
             <div className="flex items-center justify-between mb-3">
               <button
                 onClick={() => router.push('/admin/orders')}
-                className="p-2 text-olive hover:bg-olive/10 rounded-lg transition-colors"
+                className="p-2 text-olive hover:bg-olive/10 rounded-lg transition-colors cursor-pointer"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
@@ -280,7 +280,7 @@ export default function AdminOrderDetailsPage({
               </button>
               <button
                 onClick={handleLogout}
-                className="p-2 text-olive hover:bg-olive/10 rounded-lg transition-colors"
+                className="p-2 text-olive hover:bg-olive/10 rounded-lg transition-colors cursor-pointer"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -298,7 +298,7 @@ export default function AdminOrderDetailsPage({
             <div className="flex justify-center mt-3">
               <button
                 onClick={() => router.push('/admin/dashboard')}
-                className="px-3 py-1 text-sm text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors"
+                className="px-3 py-1 text-sm text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer"
               >
                 Dashboard
               </button>
@@ -325,7 +325,7 @@ export default function AdminOrderDetailsPage({
               <p className="text-red-600 mb-4">{error}</p>
               <button
                 onClick={fetchOrderDetails}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors cursor-pointer"
               >
                 Riprova
               </button>
@@ -521,7 +521,7 @@ export default function AdminOrderDetailsPage({
                   <button
                     onClick={handleDeliverySubmit}
                     disabled={isSubmittingShipping}
-                    className="w-full sm:w-auto px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+                    className="w-full sm:w-auto px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center cursor-pointer"
                   >
                     {isSubmittingShipping ? (
                       <>

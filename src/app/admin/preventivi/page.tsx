@@ -4,30 +4,28 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 
-interface OrderSummary {
+interface FormSummary {
   id: string;
-  sessionId: string;
+  orderId: string;
   customerName: string;
   customerEmail: string;
   total: number;
-  currency: string;
-  paymentStatus: string;
-  shippingStatus: string;
+  status: string;
   created: string;
   itemCount: number;
+  finalTotal?: number;
 }
 
-export default function AdminOrdersPage() {
-  const { user, loading: authLoading, logout } = useAdminAuth();
+export default function AdminPreventiviPage() {
+  const { user, loading: authLoading } = useAdminAuth();
   const router = useRouter();
-  const [orders, setOrders] = useState<OrderSummary[]>([]);
+  const [forms, setForms] = useState<FormSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [statusFilter, setStatusFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
-
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -37,11 +35,11 @@ export default function AdminOrdersPage() {
 
   useEffect(() => {
     if (user) {
-      fetchOrders();
+      fetchForms();
     }
   }, [user, currentPage, statusFilter, searchTerm]);
 
-  const fetchOrders = async () => {
+  const fetchForms = async () => {
     try {
       setLoading(true);
       setError(null);
@@ -53,21 +51,21 @@ export default function AdminOrdersPage() {
         ...(searchTerm && { search: searchTerm })
       });
 
-      const response = await fetch(`/api/admin/orders?${params}`);
+      const response = await fetch(`/api/admin/preventivi?${params}`);
       
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Errore nel recupero degli ordini');
+        throw new Error(errorData.error || 'Errore nel recupero dei preventivi');
       }
 
       const data = await response.json();
-      setOrders(data.orders);
+      setForms(data.forms);
       setTotalPages(data.totalPages);
 
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Errore sconosciuto';
       setError(errorMessage);
-      console.error('Errore recupero ordini:', error);
+      console.error('Errore recupero preventivi:', error);
     } finally {
       setLoading(false);
     }
@@ -75,11 +73,13 @@ export default function AdminOrdersPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'paid': return 'text-green-600 bg-green-50 border-green-200';
-      case 'shipping': return 'text-blue-600 bg-blue-50 border-blue-200';
-      case 'shipped': return 'text-blue-600 bg-blue-50 border-blue-200';
-      case 'delivered': return 'text-green-700 bg-green-100 border-green-300';
       case 'pending': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
+      case 'quote_sent': return 'text-purple-600 bg-purple-50 border-purple-200';
+      case 'paid': return 'text-green-600 bg-green-50 border-green-200';
+      case 'in_preparazione': return 'text-orange-600 bg-orange-50 border-orange-200';
+      case 'shipped': return 'text-blue-600 bg-blue-50 border-blue-200';
+      case 'confermato': return 'text-green-700 bg-green-100 border-green-300';
+      case 'delivered': return 'text-green-700 bg-green-100 border-green-300';
       case 'cancelled': return 'text-red-600 bg-red-50 border-red-200';
       default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
@@ -87,11 +87,13 @@ export default function AdminOrdersPage() {
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'paid': return 'Pagato';
-      case 'shipping': return 'In spedizione';
-      case 'shipped': return 'Spedito';
-      case 'delivered': return 'Consegnato';
       case 'pending': return 'In attesa';
+      case 'quote_sent': return 'Preventivo inviato';
+      case 'paid': return 'Pagato';
+      case 'in_preparazione': return 'In preparazione';
+      case 'shipped': return 'Spedito';
+      case 'confermato': return 'Confermato';
+      case 'delivered': return 'Consegnato';
       case 'cancelled': return 'Annullato';
       default: return status;
     }
@@ -100,12 +102,7 @@ export default function AdminOrdersPage() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setCurrentPage(1);
-    fetchOrders();
-  };
-
-  const handleLogout = async () => {
-    await logout();
-    router.push('/admin/login');
+    fetchForms();
   };
 
   if (authLoading) {
@@ -130,27 +127,21 @@ export default function AdminOrdersPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div>
-              <h1 className="text-3xl font-serif text-olive">Gestione Ordini</h1>
-              <p className="text-nocciola mt-1">Visualizza e gestisci tutti gli ordini</p>
+              <h1 className="text-3xl font-serif text-olive">Gestione Preventivi</h1>
+              <p className="text-nocciola mt-1">Visualizza e gestisci tutti i preventivi</p>
             </div>
             <div className="flex items-center space-x-4">
               <button
-                onClick={() => router.push('/admin/preventivi')}
+                onClick={() => router.push('/admin/orders')}
                 className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer"
               >
-                Preventivi
+                Ordini
               </button>
               <button
                 onClick={() => router.push('/admin/dashboard')}
-                className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer"
+                className="px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer"
               >
                 Dashboard
-              </button>
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer"
-              >
-                Logout
               </button>
             </div>
           </div>
@@ -166,7 +157,7 @@ export default function AdminOrdersPage() {
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="Cerca ordini per nome cliente, email, ID ordine..."
+                  placeholder="Cerca per nome cliente, email, ID preventivo..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full px-4 py-2 pl-10 border border-olive/20 rounded-lg focus:ring-2 focus:ring-olive/50 focus:border-olive"
@@ -188,16 +179,18 @@ export default function AdminOrdersPage() {
                 className="px-4 py-2 border border-olive/20 rounded-lg focus:ring-2 focus:ring-olive/50 focus:border-olive"
               >
                 <option value="all">Tutti gli stati</option>
-                <option value="paid">Pagato</option>
-                <option value="shipping">In spedizione</option>
-                <option value="shipped">Spedito</option>
-                <option value="delivered">Consegnato</option>
                 <option value="pending">In attesa</option>
+                <option value="quote_sent">Preventivo inviato</option>
+                <option value="paid">Pagato</option>
+                <option value="in_preparazione">In preparazione</option>
+                <option value="shipped">Spedito</option>
+                <option value="confermato">Confermato</option>
+                <option value="delivered">Consegnato</option>
                 <option value="cancelled">Annullato</option>
               </select>
               
               <button
-                onClick={fetchOrders}
+                onClick={fetchForms}
                 disabled={loading}
                 className="px-6 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors disabled:opacity-50 flex items-center space-x-2 cursor-pointer"
               >
@@ -216,23 +209,23 @@ export default function AdminOrdersPage() {
           </div>
         )}
 
-        {/* Lista Ordini */}
+        {/* Lista Preventivi */}
         <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-olive/10 overflow-hidden">
           {loading ? (
             <div className="p-8 text-center">
               <div className="w-8 h-8 border-2 border-olive/30 border-t-olive rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-olive">Caricamento ordini...</p>
+              <p className="text-olive">Caricamento preventivi...</p>
             </div>
-          ) : orders.length === 0 ? (
+          ) : forms.length === 0 ? (
             <div className="p-8 text-center">
               <svg className="mx-auto h-12 w-12 text-olive/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
-              <h3 className="mt-2 text-sm font-medium text-olive">Nessun ordine trovato</h3>
+              <h3 className="mt-2 text-sm font-medium text-olive">Nessun preventivo trovato</h3>
               <p className="mt-1 text-sm text-nocciola">
                 {searchTerm || statusFilter !== 'all' 
                   ? 'Prova a modificare i filtri di ricerca' 
-                  : 'Non ci sono ordini al momento'
+                  : 'Non ci sono preventivi al momento'
                 }
               </p>
             </div>
@@ -244,7 +237,7 @@ export default function AdminOrdersPage() {
                   <thead className="bg-olive/5">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-olive uppercase tracking-wider">
-                        Ordine
+                        Preventivo
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-olive uppercase tracking-wider">
                         Cliente
@@ -253,10 +246,7 @@ export default function AdminOrdersPage() {
                         Totale
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-olive uppercase tracking-wider">
-                        Pagamento
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-olive uppercase tracking-wider">
-                        Spedizione
+                        Stato
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-olive uppercase tracking-wider">
                         Data
@@ -267,41 +257,41 @@ export default function AdminOrdersPage() {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-olive/10">
-                    {orders.map((order) => (
-                      <tr key={order.id} className="hover:bg-olive/5 transition-colors">
+                    {forms.map((form) => (
+                      <tr key={form.id} className="hover:bg-olive/5 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div>
-                            <div className="text-sm font-medium text-olive">{order.sessionId.slice(-8)}</div>
-                            <div className="text-sm text-nocciola">{order.itemCount} prodotti</div>
+                            <div className="text-sm font-medium text-olive">{form.orderId}</div>
+                            <div className="text-sm text-nocciola">{form.itemCount} prodotti</div>
                           </div>
                         </td>
                         <td className="px-6 py-4">
                           <div>
-                            <div className="text-sm font-medium text-gray-900">{order.customerName}</div>
-                            <div className="text-sm text-nocciola">{order.customerEmail}</div>
+                            <div className="text-sm font-medium text-gray-900">{form.customerName}</div>
+                            <div className="text-sm text-nocciola">{form.customerEmail}</div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm font-bold text-olive">
-                            €{order.total.toFixed(2)}
+                            €{(form.finalTotal || form.total).toFixed(2)}
                           </div>
+                          {form.finalTotal && form.finalTotal !== form.total && (
+                            <div className="text-xs text-nocciola line-through">
+                              €{form.total.toFixed(2)}
+                            </div>
+                          )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(order.paymentStatus)}`}>
-                            {getStatusText(order.paymentStatus)}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(order.shippingStatus)}`}>
-                            {getStatusText(order.shippingStatus)}
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(form.status)}`}>
+                            {getStatusText(form.status)}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-nocciola">
-                          {new Date(order.created).toLocaleDateString('it-IT')}
+                          {new Date(form.created).toLocaleDateString('it-IT')}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <button
-                            onClick={() => router.push(`/admin/orders/${order.id}`)}
+                            onClick={() => router.push(`/admin/forms/${form.id}`)}
                             className="text-olive hover:text-salvia transition-colors cursor-pointer"
                           >
                             Dettagli
@@ -315,42 +305,42 @@ export default function AdminOrdersPage() {
 
               {/* Mobile Cards */}
               <div className="lg:hidden">
-                {orders.map((order) => (
-                  <div key={order.id} className="p-4 border-b border-olive/10 last:border-b-0">
+                {forms.map((form) => (
+                  <div key={form.id} className="p-4 border-b border-olive/10 last:border-b-0">
                     <div className="flex justify-between items-start mb-2">
                       <div>
-                        <h3 className="text-sm font-medium text-olive">{order.sessionId.slice(-8)}</h3>
-                        <p className="text-xs text-nocciola">{order.itemCount} prodotti</p>
+                        <h3 className="text-sm font-medium text-olive">{form.orderId}</h3>
+                        <p className="text-xs text-nocciola">{form.itemCount} prodotti</p>
                       </div>
-                      <div className="flex flex-col items-end space-y-1">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(order.paymentStatus)}`}>
-                          {getStatusText(order.paymentStatus)}
-                        </span>
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(order.shippingStatus)}`}>
-                          {getStatusText(order.shippingStatus)}
-                        </span>
-                      </div>
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(form.status)}`}>
+                        {getStatusText(form.status)}
+                      </span>
                     </div>
                     
                     <div className="space-y-2">
                       <div>
-                        <p className="text-sm font-medium text-gray-900">{order.customerName}</p>
-                        <p className="text-xs text-nocciola">{order.customerEmail}</p>
+                        <p className="text-sm font-medium text-gray-900">{form.customerName}</p>
+                        <p className="text-xs text-nocciola">{form.customerEmail}</p>
                       </div>
                       
                       <div className="flex justify-between items-center">
                         <div>
                           <span className="text-sm font-bold text-olive">
-                            €{order.total.toFixed(2)}
+                            €{(form.finalTotal || form.total).toFixed(2)}
                           </span>
+                          {form.finalTotal && form.finalTotal !== form.total && (
+                            <span className="text-xs text-nocciola line-through ml-2">
+                              €{form.total.toFixed(2)}
+                            </span>
+                          )}
                         </div>
                         <div className="text-xs text-nocciola">
-                          {new Date(order.created).toLocaleDateString('it-IT')}
+                          {new Date(form.created).toLocaleDateString('it-IT')}
                         </div>
                       </div>
                       
                       <button
-                        onClick={() => router.push(`/admin/orders/${order.id}`)}
+                        onClick={() => router.push(`/admin/forms/${form.id}`)}
                         className="w-full mt-3 px-4 py-2 text-sm bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer"
                       >
                         Visualizza Dettagli
