@@ -80,7 +80,7 @@ const FormCard: React.FC<FormCardProps> = ({ form, onCardClick }) => {
             e.stopPropagation();
             onCardClick(form.id);
           }}
-          className="text-olive hover:text-salvia font-medium text-sm"
+          className="text-olive hover:text-salvia font-medium text-sm cursor-pointer"
         >
           Dettagli →
         </button>

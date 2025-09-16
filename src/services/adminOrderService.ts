@@ -318,15 +318,17 @@ export class AdminOrderService {
   }> {
     try {
       const db = await getDatabase();
-      const collection = db.collection(this.ORDERS_COLLECTION);
+      const ordersCollection = db.collection(this.ORDERS_COLLECTION);
+      const formsCollection = db.collection('forms');
 
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const tomorrow = new Date(today);
       tomorrow.setDate(tomorrow.getDate() + 1);
 
-      const [totalStats, todayStats] = await Promise.all([
-        collection.aggregate([
+      // Statistiche ordini classici
+      const [totalOrdersStats, todayOrdersStats] = await Promise.all([
+        ordersCollection.aggregate([
           { $match: { paymentStatus: 'paid' } },
           {
             $group: {
@@ -336,7 +338,7 @@ export class AdminOrderService {
             }
           }
         ]).toArray(),
-        collection.aggregate([
+        ordersCollection.aggregate([
           {
             $match: {
               paymentStatus: 'paid',
@@ -353,11 +355,57 @@ export class AdminOrderService {
         ]).toArray()
       ]);
 
+      // Statistiche preventivi pagati
+      const [totalFormsStats, todayFormsStats] = await Promise.all([
+        formsCollection.aggregate([
+          { 
+            $match: { 
+              status: { $in: ['paid', 'shipped', 'delivered'] },
+              'finalPricing.finalTotal': { $exists: true }
+            }
+          },
+          {
+            $group: {
+              _id: null,
+              totalForms: { $sum: 1 },
+              totalRevenue: { $sum: '$finalPricing.finalTotal' }
+            }
+          }
+        ]).toArray(),
+        formsCollection.aggregate([
+          {
+            $match: {
+              status: { $in: ['paid', 'shipped', 'delivered'] },
+              'finalPricing.finalTotal': { $exists: true },
+              updatedAt: { $gte: today, $lt: tomorrow }
+            }
+          },
+          {
+            $group: {
+              _id: null,
+              formsToday: { $sum: 1 },
+              revenueToday: { $sum: '$finalPricing.finalTotal' }
+            }
+          }
+        ]).toArray()
+      ]);
+
+      // Combina i risultati
+      const ordersTotal = totalOrdersStats[0]?.totalOrders || 0;
+      const ordersRevenue = totalOrdersStats[0]?.totalRevenue || 0;
+      const ordersToday = todayOrdersStats[0]?.ordersToday || 0;
+      const ordersTodayRevenue = todayOrdersStats[0]?.revenueToday || 0;
+
+      const formsTotal = totalFormsStats[0]?.totalForms || 0;
+      const formsRevenue = totalFormsStats[0]?.totalRevenue || 0;
+      const formsToday = todayFormsStats[0]?.formsToday || 0;
+      const formsTodayRevenue = todayFormsStats[0]?.revenueToday || 0;
+
       return {
-        totalOrders: totalStats[0]?.totalOrders || 0,
-        totalRevenue: totalStats[0]?.totalRevenue || 0,
-        ordersToday: todayStats[0]?.ordersToday || 0,
-        revenueToday: todayStats[0]?.revenueToday || 0,
+        totalOrders: ordersTotal + formsTotal,
+        totalRevenue: ordersRevenue + formsRevenue,
+        ordersToday: ordersToday + formsToday,
+        revenueToday: ordersTodayRevenue + formsTodayRevenue,
       };
     } catch (error) {
       console.error('Errore statistiche ordini:', error);

@@ -38,6 +38,15 @@ interface FormDetails {
     estimatedShipping: number;
     estimatedTotal: number;
   };
+  finalPricing?: {
+    finalPrices: Array<{
+      productId: string;
+      finalPrice: number;
+    }>;
+    finalSubtotal: number;
+    finalShipping: number;
+    finalTotal: number;
+  };
   status: string;
   type: string;
   created: string;
@@ -52,6 +61,10 @@ export default function FormDetailPage() {
   const [form, setForm] = useState<FormDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isEditingPrices, setIsEditingPrices] = useState(false);
+  const [finalPrices, setFinalPrices] = useState<Record<string, number>>({});
+  const [finalShipping, setFinalShipping] = useState(0);
+  const [isSendingQuote, setIsSendingQuote] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -79,6 +92,23 @@ export default function FormDetailPage() {
 
       const data = await response.json();
       setForm(data.form);
+      
+      // Inizializza i prezzi finali se già presenti
+      if (data.form.finalPricing) {
+        const priceMap: Record<string, number> = {};
+        data.form.finalPricing.finalPrices.forEach((item: any) => {
+          priceMap[item.productId] = item.finalPrice;
+        });
+        setFinalPrices(priceMap);
+        setFinalShipping(data.form.finalPricing.finalShipping);
+      } else {
+        // Inizializza con i prezzi stimati
+        const initialPrices: Record<string, number> = {};
+        data.form.products.forEach((product: FormProduct) => {
+          initialPrices[product.id] = product.price;
+        });
+        setFinalPrices(initialPrices);
+      }
 
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Errore sconosciuto';
@@ -96,6 +126,12 @@ export default function FormDetailPage() {
       case 'completed': return 'text-green-600 bg-green-50 border-green-200';
       case 'cancelled': return 'text-red-600 bg-red-50 border-red-200';
       case 'processing': return 'text-blue-600 bg-blue-50 border-blue-200';
+      case 'quote_sent': return 'text-purple-600 bg-purple-50 border-purple-200';
+      case 'paid': return 'text-green-600 bg-green-50 border-green-200';
+      case 'in_preparazione': return 'text-orange-600 bg-orange-50 border-orange-200';
+      case 'shipped': return 'text-blue-600 bg-blue-50 border-blue-200';
+      case 'confermato': return 'text-green-700 bg-green-100 border-green-300';
+      case 'delivered': return 'text-green-700 bg-green-100 border-green-300';
       default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
   };
@@ -106,7 +142,126 @@ export default function FormDetailPage() {
       case 'completed': return 'Completato';
       case 'cancelled': return 'Annullato';
       case 'processing': return 'In elaborazione';
+      case 'quote_sent': return 'Preventivo inviato';
+      case 'paid': return 'Pagato';
+      case 'in_preparazione': return 'In preparazione';
+      case 'shipped': return 'Spedito';
+      case 'confermato': return 'Confermato';
+      case 'delivered': return 'Consegnato';
       default: return status;
+    }
+  };
+
+  const calculateFinalTotal = () => {
+    const subtotal = form?.products.reduce((sum, product) => {
+      return sum + (finalPrices[product.id] || 0) * product.quantity;
+    }, 0) || 0;
+    
+    return {
+      subtotal,
+      shipping: finalShipping,
+      total: subtotal + finalShipping
+    };
+  };
+
+  const saveFinalPricing = async () => {
+    if (!form) return;
+    
+    try {
+      const finalPricing = {
+        finalPrices: form.products.map(product => ({
+          productId: product.id,
+          finalPrice: finalPrices[product.id] || 0
+        })),
+        finalSubtotal: calculateFinalTotal().subtotal,
+        finalShipping: finalShipping,
+        finalTotal: calculateFinalTotal().total
+      };
+
+      const response = await fetch(`/api/admin/forms/${params.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ finalPricing })
+      });
+
+      if (!response.ok) throw new Error('Errore nel salvataggio');
+      
+      setForm(prev => prev ? { ...prev, finalPricing } : null);
+      setIsEditingPrices(false);
+      
+    } catch (error) {
+      setError('Errore nel salvataggio dei prezzi');
+    }
+  };
+
+  const sendQuoteEmail = async () => {
+    if (!form) return;
+    
+    try {
+      setIsSendingQuote(true);
+      
+      const response = await fetch(`/api/admin/forms/${params.id}/send-quote`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      if (!response.ok) throw new Error('Errore nell\'invio del preventivo');
+      
+      // Aggiorna lo stato a 'quote_sent'
+      await fetch(`/api/admin/forms/${params.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'quote_sent' })
+      });
+      
+      setForm(prev => prev ? { ...prev, status: 'quote_sent' } : null);
+      
+    } catch (error) {
+      setError('Errore nell\'invio del preventivo');
+    } finally {
+      setIsSendingQuote(false);
+    }
+  };
+
+  const updateStatus = async (newStatus: string) => {
+    if (!form) return;
+    
+    try {
+      const response = await fetch(`/api/admin/forms/${params.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      });
+
+      if (!response.ok) throw new Error('Errore nell\'aggiornamento dello stato');
+      
+      setForm(prev => prev ? { ...prev, status: newStatus } : null);
+      
+      // Se cambiamo stato a 'confermato', inviamo email di conferma consegna
+      if (newStatus === 'confermato') {
+        await sendDeliveryConfirmationEmail();
+      }
+      
+    } catch (error) {
+      setError('Errore nell\'aggiornamento dello stato');
+    }
+  };
+
+  const sendDeliveryConfirmationEmail = async () => {
+    if (!form) return;
+    
+    try {
+      const response = await fetch(`/api/admin/forms/${params.id}/send-delivery-confirmation`, {
+        method: 'POST'
+      });
+
+      if (!response.ok) {
+        console.error('Errore invio email di conferma consegna');
+      } else {
+        console.log('Email di conferma consegna inviata con successo');
+      }
+    } catch (error) {
+      console.error('Errore invio email di conferma consegna:', error);
     }
   };
 
@@ -133,7 +288,7 @@ export default function FormDetailPage() {
           <p className="text-gray-600 mb-4">{error}</p>
           <button
             onClick={() => router.push('/admin/orders')}
-            className="px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors"
+            className="px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer"
           >
             Torna agli ordini
           </button>
@@ -158,8 +313,8 @@ export default function FormDetailPage() {
             </div>
             <div className="flex items-center space-x-4">
               <button
-                onClick={() => router.push('/admin/orders')}
-                className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors"
+                onClick={() => router.push('/admin/preventivi')}
+                className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer"
               >
                 ← Torna ai preventivi
               </button>
@@ -208,7 +363,18 @@ export default function FormDetailPage() {
 
               {/* Prodotti Richiesti */}
               <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-olive/10 p-6">
-                <h2 className="text-xl font-serif text-olive mb-4">Prodotti Richiesti</h2>
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-serif text-olive">Prodotti Richiesti</h2>
+                  {form.status === 'pending' && (
+                    <button
+                      onClick={() => setIsEditingPrices(!isEditingPrices)}
+                      className="px-4 py-2 text-sm bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer"
+                    >
+                      {isEditingPrices ? 'Annulla' : 'Modifica Prezzi'}
+                    </button>
+                  )}
+                </div>
+                
                 <div className="space-y-4">
                   {form.products.map((product) => (
                     <div key={product.id} className="flex items-center justify-between p-4 bg-olive/5 rounded-lg">
@@ -225,41 +391,131 @@ export default function FormDetailPage() {
                           <p className="text-sm text-olive">Quantità: {product.quantity}</p>
                         </div>
                       </div>
+                      
                       <div className="text-right">
-                        <p className="font-semibold text-olive">
-                          €{product.price.toFixed(2)} cad.
-                        </p>
-                        <p className="text-sm text-nocciola">
-                          Tot: €{(product.price * product.quantity).toFixed(2)}
-                        </p>
+                        {isEditingPrices ? (
+                          <div className="space-y-2">
+                            <input
+                              type="number"
+                              value={finalPrices[product.id] || product.price}
+                              onChange={(e) => setFinalPrices(prev => ({
+                                ...prev,
+                                [product.id]: parseFloat(e.target.value) || 0
+                              }))}
+                              className="w-20 px-2 py-1 text-sm border border-olive/20 rounded"
+                              step="0.01"
+                              min="0"
+                            />
+                            <p className="text-xs text-nocciola">€/cad.</p>
+                          </div>
+                        ) : (
+                          <>
+                            <p className="font-semibold text-olive">
+                              €{(form.finalPricing?.finalPrices.find(fp => fp.productId === product.id)?.finalPrice || product.price).toFixed(2)} cad.
+                            </p>
+                            <p className="text-sm text-nocciola">
+                              Tot: €{((form.finalPricing?.finalPrices.find(fp => fp.productId === product.id)?.finalPrice || product.price) * product.quantity).toFixed(2)}
+                            </p>
+                          </>
+                        )}
                       </div>
                     </div>
                   ))}
                 </div>
 
-                {/* Totali Stimati */}
-                <div className="mt-6 pt-6 border-t border-olive/10">
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-nocciola">Subtotale stimato:</span>
-                      <span className="font-medium">€{form.pricing.subtotal.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-nocciola">Spedizione stimata:</span>
-                      <span className="font-medium">Da calcolare</span>
-                    </div>
-                    <div className="flex justify-between text-lg font-semibold text-olive border-t border-olive/10 pt-2">
-                      <span>Totale stimato:</span>
-                      <span>€{form.pricing.subtotal.toFixed(2)}</span>
+                {/* Sezione Spedizione in Editing Mode */}
+                {isEditingPrices && (
+                  <div className="mt-6 pt-6 border-t border-olive/10">
+                    <h3 className="text-lg font-medium text-olive mb-3">Spedizione</h3>
+                    <div className="flex items-center space-x-4">
+                      <label className="text-sm text-nocciola">Costo spedizione:</label>
+                      <input
+                        type="number"
+                        value={finalShipping}
+                        onChange={(e) => setFinalShipping(parseFloat(e.target.value) || 0)}
+                        className="w-24 px-2 py-1 text-sm border border-olive/20 rounded"
+                        step="0.01"
+                        min="0"
+                      />
+                      <span className="text-sm text-nocciola">€</span>
                     </div>
                   </div>
+                )}
+
+                {/* Totali */}
+                <div className="mt-6 pt-6 border-t border-olive/10">
+                  {isEditingPrices ? (
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-nocciola">Subtotale:</span>
+                        <span className="font-medium">€{calculateFinalTotal().subtotal.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-nocciola">Spedizione:</span>
+                        <span className="font-medium">€{calculateFinalTotal().shipping.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between text-lg font-semibold text-olive border-t border-olive/10 pt-2">
+                        <span>Totale finale:</span>
+                        <span>€{calculateFinalTotal().total.toFixed(2)}</span>
+                      </div>
+                      
+                      <div className="mt-4 flex space-x-3">
+                        <button
+                          onClick={saveFinalPricing}
+                          className="flex-1 px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer"
+                        >
+                          Salva Prezzi
+                        </button>
+                        <button
+                          onClick={() => setIsEditingPrices(false)}
+                          className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive/5 transition-colors cursor-pointer"
+                        >
+                          Annulla
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {form.finalPricing ? (
+                        <>
+                          <div className="flex justify-between">
+                            <span className="text-nocciola">Subtotale:</span>
+                            <span className="font-medium">€{form.finalPricing.finalSubtotal.toFixed(2)}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-nocciola">Spedizione:</span>
+                            <span className="font-medium">€{form.finalPricing.finalShipping.toFixed(2)}</span>
+                          </div>
+                          <div className="flex justify-between text-lg font-semibold text-olive border-t border-olive/10 pt-2">
+                            <span>Totale finale:</span>
+                            <span>€{form.finalPricing.finalTotal.toFixed(2)}</span>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="flex justify-between">
+                            <span className="text-nocciola">Subtotale stimato:</span>
+                            <span className="font-medium">€{form.pricing.subtotal.toFixed(2)}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-nocciola">Spedizione stimata:</span>
+                            <span className="font-medium">Da calcolare</span>
+                          </div>
+                          <div className="flex justify-between text-lg font-semibold text-olive border-t border-olive/10 pt-2">
+                            <span>Totale stimato:</span>
+                            <span>€{form.pricing.subtotal.toFixed(2)}</span>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
 
             {/* Sidebar con informazioni */}
             <div className="space-y-6">
-              {/* Stato */}
+              {/* Stato e Azioni */}
               <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-olive/10 p-6">
                 <h2 className="text-xl font-serif text-olive mb-4">Stato Preventivo</h2>
                 
@@ -271,6 +527,64 @@ export default function FormDetailPage() {
                     <span className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full border ${getStatusColor(form.status)}`}>
                       {getStatusText(form.status)}
                     </span>
+                  </div>
+
+                  {/* Azioni Preventivo */}
+                  <div className="space-y-3">
+                    {form.status === 'pending' && form.finalPricing && (
+                      <button
+                        onClick={sendQuoteEmail}
+                        disabled={isSendingQuote}
+                        className="w-full px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors disabled:opacity-50 cursor-pointer"
+                      >
+                        {isSendingQuote ? 'Invio in corso...' : 'Invia Preventivo via Email'}
+                      </button>
+                    )}
+                    
+                    {form.status === 'quote_sent' && (
+                      <button
+                        onClick={() => updateStatus('paid')}
+                        className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors cursor-pointer"
+                      >
+                        Segna come Pagato
+                      </button>
+                    )}
+                    
+                    {form.status === 'paid' && (
+                      <button
+                        onClick={() => updateStatus('in_preparazione')}
+                        className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
+                      >
+                        Metti in Preparazione
+                      </button>
+                    )}
+                    
+                    {form.status === 'in_preparazione' && (
+                      <button
+                        onClick={() => updateStatus('shipped')}
+                        className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
+                      >
+                        Segna come Spedito
+                      </button>
+                    )}
+                    
+                    {form.status === 'shipped' && (
+                      <button
+                        onClick={() => updateStatus('confermato')}
+                        className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors cursor-pointer"
+                      >
+                        Conferma Consegna
+                      </button>
+                    )}
+
+                    {(form.status === 'pending' || form.status === 'quote_sent') && (
+                      <button
+                        onClick={() => updateStatus('cancelled')}
+                        className="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors cursor-pointer"
+                      >
+                        Annulla Preventivo
+                      </button>
+                    )}
                   </div>
 
                   {form.notes && (

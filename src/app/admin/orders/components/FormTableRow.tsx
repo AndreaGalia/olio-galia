@@ -74,7 +74,7 @@ const FormTableRow: React.FC<FormTableRowProps> = ({ form, onRowClick }) => {
             e.stopPropagation();
             onRowClick(form.id);
           }}
-          className="text-olive hover:text-salvia font-medium text-sm"
+          className="text-olive hover:text-salvia font-medium text-sm cursor-pointer"
         >
           Dettagli
         </button>
