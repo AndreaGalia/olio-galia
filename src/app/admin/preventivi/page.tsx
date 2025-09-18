@@ -132,6 +132,15 @@ export default function AdminPreventiviPage() {
             </div>
             <div className="flex items-center space-x-2 sm:space-x-4">
               <button
+                onClick={() => router.push('/admin/preventivi/create')}
+                className="px-2 sm:px-4 py-2 bg-gradient-to-r from-salvia to-olive text-white rounded-lg hover:from-olive hover:to-salvia transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0 flex items-center space-x-1"
+              >
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+                </svg>
+                <span>Nuovo</span>
+              </button>
+              <button
                 onClick={() => router.push('/admin/orders')}
                 className="px-2 sm:px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
               >

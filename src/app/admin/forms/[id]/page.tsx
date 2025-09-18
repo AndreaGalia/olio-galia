@@ -62,8 +62,8 @@ export default function FormDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isEditingPrices, setIsEditingPrices] = useState(false);
-  const [finalPrices, setFinalPrices] = useState<Record<string, number>>({});
-  const [finalShipping, setFinalShipping] = useState(0);
+  const [finalPrices, setFinalPrices] = useState<Record<string, number | string>>({});
+  const [finalShipping, setFinalShipping] = useState<number | string>(0);
   const [isSendingQuote, setIsSendingQuote] = useState(false);
 
   useEffect(() => {
@@ -154,13 +154,17 @@ export default function FormDetailPage() {
 
   const calculateFinalTotal = () => {
     const subtotal = form?.products.reduce((sum, product) => {
-      return sum + (finalPrices[product.id] || 0) * product.quantity;
+      const price = typeof finalPrices[product.id] === 'string' ?
+        parseFloat(finalPrices[product.id] as string) || 0 :
+        (finalPrices[product.id] as number) || 0;
+      return sum + (price * product.quantity);
     }, 0) || 0;
-    
+
+    const shipping = typeof finalShipping === 'string' ? parseFloat(finalShipping) || 0 : finalShipping;
     return {
       subtotal,
-      shipping: finalShipping,
-      total: subtotal + finalShipping
+      shipping,
+      total: subtotal + shipping
     };
   };
 
@@ -171,10 +175,12 @@ export default function FormDetailPage() {
       const finalPricing = {
         finalPrices: form.products.map(product => ({
           productId: product.id,
-          finalPrice: finalPrices[product.id] || 0
+          finalPrice: typeof finalPrices[product.id] === 'string' ?
+            parseFloat(finalPrices[product.id] as string) || 0 :
+            (finalPrices[product.id] as number) || 0
         })),
         finalSubtotal: calculateFinalTotal().subtotal,
-        finalShipping: finalShipping,
+        finalShipping: typeof finalShipping === 'string' ? parseFloat(finalShipping) || 0 : finalShipping,
         finalTotal: calculateFinalTotal().total
       };
 
@@ -185,7 +191,7 @@ export default function FormDetailPage() {
       });
 
       if (!response.ok) throw new Error('Errore nel salvataggio');
-      
+
       setForm(prev => prev ? { ...prev, finalPricing } : null);
       setIsEditingPrices(false);
       
@@ -397,11 +403,32 @@ export default function FormDetailPage() {
                           <div className="space-y-2">
                             <input
                               type="number"
-                              value={finalPrices[product.id] || product.price}
-                              onChange={(e) => setFinalPrices(prev => ({
-                                ...prev,
-                                [product.id]: parseFloat(e.target.value) || 0
-                              }))}
+                              value={finalPrices[product.id] !== undefined ? finalPrices[product.id] : product.price}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                setFinalPrices(prev => ({
+                                  ...prev,
+                                  [product.id]: value === '' ? '' : value
+                                }));
+                              }}
+                              onBlur={(e) => {
+                                const value = e.target.value;
+                                if (value === '' || isNaN(parseFloat(value))) {
+                                  setFinalPrices(prev => ({
+                                    ...prev,
+                                    [product.id]: parseFloat(product.price.toString()) || 0
+                                  }));
+                                } else {
+                                  setFinalPrices(prev => ({
+                                    ...prev,
+                                    [product.id]: parseFloat(value)
+                                  }));
+                                }
+                              }}
+                              onFocus={(e) => {
+                                // Seleziona tutto il testo quando viene focusato
+                                e.target.select();
+                              }}
                               className="w-20 px-2 py-1 text-sm border border-olive/20 rounded"
                               step="0.01"
                               min="0"
@@ -432,7 +459,22 @@ export default function FormDetailPage() {
                       <input
                         type="number"
                         value={finalShipping}
-                        onChange={(e) => setFinalShipping(parseFloat(e.target.value) || 0)}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setFinalShipping(value === '' ? '' : value);
+                        }}
+                        onBlur={(e) => {
+                          const value = e.target.value;
+                          if (value === '' || isNaN(parseFloat(value))) {
+                            setFinalShipping(0);
+                          } else {
+                            setFinalShipping(parseFloat(value));
+                          }
+                        }}
+                        onFocus={(e) => {
+                          // Seleziona tutto il testo quando viene focusato
+                          e.target.select();
+                        }}
                         className="w-24 px-2 py-1 text-sm border border-olive/20 rounded"
                         step="0.01"
                         min="0"

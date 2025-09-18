@@ -88,6 +88,7 @@ export const GET = withAuth(async (request: NextRequest, { params }: { params: P
       created: form.createdAt?.toISOString() || form.timestamp,
       notes: form.notes || '',
       itemCount: form.cart?.length || 0,
+      finalPricing: form.finalPricing || null, // Aggiungi i prezzi finali se presenti
     };
 
     return NextResponse.json({

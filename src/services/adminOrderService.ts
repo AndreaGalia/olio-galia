@@ -355,12 +355,12 @@ export class AdminOrderService {
         ]).toArray()
       ]);
 
-      // Statistiche preventivi pagati
+      // Statistiche preventivi pagati (inclusi tutti gli stati dopo il pagamento)
       const [totalFormsStats, todayFormsStats] = await Promise.all([
         formsCollection.aggregate([
-          { 
-            $match: { 
-              status: { $in: ['paid', 'shipped', 'delivered'] },
+          {
+            $match: {
+              status: { $in: ['paid', 'in_preparazione', 'shipped', 'confermato', 'delivered'] },
               'finalPricing.finalTotal': { $exists: true }
             }
           },
@@ -375,7 +375,7 @@ export class AdminOrderService {
         formsCollection.aggregate([
           {
             $match: {
-              status: { $in: ['paid', 'shipped', 'delivered'] },
+              status: { $in: ['paid', 'in_preparazione', 'shipped', 'confermato', 'delivered'] },
               'finalPricing.finalTotal': { $exists: true },
               updatedAt: { $gte: today, $lt: tomorrow }
             }
