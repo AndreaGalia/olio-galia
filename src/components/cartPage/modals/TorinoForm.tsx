@@ -124,18 +124,18 @@ export default function TorinoForm({ onSubmit, cart, isLoading = false, onCancel
           type="button"
           onClick={onCancel}
           disabled={isLoading}
-          className="px-4 sm:px-6 py-2 sm:py-3 rounded-xl bg-white border-2 border-nocciola/30 text-gray-700 font-medium hover:bg-nocciola/10 hover:border-nocciola/50 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-3 sm:px-6 py-2 sm:py-3 rounded-xl bg-white border-2 border-nocciola/30 text-gray-700 font-medium hover:bg-nocciola/10 hover:border-nocciola/50 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base whitespace-nowrap"
         >
           {t.torinoCheckout.modal.form.buttons.cancel}
         </button>
         <button
           type="submit"
           disabled={isLoading}
-          className="px-5 sm:px-8 py-2 sm:py-3 rounded-xl bg-gradient-to-r from-olive to-salvia text-beige font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+          className="px-3 sm:px-8 py-2 sm:py-3 rounded-xl bg-gradient-to-r from-olive to-salvia text-beige font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 flex items-center gap-1 sm:gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 text-sm sm:text-base whitespace-nowrap"
         >
           {isLoading ? (
             <>
-              <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+              <svg className="w-3 h-3 sm:w-4 sm:h-4 animate-spin flex-shrink-0" fill="none" viewBox="0 0 24 24">
                 <circle
                   className="opacity-25"
                   cx="12"
@@ -150,12 +150,12 @@ export default function TorinoForm({ onSubmit, cart, isLoading = false, onCancel
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 />
               </svg>
-              {t.torinoCheckout.modal.form.buttons.submitting}
+              <span className="truncate">{t.torinoCheckout.modal.form.buttons.submitting}</span>
             </>
           ) : (
             <>
               <svg
-                className="w-4 h-4"
+                className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -167,7 +167,7 @@ export default function TorinoForm({ onSubmit, cart, isLoading = false, onCancel
                   d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              {t.torinoCheckout.modal.form.buttons.submit}
+              <span className="truncate">{t.torinoCheckout.modal.form.buttons.submit}</span>
             </>
           )}
         </button>

@@ -129,28 +129,22 @@ export default function AdminOrdersPage() {
       <header className="bg-white/80 backdrop-blur-sm shadow-lg border-b border-olive/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
-            <div>
-              <h1 className="text-3xl font-serif text-olive">Gestione Ordini</h1>
-              <p className="text-nocciola mt-1">Visualizza e gestisci tutti gli ordini</p>
+            <div className="flex-1 min-w-0">
+              <h1 className="text-xl sm:text-3xl font-serif text-olive truncate">Gestione Ordini</h1>
+              <p className="text-nocciola mt-1 text-sm sm:text-base truncate">Visualizza e gestisci tutti gli ordini</p>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <button
                 onClick={() => router.push('/admin/preventivi')}
-                className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer"
+                className="px-2 sm:px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
               >
                 Preventivi
               </button>
               <button
                 onClick={() => router.push('/admin/dashboard')}
-                className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer"
+                className="px-2 sm:px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
               >
                 Dashboard
-              </button>
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer"
-              >
-                Logout
               </button>
             </div>
           </div>

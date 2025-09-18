@@ -535,54 +535,81 @@ export default function FormDetailPage() {
                       <button
                         onClick={sendQuoteEmail}
                         disabled={isSendingQuote}
-                        className="w-full px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors disabled:opacity-50 cursor-pointer"
+                        className="w-full px-4 py-3 sm:py-4 bg-gradient-to-r from-olive to-salvia text-beige font-semibold rounded-xl hover:from-salvia hover:to-olive disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center shadow-lg hover:shadow-xl whitespace-nowrap"
                       >
-                        {isSendingQuote ? 'Invio in corso...' : 'Invia Preventivo via Email'}
+                        {isSendingQuote ? (
+                          <>
+                            <div className="w-4 h-4 border-2 border-beige/30 border-t-beige rounded-full animate-spin mr-2"></div>
+                            <span className="text-sm sm:text-base">Invio in corso...</span>
+                          </>
+                        ) : (
+                          <>
+                            <svg className="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            <span className="text-sm sm:text-base">Invia Preventivo</span>
+                          </>
+                        )}
                       </button>
                     )}
-                    
+
                     {form.status === 'quote_sent' && (
                       <button
                         onClick={() => updateStatus('paid')}
-                        className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors cursor-pointer"
+                        className="w-full px-4 py-3 sm:py-4 bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold rounded-xl hover:from-green-700 hover:to-green-800 transition-all duration-200 flex items-center justify-center shadow-lg hover:shadow-xl whitespace-nowrap"
                       >
-                        Segna come Pagato
+                        <svg className="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                        </svg>
+                        <span className="text-sm sm:text-base">Segna come Pagato</span>
                       </button>
                     )}
-                    
+
                     {form.status === 'paid' && (
                       <button
                         onClick={() => updateStatus('in_preparazione')}
-                        className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
+                        className="w-full px-4 py-3 sm:py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-200 flex items-center justify-center shadow-lg hover:shadow-xl whitespace-nowrap"
                       >
-                        Metti in Preparazione
+                        <svg className="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                        <span className="text-sm sm:text-base">Metti in Preparazione</span>
                       </button>
                     )}
-                    
+
                     {form.status === 'in_preparazione' && (
                       <button
                         onClick={() => updateStatus('shipped')}
-                        className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
+                        className="w-full px-4 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 flex items-center justify-center shadow-lg hover:shadow-xl whitespace-nowrap"
                       >
-                        Segna come Spedito
+                        <svg className="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2v0a2 2 0 01-2-2v-5H8z" />
+                        </svg>
+                        <span className="text-sm sm:text-base">Segna come Spedito</span>
                       </button>
                     )}
-                    
+
                     {form.status === 'shipped' && (
                       <button
                         onClick={() => updateStatus('confermato')}
-                        className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors cursor-pointer"
+                        className="w-full px-4 py-3 sm:py-4 bg-gradient-to-r from-salvia to-olive text-beige font-semibold rounded-xl hover:from-olive hover:to-salvia transition-all duration-200 flex items-center justify-center shadow-lg hover:shadow-xl whitespace-nowrap"
                       >
-                        Conferma Consegna
+                        <svg className="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className="text-sm sm:text-base">Conferma Consegna</span>
                       </button>
                     )}
 
                     {(form.status === 'pending' || form.status === 'quote_sent') && (
                       <button
                         onClick={() => updateStatus('cancelled')}
-                        className="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors cursor-pointer"
+                        className="w-full px-4 py-3 sm:py-4 bg-gradient-to-r from-red-600 to-red-700 text-white font-semibold rounded-xl hover:from-red-700 hover:to-red-800 transition-all duration-200 flex items-center justify-center shadow-lg hover:shadow-xl whitespace-nowrap"
                       >
-                        Annulla Preventivo
+                        <svg className="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className="text-sm sm:text-base">Annulla Preventivo</span>
                       </button>
                     )}
                   </div>
