@@ -31,18 +31,18 @@ export default function CheckoutButton({ onClick, totalItems, disabled = false }
         <button
           onClick={onClick}
           disabled={disabled}
-          className="w-full bg-olive hover:bg-salvia text-beige font-medium py-2.5 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-olive hover:bg-salvia text-beige font-medium py-2.5 px-2 sm:px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <span>{t.torinoCheckout.button.subtitle}</span>
+          <span className="whitespace-nowrap truncate">{t.torinoCheckout.button.subtitle}</span>
           {totalItems > 0 && (
-            <span className="bg-beige/20 text-beige px-2 py-0.5 rounded-full text-xs">
+            <span className="bg-beige/20 text-beige px-1 sm:px-2 py-0.5 rounded-full text-xs whitespace-nowrap flex-shrink-0">
               {translate('torinoCheckout.button.itemCount', {
                 count: totalItems.toString(),
                 itemLabel: itemLabel
               })}
             </span>
           )}
-          <span className="text-xs opacity-80">→</span>
+          <span className="text-xs opacity-80 flex-shrink-0">→</span>
         </button>
         
         {totalItems === 0 && (

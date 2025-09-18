@@ -237,32 +237,26 @@ export default function AdminOrderDetailsPage({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Desktop Header */}
           <div className="hidden md:flex justify-between items-center py-6">
-            <div>
-              <h1 className="text-3xl font-serif text-olive">Dettagli Ordine</h1>
+            <div className="flex-1 min-w-0">
+              <h1 className="text-xl sm:text-3xl font-serif text-olive truncate">Dettagli Ordine</h1>
               {orderDetails?.paymentIntent && (
-                <p className="text-nocciola mt-1">
+                <p className="text-nocciola mt-1 text-sm sm:text-base truncate">
                   Payment Intent: {orderDetails.paymentIntent.slice(-8)}
                 </p>
               )}
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <button
                 onClick={() => router.push('/admin/orders')}
-                className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer"
+                className="px-2 sm:px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
               >
                 ← Indietro
               </button>
               <button
                 onClick={() => router.push('/admin/dashboard')}
-                className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer"
+                className="px-2 sm:px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
               >
                 Dashboard
-              </button>
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer"
-              >
-                Logout
               </button>
             </div>
           </div>
@@ -279,29 +273,19 @@ export default function AdminOrderDetailsPage({
                 </svg>
               </button>
               <button
-                onClick={handleLogout}
-                className="p-2 text-olive hover:bg-olive/10 rounded-lg transition-colors cursor-pointer"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
-              </button>
-            </div>
-            <div className="text-center">
-              <h1 className="text-2xl font-serif text-olive">Dettagli Ordine</h1>
-              {orderDetails?.paymentIntent && (
-                <p className="text-nocciola text-sm mt-1">
-                  Payment Intent: {orderDetails.paymentIntent.slice(-8)}
-                </p>
-              )}
-            </div>
-            <div className="flex justify-center mt-3">
-              <button
                 onClick={() => router.push('/admin/dashboard')}
-                className="px-3 py-1 text-sm text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer"
+                className="px-3 py-1 text-sm text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer whitespace-nowrap"
               >
                 Dashboard
               </button>
+            </div>
+            <div className="text-center">
+              <h1 className="text-xl font-serif text-olive">Dettagli Ordine</h1>
+              {orderDetails?.paymentIntent && (
+                <p className="text-nocciola text-sm mt-1 truncate">
+                  Payment Intent: {orderDetails.paymentIntent.slice(-8)}
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -413,87 +397,104 @@ export default function AdminOrderDetailsPage({
             <div className="space-y-6">
               {/* Form Spedizione - Solo se non ancora spedito */}
               {orderDetails.paymentStatus === 'paid' && orderDetails.shippingStatus !== 'shipped' && orderDetails.shippingStatus !== 'delivered' && (
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-olive/10">
-                  <h2 className="text-lg sm:text-xl font-serif text-olive mb-4 sm:mb-6 flex items-center">
-                    <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Gestione Spedizione
-                  </h2>
-
-                  <form onSubmit={handleShippingSubmit} className="space-y-4">
-                    {/* ID Spedizione - Solo quando lo stato è "shipped" */}
-                    {shippingForm.status === 'shipped' && (
-                      <div>
-                        <label htmlFor="trackingId" className="block text-sm font-medium text-nocciola mb-2">
-                          ID Spedizione *
-                        </label>
-                        <input
-                          type="text"
-                          id="trackingId"
-                          value={shippingForm.trackingId}
-                          onChange={(e) => setShippingForm(prev => ({ ...prev, trackingId: e.target.value }))}
-                          placeholder="Inserisci l'ID di tracciamento"
-                          className="w-full px-4 py-2 border border-nocciola/30 rounded-lg focus:ring-2 focus:ring-olive focus:border-olive"
-                          disabled={isSubmittingShipping}
-                        />
-                        <p className="text-xs text-nocciola/70 mt-1">
-                          L'ID spedizione sarà inviato automaticamente al cliente via email
-                        </p>
-                      </div>
-                    )}
-
+                <div className="bg-gradient-to-br from-beige to-sabbia/50 rounded-2xl p-4 sm:p-6 shadow-xl border border-nocciola/30">
+                  <div className="flex items-center mb-4 sm:mb-6">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-olive rounded-full flex items-center justify-center mr-3 sm:mr-4">
+                      <svg className="w-5 h-5 sm:w-6 sm:h-6 text-beige" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2v0a2 2 0 01-2-2v-5H8z" />
+                      </svg>
+                    </div>
                     <div>
-                      <label htmlFor="shippingStatus" className="block text-sm font-medium text-nocciola mb-2">
-                        Stato Spedizione
-                      </label>
-                      <select
-                        id="shippingStatus"
-                        value={shippingForm.status}
-                        onChange={(e) => setShippingForm(prev => ({ ...prev, status: e.target.value, trackingId: e.target.value !== 'shipped' ? '' : prev.trackingId }))}
-                        className="w-full px-4 py-2 border border-nocciola/30 rounded-lg focus:ring-2 focus:ring-olive focus:border-olive"
-                        disabled={isSubmittingShipping}
-                      >
-                        <option value="shipping">In Preparazione</option>
-                        <option value="shipped">Spedito</option>
-                        <option value="delivered">Consegnato</option>
-                      </select>
-                      <p className="text-xs text-nocciola/70 mt-1">
-                        {shippingForm.status === 'shipping' && 'Ordine in preparazione - nessuna email sarà inviata'}
-                        {shippingForm.status === 'shipped' && 'Email di spedizione sarà inviata automaticamente al cliente'}
-                        {shippingForm.status === 'delivered' && 'Ordine consegnato'}
-                      </p>
+                      <h2 className="text-lg sm:text-xl font-serif text-olive font-semibold">Aggiorna Spedizione</h2>
+                      <p className="text-sm text-nocciola">Gestisci stato e tracciamento dell'ordine</p>
+                    </div>
+                  </div>
+
+                  <form onSubmit={handleShippingSubmit} className="space-y-4 sm:space-y-5">
+                    <div className="grid gap-4 sm:gap-6">
+                      <div>
+                        <label htmlFor="shippingStatus" className="block text-sm font-semibold text-olive mb-2">
+                          Cambia Stato
+                        </label>
+                        <select
+                          id="shippingStatus"
+                          value={shippingForm.status}
+                          onChange={(e) => setShippingForm(prev => ({ ...prev, status: e.target.value, trackingId: e.target.value !== 'shipped' ? '' : prev.trackingId }))}
+                          className="w-full px-4 py-3 border-2 border-nocciola/30 rounded-xl focus:ring-2 focus:ring-olive focus:border-olive bg-white text-olive font-medium transition-all duration-200"
+                          disabled={isSubmittingShipping}
+                        >
+                          <option value="shipping">📦 In Preparazione</option>
+                          <option value="shipped">🚚 Spedito</option>
+                          <option value="delivered">✅ Consegnato</option>
+                        </select>
+                        <div className="mt-2 p-3 bg-sabbia/50 rounded-lg border border-nocciola/20">
+                          <p className="text-xs sm:text-sm text-olive font-medium">
+                            {shippingForm.status === 'shipping' && '📝 L\'ordine risulterà in preparazione. Nessuna email verrà inviata.'}
+                            {shippingForm.status === 'shipped' && '📧 Verrà inviata automaticamente un\'email di spedizione al cliente.'}
+                            {shippingForm.status === 'delivered' && '🎉 L\'ordine verrà marcato come consegnato.'}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* ID Spedizione - Solo quando lo stato è "shipped" */}
+                      {shippingForm.status === 'shipped' && (
+                        <div className="bg-white rounded-xl p-4 border-2 border-nocciola/30">
+                          <label htmlFor="trackingId" className="block text-sm font-semibold text-olive mb-2">
+                            🔢 ID Spedizione *
+                          </label>
+                          <input
+                            type="text"
+                            id="trackingId"
+                            value={shippingForm.trackingId}
+                            onChange={(e) => setShippingForm(prev => ({ ...prev, trackingId: e.target.value }))}
+                            placeholder="es. 1234567890 o ABC123XYZ"
+                            className="w-full px-4 py-3 border-2 border-nocciola/30 rounded-xl focus:ring-2 focus:ring-olive focus:border-olive font-mono text-olive"
+                            disabled={isSubmittingShipping}
+                          />
+                          <p className="text-xs text-nocciola mt-2 font-medium">
+                            💡 Il cliente riceverà questo ID per tracciare la spedizione
+                          </p>
+                        </div>
+                      )}
                     </div>
 
                     {shippingError && (
-                      <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-                        {shippingError}
+                      <div className="bg-red-100 border-2 border-red-300 text-red-800 px-4 py-3 rounded-xl flex items-center">
+                        <svg className="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className="font-medium">{shippingError}</span>
                       </div>
                     )}
 
                     {shippingSuccess && (
-                      <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
-                        ✅ Stato spedizione aggiornato con successo!
-                        {orderDetails?.shippingStatus === 'shipped' && ' Email inviata al cliente.'}
+                      <div className="bg-green-100 border-2 border-green-300 text-green-800 px-4 py-3 rounded-xl flex items-center">
+                        <svg className="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className="font-medium">
+                          Stato aggiornato con successo!
+                          {orderDetails?.shippingStatus === 'shipped' && ' Email inviata al cliente.'}
+                        </span>
                       </div>
                     )}
 
                     <button
                       type="submit"
                       disabled={isSubmittingShipping || (shippingForm.status === 'shipped' && !shippingForm.trackingId.trim())}
-                      className="w-full sm:w-auto px-6 py-3 bg-olive text-white font-semibold rounded-lg hover:bg-olive/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+                      className="w-full px-6 py-3 sm:py-4 bg-gradient-to-r from-olive to-salvia text-beige font-semibold rounded-xl hover:from-salvia hover:to-olive disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center shadow-lg hover:shadow-xl whitespace-nowrap"
                     >
                       {isSubmittingShipping ? (
                         <>
-                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
-                          Aggiornamento...
+                          <div className="w-5 h-5 border-2 border-beige/30 border-t-beige rounded-full animate-spin mr-3"></div>
+                          <span className="text-sm sm:text-base">Aggiornamento in corso...</span>
                         </>
                       ) : (
                         <>
-                          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2 2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414M4 13h2.586a1 1 0 01.707.293l2.414 2.414" />
+                          <svg className="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                           </svg>
-                          Aggiorna Spedizione
+                          <span className="text-sm sm:text-base">Aggiorna Stato Spedizione</span>
                         </>
                       )}
                     </button>

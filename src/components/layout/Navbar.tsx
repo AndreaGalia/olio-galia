@@ -55,7 +55,7 @@ export default function Navbar() {
                   <li key={item.translationKey}>
                     <Link
                       href={item.href}
-                      className={`cursor-pointer hover:underline hover:text-salvia transition-colors duration-200 ${
+                      className={`cursor-pointer hover:underline hover:text-salvia transition-colors duration-200 whitespace-nowrap ${
                         isActive(item.href) ? 'text-salvia underline' : ''
                       }`}
                     >

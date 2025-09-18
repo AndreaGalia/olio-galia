@@ -42,20 +42,20 @@ export default function AdminDashboardPage() {
       <header className="bg-white/80 backdrop-blur-sm shadow-lg border-b border-olive/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
-            <div>
-              <h1 className="text-3xl font-serif text-olive">Dashboard Admin</h1>
-              <p className="text-nocciola mt-1">Benvenuto, {user.email}</p>
+            <div className="flex-1 min-w-0">
+              <h1 className="text-xl sm:text-3xl font-serif text-olive truncate">Dashboard Admin</h1>
+              <p className="text-nocciola mt-1 text-sm sm:text-base truncate">Benvenuto, {user.email}</p>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <button
                 onClick={() => router.push('/admin/orders')}
-                className="px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer"
+                className="px-2 sm:px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
               >
                 Gestisci Ordini
               </button>
               <button
                 onClick={handleLogout}
-                className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer"
+                className="px-2 sm:px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
               >
                 Logout
               </button>
@@ -146,7 +146,7 @@ export default function AdminDashboardPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-olive mb-2">Gestisci Ordini</h3>
+              <h3 className="text-lg font-semibold text-olive mb-2 whitespace-nowrap">Gestisci Ordini</h3>
               <p className="text-nocciola text-sm">Visualizza e gestisci tutti gli ordini</p>
             </button>
 
@@ -159,7 +159,7 @@ export default function AdminDashboardPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-olive mb-2">Gestisci Preventivi</h3>
+              <h3 className="text-lg font-semibold text-olive mb-2 whitespace-nowrap">Gestisci Preventivi</h3>
               <p className="text-nocciola text-sm">Visualizza e gestisci tutti i preventivi</p>
             </button>
 
@@ -173,7 +173,7 @@ export default function AdminDashboardPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-salvia mb-2">Aggiorna Dati</h3>
+              <h3 className="text-lg font-semibold text-salvia mb-2 whitespace-nowrap">Aggiorna Dati</h3>
               <p className="text-nocciola text-sm">Ricarica le statistiche più recenti</p>
             </button>
 
@@ -186,7 +186,7 @@ export default function AdminDashboardPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-nocciola mb-2">Vai al Sito</h3>
+              <h3 className="text-lg font-semibold text-nocciola mb-2 whitespace-nowrap">Vai al Sito</h3>
               <p className="text-nocciola text-sm">Visualizza il sito pubblico</p>
             </button>
           </div>
