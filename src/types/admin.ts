@@ -61,4 +61,5 @@ export interface FilterParams {
   limit: number;
   status?: string;
   search?: string;
+  includeStripe?: boolean;
 }

@@ -53,6 +53,10 @@ export function useAdminData<T>({
         params.append('search', debouncedSearch);
       }
 
+      if (filters.includeStripe) {
+        params.append('includeStripe', 'true');
+      }
+
       const response = await fetch(`${endpoint}?${params}`);
 
       if (!response.ok) {
@@ -82,7 +86,7 @@ export function useAdminData<T>({
     } finally {
       setLoading(false);
     }
-  }, [endpoint, filters.page, filters.status, filters.limit, debouncedSearch]);
+  }, [endpoint, filters.page, filters.status, filters.limit, filters.includeStripe, debouncedSearch]);
 
   const setFilters = useCallback((newFilters: Partial<FilterParams>) => {
     setFiltersState(prev => ({
