@@ -1,236 +1,109 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { useAdminData } from '@/hooks/useAdminData';
+import AdminLayout from '@/components/admin/AdminLayout';
+import SearchFilters from '@/components/admin/SearchFilters';
+import StatusBadge from '@/components/admin/StatusBadge';
+import Pagination from '@/components/admin/Pagination';
+import EmptyState from '@/components/admin/EmptyState';
+import LoadingSpinner from '@/components/admin/LoadingSpinner';
+import type { OrderSummary } from '@/types/admin';
 
-interface OrderSummary {
-  id: string;
-  sessionId: string;
-  customerName: string;
-  customerEmail: string;
-  total: number;
-  currency: string;
-  paymentStatus: string;
-  shippingStatus: string;
-  created: string;
-  itemCount: number;
-}
+const orderStatusOptions = [
+  { value: 'all', label: 'Tutti gli stati' },
+  { value: 'paid', label: 'Pagato' },
+  { value: 'shipping', label: 'In spedizione' },
+  { value: 'shipped', label: 'Spedito' },
+  { value: 'delivered', label: 'Consegnato' },
+  { value: 'pending', label: 'In attesa' },
+  { value: 'cancelled', label: 'Annullato' },
+];
 
 export default function AdminOrdersPage() {
-  const { user, loading: authLoading, logout } = useAdminAuth();
   const router = useRouter();
-  const [orders, setOrders] = useState<OrderSummary[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const {
+    data: orders,
+    loading,
+    error,
+    totalPages,
+    filters,
+    setFilters,
+    refresh
+  } = useAdminData<OrderSummary>({
+    endpoint: '/api/admin/orders'
+  });
 
+  const headerActions = (
+    <>
+      <button
+        onClick={() => router.push('/admin/preventivi')}
+        className="px-2 sm:px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
+      >
+        Preventivi
+      </button>
+      <button
+        onClick={() => router.push('/admin/dashboard')}
+        className="px-2 sm:px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
+      >
+        Dashboard
+      </button>
+    </>
+  );
 
-  useEffect(() => {
-    if (!authLoading && !user) {
-      router.push('/admin/login');
-    }
-  }, [user, authLoading, router]);
-
-  useEffect(() => {
-    if (user) {
-      fetchOrders();
-    }
-  }, [user, currentPage, statusFilter, searchTerm]);
-
-  const fetchOrders = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const params = new URLSearchParams({
-        page: currentPage.toString(),
-        limit: '20',
-        ...(statusFilter !== 'all' && { status: statusFilter }),
-        ...(searchTerm && { search: searchTerm })
-      });
-
-      const response = await fetch(`/api/admin/orders?${params}`);
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Errore nel recupero degli ordini');
-      }
-
-      const data = await response.json();
-      setOrders(data.orders);
-      setTotalPages(data.totalPages);
-
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Errore sconosciuto';
-      setError(errorMessage);
-      console.error('Errore recupero ordini:', error);
-    } finally {
-      setLoading(false);
-    }
+  const handleSearchChange = (search: string) => {
+    setFilters({ search });
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'paid': return 'text-green-600 bg-green-50 border-green-200';
-      case 'shipping': return 'text-blue-600 bg-blue-50 border-blue-200';
-      case 'shipped': return 'text-blue-600 bg-blue-50 border-blue-200';
-      case 'delivered': return 'text-green-700 bg-green-100 border-green-300';
-      case 'pending': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      case 'cancelled': return 'text-red-600 bg-red-50 border-red-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
-    }
+  const handleStatusChange = (status: string) => {
+    setFilters({ status });
   };
 
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'paid': return 'Pagato';
-      case 'shipping': return 'In spedizione';
-      case 'shipped': return 'Spedito';
-      case 'delivered': return 'Consegnato';
-      case 'pending': return 'In attesa';
-      case 'cancelled': return 'Annullato';
-      default: return status;
-    }
+  const handlePageChange = (page: number) => {
+    setFilters({ page });
   };
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setCurrentPage(1);
-    fetchOrders();
-  };
-
-  const handleLogout = async () => {
-    await logout();
-    router.push('/admin/login');
-  };
-
-  if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-olive/5">
-        <div className="text-center">
-          <div className="w-8 h-8 border-2 border-olive/30 border-t-olive rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-olive">Caricamento...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return null;
-  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sabbia via-beige to-sabbia/80">
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm shadow-lg border-b border-olive/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex-1 min-w-0">
-              <h1 className="text-xl sm:text-3xl font-serif text-olive truncate">Gestione Ordini</h1>
-              <p className="text-nocciola mt-1 text-sm sm:text-base truncate">Visualizza e gestisci tutti gli ordini</p>
-            </div>
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <button
-                onClick={() => router.push('/admin/preventivi')}
-                className="px-2 sm:px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
-              >
-                Preventivi
-              </button>
-              <button
-                onClick={() => router.push('/admin/dashboard')}
-                className="px-2 sm:px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
-              >
-                Dashboard
-              </button>
-            </div>
-          </div>
+    <AdminLayout
+      title="Gestione Ordini"
+      subtitle="Visualizza e gestisci tutti gli ordini"
+      headerActions={headerActions}
+    >
+      <SearchFilters
+        searchTerm={filters.search || ''}
+        onSearchChange={handleSearchChange}
+        statusFilter={filters.status || 'all'}
+        onStatusChange={handleStatusChange}
+        onRefresh={refresh}
+        isLoading={loading}
+        searchPlaceholder="Cerca ordini per nome cliente, email, ID ordine..."
+        statusOptions={orderStatusOptions}
+      />
+
+      {error && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
+          {error}
         </div>
-      </header>
+      )}
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Filtri e Ricerca */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-olive/10 p-6 mb-8">
-          <div className="flex flex-col lg:flex-row gap-4">
-            {/* Ricerca */}
-            <form onSubmit={handleSearch} className="flex-1">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Cerca ordini per nome cliente, email, ID ordine..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-4 py-2 pl-10 border border-olive/20 rounded-lg focus:ring-2 focus:ring-olive/50 focus:border-olive"
-                />
-                <svg className="absolute left-3 top-2.5 h-5 w-5 text-olive/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </div>
-            </form>
-
-            {/* Filtro Status */}
-            <div className="flex items-center space-x-4">
-              <select
-                value={statusFilter}
-                onChange={(e) => {
-                  setStatusFilter(e.target.value);
-                  setCurrentPage(1);
-                }}
-                className="px-4 py-2 border border-olive/20 rounded-lg focus:ring-2 focus:ring-olive/50 focus:border-olive"
-              >
-                <option value="all">Tutti gli stati</option>
-                <option value="paid">Pagato</option>
-                <option value="shipping">In spedizione</option>
-                <option value="shipped">Spedito</option>
-                <option value="delivered">Consegnato</option>
-                <option value="pending">In attesa</option>
-                <option value="cancelled">Annullato</option>
-              </select>
-              
-              <button
-                onClick={fetchOrders}
-                disabled={loading}
-                className="px-6 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors disabled:opacity-50 flex items-center space-x-2 cursor-pointer"
-              >
-                <svg className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                <span>Aggiorna</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
-            {error}
-          </div>
-        )}
-
-        {/* Lista Ordini */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-olive/10 overflow-hidden">
-          {loading ? (
-            <div className="p-8 text-center">
-              <div className="w-8 h-8 border-2 border-olive/30 border-t-olive rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-olive">Caricamento ordini...</p>
-            </div>
-          ) : orders.length === 0 ? (
-            <div className="p-8 text-center">
+      <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-olive/10 overflow-hidden">
+        {loading ? (
+          <LoadingSpinner message="Caricamento ordini..." />
+        ) : orders.length === 0 ? (
+          <EmptyState
+            icon={
               <svg className="mx-auto h-12 w-12 text-olive/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z" />
               </svg>
-              <h3 className="mt-2 text-sm font-medium text-olive">Nessun ordine trovato</h3>
-              <p className="mt-1 text-sm text-nocciola">
-                {searchTerm || statusFilter !== 'all' 
-                  ? 'Prova a modificare i filtri di ricerca' 
-                  : 'Non ci sono ordini al momento'
-                }
-              </p>
-            </div>
-          ) : (
+            }
+            title="Nessun ordine trovato"
+            description={
+              filters.search || (filters.status && filters.status !== 'all')
+                ? 'Prova a modificare i filtri di ricerca'
+                : 'Non ci sono ordini al momento'
+            }
+          />
+        ) : (
             <>
               {/* Desktop Table */}
               <div className="hidden lg:block overflow-x-auto">
@@ -281,14 +154,10 @@ export default function AdminOrdersPage() {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(order.paymentStatus)}`}>
-                            {getStatusText(order.paymentStatus)}
-                          </span>
+                          <StatusBadge status={order.paymentStatus} type="payment" />
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(order.shippingStatus)}`}>
-                            {getStatusText(order.shippingStatus)}
-                          </span>
+                          <StatusBadge status={order.shippingStatus} type="shipping" />
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-nocciola">
                           {new Date(order.created).toLocaleDateString('it-IT')}
@@ -317,12 +186,8 @@ export default function AdminOrdersPage() {
                         <p className="text-xs text-nocciola">{order.itemCount} prodotti</p>
                       </div>
                       <div className="flex flex-col items-end space-y-1">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(order.paymentStatus)}`}>
-                          {getStatusText(order.paymentStatus)}
-                        </span>
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(order.shippingStatus)}`}>
-                          {getStatusText(order.shippingStatus)}
-                        </span>
+                        <StatusBadge status={order.paymentStatus} type="payment" />
+                        <StatusBadge status={order.shippingStatus} type="shipping" />
                       </div>
                     </div>
                     
@@ -354,36 +219,14 @@ export default function AdminOrdersPage() {
                 ))}
               </div>
 
-              {/* Paginazione */}
-              {totalPages > 1 && (
-                <div className="px-6 py-4 bg-olive/5 border-t border-olive/10">
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm text-nocciola">
-                      Pagina {currentPage} di {totalPages}
-                    </div>
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                        disabled={currentPage === 1}
-                        className="px-3 py-1 text-sm border border-olive/20 rounded hover:bg-olive hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-                      >
-                        Precedente
-                      </button>
-                      <button
-                        onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                        disabled={currentPage === totalPages}
-                        className="px-3 py-1 text-sm border border-olive/20 rounded hover:bg-olive hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-                      >
-                        Successiva
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
+              <Pagination
+                currentPage={filters.page}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
             </>
           )}
         </div>
-      </main>
-    </div>
+    </AdminLayout>
   );
 }
