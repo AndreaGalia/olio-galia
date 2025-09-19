@@ -83,10 +83,11 @@ export class AdminOrderService {
 
   // Recupera tutti gli ordini con paginazione
   static async getAllOrders(
-    page: number = 1, 
+    page: number = 1,
     limit: number = 20,
     status?: string,
-    search?: string
+    search?: string,
+    includeStripe: boolean = false
   ): Promise<{ orders: AdminOrderSummary[]; total: number; page: number; totalPages: number }> {
     try {
       const skip = (page - 1) * limit;
@@ -136,9 +137,12 @@ export class AdminOrderService {
 
       const totalMongo = await collection.countDocuments(filter);
 
-      // Se abbiamo ordini da MongoDB, usali
+      let allOrders: AdminOrderSummary[] = [];
+      let totalOrders = 0;
+
+      // Aggiungi ordini da MongoDB se presenti
       if (mongoOrders.length > 0) {
-        const orders: AdminOrderSummary[] = mongoOrders.map(order => ({
+        const mongoOrdersData: AdminOrderSummary[] = mongoOrders.map(order => ({
           id: order._id.toString(),
           sessionId: order.sessionId || order.stripeSessionId || order.id || order._id.toString(),
           paymentIntent: order.paymentIntent || null,
@@ -155,49 +159,78 @@ export class AdminOrderService {
           shipping: order.shipping,
         }));
 
+        allOrders = [...mongoOrdersData];
+        totalOrders = totalMongo;
+      }
+
+      // Aggiungi ordini da Stripe solo se richiesto esplicitamente
+      if (includeStripe) {
+        try {
+          const sessions = await stripe.checkout.sessions.list({
+            limit: Math.min(limit, 100),
+            expand: ['data.line_items'],
+          });
+
+          const paidSessions = sessions.data.filter(session =>
+            session.payment_status === 'paid' &&
+            (!status || status === 'all' || session.payment_status === status)
+          );
+
+          const stripeOrders: AdminOrderSummary[] = paidSessions.map(session => ({
+            id: `stripe_${session.id}`,
+            sessionId: session.id,
+            paymentIntent: typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id || null,
+            customerName: session.customer_details?.name || 'N/D',
+            customerEmail: session.customer_details?.email || 'N/D',
+            total: (session.amount_total || 0) / 100,
+            currency: session.currency || 'eur',
+            status: 'completed',
+            paymentStatus: session.payment_status,
+            shippingStatus: 'pending', // Default per ordini da Stripe
+            created: new Date(session.created * 1000).toISOString(),
+            itemCount: session.line_items?.data?.length || 0,
+            shipping: session.customer_details?.address ? {
+              address: this.formatAddress(session.customer_details.address),
+              method: 'Standard'
+            } : undefined,
+          }));
+
+          // Filtra gli ordini Stripe che non sono già in MongoDB
+          const mongoSessionIds = new Set(allOrders.map(order => order.sessionId));
+          const uniqueStripeOrders = stripeOrders.filter(order =>
+            !mongoSessionIds.has(order.sessionId)
+          );
+
+          allOrders = [...allOrders, ...uniqueStripeOrders];
+          totalOrders += uniqueStripeOrders.length;
+        } catch (stripeError) {
+          console.warn('Errore recupero ordini Stripe (ignorato):', stripeError);
+        }
+      }
+
+      // Se non ci sono ordini e non è stato richiesto Stripe, restituisci vuoto
+      if (allOrders.length === 0) {
         return {
-          orders,
-          total: totalMongo,
+          orders: [],
+          total: 0,
           page,
-          totalPages: Math.ceil(totalMongo / limit)
+          totalPages: 0
         };
       }
 
-      // Fallback: recupera da Stripe (per ordini non ancora salvati su MongoDB)
-      const sessions = await stripe.checkout.sessions.list({
-        limit: Math.min(limit, 100),
-        expand: ['data.line_items'],
-      });
+      // Ordina tutti gli ordini per data di creazione (più recenti prima)
+      allOrders.sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime());
 
-      const paidSessions = sessions.data.filter(session => 
-        session.payment_status === 'paid' && 
-        (!status || status === 'all' || session.payment_status === status)
-      );
-
-      const orders: AdminOrderSummary[] = paidSessions.map(session => ({
-        id: session.id,
-        sessionId: session.id,
-        paymentIntent: typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id || null,
-        customerName: session.customer_details?.name || 'N/D',
-        customerEmail: session.customer_details?.email || 'N/D',
-        total: (session.amount_total || 0) / 100,
-        currency: session.currency || 'eur',
-        status: 'completed',
-        paymentStatus: session.payment_status,
-        shippingStatus: 'pending', // Default per ordini da Stripe
-        created: new Date(session.created * 1000).toISOString(),
-        itemCount: session.line_items?.data?.length || 0,
-        shipping: session.customer_details?.address ? {
-          address: this.formatAddress(session.customer_details.address),
-          method: 'Standard'
-        } : undefined,
-      }));
+      // Applica paginazione manuale se necessario
+      const startIndex = (page - 1) * limit;
+      const endIndex = startIndex + limit;
+      const paginatedOrders = allOrders.slice(startIndex, endIndex);
 
       return {
-        orders,
-        total: paidSessions.length,
-        page: 1,
-        totalPages: 1
+        orders: paginatedOrders,
+        total: totalOrders,
+        page,
+        totalPages: Math.ceil(totalOrders / limit)
       };
     } catch (error) {
       console.error('Errore recupero ordini admin:', error);
