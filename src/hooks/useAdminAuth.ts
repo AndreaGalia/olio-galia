@@ -1,12 +1,5 @@
 import { useState, useEffect } from 'react';
-
-export interface AdminUser {
-  id: string;
-  email: string;
-  role: 'admin';
-  lastLogin?: string;
-  createdAt: string;
-}
+import type { AdminUser } from '@/types/admin';
 
 interface UseAdminAuthReturn {
   user: AdminUser | null;

@@ -1,4 +1,4 @@
-// This component is deprecated. Use the new StatusBadge from @/components/admin/StatusBadge.tsx
+import React from 'react';
 import { getStatusLabel, getStatusColor } from '@/utils/statusUtils';
 import type { StatusType } from '@/types/admin';
 
@@ -8,7 +8,7 @@ interface StatusBadgeProps {
   size?: 'sm' | 'md';
 }
 
-export default function StatusBadge({ status, type, size = 'sm' }: StatusBadgeProps) {
+const StatusBadge = React.memo(function StatusBadge({ status, type, size = 'sm' }: StatusBadgeProps) {
   const label = getStatusLabel(status, type);
   const colorClasses = getStatusColor(status, type);
 
@@ -22,4 +22,6 @@ export default function StatusBadge({ status, type, size = 'sm' }: StatusBadgePr
       {label}
     </span>
   );
-}
+});
+
+export default StatusBadge;

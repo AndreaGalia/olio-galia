@@ -1,11 +1,5 @@
 import { useState, useEffect } from 'react';
-
-export interface AdminStats {
-  totalOrders: number;
-  totalRevenue: number;
-  ordersToday: number;
-  revenueToday: number;
-}
+import type { AdminStats } from '@/types/admin';
 
 interface UseAdminStatsReturn {
   stats: AdminStats | null;

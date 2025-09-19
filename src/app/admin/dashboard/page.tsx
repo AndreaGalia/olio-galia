@@ -1,70 +1,28 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useAdminStats } from '@/hooks/useAdminStats';
+import AdminLayout from '@/components/admin/AdminLayout';
 
 export default function AdminDashboardPage() {
-  const { user, loading: authLoading, logout } = useAdminAuth();
   const { stats, loading: statsLoading, refreshStats } = useAdminStats();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!authLoading && !user) {
-      router.push('/admin/login');
-    }
-  }, [user, authLoading, router]);
-
-  const handleLogout = async () => {
-    await logout();
-    router.push('/admin/login');
-  };
-
-  if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-olive/5">
-        <div className="text-center">
-          <div className="w-8 h-8 border-2 border-olive/30 border-t-olive rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-olive">Caricamento...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return null;
-  }
+  const headerActions = (
+    <button
+      onClick={() => router.push('/admin/orders')}
+      className="px-2 sm:px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
+    >
+      Gestisci Ordini
+    </button>
+  );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sabbia via-beige to-sabbia/80">
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm shadow-lg border-b border-olive/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex-1 min-w-0">
-              <h1 className="text-xl sm:text-3xl font-serif text-olive truncate">Dashboard Admin</h1>
-              <p className="text-nocciola mt-1 text-sm sm:text-base truncate">Benvenuto, {user.email}</p>
-            </div>
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <button
-                onClick={() => router.push('/admin/orders')}
-                className="px-2 sm:px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
-              >
-                Gestisci Ordini
-              </button>
-              <button
-                onClick={handleLogout}
-                className="px-2 sm:px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <AdminLayout
+      title="Dashboard Admin"
+      subtitle="Panoramica generale del sistema"
+      headerActions={headerActions}
+    >
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-olive/10">
@@ -191,7 +149,6 @@ export default function AdminDashboardPage() {
             </button>
           </div>
         </div>
-      </main>
-    </div>
+    </AdminLayout>
   );
 }
