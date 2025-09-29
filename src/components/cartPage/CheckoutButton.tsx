@@ -31,7 +31,7 @@ export default function CheckoutButton({ onClick, totalItems, disabled = false }
         <button
           onClick={onClick}
           disabled={disabled}
-          className="w-full bg-olive hover:bg-salvia text-beige font-medium py-2.5 px-2 sm:px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-olive hover:bg-salvia text-beige font-medium py-2.5 px-2 sm:px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           <span className="whitespace-nowrap truncate">{t.torinoCheckout.button.subtitle}</span>
           {totalItems > 0 && (

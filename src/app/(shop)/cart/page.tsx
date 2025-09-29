@@ -3,6 +3,7 @@
 import { useCart } from '@/contexts/CartContext';
 import { useProducts } from '@/hooks/useProducts';
 import { useT } from '@/hooks/useT';
+import { useSettings } from '@/hooks/useSettings';
 
 // Import degli hook personalizzati
 import { useCartCalculations } from '@/hooks/useCartCalculations';
@@ -23,6 +24,7 @@ import CheckoutTorinoButton from '@/components/cartPage/CheckoutTorinoButton';
 export default function CartPage() {
   const { cart, getTotalItems } = useCart();
   const { products, loading, error } = useProducts();
+  const { settings } = useSettings();
   const { t } = useT();
   
   // Hook personalizzati
@@ -88,8 +90,8 @@ export default function CartPage() {
               })}
             </div>
 
-            {/* Bottone checkout Torino sotto i prodotti */}
-            <CheckoutTorinoButton />
+            {/* Bottone checkout Torino sotto i prodotti - mostra solo se abilitato dall'admin */}
+            {settings.torino_checkout_enabled && <CheckoutTorinoButton />}
           </div>
 
           {/* Riepilogo ordine */}

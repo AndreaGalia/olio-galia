@@ -54,6 +54,12 @@ export default function AdminPreventiviPage() {
         Ordini
       </button>
       <button
+        onClick={() => router.push('/admin/settings')}
+        className="px-2 sm:px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
+      >
+        Impostazioni
+      </button>
+      <button
         onClick={() => router.push('/admin/dashboard')}
         className="px-2 sm:px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
       >
