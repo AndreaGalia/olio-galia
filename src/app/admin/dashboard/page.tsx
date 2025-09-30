@@ -9,12 +9,20 @@ export default function AdminDashboardPage() {
   const router = useRouter();
 
   const headerActions = (
-    <button
-      onClick={() => router.push('/admin/orders')}
-      className="px-2 sm:px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
-    >
-      Gestisci Ordini
-    </button>
+    <div className="flex gap-2">
+      <button
+        onClick={() => router.push('/admin/products')}
+        className="px-2 sm:px-4 py-2 bg-salvia text-white rounded-lg hover:bg-olive transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
+      >
+        Prodotti
+      </button>
+      <button
+        onClick={() => router.push('/admin/orders')}
+        className="px-2 sm:px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
+      >
+        Ordini
+      </button>
+    </div>
   );
 
   return (
@@ -119,6 +127,32 @@ export default function AdminDashboardPage() {
               </div>
               <h3 className="text-lg font-semibold text-olive mb-2 whitespace-nowrap">Gestisci Preventivi</h3>
               <p className="text-nocciola text-sm">Visualizza e gestisci tutti i preventivi</p>
+            </button>
+
+            <button
+              onClick={() => router.push('/admin/products')}
+              className="p-6 border-2 border-salvia/20 rounded-xl hover:border-salvia hover:bg-salvia/5 transition-all duration-300 group cursor-pointer"
+            >
+              <div className="flex items-center mb-4">
+                <svg className="w-8 h-8 text-salvia group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-salvia mb-2 whitespace-nowrap">Gestisci Prodotti</h3>
+              <p className="text-nocciola text-sm">Crea, modifica e gestisci i prodotti dell'ecommerce</p>
+            </button>
+
+            <button
+              onClick={() => router.push('/admin/categories')}
+              className="p-6 border-2 border-salvia/20 rounded-xl hover:border-salvia hover:bg-salvia/5 transition-all duration-300 group cursor-pointer"
+            >
+              <div className="flex items-center mb-4">
+                <svg className="w-8 h-8 text-salvia group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-salvia mb-2 whitespace-nowrap">Gestisci Categorie</h3>
+              <p className="text-nocciola text-sm">Crea, modifica e gestisci le categorie dei prodotti</p>
             </button>
 
             <button
