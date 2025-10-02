@@ -42,6 +42,7 @@ export interface OrderDetails {
   currency?: string;
   paymentStatus?: string;
   paymentIntent?: string;
+  shippingStatus?: string;
 }
 
 // ===== INVOICE STATUS =====
