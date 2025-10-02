@@ -28,21 +28,42 @@ export class ProductService {
   static async getProductById(id: string, locale: SupportedLocale = 'it'): Promise<Product | null> {
     try {
       const { db } = await connectToDatabase();
-      
+
       const product = await db
         .collection<ProductDocument>('products')
-        .findOne({ 
+        .findOne({
           $or: [
             { id: id },
             { [`slug.${locale}`]: id }
           ],
           'metadata.isActive': true
         });
-      
+
       return product ? this.localizeProduct(product, locale) : null;
     } catch (error) {
       console.error('Error fetching product:', error);
       throw new Error('Failed to fetch product');
+    }
+  }
+
+  static async getFullProductDocument(id: string, locale: SupportedLocale = 'it'): Promise<ProductDocument | null> {
+    try {
+      const { db } = await connectToDatabase();
+
+      const product = await db
+        .collection<ProductDocument>('products')
+        .findOne({
+          $or: [
+            { id: id },
+            { [`slug.${locale}`]: id }
+          ],
+          'metadata.isActive': true
+        });
+
+      return product;
+    } catch (error) {
+      console.error('Error fetching full product document:', error);
+      throw new Error('Failed to fetch full product document');
     }
   }
   

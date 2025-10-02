@@ -54,12 +54,16 @@ export async function GET(
       }
     }
 
-    // Aggiorna il prodotto con i dati di stock da Stripe
+    // Recupera il documento completo per ottenere tutti gli slug
+    const fullProduct = await ProductService.getFullProductDocument(slug, localeParam);
+
+    // Aggiorna il prodotto con i dati di stock da Stripe e tutti gli slug
     const productWithStock = {
       ...product,
-      ...stockData
+      ...stockData,
+      allSlugs: fullProduct?.slug // Aggiungi tutti gli slug (it, en)
     };
-    
+
     return NextResponse.json({
       product: productWithStock,
       metadata: {
