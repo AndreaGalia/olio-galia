@@ -458,6 +458,89 @@ Il campo `categoryDisplay` nelle traduzioni non veniva valorizzato durante la cr
 
 ---
 
+### Data: 2 Ottobre 2025
+
+#### 🐛 Bug Fix: Cambio Lingua Pagina Prodotto
+
+**Problema Identificato:**
+Quando l'utente si trovava sulla pagina di dettaglio di un prodotto (`/products/[slug]`) e cambiava lingua (IT ↔ EN), appariva il messaggio "Prodotto non trovato".
+
+**Causa del Bug:**
+1. I prodotti hanno slug separati per lingua (es. `slug.it = "olio-extravergine"`, `slug.en = "extra-virgin-oil"`)
+2. Al cambio lingua, l'URL rimaneva con lo slug della lingua precedente
+3. L'hook `useProductBySlug` cercava il prodotto con lo slug nell'URL ma nella nuova locale
+4. Non trovando corrispondenza, restituiva 404
+
+**Soluzione Implementata:**
+
+1. **`useProductBySlug.ts`** - Modificato hook per redirect automatico
+   - Aggiunta dipendenza `useRouter` da Next.js
+   - Salvataggio di tutti gli slug (IT/EN) alla prima fetch del prodotto
+   - Nuovo effect che monitora il cambio di `locale`
+   - Redirect automatico allo slug corretto della nuova lingua tramite `router.replace()`
+
+2. **`productService.ts`** - Nuovo metodo per documento completo
+   - Aggiunto metodo `getFullProductDocument()` che restituisce il `ProductDocument` completo
+   - Mantiene tutti gli slug in tutte le lingue per permettere il redirect
+
+3. **`route.ts` (API `/api/products/[slug]`)** - Response estesa
+   - Chiamata a `getFullProductDocument()` per recuperare tutti gli slug
+   - Aggiunto campo `allSlugs` nella response con struttura `{ it: string, en: string }`
+
+**Flusso Funzionante:**
+1. Utente su `/products/olio-extravergine` (IT)
+2. Cambio lingua → EN
+3. Hook rileva cambio `locale` e ha salvato `allSlugs: { it: "olio-extravergine", en: "extra-virgin-oil" }`
+4. Esegue `router.replace("/products/extra-virgin-oil")`
+5. Nessun errore, transizione smooth tra slug localizzati
+
+---
+
+#### 🐛 Bug Fix: Filtro "In Attesa" Ordini Admin
+
+**Problema Identificato:**
+Il filtro "In attesa" (pending) nella pagina `/admin/orders` non funzionava correttamente.
+
+**Causa del Bug:**
+1. Nel codice mancava il caso `status === 'pending'` nella logica di filtraggio MongoDB
+2. Gli ordini salvati tramite `OrderService.createOrder()` non avevano il campo `shippingStatus` impostato
+3. Ordini vecchi già esistenti in MongoDB non avevano il campo `shippingStatus`
+
+**Soluzione Implementata:**
+
+1. **`adminOrderService.ts`** - Gestione filtro pending
+   - Aggiunto caso `status === 'pending'` nella costruzione del filtro (riga 100-109)
+   - Filtro MongoDB usa `$or` per trovare ordini con:
+     - `shippingStatus: 'pending'` OPPURE
+     - `shippingStatus: { $exists: false }` (per ordini vecchi)
+   - Gestione corretta della combinazione con ricerca testuale tramite `$and`
+
+2. **`orderService.ts`** - Default shippingStatus
+   - Modificato metodo `createOrder()` per aggiungere `shippingStatus: 'pending'` di default (riga 53)
+   - Assicura che tutti i nuovi ordini abbiano questo campo valorizzato
+
+3. **`checkoutSuccessTypes.ts`** - Aggiornamento Type
+   - Aggiunto campo opzionale `shippingStatus?: string` all'interfaccia `OrderDetails` (riga 45)
+   - Risolve errori TypeScript e mantiene type safety
+
+**Risultato:**
+- ✅ Filtro "In attesa" funziona per ordini nuovi con `shippingStatus: 'pending'`
+- ✅ Filtro "In attesa" funziona per ordini vecchi senza il campo (retrocompatibilità)
+- ✅ Nuovi ordini salvati avranno sempre `shippingStatus` valorizzato
+- ✅ Possibilità di filtrare per stato spedizione: pending, shipping, shipped, delivered
+
+---
+
+**Build Status:**
+- ✅ Build produzione completata senza errori
+- ✅ Type checking TypeScript passed
+- ✅ Linting passed
+- ✅ 46 route generate correttamente
+- ✅ Nessun breaking change
+- ✅ Retrocompatibilità garantita con ordini esistenti
+
+---
+
 ## 🎯 Conclusioni
 
 Il progetto **Olio Galia** rappresenta una soluzione e-commerce completa e moderna, con:

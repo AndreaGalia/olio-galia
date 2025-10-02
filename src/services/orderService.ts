@@ -49,7 +49,9 @@ export class OrderService {
         updatedAt: new Date(),
         // Assicurati che l'ID sia unico
         orderId: orderData.id,
-      };
+        // Aggiungi shippingStatus di default se non presente
+        shippingStatus: orderData.shippingStatus || 'pending',
+      } as any;
 
       const result = await collection.insertOne(orderToSave);
       

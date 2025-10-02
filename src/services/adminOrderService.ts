@@ -94,15 +94,27 @@ export class AdminOrderService {
       
       // Costruisci il filtro
       let filter: any = {};
+      let statusFilter: any = null;
+
       if (status && status !== 'all') {
         if (status === 'paid') {
           filter.paymentStatus = 'paid';
+        } else if (status === 'pending') {
+          // Salva il filtro pending per combinarlo dopo con la ricerca
+          statusFilter = {
+            $or: [
+              { shippingStatus: 'pending' },
+              { shippingStatus: { $exists: false } }
+            ]
+          };
         } else if (status === 'shipping') {
           filter.shippingStatus = 'shipping';
         } else if (status === 'shipped') {
           filter.shippingStatus = 'shipped';
         } else if (status === 'delivered') {
           filter.shippingStatus = 'delivered';
+        } else if (status === 'cancelled') {
+          filter.status = 'cancelled';
         } else {
           filter.paymentStatus = status; // fallback per compatibilità
         }
@@ -111,7 +123,7 @@ export class AdminOrderService {
       // Aggiungi ricerca unificata
       if (search && search.trim()) {
         const searchRegex = { $regex: search.trim(), $options: 'i' };
-        filter.$or = [
+        const searchConditions = [
           { sessionId: searchRegex },
           { orderId: searchRegex },
           { 'customer.name': searchRegex },
@@ -122,6 +134,19 @@ export class AdminOrderService {
           { lastName: searchRegex },
           { email: searchRegex }
         ];
+
+        // Se abbiamo un filtro pending, combina con AND
+        if (statusFilter) {
+          filter.$and = [
+            statusFilter,
+            { $or: searchConditions }
+          ];
+        } else {
+          filter.$or = searchConditions;
+        }
+      } else if (statusFilter) {
+        // Se non c'è ricerca ma c'è filtro pending, applicalo direttamente
+        Object.assign(filter, statusFilter);
       }
 
       // Prima prova a recuperare da MongoDB (ordini salvati)
