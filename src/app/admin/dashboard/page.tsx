@@ -17,6 +17,12 @@ export default function AdminDashboardPage() {
         Prodotti
       </button>
       <button
+        onClick={() => router.push('/admin/customers')}
+        className="px-2 sm:px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
+      >
+        Clienti
+      </button>
+      <button
         onClick={() => router.push('/admin/orders')}
         className="px-2 sm:px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
       >

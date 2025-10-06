@@ -10,12 +10,12 @@ interface FilterOption {
 interface SearchFiltersProps {
   searchTerm: string;
   onSearchChange: (value: string) => void;
-  statusFilter: string;
-  onStatusChange: (value: string) => void;
+  statusFilter?: string;
+  onStatusChange?: (value: string) => void;
   onRefresh: () => void;
   isLoading?: boolean;
   searchPlaceholder?: string;
-  statusOptions: FilterOption[];
+  statusOptions?: FilterOption[];
 }
 
 export default function SearchFilters({
@@ -54,17 +54,19 @@ export default function SearchFilters({
         </form>
 
         <div className="flex items-center space-x-4">
-          <select
-            value={statusFilter}
-            onChange={(e) => onStatusChange(e.target.value)}
-            className="px-4 py-2 border border-olive/20 rounded-lg focus:ring-2 focus:ring-olive/50 focus:border-olive"
-          >
-            {statusOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+          {statusOptions && statusFilter !== undefined && onStatusChange && (
+            <select
+              value={statusFilter}
+              onChange={(e) => onStatusChange(e.target.value)}
+              className="px-4 py-2 border border-olive/20 rounded-lg focus:ring-2 focus:ring-olive/50 focus:border-olive"
+            >
+              {statusOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          )}
 
           <button
             onClick={onRefresh}

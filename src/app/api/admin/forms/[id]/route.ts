@@ -3,6 +3,7 @@ import { withAuth } from '@/lib/auth/middleware';
 import { getDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 import Stripe from 'stripe';
+import { CustomerService } from '@/services/customerService';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -114,6 +115,21 @@ export const PATCH = withAuth(async (request: NextRequest, { params }: { params:
     const db = await getDatabase();
     const collection = db.collection('forms');
 
+    // Recupera il form prima dell'aggiornamento per creare/aggiornare il cliente
+    let form;
+    if (formId.match(/^[0-9a-fA-F]{24}$/)) {
+      form = await collection.findOne({ _id: new ObjectId(formId) });
+    } else {
+      form = await collection.findOne({ orderId: formId });
+    }
+
+    if (!form) {
+      return NextResponse.json(
+        { error: 'Preventivo non trovato' },
+        { status: 404 }
+      );
+    }
+
     const updateData: any = {
       updatedAt: new Date(),
     };
@@ -140,6 +156,39 @@ export const PATCH = withAuth(async (request: NextRequest, { params }: { params:
         { error: 'Preventivo non trovato' },
         { status: 404 }
       );
+    }
+
+    // Se il preventivo è stato segnato come pagato, crea/aggiorna il cliente
+    if (status === 'paid') {
+      try {
+        // Usa il finalPricing appena passato nella request, altrimenti quello già salvato
+        const totalInEuros = finalPricing?.finalTotal || form.finalPricing?.finalTotal || 0;
+        const totalInCents = Math.round(totalInEuros * 100);
+
+        // Estrai indirizzo dall'address string (formato: "Via 123, Città, Provincia")
+        const addressParts = (form.address || '').split(',').map((p: string) => p.trim());
+        const addressDetails = addressParts.length > 0 ? {
+          line1: addressParts[0] || undefined,
+          city: addressParts[1] || undefined,
+          state: form.province || undefined,
+          postal_code: undefined,
+          country: 'IT'
+        } : undefined;
+
+        await CustomerService.createOrUpdateFromOrder(
+          form.email || '',
+          form.firstName || 'Cliente',
+          form.lastName || '',
+          form.phone || undefined,
+          addressDetails,
+          form.orderId || formId,
+          totalInCents,
+          'quote'
+        );
+      } catch (customerError) {
+        console.error('⚠️ Errore nella creazione/aggiornamento cliente da preventivo:', customerError);
+        // Non bloccare il processo se c'è un errore nel salvare il cliente
+      }
     }
 
     return NextResponse.json({
