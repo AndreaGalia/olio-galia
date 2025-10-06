@@ -157,11 +157,11 @@ export class CustomerService {
         .find({ id: { $in: allOrderIds } })
         .toArray();
 
-      // Recupera tutti i preventivi pagati in una query
+      // Recupera i preventivi in una query (escludi pending)
       const allQuotes = await formsCollection
         .find({
           orderId: { $in: allOrderIds },
-          status: 'paid'
+          status: { $ne: 'pending' }
         })
         .toArray();
 
@@ -243,11 +243,11 @@ export class CustomerService {
         .sort({ createdAt: -1 })
         .toArray();
 
-      // Recupera anche i preventivi pagati dalla collection forms (orderId corrisponde)
+      // Recupera i preventivi dalla collection forms (escludi pending)
       const quotes = await formsCollection
         .find({
           orderId: { $in: customer.orders },
-          status: 'paid'
+          status: { $ne: 'pending' }
         })
         .sort({ createdAt: -1 })
         .toArray();
@@ -277,7 +277,7 @@ export class CustomerService {
             orderId: quote.orderId,
             date: quote.createdAt || new Date(quote.timestamp),
             total: totalInCents,
-            status: 'paid',
+            status: quote.status || 'pending',
             items: quote.cart?.length || 0,
             type: 'quote' as const,
           };
