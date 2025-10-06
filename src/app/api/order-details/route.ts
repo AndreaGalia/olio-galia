@@ -25,6 +25,13 @@ interface OrderDetails {
   shipping: {
     address: string;
     method: string;
+    addressDetails?: {
+      line1?: string;
+      city?: string;
+      postal_code?: string;
+      country?: string;
+      state?: string;
+    };
   };
   items: OrderItem[];
   pricing: {
@@ -129,13 +136,23 @@ const buildOrderDetails = async (session: Stripe.Checkout.Session): Promise<Orde
   const pricing = calculatePricing(session);
   const items = extractOrderItems(session);
   const shippingMethod = await getShippingMethodName(session, pricing.shippingCost);
-  
+
+  // Estrai dettagli indirizzo strutturati
+  const addressDetails = session.customer_details?.address ? {
+    line1: session.customer_details.address.line1 || undefined,
+    city: session.customer_details.address.city || undefined,
+    postal_code: session.customer_details.address.postal_code || undefined,
+    country: session.customer_details.address.country || undefined,
+    state: session.customer_details.address.state || undefined,
+  } : undefined;
+
   return {
     id: session.id,
     customer,
     shipping: {
       address: formatShippingAddress(session.customer_details),
-      method: shippingMethod
+      method: shippingMethod,
+      addressDetails
     },
     items,
     pricing,

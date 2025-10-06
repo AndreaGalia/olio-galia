@@ -231,18 +231,25 @@ export default function FormDetailPage() {
 
   const updateStatus = async (newStatus: string) => {
     if (!form) return;
-    
+
     try {
+      // Quando segniamo come pagato, includiamo anche il finalPricing
+      const body: any = { status: newStatus };
+
+      if (newStatus === 'paid' && form.finalPricing) {
+        body.finalPricing = form.finalPricing;
+      }
+
       const response = await fetch(`/api/admin/forms/${params.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify(body)
       });
 
       if (!response.ok) throw new Error('Errore nell\'aggiornamento dello stato');
-      
+
       setForm(prev => prev ? { ...prev, status: newStatus } : null);
-      
+
       // Se cambiamo stato a 'confermato', inviamo email di conferma consegna
       if (newStatus === 'confermato') {
         await sendDeliveryConfirmationEmail();

@@ -57,6 +57,14 @@ export function useAdminData<T>({
         params.append('includeStripe', 'true');
       }
 
+      // Add any additional params from dependencies
+      if (dependencies.length > 0) {
+        // Extract sortBy and sortOrder from dependencies if present
+        const [sortBy, sortOrder] = dependencies as [string?, string?];
+        if (sortBy) params.append('sortBy', sortBy);
+        if (sortOrder) params.append('sortOrder', sortOrder);
+      }
+
       const response = await fetch(`${endpoint}?${params}`);
 
       if (!response.ok) {
@@ -71,6 +79,8 @@ export function useAdminData<T>({
         setData(responseData.orders);
       } else if (responseData.forms) {
         setData(responseData.forms);
+      } else if (responseData.customers) {
+        setData(responseData.customers);
       } else if (responseData.data) {
         setData(responseData.data);
       } else {
@@ -86,7 +96,8 @@ export function useAdminData<T>({
     } finally {
       setLoading(false);
     }
-  }, [endpoint, filters.page, filters.status, filters.limit, filters.includeStripe, debouncedSearch]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [endpoint, filters.page, filters.status, filters.limit, filters.includeStripe, debouncedSearch, ...(dependencies || [])]);
 
   const setFilters = useCallback((newFilters: Partial<FilterParams>) => {
     setFiltersState(prev => ({
@@ -101,7 +112,8 @@ export function useAdminData<T>({
 
   useEffect(() => {
     fetchData();
-  }, [fetchData, ...dependencies]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchData]);
 
   return {
     data,

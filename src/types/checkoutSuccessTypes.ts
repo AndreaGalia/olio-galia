@@ -20,6 +20,13 @@ export interface Customer {
 export interface Shipping {
   address?: string;
   method?: string;
+  addressDetails?: {
+    line1?: string;
+    city?: string;
+    postal_code?: string;
+    country?: string;
+    state?: string;
+  };
 }
 
 // ===== PRICING =====

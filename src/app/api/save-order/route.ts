@@ -1,6 +1,7 @@
 // app/api/save-order/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { OrderService } from '@/services/orderService';
+import { CustomerService } from '@/services/customerService';
 import { OrderDetails } from '@/types/checkoutSuccessTypes';
 import { EmailOrderData, EmailOrderDataExtended } from '@/types/email';
 import { EmailService } from '@/lib/email/resend';
@@ -49,6 +50,27 @@ export async function POST(request: NextRequest) {
     // Salva l'ordine in MongoDB
     const mongoId = await OrderService.createOrder(orderDetails);
     console.log('✅ Ordine salvato su MongoDB:', mongoId);
+
+    // Crea o aggiorna il cliente automaticamente
+    try {
+      // Converti il totale da euro a centesimi
+      const totalInCents = Math.round((orderDetails.pricing?.total || orderDetails.total || 0) * 100);
+
+      await CustomerService.createOrUpdateFromOrder(
+        orderDetails.customer?.email || '',
+        orderDetails.customer?.name?.split(' ')[0] || 'Cliente',
+        orderDetails.customer?.name?.split(' ').slice(1).join(' ') || '',
+        orderDetails.customer?.phone,
+        orderDetails.shipping?.addressDetails,
+        orderDetails.id,
+        totalInCents,
+        'order'
+      );
+      console.log('✅ Cliente creato/aggiornato automaticamente');
+    } catch (customerError) {
+      console.error('⚠️ Errore nella creazione/aggiornamento cliente:', customerError);
+      // Non bloccare il processo se c'è un errore nel salvare il cliente
+    }
 
     // Prepara dati per l'email
     // Prepara dati per l'email
