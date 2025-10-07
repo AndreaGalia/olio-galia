@@ -26,7 +26,6 @@ export const GET = withAuth(async (request: NextRequest) => {
     });
 
   } catch (error) {
-    console.error('Errore recupero clienti admin:', error);
     return NextResponse.json(
       { error: 'Errore nel recupero dei clienti' },
       { status: 500 }
@@ -72,8 +71,6 @@ export const POST = withAuth(async (request: NextRequest) => {
     });
 
   } catch (error: any) {
-    console.error('Errore creazione cliente:', error);
-
     if (error.message?.includes('esiste già')) {
       return NextResponse.json(
         { error: error.message },

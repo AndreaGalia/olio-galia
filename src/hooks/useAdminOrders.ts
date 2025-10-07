@@ -72,7 +72,7 @@ export function useAdminOrders(): UseAdminOrdersReturn {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Errore sconosciuto';
       setError(errorMessage);
-      console.error('Errore recupero ordini:', error);
+      
     } finally {
       setLoading(false);
     }

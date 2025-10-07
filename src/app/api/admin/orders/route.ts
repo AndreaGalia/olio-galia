@@ -19,7 +19,7 @@ export const GET = withAuth(async (request: NextRequest) => {
     });
 
   } catch (error) {
-    console.error('Errore recupero ordini admin:', error);
+    
     return NextResponse.json(
       { error: 'Errore nel recupero degli ordini' },
       { status: 500 }

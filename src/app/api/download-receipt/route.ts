@@ -110,7 +110,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(receiptUrl);
 
   } catch (error) {
-    console.error('Errore recupero ricevuta:', error);
+    
     
     const message = error instanceof Error ? error.message : 'Errore nel recupero della ricevuta';
     
@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(receiptStatus);
 
   } catch (error) {
-    console.error('Errore controllo ricevuta:', error);
+    
     
     const message = error instanceof Error ? error.message : 'Errore nel controllo della ricevuta';
     const status = message.includes('richiesto') ? 400 : 500;

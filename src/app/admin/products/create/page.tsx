@@ -95,7 +95,7 @@ export default function CreateProductPage() {
         const data = await response.json();
         setCategories(data.categories);
       } catch (err) {
-        console.error('Errore caricamento categorie:', err);
+        
         setError('Errore nel caricamento delle categorie');
       } finally {
         setCategoriesLoading(false);
@@ -249,7 +249,7 @@ export default function CreateProductPage() {
       }
 
       const result = await response.json();
-      console.log('Prodotto creato:', result);
+      
       router.push('/admin/products');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Errore sconosciuto');

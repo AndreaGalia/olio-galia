@@ -62,7 +62,7 @@ const updateProductStock = async (productId: string, quantityBought: number) => 
     }
   });
 
-  console.log(`${product.name}: ${currentStock} → ${newStock}`);
+  
 };
 
 const processStockUpdates = async (session: Stripe.Checkout.Session) => {
@@ -91,13 +91,13 @@ export async function POST(request: NextRequest) {
     // Validazione
     validateInput(sessionId);
 
-    console.log(`🔍 Controllando ordine ${sessionId}...`);
+    
 
     // NUOVO: Prima controlla se l'ordine esiste già nel database MongoDB
     const orderExists = await OrderService.orderExists(sessionId);
     
     if (orderExists) {
-      console.log(`⏭️ Ordine ${sessionId} già presente nel DB, saltando aggiornamento stock`);
+      
       return NextResponse.json({
         success: true,
         message: 'Ordine già processato, stock non modificato',
@@ -108,7 +108,6 @@ export async function POST(request: NextRequest) {
 
     // Controlla se già processato (cache in memoria come backup)
     if (isAlreadyProcessed(sessionId)) {
-      console.log(`⏭️ Ordine ${sessionId} già processato (cache in memoria)`);
       return NextResponse.json({ 
         success: true, 
         message: 'Stock già aggiornato per questa sessione',
@@ -117,7 +116,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    console.log(`📦 Procedendo con aggiornamento stock per ${sessionId}...`);
+    
 
     // Recupera sessione da Stripe
     const session = await retrieveSession(sessionId);
@@ -131,7 +130,7 @@ export async function POST(request: NextRequest) {
     // Marca come processato
     markAsProcessed(sessionId);
 
-    console.log(`✅ Stock aggiornato con successo per ${sessionId}`);
+    
 
     return NextResponse.json({ 
       success: true, 
@@ -140,7 +139,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('❌ Errore nell\'aggiornamento stock:', error);
+    
     
     const message = error instanceof Error ? error.message : 'Errore server';
     const status = message.includes('richiesto') || message.includes('completato') ? 400 : 500;

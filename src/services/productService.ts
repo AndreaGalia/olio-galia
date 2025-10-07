@@ -20,7 +20,6 @@ export class ProductService {
       
       return products.map(product => this.localizeProduct(product, locale));
     } catch (error) {
-      console.error('Error fetching products:', error);
       throw new Error('Failed to fetch products');
     }
   }
@@ -41,7 +40,6 @@ export class ProductService {
 
       return product ? this.localizeProduct(product, locale) : null;
     } catch (error) {
-      console.error('Error fetching product:', error);
       throw new Error('Failed to fetch product');
     }
   }
@@ -62,7 +60,6 @@ export class ProductService {
 
       return product;
     } catch (error) {
-      console.error('Error fetching full product document:', error);
       throw new Error('Failed to fetch full product document');
     }
   }
@@ -79,7 +76,6 @@ export class ProductService {
       
       return categories.map(category => this.localizeCategory(category, locale));
     } catch (error) {
-      console.error('Error fetching categories:', error);
       throw new Error('Failed to fetch categories');
     }
   }
@@ -102,7 +98,6 @@ export class ProductService {
       
       return products.map(product => this.localizeProduct(product, locale));
     } catch (error) {
-      console.error('Error searching products:', error);
       throw new Error('Failed to search products');
     }
   }

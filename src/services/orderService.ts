@@ -54,11 +54,9 @@ export class OrderService {
       } as any;
 
       const result = await collection.insertOne(orderToSave);
-      
-      console.log(`Ordine salvato con ID: ${result.insertedId}`);
+
       return result.insertedId.toString();
     } catch (error) {
-      console.error('Errore nel salvare l\'ordine:', error);
       throw new Error('Impossibile salvare l\'ordine nel database');
     }
   }
@@ -77,7 +75,6 @@ export class OrderService {
 
       return this.mongoToOrderDetails(order);
     } catch (error) {
-      console.error('Errore nel recuperare l\'ordine:', error);
       return null;
     }
   }
@@ -100,7 +97,6 @@ export class OrderService {
 
       return result.modifiedCount > 0;
     } catch (error) {
-      console.error('Errore nell\'aggiornare lo stato ordine:', error);
       return false;
     }
   }
@@ -119,7 +115,6 @@ export class OrderService {
       // Converti ogni documento MongoDB in OrderDetails
       return orders.map(order => this.mongoToOrderDetails(order));
     } catch (error) {
-      console.error('Errore nel recuperare ordini per email:', error);
       return [];
     }
   }
@@ -133,7 +128,6 @@ export class OrderService {
       const count = await collection.countDocuments({ id: sessionId });
       return count > 0;
     } catch (error) {
-      console.error('Errore nel verificare esistenza ordine:', error);
       return false;
     }
   }
@@ -165,7 +159,6 @@ export class OrderService {
         hasMore: skip + orders.length < total
       };
     } catch (error) {
-      console.error('Errore nel recuperare tutti gli ordini:', error);
       return { orders: [], total: 0, hasMore: false };
     }
   }
@@ -183,7 +176,6 @@ export class OrderService {
 
       return orders.map(order => this.mongoToOrderDetails(order));
     } catch (error) {
-      console.error('Errore nel recuperare ordini per stato:', error);
       return [];
     }
   }

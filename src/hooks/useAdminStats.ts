@@ -31,7 +31,7 @@ export function useAdminStats(): UseAdminStatsReturn {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Errore sconosciuto';
       setError(errorMessage);
-      console.error('Errore recupero statistiche:', error);
+      
     } finally {
       setLoading(false);
     }

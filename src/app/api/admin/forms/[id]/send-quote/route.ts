@@ -11,7 +11,7 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
   try {
     // Verifica che la API key sia configurata
     if (!process.env.RESEND_API_KEY) {
-      console.error('RESEND_API_KEY non configurata nelle variabili d\'ambiente');
+      
       return NextResponse.json(
         { error: 'Configurazione email mancante' },
         { status: 500 }
@@ -64,7 +64,7 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
             totalPrice: finalPrice * item.quantity
           });
         } catch (error) {
-          console.error(`Errore recupero prodotto ${item.id}:`, error);
+          
           
           // Usa i dati del preventivo come fallback
           const finalPriceData = form.finalPricing.finalPrices.find((fp: any) => fp.productId === item.id);
@@ -92,21 +92,13 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
       customerPhone: form.phone
     };
 
-    console.log('Dati preventivo preparati:', {
-      ...quoteData,
-      itemsCount: productsInfo.length,
-      hasValidEmail: !!form.email
-    });
+    
 
     // Genera il contenuto HTML dell'email
     const emailHTML = createQuoteEmailHTML(quoteData);
 
     // Invia l'email
-    console.log('Tentativo invio email con dati:', {
-      from: 'Olio Galia <preventivi@olio-galia.it>',
-      to: [form.email],
-      subject: `Il tuo Preventivo #${form.orderId} - Olio Galia`,
-    });
+    
 
     const emailResult = await resend.emails.send({
       from: 'Olio Galia <onboarding@resend.dev>', // Usa il dominio di test di Resend
@@ -116,10 +108,10 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
       html: emailHTML,
     });
 
-    console.log('Risultato invio email:', emailResult);
+    
 
     if (!emailResult.data?.id) {
-      console.error('Errore: emailResult.data è null o undefined:', emailResult);
+      
       throw new Error(`Errore nell'invio dell'email: ${JSON.stringify(emailResult.error || emailResult)}`);
     }
 
@@ -143,7 +135,7 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
     });
 
   } catch (error) {
-    console.error('Errore invio preventivo:', error);
+    
     return NextResponse.json(
       { error: 'Errore nell\'invio del preventivo' },
       { status: 500 }

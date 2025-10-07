@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
       }
     );
 
-    console.log(`Stock aggiornato per ${stripeProduct.name}: ${newQuantity}`);
+    
 
     return NextResponse.json({
       success: true,
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error updating stock:', error);
+    
     return NextResponse.json(
       { error: 'Errore nell\'aggiornamento dello stock' },
       { status: 500 }

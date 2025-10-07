@@ -41,7 +41,6 @@ export class AdminService {
       const result = await collection.insertOne(adminUser);
       return result.insertedId.toString();
     } catch (error) {
-      console.error('Errore creazione admin:', error);
       throw error;
     }
   }
@@ -70,7 +69,6 @@ export class AdminService {
 
       return admin;
     } catch (error) {
-      console.error('Errore login admin:', error);
       throw error;
     }
   }
@@ -83,10 +81,9 @@ export class AdminService {
       
       const { ObjectId } = require('mongodb');
       const admin = await collection.findOne({ _id: new ObjectId(adminId) });
-      
+
       return admin;
     } catch (error) {
-      console.error('Errore recupero admin:', error);
       return null;
     }
   }

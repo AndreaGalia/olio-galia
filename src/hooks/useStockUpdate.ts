@@ -33,7 +33,7 @@ export function useStockUpdate(sessionId: string | null) {
       }));
 
       try {
-        console.log('📦 Controllando e aggiornando stock...');
+        
         
         const response = await fetch('/api/update-stock', {
           method: 'POST',
@@ -46,7 +46,6 @@ export function useStockUpdate(sessionId: string | null) {
         if (response.ok) {
           if (result.alreadyProcessed) {
             const source = result.source || 'unknown';
-            console.log(`⏭️ Ordine già processato (${source}), stock non modificato`);
             setStockUpdateStatus(prev => ({ 
               ...prev, 
               updating: false, 
@@ -54,7 +53,7 @@ export function useStockUpdate(sessionId: string | null) {
               source: source
             }));
           } else {
-            console.log('✅ Stock aggiornato con successo:', result.updates);
+            
             setStockUpdateStatus(prev => ({ 
               ...prev, 
               updating: false, 
@@ -66,7 +65,7 @@ export function useStockUpdate(sessionId: string | null) {
         }
 
       } catch (error) {
-        console.error('❌ Errore nell\'aggiornamento stock:', error);
+        
         hasProcessed.current = false; // Permetti retry
         setStockUpdateStatus(prev => ({ 
           ...prev, 

@@ -31,7 +31,6 @@ export function useTranslations(locale: Locale = defaultLocale) {
     }
     
     if (typeof value !== 'string') {
-      console.warn(`Translation key "${key}" not found`)
       return key
     }
     

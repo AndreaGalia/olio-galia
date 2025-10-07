@@ -25,7 +25,7 @@ export function useAdminAuth(): UseAdminAuthReturn {
         setUser(null);
       }
     } catch (error) {
-      console.error('Errore verifica autenticazione:', error);
+      
       setUser(null);
     } finally {
       setLoading(false);
@@ -49,11 +49,11 @@ export function useAdminAuth(): UseAdminAuthReturn {
         setUser(data.user);
         return true;
       } else {
-        console.error('Login fallito:', data.error);
+        
         return false;
       }
     } catch (error) {
-      console.error('Errore durante il login:', error);
+      
       return false;
     }
   };
@@ -65,7 +65,7 @@ export function useAdminAuth(): UseAdminAuthReturn {
         method: 'POST',
       });
     } catch (error) {
-      console.error('Errore durante il logout:', error);
+      
     } finally {
       setUser(null);
     }

@@ -31,12 +31,6 @@ export async function POST(request: NextRequest) {
     
     const result = await collection.insertOne(dataToSave);
 
-    console.log(`✅ Nuovo ordine Torino salvato: ${orderId}`, {
-      customer: `${formData.firstName} ${formData.lastName}`,
-      email: formData.email,
-      mongoId: result.insertedId.toString()
-    });
-
     return NextResponse.json({
       success: true,
       message: 'Richiesta salvata con successo',
@@ -45,7 +39,7 @@ export async function POST(request: NextRequest) {
     }, { status: 201 });
 
   } catch (error) {
-    console.error('Errore nel salvare dati form:', error);
+    
     
     return NextResponse.json({
       success: false,

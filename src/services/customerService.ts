@@ -92,7 +92,6 @@ export class CustomerService {
         await collection.insertOne(newCustomer);
       }
     } catch (error) {
-      console.error('Errore nel creare/aggiornare cliente:', error);
       throw new Error('Impossibile salvare il cliente nel database');
     }
   }
@@ -214,7 +213,6 @@ export class CustomerService {
         hasMore: skip + customers.length < total
       };
     } catch (error) {
-      console.error('Errore nel recuperare i clienti:', error);
       return { customers: [], total: 0, hasMore: false };
     }
   }
@@ -261,6 +259,7 @@ export class CustomerService {
 
           return {
             orderId: order.id || order.orderId,
+            mongoId: order._id?.toString() || '',
             date: order.createdAt || new Date(order.created),
             total: totalInCents,
             status: order.status || 'unknown',
@@ -275,6 +274,7 @@ export class CustomerService {
 
           return {
             orderId: quote.orderId,
+            mongoId: quote._id?.toString() || '',
             date: quote.createdAt || new Date(quote.timestamp),
             total: totalInCents,
             status: quote.status || 'pending',
@@ -292,7 +292,6 @@ export class CustomerService {
         orderDetails: allOrders,
       };
     } catch (error) {
-      console.error('Errore nel recuperare il cliente:', error);
       return null;
     }
   }
@@ -307,7 +306,6 @@ export class CustomerService {
 
       return await collection.findOne({ email: email.toLowerCase() });
     } catch (error) {
-      console.error('Errore nel recuperare cliente per email:', error);
       return null;
     }
   }
@@ -345,7 +343,6 @@ export class CustomerService {
       const result = await collection.insertOne(newCustomer);
       return result.insertedId.toString();
     } catch (error: any) {
-      console.error('Errore nel creare cliente:', error);
       throw error;
     }
   }
@@ -377,7 +374,6 @@ export class CustomerService {
 
       return result.modifiedCount > 0;
     } catch (error) {
-      console.error('Errore nell\'aggiornare cliente:', error);
       return false;
     }
   }
@@ -396,7 +392,6 @@ export class CustomerService {
 
       return result.deletedCount > 0;
     } catch (error) {
-      console.error('Errore nell\'eliminare cliente:', error);
       return false;
     }
   }
@@ -444,7 +439,6 @@ export class CustomerService {
         }))
       };
     } catch (error) {
-      console.error('Errore nel recuperare statistiche clienti:', error);
       return {
         totalCustomers: 0,
         newCustomersThisMonth: 0,

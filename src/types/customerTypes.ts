@@ -28,6 +28,7 @@ export interface CustomerDocument {
 export interface CustomerWithOrders extends CustomerDocument {
   orderDetails?: Array<{
     orderId: string;
+    mongoId: string; // _id di MongoDB per navigazione admin
     date: Date;
     total: number;
     status: string;

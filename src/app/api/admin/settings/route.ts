@@ -16,7 +16,7 @@ export async function GET() {
 
     return NextResponse.json(settings);
   } catch (error) {
-    console.error('Errore nel recupero delle impostazioni admin:', error);
+    
     return NextResponse.json(
       { error: 'Errore nel recupero delle impostazioni' },
       { status: 500 }
@@ -61,7 +61,7 @@ export async function PUT(request: NextRequest) {
       torino_checkout_enabled
     });
   } catch (error) {
-    console.error('Errore nell\'aggiornamento delle impostazioni admin:', error);
+    
     return NextResponse.json(
       { error: 'Errore nell\'aggiornamento delle impostazioni' },
       { status: 500 }

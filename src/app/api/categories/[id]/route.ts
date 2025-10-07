@@ -27,7 +27,7 @@ export async function GET(
 
     return NextResponse.json(category);
   } catch (error) {
-    console.error('Error fetching category:', error);
+    
     return NextResponse.json(
       { error: 'Errore nel caricamento della categoria' },
       { status: 500 }
@@ -83,7 +83,7 @@ export async function PUT(
     });
 
   } catch (error) {
-    console.error('Error updating category:', error);
+    
     return NextResponse.json(
       { error: 'Errore nell\'aggiornamento della categoria' },
       { status: 500 }
@@ -142,7 +142,7 @@ export async function DELETE(
     });
 
   } catch (error) {
-    console.error('Error deleting category:', error);
+    
     return NextResponse.json(
       { error: 'Errore nell\'eliminazione della categoria' },
       { status: 500 }

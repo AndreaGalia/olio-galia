@@ -68,7 +68,7 @@ export const GET = withAuth(async (request: NextRequest) => {
     });
 
   } catch (error) {
-    console.error('Errore recupero forms admin:', error);
+    
     return NextResponse.json(
       { error: 'Errore nel recupero dei forms' },
       { status: 500 }

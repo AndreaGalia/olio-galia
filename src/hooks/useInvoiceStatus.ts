@@ -32,7 +32,7 @@ export function useInvoiceStatus(sessionId: string | null) {
           }));
         }
       } catch (error) {
-        console.error('Errore nel controllo fattura:', error);
+        
       } finally {
         setInvoiceStatus(prev => ({ ...prev, checking: false }));
       }

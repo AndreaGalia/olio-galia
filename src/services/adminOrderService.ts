@@ -76,7 +76,6 @@ export class AdminOrderService {
       
       return 'ORD-N/D';
     } catch (error) {
-      console.error('Errore generazione ID ordine:', error);
       return `ORD${(order._id?.toString() || order.sessionId || 'UNKNOWN').slice(-8).toUpperCase()}`;
     }
   }
@@ -229,7 +228,7 @@ export class AdminOrderService {
           allOrders = [...allOrders, ...uniqueStripeOrders];
           totalOrders += uniqueStripeOrders.length;
         } catch (stripeError) {
-          console.warn('Errore recupero ordini Stripe (ignorato):', stripeError);
+          // Errore recupero ordini Stripe (ignorato)
         }
       }
 
@@ -258,7 +257,6 @@ export class AdminOrderService {
         totalPages: Math.ceil(totalOrders / limit)
       };
     } catch (error) {
-      console.error('Errore recupero ordini admin:', error);
       throw error;
     }
   }
@@ -362,7 +360,6 @@ export class AdminOrderService {
         paymentIntent: typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id || null,
       };
     } catch (error) {
-      console.error('Errore recupero dettagli ordine:', error);
       return null;
     }
   }
@@ -466,7 +463,6 @@ export class AdminOrderService {
         revenueToday: ordersTodayRevenue + formsTodayRevenue,
       };
     } catch (error) {
-      console.error('Errore statistiche ordini:', error);
       return {
         totalOrders: 0,
         totalRevenue: 0,
@@ -523,7 +519,6 @@ export class AdminOrderService {
       return updatedOrder;
 
     } catch (error) {
-      console.error('Errore aggiornamento spedizione ordine:', error);
       return null;
     }
   }

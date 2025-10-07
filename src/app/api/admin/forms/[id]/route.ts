@@ -46,7 +46,6 @@ export const GET = withAuth(async (request: NextRequest, { params }: { params: P
             currency: prices.data[0]?.currency || 'eur',
           });
         } catch (error) {
-          console.error(`Errore recupero prodotto ${item.id}:`, error);
           productsInfo.push({
             id: item.id,
             name: `Prodotto ${item.id}`,
@@ -98,7 +97,6 @@ export const GET = withAuth(async (request: NextRequest, { params }: { params: P
     });
 
   } catch (error) {
-    console.error('Errore recupero dettagli form:', error);
     return NextResponse.json(
       { error: 'Errore nel recupero del preventivo' },
       { status: 500 }
@@ -186,7 +184,6 @@ export const PATCH = withAuth(async (request: NextRequest, { params }: { params:
           'quote'
         );
       } catch (customerError) {
-        console.error('⚠️ Errore nella creazione/aggiornamento cliente da preventivo:', customerError);
         // Non bloccare il processo se c'è un errore nel salvare il cliente
       }
     }
@@ -197,7 +194,6 @@ export const PATCH = withAuth(async (request: NextRequest, { params }: { params:
     });
 
   } catch (error) {
-    console.error('Errore aggiornamento form:', error);
     return NextResponse.json(
       { error: 'Errore nell\'aggiornamento del preventivo' },
       { status: 500 }

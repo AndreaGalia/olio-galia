@@ -17,7 +17,7 @@ export function useOrderDetails(sessionId: string | null) {
           setOrderDetails(data);
         }
       } catch (error) {
-        console.error('Errore nel recuperare i dettagli ordine:', error);
+        
       } finally {
         setLoadingOrder(false);
       }

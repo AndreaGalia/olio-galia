@@ -87,7 +87,6 @@ export default function AdminCustomerDetailPage({
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Errore sconosciuto';
       setError(errorMessage);
-      console.error('Errore recupero dettagli cliente:', error);
     } finally {
       setLoading(false);
     }

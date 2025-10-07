@@ -49,7 +49,6 @@ export async function GET(
           stockQuantity
         };
       } catch (error) {
-        console.error('Error fetching Stripe product data:', error);
         // Mantieni i dati di stock dal database se Stripe fallisce
       }
     }
@@ -73,7 +72,6 @@ export async function GET(
     });
     
   } catch (error) {
-    console.error('Error in single product API:', error);
     return NextResponse.json(
       { error: 'Failed to load product' },
       { status: 500 }

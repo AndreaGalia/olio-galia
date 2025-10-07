@@ -98,7 +98,7 @@ const getShippingMethodName = async (session: Stripe.Checkout.Session, shippingC
       const shippingRate = await stripe.shippingRates.retrieve(session.shipping_cost.shipping_rate);
       return shippingRate.display_name || 'Standard';
     } catch (error) {
-      console.log('Impossibile recuperare dettagli shipping rate:', error);
+      // Impossibile recuperare dettagli shipping rate
     }
   }
 
@@ -181,11 +181,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(orderDetails);
 
   } catch (error) {
-    console.error('Errore nel recuperare i dettagli ordine:', error);
-    
     const message = error instanceof Error ? error.message : 'Errore nel recuperare i dettagli ordine';
     const status = message.includes('mancante') ? 400 : 500;
-    
+
     return NextResponse.json({ error: message }, { status });
   }
 }

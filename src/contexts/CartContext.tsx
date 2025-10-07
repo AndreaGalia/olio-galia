@@ -30,7 +30,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       try {
         setCart(JSON.parse(storedCart));
       } catch (error) {
-        console.error("Errore nel caricare il carrello:", error);
+        
         setCart([]);
       }
     }

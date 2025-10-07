@@ -11,7 +11,7 @@ export async function GET() {
       torino_checkout_enabled: settings?.torino_checkout_enabled || false
     });
   } catch (error) {
-    console.error('Errore nel recupero delle impostazioni:', error);
+    
     return NextResponse.json(
       { error: 'Errore nel recupero delle impostazioni' },
       { status: 500 }

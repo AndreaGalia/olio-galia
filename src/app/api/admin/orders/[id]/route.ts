@@ -25,7 +25,7 @@ export const GET = withAuth(async (
     });
 
   } catch (error) {
-    console.error('Errore recupero dettagli ordine:', error);
+    
     return NextResponse.json(
       { error: 'Errore nel recupero dei dettagli ordine' },
       { status: 500 }
@@ -86,12 +86,12 @@ export const PUT = withAuth(async (
         const emailSent = await EmailService.sendShippingNotification(shippingNotificationData);
         
         if (emailSent) {
-          console.log('✅ Email di spedizione inviata con successo');
+          
         } else {
-          console.log('⚠️ Errore nell\'invio dell\'email di spedizione');
+          
         }
       } catch (emailError) {
-        console.error('❌ Errore nell\'invio dell\'email di spedizione:', emailError);
+        
         // Non blocchiamo la response per un errore di email
       }
     }
@@ -111,12 +111,12 @@ export const PUT = withAuth(async (
         const emailSent = await EmailService.sendDeliveryNotification(deliveryNotificationData);
         
         if (emailSent) {
-          console.log('✅ Email di consegna inviata con successo');
+          
         } else {
-          console.log('⚠️ Errore nell\'invio dell\'email di consegna');
+          
         }
       } catch (emailError) {
-        console.error('❌ Errore nell\'invio dell\'email di consegna:', emailError);
+        
         // Non blocchiamo la response per un errore di email
       }
     }
@@ -127,7 +127,7 @@ export const PUT = withAuth(async (
     });
 
   } catch (error) {
-    console.error('Errore aggiornamento ordine:', error);
+    
     return NextResponse.json(
       { error: 'Errore nell\'aggiornamento dell\'ordine' },
       { status: 500 }
