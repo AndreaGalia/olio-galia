@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     });
     
   } catch (error) {
-    console.error('Error in categories API:', error);
+    
     return NextResponse.json(
       { error: 'Failed to load categories' },
       { status: 500 }
@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error creating category:', error);
+    
     return NextResponse.json(
       { error: 'Errore nella creazione della categoria' },
       { status: 500 }

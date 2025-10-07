@@ -35,7 +35,7 @@ export async function GET() {
     });
 
   } catch (error) {
-    console.error('Errore recupero profilo admin:', error);
+    
     return NextResponse.json(
       { error: 'Errore interno del server' },
       { status: 500 }

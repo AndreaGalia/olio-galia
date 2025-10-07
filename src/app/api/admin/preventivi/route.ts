@@ -82,7 +82,7 @@ export const GET = withAuth(async (request: NextRequest) => {
               }
             }
           } catch (error) {
-            console.error('Errore calcolo totale stimato:', error);
+            
             estimatedTotal = 0;
           }
         }
@@ -110,7 +110,7 @@ export const GET = withAuth(async (request: NextRequest) => {
     });
 
   } catch (error) {
-    console.error('Errore recupero preventivi:', error);
+    
     return NextResponse.json(
       { error: 'Errore nel recupero dei preventivi' },
       { status: 500 }

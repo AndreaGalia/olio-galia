@@ -9,8 +9,6 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export class EmailService {
   static async sendOrderConfirmation(orderData: EmailOrderData): Promise<boolean> {
     try {
-      console.log('📧 Preparando email di conferma ordine...');
-      
       const htmlContent = createOrderConfirmationHTML(orderData);
       
       const result = await resend.emails.send({
@@ -25,27 +23,18 @@ export class EmailService {
       });
 
       if (result.error) {
-        console.error('❌ Errore Resend:', result.error);
         return false;
       }
 
-      console.log('✅ Email inviata con successo:', {
-        messageId: result.data?.id,
-        to: orderData.customerEmail,
-        orderNumber: orderData.orderNumber
-      });
-
       return true;
     } catch (error) {
-      console.error('❌ Errore nell\'invio email:', error);
+      
       return false;
     }
   }
 
   static async sendShippingNotification(shippingData: ShippingNotificationData): Promise<boolean> {
     try {
-      console.log('🚚 Preparando email di notifica spedizione...');
-      
       const htmlContent = createShippingNotificationHTML(shippingData);
       
       const result = await resend.emails.send({
@@ -61,28 +50,18 @@ export class EmailService {
       });
 
       if (result.error) {
-        console.error('❌ Errore Resend (spedizione):', result.error);
         return false;
       }
 
-      console.log('✅ Email spedizione inviata con successo:', {
-        messageId: result.data?.id,
-        to: shippingData.customerEmail,
-        orderNumber: shippingData.orderNumber,
-        trackingId: shippingData.shippingTrackingId
-      });
-
       return true;
     } catch (error) {
-      console.error('❌ Errore nell\'invio email spedizione:', error);
+      
       return false;
     }
   }
 
   static async sendDeliveryNotification(deliveryData: DeliveryNotificationData): Promise<boolean> {
     try {
-      console.log('📦 Preparando email di conferma consegna...');
-      
       const htmlContent = createDeliveryNotificationHTML(deliveryData);
       
       const result = await resend.emails.send({
@@ -98,20 +77,12 @@ export class EmailService {
       });
 
       if (result.error) {
-        console.error('❌ Errore Resend (consegna):', result.error);
         return false;
       }
 
-      console.log('✅ Email consegna inviata con successo:', {
-        messageId: result.data?.id,
-        to: deliveryData.customerEmail,
-        orderNumber: deliveryData.orderNumber,
-        deliveryDate: deliveryData.deliveryDate
-      });
-
       return true;
     } catch (error) {
-      console.error('❌ Errore nell\'invio email consegna:', error);
+      
       return false;
     }
   }

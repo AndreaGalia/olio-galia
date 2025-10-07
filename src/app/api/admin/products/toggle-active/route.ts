@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     );
 
     const stripeProduct = await stripe.products.retrieve(productId);
-    console.log(`Stato prodotto ${stripeProduct.name}: ${active ? 'Attivo' : 'Inattivo'}`);
+    
 
     return NextResponse.json({
       success: true,
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error toggling product status:', error);
+    
     return NextResponse.json(
       { error: 'Errore nel cambio di stato del prodotto' },
       { status: 500 }

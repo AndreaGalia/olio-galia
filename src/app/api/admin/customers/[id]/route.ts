@@ -25,7 +25,6 @@ export const GET = withAuth(async (
     });
 
   } catch (error) {
-    console.error('Errore recupero cliente:', error);
     return NextResponse.json(
       { error: 'Errore nel recupero del cliente' },
       { status: 500 }
@@ -63,7 +62,6 @@ export const PUT = withAuth(async (
     });
 
   } catch (error) {
-    console.error('Errore aggiornamento cliente:', error);
     return NextResponse.json(
       { error: 'Errore nell\'aggiornamento del cliente' },
       { status: 500 }
@@ -103,7 +101,6 @@ export const DELETE = withAuth(async (
     });
 
   } catch (error) {
-    console.error('Errore eliminazione cliente:', error);
     return NextResponse.json(
       { error: 'Errore nell\'eliminazione del cliente' },
       { status: 500 }

@@ -92,7 +92,6 @@ export function useAdminData<T>({
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Errore sconosciuto';
       setError(errorMessage);
-      console.error('Errore recupero dati:', err);
     } finally {
       setLoading(false);
     }

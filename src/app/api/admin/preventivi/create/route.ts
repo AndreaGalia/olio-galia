@@ -118,12 +118,6 @@ export const POST = withAuth(async (request: NextRequest) => {
     }
 
     // Log come fa save-order-pending
-    console.log(`✅ Nuovo preventivo admin salvato: ${orderId}`, {
-      customer: `${preventivo.firstName} ${preventivo.lastName}`,
-      email: preventivo.email,
-      mongoId: result.insertedId.toString(),
-      total: finalTotal
-    });
 
     // Risposta nello stesso formato di save-order-pending
     return NextResponse.json({
@@ -143,7 +137,7 @@ export const POST = withAuth(async (request: NextRequest) => {
     }, { status: 201 });
 
   } catch (error) {
-    console.error('Errore creazione preventivo personalizzato:', error);
+    
     return NextResponse.json(
       {
         error: error instanceof Error ? error.message : 'Errore interno del server',

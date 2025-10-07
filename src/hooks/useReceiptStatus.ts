@@ -32,7 +32,7 @@ export function useReceiptStatus(sessionId: string | null) {
           }));
         }
       } catch (error) {
-        console.error('Errore nel controllo ricevuta:', error);
+        
       } finally {
         setReceiptStatus(prev => ({ ...prev, checking: false }));
       }

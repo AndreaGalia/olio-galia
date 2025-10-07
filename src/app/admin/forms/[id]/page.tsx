@@ -113,7 +113,6 @@ export default function FormDetailPage() {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Errore sconosciuto';
       setError(errorMessage);
-      console.error('Errore recupero dettagli form:', error);
     } finally {
       setLoading(false);
     }
@@ -269,12 +268,10 @@ export default function FormDetailPage() {
       });
 
       if (!response.ok) {
-        console.error('Errore invio email di conferma consegna');
-      } else {
-        console.log('Email di conferma consegna inviata con successo');
+        // Errore invio email di conferma consegna
       }
     } catch (error) {
-      console.error('Errore invio email di conferma consegna:', error);
+      // Errore invio email di conferma consegna
     }
   };
 

@@ -44,7 +44,6 @@ export async function GET(
 
     return NextResponse.json(productWithStripeData);
   } catch (error) {
-    console.error('Error fetching product:', error);
     return NextResponse.json(
       { error: 'Errore nel caricamento del prodotto' },
       { status: 500 }
@@ -135,7 +134,6 @@ export async function PUT(
         });
       } catch (priceError) {
         // Se non riusciamo a disattivare il prezzo vecchio, non è un errore critico
-        console.warn('Could not deactivate old price:', priceError);
       }
 
       // Aggiorna il prodotto su MongoDB con il nuovo price ID
@@ -184,8 +182,6 @@ export async function PUT(
     });
 
   } catch (error) {
-    console.error('Error updating product:', error);
-
     // Gestione errori specifici di Stripe
     if (error instanceof Error) {
       if (error.message.includes('Not a valid URL')) {
@@ -259,7 +255,6 @@ export async function DELETE(
     });
 
   } catch (error) {
-    console.error('Error deleting product:', error);
     return NextResponse.json(
       { error: 'Errore nell\'eliminazione del prodotto' },
       { status: 500 }

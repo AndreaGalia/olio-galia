@@ -45,13 +45,13 @@ useEffect(() => {
   }, [error, translate]);
 
   const handleSubmit = async (formData: any) => {
-    console.log("📋 Form data submitted:", formData);
+    
     
     try {
       // Salva su MongoDB e ottieni l'ID dell'ordine
       await submitForm(formData);
     } catch (err) {
-      console.error("Errore durante l'invio:", err);
+      
     }
   };
 

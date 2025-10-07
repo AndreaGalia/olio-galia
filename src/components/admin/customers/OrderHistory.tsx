@@ -9,11 +9,11 @@ interface OrderHistoryProps {
 export default function OrderHistory({ customer }: OrderHistoryProps) {
   const router = useRouter();
 
-  const handleOrderClick = (orderId: string, type?: 'order' | 'quote') => {
+  const handleOrderClick = (mongoId: string, type?: 'order' | 'quote') => {
     if (type === 'quote') {
-      router.push(`/admin/forms/${orderId}`);
+      router.push(`/admin/forms/${mongoId}`);
     } else {
-      router.push(`/admin/orders/${orderId}`);
+      router.push(`/admin/orders/${mongoId}`);
     }
   };
 
@@ -27,8 +27,8 @@ export default function OrderHistory({ customer }: OrderHistoryProps) {
         <div className="space-y-4">
           {customer.orderDetails.map((order) => (
             <div
-              key={order.orderId}
-              onClick={() => handleOrderClick(order.orderId, order.type)}
+              key={order.mongoId}
+              onClick={() => handleOrderClick(order.mongoId, order.type)}
               className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
             >
               <div className="flex justify-between items-start mb-2">

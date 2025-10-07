@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(invoiceStatus);
 
   } catch (error) {
-    console.error('Errore controllo fattura:', error);
+    
     
     const message = error instanceof Error ? error.message : 'Errore nel controllo della fattura';
     const status = message.includes('richiesto') ? 400 : 500;

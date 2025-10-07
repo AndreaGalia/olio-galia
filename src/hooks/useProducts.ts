@@ -37,7 +37,7 @@ export function useProducts(): ProductsResponse {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       setError(errorMessage);
-      console.error('Error fetching products:', err);
+      
     } finally {
       setLoading(false);
     }
@@ -53,7 +53,7 @@ export function useProducts(): ProductsResponse {
         setCategories(data.categories || []);
       }
     } catch (err) {
-      console.error('Error refreshing stock:', err);
+      
     }
   };
 

@@ -231,7 +231,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Errore checkout:', error);
+    
     
     const message = error instanceof Error ? error.message : 'Errore server';
     const status = message.includes('non trovato') || message.includes('richiesto') ? 400 : 500;

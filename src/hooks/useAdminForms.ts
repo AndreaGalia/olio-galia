@@ -71,7 +71,7 @@ export function useAdminForms(): UseAdminFormsReturn {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Errore sconosciuto';
       setError(errorMessage);
-      console.error('Errore recupero forms:', error);
+      
     } finally {
       setLoading(false);
     }

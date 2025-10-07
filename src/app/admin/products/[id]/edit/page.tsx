@@ -67,7 +67,7 @@ export default function EditProductPage() {
         const data = await response.json();
         setCategories(data.categories);
       } catch (err) {
-        console.error('Errore caricamento categorie:', err);
+        
       } finally {
         setCategoriesLoading(false);
       }

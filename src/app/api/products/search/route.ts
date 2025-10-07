@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     });
     
   } catch (error) {
-    console.error('Error in search API:', error);
+    
     return NextResponse.json(
       { error: 'Failed to search products' },
       { status: 500 }

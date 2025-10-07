@@ -47,7 +47,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(productsWithStripeData);
   } catch (error) {
-    console.error('Error fetching products:', error);
     return NextResponse.json(
       { error: 'Errore nel caricamento dei prodotti' },
       { status: 500 }
@@ -152,7 +151,6 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error creating product:', error);
     return NextResponse.json(
       { error: 'Errore nella creazione del prodotto' },
       { status: 500 }

@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     }
 
   } catch (error) {
-    console.error('Errore API send-order-email:', error);
+    
     
     const message = error instanceof Error ? error.message : 'Errore interno del server';
     

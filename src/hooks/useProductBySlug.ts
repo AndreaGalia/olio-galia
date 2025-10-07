@@ -58,7 +58,7 @@ export function useProductBySlug(slug: string): ProductResponse {
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Unknown error';
         setError(errorMessage);
-        console.error('Error fetching product:', err);
+        
       } finally {
         setLoading(false);
       }

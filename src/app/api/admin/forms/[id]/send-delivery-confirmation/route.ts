@@ -10,7 +10,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export const POST = withAuth(async (request: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   try {
     if (!process.env.RESEND_API_KEY) {
-      console.error('RESEND_API_KEY non configurata nelle variabili d\'ambiente');
+      
       return NextResponse.json(
         { error: 'Configurazione email mancante' },
         { status: 500 }
@@ -45,20 +45,13 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
       deliveryDate: new Date().toLocaleDateString('it-IT')
     };
 
-    console.log('Dati conferma consegna preparati:', {
-      ...deliveryData,
-      hasValidEmail: !!form.email
-    });
+    
 
     // Genera il contenuto HTML dell'email
     const emailHTML = createDeliveryNotificationHTML(deliveryData);
 
     // Invia l'email
-    console.log('Tentativo invio email conferma consegna con dati:', {
-      from: 'Olio Galia <onboarding@resend.dev>',
-      to: [form.email],
-      subject: `Ordine consegnato #${form.orderId} - Olio Galia`,
-    });
+    
 
     const emailResult = await resend.emails.send({
       from: 'Olio Galia <onboarding@resend.dev>',
@@ -67,10 +60,10 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
       html: emailHTML,
     });
 
-    console.log('Risultato invio email conferma consegna:', emailResult);
+    
 
     if (!emailResult.data?.id) {
-      console.error('Errore: emailResult.data è null o undefined:', emailResult);
+      
       throw new Error(`Errore nell'invio dell'email: ${JSON.stringify(emailResult.error || emailResult)}`);
     }
 
@@ -94,7 +87,7 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
     });
 
   } catch (error) {
-    console.error('Errore invio conferma consegna:', error);
+    
     return NextResponse.json(
       { error: 'Errore nell\'invio della conferma consegna' },
       { status: 500 }

@@ -5,7 +5,6 @@ import { CustomerService } from '@/services/customerService';
 import { OrderDetails } from '@/types/checkoutSuccessTypes';
 import { EmailOrderData, EmailOrderDataExtended } from '@/types/email';
 import { EmailService } from '@/lib/email/resend';
-import { log } from 'console';
 
 export async function POST(request: NextRequest) {
   try {
@@ -49,7 +48,6 @@ export async function POST(request: NextRequest) {
 
     // Salva l'ordine in MongoDB
     const mongoId = await OrderService.createOrder(orderDetails);
-    console.log('✅ Ordine salvato su MongoDB:', mongoId);
 
     // Crea o aggiorna il cliente automaticamente
     try {
@@ -66,9 +64,7 @@ export async function POST(request: NextRequest) {
         totalInCents,
         'order'
       );
-      console.log('✅ Cliente creato/aggiornato automaticamente');
     } catch (customerError) {
-      console.error('⚠️ Errore nella creazione/aggiornamento cliente:', customerError);
       // Non bloccare il processo se c'è un errore nel salvare il cliente
     }
 
@@ -122,7 +118,7 @@ try {
     emailData.hasInvoice = dataInvoice.hasInvoice || false;
   }
 } catch (error) {
-  console.error('Errore nel controllo fattura:', error);
+  // Errore nel controllo fattura
 }
 
 // Controlla ricevuta
@@ -139,7 +135,7 @@ try {
     emailData.receiptUrl = dataReceipt.receiptUrl ? `${process.env.NEXT_PUBLIC_BASE_URL}${dataReceipt.receiptUrl}` : null;
   }
 } catch (error) {
-  console.error('Errore nel controllo ricevuta:', error);
+  // Errore nel controllo ricevuta
 }
 
     let emailSent = false;
@@ -148,22 +144,16 @@ try {
     // Invia email solo se abbiamo l'email del cliente
     if (emailData.customerEmail && emailData.customerEmail !== 'N/D') {
       try {
-        console.log('📧 Inviando email di conferma...');
         emailSent = await EmailService.sendOrderConfirmation(emailData);
-        
-        if (emailSent) {
-          console.log('✅ Email di conferma inviata con successo');
-        } else {
-          console.warn('⚠️ Errore nell\'invio email');
+
+        if (!emailSent) {
           emailError = 'Errore nell\'invio dell\'email';
         }
       } catch (error) {
-        console.error('❌ Errore nell\'invio email:', error);
         emailError = error instanceof Error ? error.message : 'Errore sconosciuto nell\'invio email';
         // Non interrompiamo il processo per errori email
       }
     } else {
-      console.warn('⚠️ Email del cliente non disponibile, salto invio email');
       emailError = 'Email del cliente non disponibile';
     }
 
@@ -178,10 +168,8 @@ try {
     });
 
   } catch (error) {
-    console.error('Errore nel salvare l\'ordine:', error);
-    
     const message = error instanceof Error ? error.message : 'Errore nel salvare l\'ordine';
-    
+
     return NextResponse.json(
       { error: message },
       { status: 500 }

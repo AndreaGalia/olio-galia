@@ -1,7 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(for file in src/app/**/*.tsx src/app/**/*.ts)",
+      "Bash(do if [ -f \"$file\" ])",
+      "Bash([ \"$file\" != \"src/scripts/create-admin.ts\" ])",
+      "Bash([[ \"$file\" != *\"/api/\"* ]])",
+      "Bash(then sed -i 's/console\\.log([^)]*);*//g; s/console\\.error([^)]*);*//g; s/console\\.warn([^)]*);*//g; s/console\\.info([^)]*);*//g; s/console\\.debug([^)]*);*//g' \"$file\")",
+      "Bash(fi)",
+      "Bash(done)"
     ],
     "deny": [],
     "ask": []

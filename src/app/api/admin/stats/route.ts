@@ -12,7 +12,7 @@ export const GET = withAuth(async () => {
     });
 
   } catch (error) {
-    console.error('Errore recupero statistiche:', error);
+    
     return NextResponse.json(
       { error: 'Errore nel recupero delle statistiche' },
       { status: 500 }

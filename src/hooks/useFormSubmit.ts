@@ -52,10 +52,10 @@ export function useFormSubmit(): UseFormSubmitReturn {
       setData(result);
       setSuccess(true);
       
-      console.log('✅ Richiesta inviata con successo:', result);
+      
       
     } catch (err) {
-      console.error('❌ Errore nell\'invio:', err);
+      
       setError(err instanceof Error ? err.message : 'Errore sconosciuto');
     } finally {
       setIsLoading(false);

@@ -15,12 +15,12 @@ export const useAddToCart = ({ products }: UseAddToCartProps) => {
     const product = products.find(p => p.id === productId);
     
     if (!product) {
-      console.warn(`Prodotto con ID ${productId} non trovato`);
+      
       return false;
     }
     
     if (!product.inStock || product.stockQuantity < quantity) {
-      console.warn(`Prodotto non disponibile o quantità insufficiente`);
+      
       return false;
     }
     

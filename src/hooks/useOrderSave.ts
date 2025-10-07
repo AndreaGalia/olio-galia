@@ -29,7 +29,7 @@ export function useOrderSave(
       setOrderSaveStatus(prev => ({ ...prev, saving: true, error: null }));
 
       try {
-        console.log('💾 Salvando ordine in MongoDB...');
+        
         
         const response = await fetch('/api/save-order', {
           method: 'POST',
@@ -40,7 +40,7 @@ export function useOrderSave(
         const result = await response.json();
 
         if (response.ok) {
-          console.log('✅ Ordine salvato con successo:', result);
+          
           setOrderSaveStatus(prev => ({ 
             ...prev, 
             saved: true, 
@@ -51,7 +51,7 @@ export function useOrderSave(
         }
 
       } catch (error) {
-        console.error('❌ Errore nel salvare l\'ordine:', error);
+        
         hasOrderSaved.current = false;
         setOrderSaveStatus(prev => ({ 
           ...prev, 

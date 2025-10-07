@@ -118,7 +118,7 @@ export default function AdminOrderDetailsPage({
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Errore sconosciuto';
       setError(errorMessage);
-      console.error('Errore recupero dettagli ordine:', error);
+      
     } finally {
       setLoading(false);
     }
