@@ -4,7 +4,9 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useProducts } from '@/hooks/useProducts';
+import CustomerSearch from '@/components/admin/CustomerSearch';
 import type { Product } from '@/types/products';
+import type { CustomerDocument } from '@/types/customerTypes';
 
 interface SelectedProduct {
   productId: string;
@@ -29,6 +31,7 @@ export default function CreateCustomQuotePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [selectedCustomer, setSelectedCustomer] = useState<CustomerDocument | null>(null);
 
   const [formData, setFormData] = useState<FormData>({
     customerName: '',
@@ -40,6 +43,22 @@ export default function CreateCustomQuotePage() {
     shippingCost: 0,
     notes: ''
   });
+
+  // Auto-compila i campi quando si seleziona un cliente
+  useEffect(() => {
+    if (selectedCustomer) {
+      setFormData(prev => ({
+        ...prev,
+        customerName: `${selectedCustomer.firstName} ${selectedCustomer.lastName}`,
+        customerEmail: selectedCustomer.email,
+        customerPhone: selectedCustomer.phone || '',
+        customerAddress: selectedCustomer.address
+          ? `${selectedCustomer.address.street}, ${selectedCustomer.address.city} ${selectedCustomer.address.postalCode}, ${selectedCustomer.address.country}`
+          : '',
+        customerProvince: selectedCustomer.address?.province || ''
+      }));
+    }
+  }, [selectedCustomer]);
 
   if (authLoading || productsLoading) {
     return (
@@ -243,6 +262,15 @@ export default function CreateCustomQuotePage() {
             {/* Dati Cliente */}
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-olive/10 p-6">
               <h2 className="text-xl font-serif text-olive mb-6">Informazioni Cliente</h2>
+
+              {/* Ricerca Cliente */}
+              <div className="mb-6">
+                <CustomerSearch
+                  onSelectCustomer={setSelectedCustomer}
+                  selectedCustomer={selectedCustomer}
+                />
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-nocciola mb-2">
