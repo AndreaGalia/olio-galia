@@ -90,24 +90,24 @@
     },
     "brothers": {
       "title": "I Tre Fratelli",
-      "marco": {
-        "name": "Marco Galia",
+      "luca": {
+        "name": "Luca Galia",
         "role": "Produzione e Qualità",
-        "description": "Esperto in tecniche di coltivazione e spremitura, Marco si occupa di mantenere gli standard qualitativi che hanno reso famoso l'olio della famiglia.",
+        "description": "Esperto in tecniche di coltivazione e spremitura, Luca si occupa di mantenere gli standard qualitativi che hanno reso famoso l'olio della famiglia.",
         "speciality": "Agronomo specializzato in olivicoltura",
         "quote": "Ogni oliva raccolta porta con sé il sapore della nostra terra"
       },
-      "giuseppe": {
-        "name": "Giuseppe Galia",
+      "andrea": {
+        "name": "Andrea Galia",
         "role": "Commerciale e Marketing",
-        "description": "Con una visione moderna del business, Giuseppe cura i rapporti con i clienti e la strategia commerciale dell'azienda.",
+        "description": "Con una visione moderna del business, Andrea cura i rapporti con i clienti e la strategia commerciale dell'azienda.",
         "speciality": "Laurea in Marketing e Comunicazione",
         "quote": "Portiamo la tradizione siciliana nel mondo"
       },
-      "antonio": {
-        "name": "Antonio Galia",
+      "lorenzo": {
+        "name": "Lorenzo Galia",
         "role": "Amministrazione e Logistica",
-        "description": "Il più giovane dei fratelli, Antonio gestisce l'aspetto amministrativo e organizzativo, garantendo efficienza in ogni processo.",
+        "description": "Il più giovane dei fratelli, Lorenzo gestisce l'aspetto amministrativo e organizzativo, garantendo efficienza in ogni processo.",
         "speciality": "Dottore Commercialista",
         "quote": "L'organizzazione è il cuore di ogni grande tradizione"
       },
@@ -315,7 +315,7 @@
           "year": "2018",
           "title": "La Rinascita",
           "description": "I tre nipoti di Francesco decidono di riportare in vita l'azienda del nonno, unendo tradizione e innovazione.",
-          "details": "Marco, Giuseppe e Antonio investono i loro risparmi per ristrutturare il frantoio e modernizzare gli impianti, mantenendo i metodi tradizionali di produzione."
+          "details": "Luca, Andrea e Lorenzo investono i loro risparmi per ristrutturare il frantoio e modernizzare gli impianti, mantenendo i metodi tradizionali di produzione."
         },
         {
           "year": "2024",
@@ -331,33 +331,33 @@
       "achievements": "Risultati raggiunti:",
       "profiles": [
         {
-          "name": "Marco Galia",
+          "name": "Luca Galia",
           "role": "Produzione e Qualità",
           "age": "45 anni",
-          "description": "Il più grande dei fratelli, Marco ha ereditato la passione per la terra dal nonno Francesco. Dopo la laurea in Agraria, ha trascorso anni a perfezionare le tecniche di coltivazione biologica e spremitura a freddo.",
+          "description": "Il più grande dei fratelli, Luca ha ereditato la passione per la terra dal nonno Francesco. Dopo la laurea in Agraria, ha trascorso anni a perfezionare le tecniche di coltivazione biologica e spremitura a freddo.",
           "speciality": "Agronomo specializzato in olivicoltura biologica",
           "quote": "Ogni oliva raccolta porta con sé il sapore della nostra terra",
-          "details": "Marco si alza ogni mattina all'alba per controllare personalmente gli uliveti. La sua esperienza gli permette di riconoscere il momento perfetto per la raccolta, quando le olive hanno raggiunto il giusto grado di maturazione.",
+          "details": "Luca si alza ogni mattina all'alba per controllare personalmente gli uliveti. La sua esperienza gli permette di riconoscere il momento perfetto per la raccolta, quando le olive hanno raggiunto il giusto grado di maturazione.",
           "achievements": ["Certificazione Biologica EU", "Premio Regionale Qualità Olio 2023", "Corso Mastro Frantoiano"]
         },
         {
-          "name": "Giuseppe Galia",
+          "name": "Andrea Galia",
           "role": "Commerciale e Marketing",
           "age": "42 anni",
-          "description": "Giuseppe ha portato una ventata di modernità nell'azienda familiare. La sua visione commerciale ha permesso all'olio Galia di raggiungere mercati nazionali e internazionali, mantenendo sempre l'autenticità del prodotto.",
+          "description": "Andrea ha portato una ventata di modernità nell'azienda familiare. La sua visione commerciale ha permesso all'olio Galia di raggiungere mercati nazionali e internazionali, mantenendo sempre l'autenticità del prodotto.",
           "speciality": "Laurea in Marketing e Comunicazione - Master in Export Management",
           "quote": "Portiamo la tradizione siciliana nel mondo, una bottiglia alla volta",
-          "details": "Giuseppe ha sviluppato una rete di distributori in tutta Europa e ha creato partnership con ristoranti stellati che apprezzano la qualità dell'olio Galia.",
+          "details": "Andrea ha sviluppato una rete di distributori in tutta Europa e ha creato partnership con ristoranti stellati che apprezzano la qualità dell'olio Galia.",
           "achievements": ["Export in 12 Paesi", "Partnership con 50+ Ristoranti", "Certificazione ISO 22000"]
         },
         {
-          "name": "Antonio Galia",
+          "name": "Lorenzo Galia",
           "role": "Amministrazione e Logistica",
           "age": "38 anni",
-          "description": "Il più giovane e metodico dei fratelli, Antonio ha modernizzato tutti i processi aziendali. La sua precisione amministrativa e organizzativa garantisce che ogni aspetto del business funzioni alla perfezione.",
+          "description": "Il più giovane e metodico dei fratelli, Lorenzo ha modernizzato tutti i processi aziendali. La sua precisione amministrativa e organizzativa garantisce che ogni aspetto del business funzioni alla perfezione.",
           "speciality": "Dottore Commercialista - Specializzazione in Controllo di Gestione",
           "quote": "L'organizzazione è il cuore di ogni grande tradizione",
-          "details": "Antonio ha implementato un sistema di tracciabilità completa del prodotto, dalla pianta alla bottiglia, garantendo massima trasparenza ai clienti.",
+          "details": "Lorenzo ha implementato un sistema di tracciabilità completa del prodotto, dalla pianta alla bottiglia, garantendo massima trasparenza ai clienti.",
           "achievements": ["Sistema Tracciabilità Completa", "Certificazione HACCP", "Software Gestionale Personalizzato"]
         }
       ]
