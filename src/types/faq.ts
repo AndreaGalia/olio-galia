@@ -1,4 +1,6 @@
 // types/faq.ts
+import { ObjectId } from "mongodb";
+
 export interface FAQ {
   id: number;
   question: string;
@@ -10,6 +12,50 @@ export interface FAQData {
   question: string;
   answer: string;
   category: string;
+}
+
+// MongoDB Types
+export interface FAQDocument {
+  _id?: ObjectId;
+  translations: {
+    it: {
+      question: string;
+      answer: string;
+      category: string;
+    };
+    en: {
+      question: string;
+      answer: string;
+      category: string;
+    };
+  };
+  order: number; // Ordine di visualizzazione
+  metadata: {
+    createdAt: Date;
+    updatedAt: Date;
+    isActive: boolean;
+  };
+}
+
+export interface CreateFAQInput {
+  questionIT: string;
+  answerIT: string;
+  categoryIT: string;
+  questionEN: string;
+  answerEN: string;
+  categoryEN: string;
+  order?: number;
+}
+
+export interface UpdateFAQInput {
+  questionIT?: string;
+  answerIT?: string;
+  categoryIT?: string;
+  questionEN?: string;
+  answerEN?: string;
+  categoryEN?: string;
+  order?: number;
+  isActive?: boolean;
 }
 
 export interface FAQTitle {

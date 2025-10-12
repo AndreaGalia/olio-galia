@@ -205,7 +205,9 @@
         "phoneNumber": "+39 123 456 7890",
         "whatsappNumber": "+39 123 456 7890"
       }
-    }
+    },
+    "loading": "Caricamento FAQ...",
+    "noFAQ": "Nessuna FAQ disponibile al momento."
   },
   "navbar": {
     "menu": {
