@@ -40,6 +40,53 @@ export interface AdminStats {
   totalRevenue: number;
   ordersToday: number;
   revenueToday: number;
+  ordersYesterday: number;
+  revenueYesterday: number;
+  pendingOrdersCount: number;
+  lowStockProductsCount: number;
+  pendingQuotesCount: number;
+  recentOrders: RecentOrder[];
+  topProducts: TopProduct[];
+  salesLast7Days: DailySales[];
+  newCustomersCount: number;
+  recentCustomers: RecentCustomer[];
+  totalCustomers: number;
+  totalProducts: number;
+}
+
+export interface RecentOrder {
+  id: string;
+  orderId: string;
+  customerName: string;
+  total: number;
+  itemCount: number;
+  status: string;
+  shippingStatus: string;
+  createdAt: Date | string;
+  type: 'order' | 'quote';
+}
+
+export interface TopProduct {
+  productId: string;
+  productName: string;
+  quantity: number;
+  revenue: number;
+  image?: string;
+}
+
+export interface DailySales {
+  date: string;
+  orders: number;
+  revenue: number;
+}
+
+export interface RecentCustomer {
+  id: string;
+  name: string;
+  email: string;
+  totalOrders: number;
+  totalSpent: number;
+  createdAt: Date | string;
 }
 
 export interface PaginatedResponse<T> {
