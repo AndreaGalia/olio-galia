@@ -90,24 +90,24 @@
     },
     "brothers": {
       "title": "The Three Brothers",
-      "marco": {
-        "name": "Marco Galia",
+      "luca": {
+        "name": "Luca Galia",
         "role": "Production and Quality",
-        "description": "Expert in cultivation and pressing techniques, Marco is responsible for maintaining the quality standards that made the family oil famous.",
+        "description": "Expert in cultivation and pressing techniques, Luca is responsible for maintaining the quality standards that made the family oil famous.",
         "speciality": "Agronomist specialized in olive growing",
         "quote": "Each harvested olive carries the flavor of our land"
       },
-      "giuseppe": {
-        "name": "Giuseppe Galia",
+      "andrea": {
+        "name": "Andrea Galia",
         "role": "Sales and Marketing",
-        "description": "With a modern business vision, Giuseppe takes care of customer relations and the company's commercial strategy.",
+        "description": "With a modern business vision, Andrea takes care of customer relations and the company's commercial strategy.",
         "speciality": "Degree in Marketing and Communication",
         "quote": "We bring Sicilian tradition to the world"
       },
-      "antonio": {
-        "name": "Antonio Galia",
+      "lorenzo": {
+        "name": "Lorenzo Galia",
         "role": "Administration and Logistics",
-        "description": "The youngest of the brothers, Antonio manages the administrative and organizational aspect, ensuring efficiency in every process.",
+        "description": "The youngest of the brothers, Lorenzo manages the administrative and organizational aspect, ensuring efficiency in every process.",
         "speciality": "Chartered Accountant",
         "quote": "Organization is the heart of every great tradition"
       },
@@ -315,7 +315,7 @@
           "year": "2018",
           "title": "The Rebirth",
           "description": "Francesco's three grandsons decide to bring their grandfather's company back to life, combining tradition and innovation.",
-          "details": "Marco, Giuseppe and Antonio invest their savings to renovate the oil mill and modernize the facilities, maintaining traditional production methods."
+          "details": "Luca, Andrea and Lorenzo invest their savings to renovate the oil mill and modernize the facilities, maintaining traditional production methods."
         },
         {
           "year": "2024",
@@ -331,33 +331,33 @@
       "achievements": "Achievements:",
       "profiles": [
         {
-          "name": "Marco Galia",
+          "name": "Luca Galia",
           "role": "Production and Quality",
           "age": "45 years old",
-          "description": "The eldest of the brothers, Marco inherited the passion for the land from his grandfather Francesco. After graduating in Agriculture, he spent years perfecting organic cultivation and cold pressing techniques.",
+          "description": "The eldest of the brothers, Luca inherited the passion for the land from his grandfather Francesco. After graduating in Agriculture, he spent years perfecting organic cultivation and cold pressing techniques.",
           "speciality": "Agronomist specialized in organic olive growing",
           "quote": "Each harvested olive carries the flavor of our land",
-          "details": "Marco gets up every morning at dawn to personally check the olive groves. His experience allows him to recognize the perfect moment for harvesting, when the olives have reached the right degree of ripeness.",
+          "details": "Luca gets up every morning at dawn to personally check the olive groves. His experience allows him to recognize the perfect moment for harvesting, when the olives have reached the right degree of ripeness.",
           "achievements": ["EU Organic Certification", "Regional Oil Quality Award 2023", "Master Oil Miller Course"]
         },
         {
-          "name": "Giuseppe Galia",
+          "name": "Andrea Galia",
           "role": "Sales and Marketing",
           "age": "42 years old",
-          "description": "Giuseppe brought a breath of modernity to the family business. His commercial vision has allowed Galia oil to reach national and international markets, always maintaining product authenticity.",
+          "description": "Andrea brought a breath of modernity to the family business. His commercial vision has allowed Galia oil to reach national and international markets, always maintaining product authenticity.",
           "speciality": "Degree in Marketing and Communication - Master in Export Management",
           "quote": "We bring Sicilian tradition to the world, one bottle at a time",
-          "details": "Giuseppe has developed a network of distributors throughout Europe and created partnerships with starred restaurants that appreciate the quality of Galia oil.",
+          "details": "Andrea has developed a network of distributors throughout Europe and created partnerships with starred restaurants that appreciate the quality of Galia oil.",
           "achievements": ["Export to 12 Countries", "Partnership with 50+ Restaurants", "ISO 22000 Certification"]
         },
         {
-          "name": "Antonio Galia",
+          "name": "Lorenzo Galia",
           "role": "Administration and Logistics",
           "age": "38 years old",
-          "description": "The youngest and most methodical of the brothers, Antonio has modernized all business processes. His administrative and organizational precision ensures that every aspect of the business works perfectly.",
+          "description": "The youngest and most methodical of the brothers, Lorenzo has modernized all business processes. His administrative and organizational precision ensures that every aspect of the business works perfectly.",
           "speciality": "Chartered Accountant - Specialization in Management Control",
           "quote": "Organization is the heart of every great tradition",
-          "details": "Antonio has implemented a complete product traceability system, from plant to bottle, guaranteeing maximum transparency to customers.",
+          "details": "Lorenzo has implemented a complete product traceability system, from plant to bottle, guaranteeing maximum transparency to customers.",
           "achievements": ["Complete Traceability System", "HACCP Certification", "Custom Management Software"]
         }
       ]

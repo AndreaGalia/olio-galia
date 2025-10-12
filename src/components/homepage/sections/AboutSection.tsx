@@ -14,30 +14,30 @@ export default function AboutSection() {
   const brothers: Brother[] = [
     {
       id: 1,
-      name: t.about.brothers.marco.name,
-      role: t.about.brothers.marco.role,
-      description: t.about.brothers.marco.description,
-      speciality: t.about.brothers.marco.speciality,
-      photo: "/marco-galia.jpg",
-      quote: t.about.brothers.marco.quote
+      name: t.about.brothers.luca.name,
+      role: t.about.brothers.luca.role,
+      description: t.about.brothers.luca.description,
+      speciality: t.about.brothers.luca.speciality,
+      photo: "/luca-galia.jpg",
+      quote: t.about.brothers.luca.quote
     },
     {
       id: 2,
-      name: t.about.brothers.giuseppe.name,
-      role: t.about.brothers.giuseppe.role,
-      description: t.about.brothers.giuseppe.description,
-      speciality: t.about.brothers.giuseppe.speciality,
-      photo: "/giuseppe-galia.jpg",
-      quote: t.about.brothers.giuseppe.quote
+      name: t.about.brothers.andrea.name,
+      role: t.about.brothers.andrea.role,
+      description: t.about.brothers.andrea.description,
+      speciality: t.about.brothers.andrea.speciality,
+      photo: "/andrea-galia.jpg",
+      quote: t.about.brothers.andrea.quote
     },
     {
       id: 3,
-      name: t.about.brothers.antonio.name,
-      role: t.about.brothers.antonio.role,
-      description: t.about.brothers.antonio.description,
-      speciality: t.about.brothers.antonio.speciality,
-      photo: "/antonio-galia.jpg",
-      quote: t.about.brothers.antonio.quote
+      name: t.about.brothers.lorenzo.name,
+      role: t.about.brothers.lorenzo.role,
+      description: t.about.brothers.lorenzo.description,
+      speciality: t.about.brothers.lorenzo.speciality,
+      photo: "/lorenzo-galia.jpg",
+      quote: t.about.brothers.lorenzo.quote
     }
   ];
 

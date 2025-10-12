@@ -36,7 +36,7 @@ export function ProductsInfo() {
           <h4 className="text-xl font-serif text-olive mb-4">{t.products.whyChoose.shipping.title}</h4>
           <p className="text-nocciola leading-relaxed">
             {translate('products.whyChoose.shipping.description', { 
-              threshold: '50'
+              threshold: '100'
             })}
           </p>
         </div>
