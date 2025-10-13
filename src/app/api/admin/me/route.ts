@@ -5,7 +5,7 @@ import { AdminService } from '@/services/adminService';
 export async function GET() {
   try {
     const currentUser = await getCurrentUser();
-    
+
     if (!currentUser) {
       return NextResponse.json(
         { error: 'Non autenticato' },
@@ -15,7 +15,7 @@ export async function GET() {
 
     // Recupera i dettagli aggiornati dall'admin
     const admin = await AdminService.getAdminById(currentUser.userId);
-    
+
     if (!admin) {
       return NextResponse.json(
         { error: 'Admin non trovato' },
@@ -35,7 +35,6 @@ export async function GET() {
     });
 
   } catch (error) {
-    
     return NextResponse.json(
       { error: 'Errore interno del server' },
       { status: 500 }

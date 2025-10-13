@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { AdminService } from '@/services/adminService';
-import { signJWT, setAuthCookie } from '@/lib/auth/jwt';
+import { signJWT, getCookieOptions } from '@/lib/auth/jwt';
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 
     // Tentativo di login
     const admin = await AdminService.loginAdmin({ email, password });
-    
+
     if (!admin) {
       return NextResponse.json(
         { error: 'Credenziali non valide' },
@@ -31,10 +31,8 @@ export async function POST(request: NextRequest) {
       role: admin.role,
     });
 
-    // Imposta il cookie
-    await setAuthCookie(token);
-
-    return NextResponse.json({
+    // Crea la response con i dati dell'utente
+    const response = NextResponse.json({
       success: true,
       message: 'Login effettuato con successo',
       user: {
@@ -44,6 +42,11 @@ export async function POST(request: NextRequest) {
         lastLogin: admin.lastLogin,
       },
     });
+
+    // Imposta il cookie nella response usando le opzioni centralizzate
+    response.cookies.set('admin-token', token, getCookieOptions());
+
+    return response;
 
   } catch (error) {
     
