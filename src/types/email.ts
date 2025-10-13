@@ -43,3 +43,9 @@ export interface DeliveryNotificationData {
   shippingTrackingId?: string;
   deliveryDate?: string;
 }
+
+export interface NewsletterWelcomeData {
+  firstName: string;
+  lastName: string;
+  email: string;
+}

@@ -1,13 +1,65 @@
 "use client";
 
 import { useT } from "@/hooks/useT";
+import { useState } from "react";
 
 
 export default function Footer() {
   const { t } = useT();
+  const [showNewsletterModal, setShowNewsletterModal] = useState(false);
+  const [newsletterForm, setNewsletterForm] = useState({
+    email: '',
+    firstName: '',
+    lastName: '',
+    phone: '',
+  });
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const handleWhatsAppClick = () => {
     window.open('https://wa.me/391234567890', '_blank');
+  };
+
+  const handleNewsletterClick = () => {
+    setShowNewsletterModal(true);
+    setMessage(null);
+  };
+
+  const handleCloseModal = () => {
+    setShowNewsletterModal(false);
+    setNewsletterForm({ email: '', firstName: '', lastName: '', phone: '' });
+    setMessage(null);
+  };
+
+  const handleSubmitNewsletter = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage(null);
+
+    try {
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newsletterForm),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage({ type: 'success', text: data.message || 'Iscrizione completata con successo!' });
+        setNewsletterForm({ email: '', firstName: '', lastName: '', phone: '' });
+        // Chiudi modal dopo 3 secondi
+        setTimeout(() => {
+          handleCloseModal();
+        }, 3000);
+      } else {
+        setMessage({ type: 'error', text: data.error || 'Errore durante l\'iscrizione' });
+      }
+    } catch (error) {
+      setMessage({ type: 'error', text: 'Errore di connessione. Riprova più tardi.' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -146,18 +198,16 @@ export default function Footer() {
               <p className="text-beige/80 text-sm sm:text-base">
                 {t.footer.newsletter.description}
               </p>
-              
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 max-w-md mx-auto">
-                <input 
-                  type="email" 
-                  placeholder={t.footer.newsletter.placeholder}
-                  className="flex-1 px-4 py-3 rounded-full bg-beige/20 border border-beige/30 text-beige placeholder-beige/60 focus:outline-none focus:ring-2 focus:ring-beige/50 focus:border-transparent"
-                />
-                <button className="bg-beige text-olive px-6 py-3 rounded-full font-medium hover:bg-sabbia transition-colors duration-300 whitespace-nowrap cursor-pointer">
+
+              <div className="flex justify-center">
+                <button
+                  onClick={handleNewsletterClick}
+                  className="bg-beige text-olive px-8 py-3 rounded-full font-medium hover:bg-sabbia transition-colors duration-300 cursor-pointer shadow-lg hover:shadow-xl"
+                >
                   {t.footer.newsletter.button}
                 </button>
               </div>
-              
+
               <p className="text-xs text-beige/60">
                 {t.footer.newsletter.privacy}
               </p>
@@ -181,6 +231,125 @@ export default function Footer() {
 
         </div>
       </footer>
+
+      {/* Newsletter Modal */}
+      {showNewsletterModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            {/* Header */}
+            <div className="bg-gradient-to-br from-olive to-salvia p-6 text-beige">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="text-2xl font-serif mb-2">🌿 Iscriviti alla Newsletter</h3>
+                  <p className="text-beige/80 text-sm">Ricevi offerte esclusive e novità direttamente nella tua casella di posta</p>
+                </div>
+                <button
+                  onClick={handleCloseModal}
+                  className="text-beige hover:text-white transition-colors"
+                  aria-label="Chiudi"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleSubmitNewsletter} className="p-6 space-y-4">
+              {/* Message Banner */}
+              {message && (
+                <div className={`p-4 rounded-lg ${message.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'}`}>
+                  <p className="text-sm font-medium">{message.text}</p>
+                </div>
+              )}
+
+              {/* Nome */}
+              <div>
+                <label className="block text-sm font-medium text-olive mb-2">
+                  Nome *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={newsletterForm.firstName}
+                  onChange={(e) => setNewsletterForm({ ...newsletterForm, firstName: e.target.value })}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-olive focus:ring-2 focus:ring-olive/20 transition-colors text-olive"
+                  placeholder="Mario"
+                />
+              </div>
+
+              {/* Cognome */}
+              <div>
+                <label className="block text-sm font-medium text-olive mb-2">
+                  Cognome *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={newsletterForm.lastName}
+                  onChange={(e) => setNewsletterForm({ ...newsletterForm, lastName: e.target.value })}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-olive focus:ring-2 focus:ring-olive/20 transition-colors text-olive"
+                  placeholder="Rossi"
+                />
+              </div>
+
+              {/* Email */}
+              <div>
+                <label className="block text-sm font-medium text-olive mb-2">
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={newsletterForm.email}
+                  onChange={(e) => setNewsletterForm({ ...newsletterForm, email: e.target.value })}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-olive focus:ring-2 focus:ring-olive/20 transition-colors text-olive"
+                  placeholder="mario.rossi@example.com"
+                />
+              </div>
+
+              {/* Telefono */}
+              <div>
+                <label className="block text-sm font-medium text-olive mb-2">
+                  Telefono <span className="text-gray-400 font-normal">(opzionale)</span>
+                </label>
+                <input
+                  type="tel"
+                  value={newsletterForm.phone}
+                  onChange={(e) => setNewsletterForm({ ...newsletterForm, phone: e.target.value })}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-olive focus:ring-2 focus:ring-olive/20 transition-colors text-olive"
+                  placeholder="+39 123 456 7890"
+                />
+              </div>
+
+              {/* Privacy Notice */}
+              <p className="text-xs text-gray-500">
+                Iscrivendoti accetti di ricevere comunicazioni da Olio Galia. Puoi disiscriverti in qualsiasi momento.
+              </p>
+
+              {/* Buttons */}
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={handleCloseModal}
+                  className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                  disabled={loading}
+                >
+                  Annulla
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="flex-1 bg-gradient-to-br from-olive to-salvia text-beige px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading ? 'Invio...' : 'Iscriviti'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </>
   );
 }

@@ -61,11 +61,12 @@ export const getStatusColor = (status: string): string => {
 /**
  * Ottiene l'etichetta localizzata per la fonte del cliente
  */
-export const getCustomerSourceLabel = (source: 'manual' | 'order' | 'quote'): string => {
+export const getCustomerSourceLabel = (source: 'manual' | 'order' | 'quote' | 'newsletter'): string => {
   const labels: Record<string, string> = {
     manual: 'Manuale',
     order: 'Da Ordine',
-    quote: 'Da Preventivo'
+    quote: 'Da Preventivo',
+    newsletter: 'Newsletter'
   };
   return labels[source];
 };

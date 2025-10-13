@@ -1,8 +1,9 @@
 // lib/email/resend.ts
-import { EmailOrderData, ShippingNotificationData, DeliveryNotificationData } from '@/types/email';
+import { EmailOrderData, ShippingNotificationData, DeliveryNotificationData, NewsletterWelcomeData } from '@/types/email';
 import { Resend } from 'resend';
 import { createOrderConfirmationHTML, createShippingNotificationHTML } from './templates';
 import { createDeliveryNotificationHTML } from './delivery-template';
+import { createNewsletterWelcomeHTML } from './newsletter-template';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -63,7 +64,7 @@ export class EmailService {
   static async sendDeliveryNotification(deliveryData: DeliveryNotificationData): Promise<boolean> {
     try {
       const htmlContent = createDeliveryNotificationHTML(deliveryData);
-      
+
       const result = await resend.emails.send({
         from: 'Olio Galia <onboarding@resend.dev>', // Cambia con il tuo dominio
         // Per test usa: 'Olio Galia <onboarding@resend.dev>'
@@ -82,7 +83,33 @@ export class EmailService {
 
       return true;
     } catch (error) {
-      
+
+      return false;
+    }
+  }
+
+  static async sendNewsletterWelcome(newsletterData: NewsletterWelcomeData): Promise<boolean> {
+    try {
+      const htmlContent = createNewsletterWelcomeHTML(newsletterData);
+
+      const result = await resend.emails.send({
+        from: 'Olio Galia <onboarding@resend.dev>', // Cambia con il tuo dominio
+        // Per test usa: 'Olio Galia <onboarding@resend.dev>'
+        to: [newsletterData.email],
+        subject: '🌿 Benvenuto nella famiglia Olio Galia!',
+        html: htmlContent,
+        headers: {
+          'X-Entity-Ref-ID': `newsletter-${newsletterData.email}`,
+        },
+      });
+
+      if (result.error) {
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+
       return false;
     }
   }

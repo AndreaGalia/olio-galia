@@ -336,7 +336,7 @@ export class CustomerService {
         metadata: {
           createdAt: new Date(),
           updatedAt: new Date(),
-          source: 'manual',
+          source: input.source || 'manual',
         }
       };
 
