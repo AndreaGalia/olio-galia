@@ -4,6 +4,29 @@ import { cookies } from 'next/headers';
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production');
 const JWT_EXPIRES_IN = '7d'; // 7 giorni
 
+// Determina se usare cookie sicuri:
+// - In produzione (NODE_ENV === 'production'): usa HTTPS solo se l'URL inizia con https://
+// - In sviluppo: permetti HTTP per localhost e indirizzi IP locali
+const isProductionEnv = process.env.NODE_ENV === 'production';
+const appURL = process.env.NEXT_PUBLIC_APP_URL || '';
+const isHTTPS = appURL.startsWith('https://');
+
+// Cookie sicuri solo se:
+// 1. Siamo in produzione E l'URL è HTTPS
+// 2. OPPURE se FORCE_SECURE_COOKIES è impostato a 'true'
+const useSecureCookies = (isProductionEnv && isHTTPS) || process.env.FORCE_SECURE_COOKIES === 'true';
+
+// Configurazione cookie sicura
+export function getCookieOptions() {
+  return {
+    httpOnly: true,
+    secure: useSecureCookies, // true solo se l'URL inizia con https://
+    sameSite: (useSecureCookies ? 'strict' : 'lax') as 'strict' | 'lax',
+    maxAge: 7 * 24 * 60 * 60, // 7 giorni
+    path: '/',
+  };
+}
+
 export interface JWTPayload {
   userId: string;
   email: string;
@@ -49,13 +72,7 @@ export async function getTokenFromRequest(): Promise<string | null> {
 
 export async function setAuthCookie(token: string): Promise<void> {
   const cookieStore = await cookies();
-  cookieStore.set('admin-token', token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    maxAge: 7 * 24 * 60 * 60, // 7 giorni
-    path: '/',
-  });
+  cookieStore.set('admin-token', token, getCookieOptions());
 }
 
 export async function clearAuthCookie(): Promise<void> {
@@ -67,7 +84,7 @@ export async function getCurrentUser(): Promise<JWTPayload | null> {
   try {
     const token = await getTokenFromRequest();
     if (!token) return null;
-    
+
     return await verifyJWT(token);
   } catch {
     return null;
