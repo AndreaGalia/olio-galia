@@ -21,7 +21,7 @@ export interface CustomerDocument {
   metadata: {
     createdAt: Date;
     updatedAt: Date;
-    source: "manual" | "order" | "quote";
+    source: "manual" | "order" | "quote" | "newsletter";
   };
 }
 
@@ -43,6 +43,7 @@ export interface CreateCustomerInput {
   lastName: string;
   phone?: string;
   address?: CustomerAddress;
+  source?: "manual" | "order" | "quote" | "newsletter";
 }
 
 export interface UpdateCustomerInput {

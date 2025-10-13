@@ -8,6 +8,7 @@ import Pagination from '@/components/admin/Pagination';
 import EmptyState from '@/components/admin/EmptyState';
 import LoadingSpinner from '@/components/admin/LoadingSpinner';
 import { CustomerDocument } from '@/types/customerTypes';
+import { getCustomerSourceLabel } from '@/utils/formatters';
 import { useState } from 'react';
 
 const sortOptions = [
@@ -209,9 +210,8 @@ export default function AdminCustomersPage() {
                           <div className="text-sm font-medium text-gray-900">
                             {customer.firstName} {customer.lastName}
                           </div>
-                          <div className="text-xs text-gray-500 capitalize">
-                            {customer.metadata.source === 'manual' ? 'Manuale' :
-                             customer.metadata.source === 'order' ? 'Da Ordine' : 'Da Preventivo'}
+                          <div className="text-xs text-gray-500">
+                            {getCustomerSourceLabel(customer.metadata.source)}
                           </div>
                         </div>
                       </div>
