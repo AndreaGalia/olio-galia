@@ -34,22 +34,22 @@ export default function AdminDashboardPage() {
     : undefined;
 
   const headerActions = (
-    <div className="flex gap-2">
+    <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
       <button
         onClick={() => router.push('/admin/products')}
-        className="px-2 sm:px-4 py-2 bg-salvia text-white rounded-lg hover:bg-olive transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
+        className="px-3 md:px-4 py-2 bg-salvia text-white rounded-lg hover:bg-olive transition-colors cursor-pointer text-sm whitespace-nowrap"
       >
         Prodotti
       </button>
       <button
         onClick={() => router.push('/admin/customers')}
-        className="px-2 sm:px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
+        className="px-3 md:px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer text-sm whitespace-nowrap"
       >
         Clienti
       </button>
       <button
         onClick={() => router.push('/admin/orders')}
-        className="px-2 sm:px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap flex-shrink-0"
+        className="px-3 md:px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer text-sm whitespace-nowrap"
       >
         Ordini
       </button>
@@ -63,7 +63,7 @@ export default function AdminDashboardPage() {
       headerActions={headerActions}
     >
       {/* Stats Cards con Trend */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
         <StatsCardWithTrend
           title="Ordini Totali"
           value={stats?.totalOrders || 0}
@@ -148,7 +148,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Alerts Section */}
-      <div className="mb-8">
+      <div className="mb-6 sm:mb-8">
         <AlertsSection
           pendingOrders={stats?.pendingOrdersCount || 0}
           lowStockProducts={stats?.lowStockProductsCount || 0}
@@ -158,18 +158,18 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Recent Orders & Top Products */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
         <RecentOrdersTable orders={stats?.recentOrders || []} loading={statsLoading} />
         <TopProductsCard products={stats?.topProducts || []} loading={statsLoading} />
       </div>
 
       {/* Sales Chart */}
-      <div className="mb-8">
+      <div className="mb-6 sm:mb-8">
         <SalesChart data={stats?.salesLast7Days || []} loading={statsLoading} />
       </div>
 
       {/* Recent Customers */}
-      <div className="mb-8">
+      <div className="mb-6 sm:mb-8">
         <RecentCustomersCard
           customers={stats?.recentCustomers || []}
           newCustomersCount={stats?.newCustomersCount || 0}
@@ -178,17 +178,17 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Azioni Rapide */}
-      <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-olive/10">
-        <h2 className="text-2xl font-serif text-olive mb-6">Azioni Rapide</h2>
+      <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 lg:p-8 shadow-xl border border-olive/10">
+        <h2 className="text-xl sm:text-2xl font-serif text-olive mb-4 sm:mb-6">Azioni Rapide</h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
           <button
             onClick={() => router.push('/admin/orders')}
-            className="p-6 border-2 border-olive/20 rounded-xl hover:border-olive hover:bg-olive/5 transition-all duration-300 group cursor-pointer"
+            className="p-4 sm:p-5 lg:p-6 border-2 border-olive/20 rounded-xl hover:border-olive hover:bg-olive/5 transition-all duration-300 group cursor-pointer text-left"
           >
-            <div className="flex items-center mb-4">
+            <div className="flex items-center mb-3 sm:mb-4">
               <svg
-                className="w-8 h-8 text-olive group-hover:scale-110 transition-transform"
+                className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-olive group-hover:scale-110 transition-transform"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -201,19 +201,19 @@ export default function AdminDashboardPage() {
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-olive mb-2 whitespace-nowrap">
+            <h3 className="text-base sm:text-lg font-semibold text-olive mb-1 sm:mb-2">
               Gestisci Ordini
             </h3>
-            <p className="text-nocciola text-sm">Visualizza e gestisci tutti gli ordini</p>
+            <p className="text-nocciola text-xs sm:text-sm">Visualizza e gestisci tutti gli ordini</p>
           </button>
 
           <button
             onClick={() => router.push('/admin/preventivi')}
-            className="p-6 border-2 border-olive/20 rounded-xl hover:border-olive hover:bg-olive/5 transition-all duration-300 group cursor-pointer"
+            className="p-4 sm:p-5 lg:p-6 border-2 border-olive/20 rounded-xl hover:border-olive hover:bg-olive/5 transition-all duration-300 group cursor-pointer text-left"
           >
-            <div className="flex items-center mb-4">
+            <div className="flex items-center mb-3 sm:mb-4">
               <svg
-                className="w-8 h-8 text-olive group-hover:scale-110 transition-transform"
+                className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-olive group-hover:scale-110 transition-transform"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -226,19 +226,19 @@ export default function AdminDashboardPage() {
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-olive mb-2 whitespace-nowrap">
+            <h3 className="text-base sm:text-lg font-semibold text-olive mb-1 sm:mb-2">
               Gestisci Preventivi
             </h3>
-            <p className="text-nocciola text-sm">Visualizza e gestisci tutti i preventivi</p>
+            <p className="text-nocciola text-xs sm:text-sm">Visualizza e gestisci tutti i preventivi</p>
           </button>
 
           <button
             onClick={() => router.push('/admin/products')}
-            className="p-6 border-2 border-salvia/20 rounded-xl hover:border-salvia hover:bg-salvia/5 transition-all duration-300 group cursor-pointer"
+            className="p-4 sm:p-5 lg:p-6 border-2 border-salvia/20 rounded-xl hover:border-salvia hover:bg-salvia/5 transition-all duration-300 group cursor-pointer text-left"
           >
-            <div className="flex items-center mb-4">
+            <div className="flex items-center mb-3 sm:mb-4">
               <svg
-                className="w-8 h-8 text-salvia group-hover:scale-110 transition-transform"
+                className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-salvia group-hover:scale-110 transition-transform"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -251,21 +251,21 @@ export default function AdminDashboardPage() {
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-salvia mb-2 whitespace-nowrap">
+            <h3 className="text-base sm:text-lg font-semibold text-salvia mb-1 sm:mb-2">
               Gestisci Prodotti
             </h3>
-            <p className="text-nocciola text-sm">
-              Crea, modifica e gestisci i prodotti dell'ecommerce
+            <p className="text-nocciola text-xs sm:text-sm">
+              Crea, modifica e gestisci i prodotti
             </p>
           </button>
 
           <button
             onClick={() => router.push('/admin/categories')}
-            className="p-6 border-2 border-salvia/20 rounded-xl hover:border-salvia hover:bg-salvia/5 transition-all duration-300 group cursor-pointer"
+            className="p-4 sm:p-5 lg:p-6 border-2 border-salvia/20 rounded-xl hover:border-salvia hover:bg-salvia/5 transition-all duration-300 group cursor-pointer text-left"
           >
-            <div className="flex items-center mb-4">
+            <div className="flex items-center mb-3 sm:mb-4">
               <svg
-                className="w-8 h-8 text-salvia group-hover:scale-110 transition-transform"
+                className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-salvia group-hover:scale-110 transition-transform"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -278,21 +278,21 @@ export default function AdminDashboardPage() {
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-salvia mb-2 whitespace-nowrap">
+            <h3 className="text-base sm:text-lg font-semibold text-salvia mb-1 sm:mb-2">
               Gestisci Categorie
             </h3>
-            <p className="text-nocciola text-sm">
-              Crea, modifica e gestisci le categorie dei prodotti
+            <p className="text-nocciola text-xs sm:text-sm">
+              Crea e gestisci le categorie
             </p>
           </button>
 
           <button
             onClick={() => router.push('/admin/faqs')}
-            className="p-6 border-2 border-olive/20 rounded-xl hover:border-olive hover:bg-olive/5 transition-all duration-300 group cursor-pointer"
+            className="p-4 sm:p-5 lg:p-6 border-2 border-olive/20 rounded-xl hover:border-olive hover:bg-olive/5 transition-all duration-300 group cursor-pointer text-left"
           >
-            <div className="flex items-center mb-4">
+            <div className="flex items-center mb-3 sm:mb-4">
               <svg
-                className="w-8 h-8 text-olive group-hover:scale-110 transition-transform"
+                className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-olive group-hover:scale-110 transition-transform"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -305,22 +305,22 @@ export default function AdminDashboardPage() {
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-olive mb-2 whitespace-nowrap">
+            <h3 className="text-base sm:text-lg font-semibold text-olive mb-1 sm:mb-2">
               Gestisci FAQ
             </h3>
-            <p className="text-nocciola text-sm">
-              Crea, modifica e gestisci le domande frequenti
+            <p className="text-nocciola text-xs sm:text-sm">
+              Crea e gestisci le FAQ
             </p>
           </button>
 
           <button
             onClick={refreshStats}
             disabled={statsLoading}
-            className="p-6 border-2 border-salvia/20 rounded-xl hover:border-salvia hover:bg-salvia/5 transition-all duration-300 group disabled:opacity-50 cursor-pointer"
+            className="p-4 sm:p-5 lg:p-6 border-2 border-salvia/20 rounded-xl hover:border-salvia hover:bg-salvia/5 transition-all duration-300 group disabled:opacity-50 cursor-pointer text-left"
           >
-            <div className="flex items-center mb-4">
+            <div className="flex items-center mb-3 sm:mb-4">
               <svg
-                className={`w-8 h-8 text-salvia group-hover:scale-110 transition-transform ${
+                className={`w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-salvia group-hover:scale-110 transition-transform ${
                   statsLoading ? 'animate-spin' : ''
                 }`}
                 fill="none"
@@ -335,19 +335,19 @@ export default function AdminDashboardPage() {
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-salvia mb-2 whitespace-nowrap">
+            <h3 className="text-base sm:text-lg font-semibold text-salvia mb-1 sm:mb-2">
               Aggiorna Dati
             </h3>
-            <p className="text-nocciola text-sm">Ricarica le statistiche più recenti</p>
+            <p className="text-nocciola text-xs sm:text-sm">Ricarica le statistiche</p>
           </button>
 
           <button
             onClick={() => router.push('/')}
-            className="p-6 border-2 border-nocciola/20 rounded-xl hover:border-nocciola hover:bg-nocciola/5 transition-all duration-300 group cursor-pointer"
+            className="p-4 sm:p-5 lg:p-6 border-2 border-nocciola/20 rounded-xl hover:border-nocciola hover:bg-nocciola/5 transition-all duration-300 group cursor-pointer text-left sm:col-span-2 lg:col-span-1"
           >
-            <div className="flex items-center mb-4">
+            <div className="flex items-center mb-3 sm:mb-4">
               <svg
-                className="w-8 h-8 text-nocciola group-hover:scale-110 transition-transform"
+                className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-nocciola group-hover:scale-110 transition-transform"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -360,10 +360,10 @@ export default function AdminDashboardPage() {
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-nocciola mb-2 whitespace-nowrap">
+            <h3 className="text-base sm:text-lg font-semibold text-nocciola mb-1 sm:mb-2">
               Vai al Sito
             </h3>
-            <p className="text-nocciola text-sm">Visualizza il sito pubblico</p>
+            <p className="text-nocciola text-xs sm:text-sm">Visualizza il sito pubblico</p>
           </button>
         </div>
       </div>

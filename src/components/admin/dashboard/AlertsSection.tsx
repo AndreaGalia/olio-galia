@@ -80,8 +80,8 @@ export default function AlertsSection({
 
   if (loading) {
     return (
-      <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-olive/10">
-        <h2 className="text-xl font-serif text-olive mb-4">⚠️ Richiede Attenzione</h2>
+      <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-olive/10">
+        <h2 className="text-lg sm:text-xl font-serif text-olive mb-4">⚠️ Richiede Attenzione</h2>
         <div className="flex items-center justify-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-olive"></div>
         </div>
@@ -91,8 +91,8 @@ export default function AlertsSection({
 
   if (activeAlerts.length === 0) {
     return (
-      <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-olive/10">
-        <h2 className="text-xl font-serif text-olive mb-4">✅ Tutto sotto controllo</h2>
+      <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-olive/10">
+        <h2 className="text-lg sm:text-xl font-serif text-olive mb-4">✅ Tutto sotto controllo</h2>
         <p className="text-nocciola text-sm">
           Non ci sono elementi che richiedono la tua attenzione immediata.
         </p>
@@ -136,31 +136,31 @@ export default function AlertsSection({
   };
 
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-olive/10">
-      <h2 className="text-xl font-serif text-olive mb-4">⚠️ Richiede Attenzione</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-olive/10">
+      <h2 className="text-lg sm:text-xl font-serif text-olive mb-3 sm:mb-4">⚠️ Richiede Attenzione</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         {activeAlerts.map((alert, index) => {
           const colors = getAlertColors(alert.type);
           return (
             <div
               key={index}
-              className={`${colors.bg} ${colors.border} border-2 rounded-xl p-4 transition-all duration-300 hover:shadow-lg`}
+              className={`${colors.bg} ${colors.border} border-2 rounded-xl p-3 sm:p-4 transition-all duration-300 hover:shadow-lg`}
             >
-              <div className="flex items-start justify-between mb-3">
-                <div className={`${colors.iconBg} p-2 rounded-lg ${colors.iconColor}`}>
+              <div className="flex items-start justify-between mb-2 sm:mb-3">
+                <div className={`${colors.iconBg} p-1.5 sm:p-2 rounded-lg ${colors.iconColor}`}>
                   {alert.icon}
                 </div>
                 <span
-                  className={`${colors.badgeBg} ${colors.badgeText} text-xs font-bold px-3 py-1 rounded-full`}
+                  className={`${colors.badgeBg} ${colors.badgeText} text-xs font-bold px-2 sm:px-3 py-1 rounded-full`}
                 >
                   {alert.count}
                 </span>
               </div>
-              <h3 className="font-semibold text-gray-800 mb-1">{alert.title}</h3>
-              <p className="text-xs text-gray-600 mb-3">{alert.description}</p>
+              <h3 className="font-semibold text-gray-800 mb-1 text-sm sm:text-base">{alert.title}</h3>
+              <p className="text-xs text-gray-600 mb-2 sm:mb-3 line-clamp-2">{alert.description}</p>
               <button
                 onClick={() => router.push(alert.action.href)}
-                className={`w-full ${colors.button} px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer`}
+                className={`w-full ${colors.button} px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors cursor-pointer`}
               >
                 {alert.action.label} →
               </button>

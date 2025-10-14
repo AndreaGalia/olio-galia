@@ -51,8 +51,8 @@ export default function RecentCustomersCard({
 
   if (loading) {
     return (
-      <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-olive/10">
-        <h2 className="text-xl font-serif text-olive mb-4">👥 Nuovi Clienti</h2>
+      <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-olive/10">
+        <h2 className="text-lg sm:text-xl font-serif text-olive mb-4">👥 Nuovi Clienti</h2>
         <div className="flex items-center justify-center py-12">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-olive"></div>
         </div>
@@ -62,9 +62,9 @@ export default function RecentCustomersCard({
 
   if (customers.length === 0) {
     return (
-      <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-olive/10">
+      <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-olive/10">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-serif text-olive">👥 Nuovi Clienti</h2>
+          <h2 className="text-lg sm:text-xl font-serif text-olive">👥 Nuovi Clienti</h2>
           <span className="text-xs bg-olive/10 text-olive px-2 py-1 rounded-full font-medium">
             {newCustomersCount} ultimo mese
           </span>
@@ -77,20 +77,20 @@ export default function RecentCustomersCard({
   }
 
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-olive/10">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-serif text-olive">👥 Nuovi Clienti</h2>
+    <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-olive/10">
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
+        <h2 className="text-lg sm:text-xl font-serif text-olive">👥 Nuovi Clienti</h2>
         <button
           onClick={() => router.push('/admin/customers')}
-          className="text-olive hover:text-salvia text-sm font-medium transition-colors cursor-pointer"
+          className="text-olive hover:text-salvia text-xs sm:text-sm font-medium transition-colors cursor-pointer"
         >
           Vedi tutti →
         </button>
       </div>
 
-      <div className="mb-4 p-3 bg-olive/5 rounded-lg flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <svg className="w-5 h-5 text-olive" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="mb-3 sm:mb-4 p-2.5 sm:p-3 bg-olive/5 rounded-lg flex items-center justify-between">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <svg className="w-4 h-4 sm:w-5 sm:h-5 text-olive" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -98,21 +98,21 @@ export default function RecentCustomersCard({
               d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
             />
           </svg>
-          <span className="text-sm text-gray-700">Clienti ultimo mese</span>
+          <span className="text-xs sm:text-sm text-gray-700">Clienti ultimo mese</span>
         </div>
-        <span className="text-lg font-bold text-olive">{newCustomersCount}</span>
+        <span className="text-base sm:text-lg font-bold text-olive">{newCustomersCount}</span>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2 sm:space-y-3">
         {customers.map((customer, index) => (
           <div
             key={customer.id}
             onClick={() => router.push(`/admin/customers/${customer.id}`)}
-            className="flex items-center gap-3 p-3 rounded-xl border border-olive/10 hover:bg-olive/5 transition-colors cursor-pointer group"
+            className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-xl border border-olive/10 hover:bg-olive/5 transition-colors cursor-pointer group"
           >
             {/* Avatar */}
             <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${getAvatarColor(
+              className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold text-xs sm:text-sm flex-shrink-0 ${getAvatarColor(
                 index
               )}`}
             >
@@ -121,14 +121,14 @@ export default function RecentCustomersCard({
 
             {/* Info */}
             <div className="flex-1 min-w-0">
-              <h3 className="text-sm font-semibold text-gray-900 truncate">
+              <h3 className="text-xs sm:text-sm font-semibold text-gray-900 truncate">
                 {customer.name}
               </h3>
-              <p className="text-xs text-gray-500 truncate">{customer.email}</p>
+              <p className="text-[10px] sm:text-xs text-gray-500 truncate">{customer.email}</p>
             </div>
 
-            {/* Stats */}
-            <div className="text-right flex-shrink-0">
+            {/* Stats - hide on mobile, show on tablet+ */}
+            <div className="hidden sm:flex text-right flex-shrink-0 flex-col">
               <div className="text-xs text-gray-500">
                 {customer.totalOrders} ordini
               </div>
@@ -137,16 +137,16 @@ export default function RecentCustomersCard({
               </div>
             </div>
 
-            {/* Date badge */}
-            <div className="flex-shrink-0">
-              <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+            {/* Date badge - hide on mobile */}
+            <div className="hidden lg:flex flex-shrink-0">
+              <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full whitespace-nowrap">
                 {formatDate(customer.createdAt)}
               </span>
             </div>
 
             {/* Arrow icon */}
             <svg
-              className="w-4 h-4 text-gray-400 group-hover:text-olive transition-colors flex-shrink-0"
+              className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-400 group-hover:text-olive transition-colors flex-shrink-0"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
