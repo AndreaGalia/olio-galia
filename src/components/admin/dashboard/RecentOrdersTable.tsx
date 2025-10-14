@@ -140,7 +140,7 @@ export default function RecentOrdersTable({ orders, loading = false }: RecentOrd
                 </td>
                 <td className="py-3 px-2">
                   <span className="text-sm font-mono text-gray-700">
-                    {order.orderId.slice(0, 12)}...
+                    {order.orderId.slice(0, 8)}...
                   </span>
                 </td>
                 <td className="py-3 px-2">
@@ -184,7 +184,7 @@ export default function RecentOrdersTable({ orders, loading = false }: RecentOrd
               {getStatusBadge(order.shippingStatus)}
             </div>
             <h3 className="font-semibold text-gray-900 mb-1">{order.customerName}</h3>
-            <p className="text-xs font-mono text-gray-500 mb-2">{order.orderId}</p>
+            <p className="text-xs font-mono text-gray-500 mb-2">{order.orderId.slice(0, 12)}...</p>
             <div className="flex items-center justify-between text-sm">
               <span className="font-semibold text-olive">{formatCurrency(order.total)}</span>
               <span className="text-gray-600">{formatDate(order.createdAt)}</span>

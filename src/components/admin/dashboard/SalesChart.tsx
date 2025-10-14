@@ -28,8 +28,8 @@ export default function SalesChart({ data, loading = false }: SalesChartProps) {
 
   if (loading) {
     return (
-      <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-olive/10">
-        <h2 className="text-xl font-serif text-olive mb-4">📈 Vendite Ultimi 7 Giorni</h2>
+      <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-olive/10">
+        <h2 className="text-lg sm:text-xl font-serif text-olive mb-4">📈 Vendite Ultimi 7 Giorni</h2>
         <div className="flex items-center justify-center py-12">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-olive"></div>
         </div>
@@ -39,8 +39,8 @@ export default function SalesChart({ data, loading = false }: SalesChartProps) {
 
   if (data.length === 0) {
     return (
-      <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-olive/10">
-        <h2 className="text-xl font-serif text-olive mb-4">📈 Vendite Ultimi 7 Giorni</h2>
+      <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-olive/10">
+        <h2 className="text-lg sm:text-xl font-serif text-olive mb-4">📈 Vendite Ultimi 7 Giorni</h2>
         <p className="text-nocciola text-sm text-center py-8">
           Nessun dato disponibile.
         </p>
@@ -55,13 +55,13 @@ export default function SalesChart({ data, loading = false }: SalesChartProps) {
   const barWidth = chartWidth / data.length - 2;
 
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-olive/10">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-serif text-olive">📈 Vendite Ultimi 7 Giorni</h2>
-        <div className="flex gap-2">
+    <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-olive/10">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-4 sm:mb-6">
+        <h2 className="text-lg sm:text-xl font-serif text-olive">📈 Vendite 7 Giorni</h2>
+        <div className="flex gap-2 self-start sm:self-auto">
           <button
             onClick={() => setViewMode('revenue')}
-            className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
               viewMode === 'revenue'
                 ? 'bg-olive text-white'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -71,7 +71,7 @@ export default function SalesChart({ data, loading = false }: SalesChartProps) {
           </button>
           <button
             onClick={() => setViewMode('orders')}
-            className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
               viewMode === 'orders'
                 ? 'bg-olive text-white'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -83,11 +83,11 @@ export default function SalesChart({ data, loading = false }: SalesChartProps) {
       </div>
 
       {/* Chart Area */}
-      <div className="relative" style={{ height: chartHeight + 40 }}>
+      <div className="relative overflow-x-auto" style={{ height: chartHeight + 40 }}>
         {/* Y-axis labels */}
-        <div className="absolute left-0 top-0 bottom-10 w-12 flex flex-col justify-between text-xs text-gray-500 text-right pr-2">
-          <span>{viewMode === 'orders' ? maxValue : formatCurrency(maxValue)}</span>
-          <span>
+        <div className="absolute left-0 top-0 bottom-10 w-8 sm:w-12 flex flex-col justify-between text-[10px] sm:text-xs text-gray-500 text-right pr-1 sm:pr-2">
+          <span className="truncate">{viewMode === 'orders' ? maxValue : formatCurrency(maxValue)}</span>
+          <span className="truncate">
             {viewMode === 'orders'
               ? Math.round(maxValue / 2)
               : formatCurrency(maxValue / 2)}
@@ -96,7 +96,7 @@ export default function SalesChart({ data, loading = false }: SalesChartProps) {
         </div>
 
         {/* Chart bars */}
-        <div className="absolute left-14 right-0 top-0 bottom-10 flex items-end justify-around gap-2">
+        <div className="absolute left-10 sm:left-14 right-0 top-0 bottom-10 flex items-end justify-around gap-1 sm:gap-2">
           {data.map((item, index) => {
             const value = viewMode === 'orders' ? item.orders : item.revenue;
             const height = (value / maxValue) * chartHeight;
@@ -115,7 +115,7 @@ export default function SalesChart({ data, loading = false }: SalesChartProps) {
                     style={{ height: `${height}px` }}
                   >
                     {/* Tooltip on hover */}
-                    <div className="opacity-0 group-hover:opacity-100 absolute -top-12 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs py-1 px-2 rounded whitespace-nowrap transition-opacity z-10">
+                    <div className="opacity-0 group-hover:opacity-100 absolute -top-10 sm:-top-12 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-[10px] sm:text-xs py-1 px-2 rounded whitespace-nowrap transition-opacity z-10">
                       {viewMode === 'orders'
                         ? `${value} ordini`
                         : formatCurrency(value)}
@@ -125,7 +125,7 @@ export default function SalesChart({ data, loading = false }: SalesChartProps) {
                 </div>
 
                 {/* X-axis label */}
-                <span className="text-xs text-gray-500 mt-2 whitespace-nowrap">
+                <span className="text-[10px] sm:text-xs text-gray-500 mt-1 sm:mt-2 whitespace-nowrap">
                   {formatDate(item.date)}
                   {isToday && (
                     <span className="ml-1 text-olive font-semibold">•</span>
@@ -137,22 +137,22 @@ export default function SalesChart({ data, loading = false }: SalesChartProps) {
         </div>
 
         {/* X-axis line */}
-        <div className="absolute left-14 right-0 bottom-8 h-px bg-gray-200"></div>
+        <div className="absolute left-10 sm:left-14 right-0 bottom-8 h-px bg-gray-200"></div>
       </div>
 
       {/* Summary Stats */}
-      <div className="mt-6 pt-4 border-t border-olive/10 grid grid-cols-2 gap-4">
+      <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-olive/10 grid grid-cols-2 gap-3 sm:gap-4">
         <div>
-          <p className="text-xs text-gray-500 mb-1">Totale Periodo</p>
-          <p className="text-lg font-semibold text-olive">
+          <p className="text-[10px] sm:text-xs text-gray-500 mb-1">Totale Periodo</p>
+          <p className="text-sm sm:text-base lg:text-lg font-semibold text-olive truncate">
             {viewMode === 'orders'
               ? `${data.reduce((sum, d) => sum + d.orders, 0)} ordini`
               : formatCurrency(data.reduce((sum, d) => sum + d.revenue, 0))}
           </p>
         </div>
         <div>
-          <p className="text-xs text-gray-500 mb-1">Media Giornaliera</p>
-          <p className="text-lg font-semibold text-salvia">
+          <p className="text-[10px] sm:text-xs text-gray-500 mb-1">Media Giornaliera</p>
+          <p className="text-sm sm:text-base lg:text-lg font-semibold text-salvia truncate">
             {viewMode === 'orders'
               ? `${Math.round(data.reduce((sum, d) => sum + d.orders, 0) / data.length)} ordini`
               : formatCurrency(
