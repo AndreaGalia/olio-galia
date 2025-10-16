@@ -26,7 +26,7 @@ const sweetSans = localFont({
       style: 'normal',
     },
   ],
-  variable: '--font-termina',
+  variable: '--font-sweet-sans',
   display: 'swap',
 });
 
