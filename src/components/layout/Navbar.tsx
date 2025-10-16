@@ -55,7 +55,7 @@ export default function Navbar() {
                   <li key={item.translationKey}>
                     <Link
                       href={item.href}
-                      className={`cursor-pointer hover:underline hover:text-salvia transition-colors duration-200 whitespace-nowrap ${
+                      className={`cursor-pointer hover:underline hover:text-salvia transition-colors duration-200 whitespace-nowrap uppercase ${
                         isActive(item.href) ? 'text-salvia underline' : ''
                       }`}
                     >
@@ -159,9 +159,9 @@ export default function Navbar() {
               <ul className="space-y-6">
                 {menuItems.map((item) => (
                   <li key={item.translationKey}>
-                    <Link 
+                    <Link
                       href={item.href}
-                      className={`block text-xl font-serif hover:text-salvia transition-colors duration-200 py-2 ${
+                      className={`block text-xl font-serif hover:text-salvia transition-colors duration-200 py-2 uppercase ${
                         isActive(item.href) ? 'text-salvia' : 'text-olive'
                       }`}
                       onClick={toggleMenu}

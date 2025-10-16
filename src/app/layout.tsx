@@ -26,7 +26,7 @@ const sweetSans = localFont({
       style: 'normal',
     },
   ],
-  variable: '--font-sweet-sans',
+  variable: '--font-termina',
   display: 'swap',
 });
 
@@ -38,7 +38,10 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="it">
-      <body className={`${roboto.variable} ${sweetSans.variable}`}>
+      <head>
+        <link rel="stylesheet" href="https://use.typekit.net/mew4ocs.css" />
+      </head>
+      <body className={`${roboto.variable}`}>
         <LocaleProvider>
           <CartProvider>
             <Navbar />

@@ -8,7 +8,7 @@
   --color-nocciola: #B2A98C;   /* nocciola, neutro e caldo */
 
   --font-family-serif: "Cormorant Garamond", serif;
-  --font-family-title: var(--font-sweet-sans), sans-serif;
+  --font-family-title: "termina", sans-serif;
   --font-family-body: var(--font-roboto), sans-serif;
 }
 
@@ -20,10 +20,14 @@ body {
 
 /* Title styles - more specific selectors */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-sweet-sans), sans-serif !important;
+  font-family: "termina", sans-serif !important;
+  font-weight: 500 !important;
+  font-style: normal !important;
 }
 
 /* Navbar title override */
 .font-serif {
-  font-family: var(--font-sweet-sans), sans-serif !important;
+  font-family: "termina", sans-serif !important;
+  font-weight: 500 !important;
+  font-style: normal !important;
 }
