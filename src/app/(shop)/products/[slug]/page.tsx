@@ -11,6 +11,7 @@ import ProductImageGallery from "@/components/singleProductPage/ProductImageGall
 import ProductInfoSection from "@/components/singleProductPage/ProductInfoSection";
 import ProductDetailsCards from "@/components/singleProductPage/ProductDetailsCards";
 import RelatedProductsSection from "@/components/singleProductPage/RelatedProductsSection";
+import CustomHTMLRenderer from "@/components/singleProductPage/CustomHTMLRenderer";
 
 
 interface ProductDetailPageProps {
@@ -37,37 +38,63 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
   // Verifica se il prodotto è esaurito
   const isOutOfStock = !product.inStock || product.stockQuantity === 0;
 
+  // Verifica se il prodotto ha HTML personalizzato (con optional chaining sicuro)
+  const hasCustomHTML = Boolean(product.customHTML?.trim());
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige">
       {/* Breadcrumb Navigation */}
       <BreadcrumbNavigation productName={product.name} />
 
       <div className="container mx-auto px-4 sm:px-6 max-w-7xl py-8 sm:py-12">
-        
-        {/* Sezione principale del prodotto */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 mb-16">
-          
-          {/* Galleria immagini */}
-          <ProductImageGallery 
-            images={product.images}
-            productName={product.name}
-            isOutOfStock={isOutOfStock}
-          />
 
-          {/* Informazioni prodotto */}
-          <ProductInfoSection 
+        {/* Layout standard - SEMPRE VISIBILE */}
+        <>
+          {/* Sezione principale del prodotto */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 mb-16">
+
+            {/* Galleria immagini */}
+            <ProductImageGallery
+              images={product.images}
+              productName={product.name}
+              isOutOfStock={isOutOfStock}
+            />
+
+            {/* Informazioni prodotto */}
+            <ProductInfoSection
+              product={product}
+              isOutOfStock={isOutOfStock}
+            />
+          </div>
+
+          {/* Schede dettagliate */}
+          <ProductDetailsCards
             product={product}
             isOutOfStock={isOutOfStock}
           />
-        </div>
+        </>
 
-        {/* Schede dettagliate */}
-        <ProductDetailsCards 
-          product={product}
-          isOutOfStock={isOutOfStock}
-        />
+        {/* HTML Personalizzato - SE PRESENTE, VIENE AGGIUNTO SOTTO */}
+        {hasCustomHTML && (
+          <>
+            {/* Badge avviso HTML personalizzato (visibile solo in sviluppo) */}
+            {process.env.NODE_ENV === 'development' && (
+              <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
+                🎨 <strong>Contenuto Aggiuntivo:</strong> Questo prodotto ha contenuto HTML personalizzato.
+              </div>
+            )}
 
-        {/* Prodotti correlati */}
+            {/* Separatore visivo */}
+            <div className="my-12 border-t-2 border-olive/20"></div>
+
+            <CustomHTMLRenderer
+              html={product.customHTML || ''}
+              className="mb-16"
+            />
+          </>
+        )}
+
+        {/* Prodotti correlati (sempre visibili) */}
         <RelatedProductsSection products={relatedProducts} />
 
       </div>

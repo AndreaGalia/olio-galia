@@ -31,3 +31,101 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 500 !important;
   font-style: normal !important;
 }
+
+/* Custom HTML Content Styles */
+.custom-html-content {
+  /* Base typography */
+  font-family: var(--font-roboto), sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+.custom-html-content h1,
+.custom-html-content h2,
+.custom-html-content h3,
+.custom-html-content h4,
+.custom-html-content h5,
+.custom-html-content h6 {
+  font-family: "termina", sans-serif;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  color: var(--color-olive);
+}
+
+.custom-html-content p {
+  margin-bottom: 1rem;
+}
+
+.custom-html-content a {
+  color: var(--color-olive);
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.custom-html-content a:hover {
+  color: var(--color-salvia);
+}
+
+.custom-html-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.custom-html-content ul,
+.custom-html-content ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.custom-html-content li {
+  margin-bottom: 0.5rem;
+}
+
+.custom-html-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+
+.custom-html-content th,
+.custom-html-content td {
+  padding: 0.75rem;
+  border: 1px solid var(--color-sabbia);
+  text-align: left;
+}
+
+.custom-html-content th {
+  background-color: var(--color-beige);
+  font-weight: 600;
+  color: var(--color-olive);
+}
+
+.custom-html-content blockquote {
+  border-left: 4px solid var(--color-olive);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: #555;
+}
+
+.custom-html-content code {
+  background-color: var(--color-beige);
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.custom-html-content pre {
+  background-color: var(--color-beige);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.custom-html-content pre code {
+  background-color: transparent;
+  padding: 0;
+}
