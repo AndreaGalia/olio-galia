@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminLayout from '@/components/admin/AdminLayout';
+import HTMLEditor from '@/components/admin/HTMLEditor';
 import { ProductTranslations } from '@/types/products';
 
 interface ProductFormData {
@@ -580,6 +581,46 @@ export default function CreateProductPage() {
                 </button>
               </div>
             </div>
+          </section>
+
+          {/* HTML Personalizzato Italiano */}
+          <section>
+            <h3 className="text-lg font-semibold text-olive mb-4">
+              HTML Personalizzato (Italiano) - Opzionale
+            </h3>
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+              <p className="text-sm text-gray-700">
+                <strong>⚠️ Nota:</strong> Se inserisci HTML personalizzato, questo sostituirà completamente
+                il layout standard del prodotto. Lascia vuoto per usare il layout predefinito.
+              </p>
+            </div>
+            <HTMLEditor
+              value={formData.translations.it.customHTML || ''}
+              onChange={(value) => updateTranslation('it', 'customHTML', value)}
+              label="Codice HTML Personalizzato (IT)"
+              placeholder="Inserisci HTML personalizzato per la versione italiana..."
+              height="500px"
+            />
+          </section>
+
+          {/* HTML Personalizzato Inglese */}
+          <section>
+            <h3 className="text-lg font-semibold text-olive mb-4">
+              Custom HTML (English) - Optional
+            </h3>
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+              <p className="text-sm text-gray-700">
+                <strong>⚠️ Note:</strong> If you add custom HTML, it will completely replace
+                the standard product layout. Leave empty to use the default layout.
+              </p>
+            </div>
+            <HTMLEditor
+              value={formData.translations.en.customHTML || ''}
+              onChange={(value) => updateTranslation('en', 'customHTML', value)}
+              label="Custom HTML Code (EN)"
+              placeholder="Insert custom HTML for the English version..."
+              height="500px"
+            />
           </section>
 
           {/* Informazioni Nutrizionali */}

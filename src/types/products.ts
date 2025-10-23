@@ -13,6 +13,7 @@ export interface ProductTranslations {
   awards: string[];
   seoKeywords: string[];
   tags: string[];
+  customHTML?: string; // HTML personalizzato per layout custom del prodotto
 }
 
 export interface BaseProduct {
