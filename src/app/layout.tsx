@@ -6,6 +6,7 @@ import { CartProvider } from '@/contexts/CartContext';
 import { LocaleProvider } from '@/contexts/LocaleContext';
 import { Roboto } from 'next/font/google';
 import localFont from 'next/font/local';
+import { Analytics } from "@vercel/analytics/next"
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
