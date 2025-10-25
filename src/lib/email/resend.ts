@@ -6,6 +6,7 @@ import { createDeliveryNotificationHTML } from './delivery-template';
 import { createNewsletterWelcomeHTML } from './newsletter-template';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+const FROM_EMAIL = process.env.FROM_EMAIL || 'Olio Galia <onboarding@resend.dev>';
 
 export class EmailService {
   static async sendOrderConfirmation(orderData: EmailOrderData): Promise<boolean> {
@@ -13,8 +14,7 @@ export class EmailService {
       const htmlContent = createOrderConfirmationHTML(orderData);
       
       const result = await resend.emails.send({
-        from: 'Ordini <onboarding@resend.dev>', // Cambia con il tuo dominio
-        // Per test usa: 'Ordini <onboarding@resend.dev>'
+        from: FROM_EMAIL,
         to: [orderData.customerEmail],
         subject: `Conferma Ordine #${orderData.orderNumber} - Grazie per il tuo acquisto!`,
         html: htmlContent,
@@ -39,8 +39,7 @@ export class EmailService {
       const htmlContent = createShippingNotificationHTML(shippingData);
       
       const result = await resend.emails.send({
-        from: 'Olio Galia <onboarding@resend.dev>', // Cambia con il tuo dominio
-        // Per test usa: 'Olio Galia <onboarding@resend.dev>'
+        from: FROM_EMAIL,
         to: [shippingData.customerEmail],
         subject: `🚚 Il tuo ordine #${shippingData.orderNumber} è in viaggio! - Olio Galia`,
         html: htmlContent,
@@ -66,8 +65,7 @@ export class EmailService {
       const htmlContent = createDeliveryNotificationHTML(deliveryData);
 
       const result = await resend.emails.send({
-        from: 'Olio Galia <onboarding@resend.dev>', // Cambia con il tuo dominio
-        // Per test usa: 'Olio Galia <onboarding@resend.dev>'
+        from: FROM_EMAIL,
         to: [deliveryData.customerEmail],
         subject: `✅ Ordine #${deliveryData.orderNumber} consegnato con successo! - Olio Galia`,
         html: htmlContent,
@@ -93,8 +91,7 @@ export class EmailService {
       const htmlContent = createNewsletterWelcomeHTML(newsletterData);
 
       const result = await resend.emails.send({
-        from: 'Olio Galia <onboarding@resend.dev>', // Cambia con il tuo dominio
-        // Per test usa: 'Olio Galia <onboarding@resend.dev>'
+        from: FROM_EMAIL,
         to: [newsletterData.email],
         subject: '🌿 Benvenuto nella famiglia Olio Galia!',
         html: htmlContent,

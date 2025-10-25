@@ -54,7 +54,7 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
     
 
     const emailResult = await resend.emails.send({
-      from: 'Olio Galia <onboarding@resend.dev>',
+      from: process.env.FROM_EMAIL || 'Olio Galia <onboarding@resend.dev>',
       to: [form.email],
       subject: `Ordine consegnato #${form.orderId} - Olio Galia`,
       html: emailHTML,

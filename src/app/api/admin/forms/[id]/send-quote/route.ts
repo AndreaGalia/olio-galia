@@ -101,7 +101,7 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
     
 
     const emailResult = await resend.emails.send({
-      from: 'Olio Galia <onboarding@resend.dev>', // Usa il dominio di test di Resend
+      from: process.env.FROM_EMAIL || 'Olio Galia <onboarding@resend.dev>',
       to: [form.email],
       // bcc: ['admin@olio-galia.it'], // Rimuovo BCC per ora
       subject: `Il tuo Preventivo #${form.orderId} - Olio Galia`,
