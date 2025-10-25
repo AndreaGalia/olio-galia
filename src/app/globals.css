@@ -23,6 +23,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: "termina", sans-serif !important;
   font-weight: 500 !important;
   font-style: normal !important;
+  text-transform: uppercase !important;
 }
 
 /* Navbar title override */
@@ -30,6 +31,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: "termina", sans-serif !important;
   font-weight: 500 !important;
   font-style: normal !important;
+  text-transform: uppercase !important;
 }
 
 /* Custom HTML Content Styles */
@@ -50,6 +52,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 500;
   margin-bottom: 1rem;
   color: var(--color-olive);
+  text-transform: uppercase;
 }
 
 .custom-html-content p {
