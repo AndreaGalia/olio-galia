@@ -2155,6 +2155,7 @@ return (
   font-weight: 500;
   margin-bottom: 1rem;
   color: var(--color-olive);
+  text-transform: uppercase;
 }
 
 .custom-html-content p { margin-bottom: 1rem; }
