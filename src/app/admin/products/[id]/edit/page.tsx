@@ -439,6 +439,27 @@ export default function EditProductPage() {
                 />
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Descrizione Lunga</label>
+                <textarea
+                  value={product.translations.it.longDescription || ''}
+                  onChange={(e) => updateTranslation('it', 'longDescription', e.target.value)}
+                  className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
+                  rows={5}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Dettagli</label>
+                <textarea
+                  value={product.translations.it.details || ''}
+                  onChange={(e) => updateTranslation('it', 'details', e.target.value)}
+                  className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
+                  rows={4}
+                  placeholder="Dettagli aggiuntivi sul prodotto"
+                />
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Categoria Visualizzata *</label>
@@ -516,6 +537,27 @@ export default function EditProductPage() {
                   onChange={(e) => updateTranslation('en', 'description', e.target.value)}
                   className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
                   rows={3}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Long Description</label>
+                <textarea
+                  value={product.translations.en.longDescription || ''}
+                  onChange={(e) => updateTranslation('en', 'longDescription', e.target.value)}
+                  className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
+                  rows={5}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Details</label>
+                <textarea
+                  value={product.translations.en.details || ''}
+                  onChange={(e) => updateTranslation('en', 'details', e.target.value)}
+                  className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
+                  rows={4}
+                  placeholder="Additional product details"
                 />
               </div>
 
