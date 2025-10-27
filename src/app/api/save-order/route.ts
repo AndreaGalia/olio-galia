@@ -131,8 +131,12 @@ try {
 
   if (response.ok) {
     const dataReceipt = await response.json();
-    // Aggiorna emailData con i dati della ricevuta
-    emailData.receiptUrl = dataReceipt.receiptUrl ? `${process.env.NEXT_PUBLIC_BASE_URL}${dataReceipt.receiptUrl}` : null;
+    if (dataReceipt.receiptUrl) {
+      const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || '').replace(/\/$/, '');
+      emailData.receiptUrl = `${baseUrl}${dataReceipt.receiptUrl}`;
+    } else {
+      emailData.receiptUrl = null;
+    }
   }
 } catch (error) {
   // Errore nel controllo ricevuta
