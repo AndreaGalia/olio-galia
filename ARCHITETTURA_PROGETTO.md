@@ -199,6 +199,13 @@ src/
 | `/api/admin/stats` | `src/app/api/admin/stats/route.ts` | GET | Statistiche dashboard |
 | `/api/admin/settings` | `src/app/api/admin/settings/route.ts` | GET, PUT | Configurazioni sistema |
 
+#### Obiettivi di Fatturato
+| Endpoint | File | Metodi | Descrizione |
+|----------|------|--------|-------------|
+| `/api/admin/goals` | `src/app/api/admin/goals/route.ts` | GET, POST | Lista obiettivi / Crea nuovo obiettivo |
+| `/api/admin/goals/[id]` | `src/app/api/admin/goals/[id]/route.ts` | PUT, DELETE | Aggiorna/Elimina obiettivo |
+| `/api/admin/goals/active` | `src/app/api/admin/goals/active/route.ts` | GET | Obiettivo attivo con progresso |
+
 ## 🗄️ Modelli Dati
 
 ### ProductDocument (MongoDB)
@@ -424,5 +431,3 @@ npm run lint     # Linting TypeScript/ESLint
 - ✅ HTTPS enforcement (prod)
 
 ---
-
-**Nota**: Per il changelog completo delle modifiche recenti, vedere il file `CHANGELOG_MODIFICHE.md`.
