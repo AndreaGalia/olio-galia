@@ -5,6 +5,7 @@ import { CustomerService } from '@/services/customerService';
 import { OrderDetails } from '@/types/checkoutSuccessTypes';
 import { EmailOrderData, EmailOrderDataExtended } from '@/types/email';
 import { EmailService } from '@/lib/email/resend';
+import { TelegramService } from '@/lib/telegram/telegram';
 
 export async function POST(request: NextRequest) {
   try {
@@ -142,6 +143,19 @@ try {
   // Errore nel controllo ricevuta
 }
 
+    // Invia notifica Telegram con link diretto all'ordine
+    let telegramSent = false;
+    let telegramError = null;
+    try {
+      telegramSent = await TelegramService.sendOrderNotification(orderDetails, mongoId);
+      if (!telegramSent) {
+        telegramError = 'Errore nell\'invio della notifica Telegram';
+      }
+    } catch (error) {
+      telegramError = error instanceof Error ? error.message : 'Errore sconosciuto nell\'invio notifica Telegram';
+      // Non interrompiamo il processo per errori Telegram
+    }
+
     let emailSent = false;
     let emailError = null;
 
@@ -168,7 +182,9 @@ try {
       sessionId,
       duplicate: false,
       emailSent,
-      emailError
+      emailError,
+      telegramSent,
+      telegramError
     });
 
   } catch (error) {

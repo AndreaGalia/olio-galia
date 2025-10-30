@@ -4,6 +4,7 @@ import { getDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 import Stripe from 'stripe';
 import { CustomerService } from '@/services/customerService';
+import { TelegramService } from '@/lib/telegram/telegram';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -156,7 +157,7 @@ export const PATCH = withAuth(async (request: NextRequest, { params }: { params:
       );
     }
 
-    // Se il preventivo è stato segnato come pagato, crea/aggiorna il cliente
+    // Se il preventivo è stato segnato come pagato, crea/aggiorna il cliente e invia notifica
     if (status === 'paid') {
       try {
         // Usa il finalPricing appena passato nella request, altrimenti quello già salvato
@@ -185,6 +186,50 @@ export const PATCH = withAuth(async (request: NextRequest, { params }: { params:
         );
       } catch (customerError) {
         // Non bloccare il processo se c'è un errore nel salvare il cliente
+      }
+
+      // Invia notifica Telegram per preventivo pagato
+      try {
+        // Recupera informazioni sui prodotti da Stripe per la notifica
+        const productsInfo = [];
+        if (form.cart && Array.isArray(form.cart)) {
+          for (const item of form.cart) {
+            try {
+              const product = await stripe.products.retrieve(item.id);
+              const prices = await stripe.prices.list({ product: item.id });
+
+              productsInfo.push({
+                id: item.id,
+                name: product.name,
+                description: product.description,
+                quantity: item.quantity,
+                price: prices.data[0] ? (prices.data[0].unit_amount || 0) / 100 : 0,
+              });
+            } catch (error) {
+              productsInfo.push({
+                id: item.id,
+                name: `Prodotto ${item.id}`,
+                quantity: item.quantity,
+                price: 0,
+              });
+            }
+          }
+        }
+
+        // Prepara i dati del form aggiornati con finalPricing
+        const formDataWithPricing = {
+          ...form,
+          finalPricing: finalPricing || form.finalPricing,
+        };
+
+        await TelegramService.sendQuotePaidNotification(
+          formDataWithPricing,
+          productsInfo,
+          formId
+        );
+      } catch (telegramError) {
+        // Non bloccare il processo se c'è un errore nell'invio della notifica
+        console.error('Errore invio notifica Telegram:', telegramError);
       }
     }
 
