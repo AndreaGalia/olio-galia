@@ -94,13 +94,13 @@ export default function FormDetailPage() {
       setForm(data.form);
       
       // Inizializza i prezzi finali se già presenti
-      if (data.form.finalPricing) {
+      if (data.form.finalPricing && data.form.finalPricing.finalPrices) {
         const priceMap: Record<string, number> = {};
         data.form.finalPricing.finalPrices.forEach((item: any) => {
           priceMap[item.productId] = item.finalPrice;
         });
         setFinalPrices(priceMap);
-        setFinalShipping(data.form.finalPricing.finalShipping);
+        setFinalShipping(data.form.finalPricing.finalShipping || 0);
       } else {
         // Inizializza con i prezzi stimati
         const initialPrices: Record<string, number> = {};
@@ -442,10 +442,10 @@ export default function FormDetailPage() {
                         ) : (
                           <>
                             <p className="font-semibold text-olive">
-                              €{(form.finalPricing?.finalPrices.find(fp => fp.productId === product.id)?.finalPrice || product.price).toFixed(2)} cad.
+                              €{(form.finalPricing?.finalPrices?.find(fp => fp.productId === product.id)?.finalPrice || product.price).toFixed(2)} cad.
                             </p>
                             <p className="text-sm text-nocciola">
-                              Tot: €{((form.finalPricing?.finalPrices.find(fp => fp.productId === product.id)?.finalPrice || product.price) * product.quantity).toFixed(2)}
+                              Tot: €{((form.finalPricing?.finalPrices?.find(fp => fp.productId === product.id)?.finalPrice || product.price) * product.quantity).toFixed(2)}
                             </p>
                           </>
                         )}
