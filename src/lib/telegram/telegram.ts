@@ -3,7 +3,29 @@ import { OrderDetails } from '@/types/checkoutSuccessTypes';
 
 interface TelegramConfig {
   botToken: string;
-  chatIds: string[]; // Array di chat IDs
+  chatIds: string[];
+}
+
+interface ProductInfo {
+  id: string;
+  name: string;
+  quantity: number;
+  price: number;
+}
+
+interface FormData {
+  orderId?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  province?: string;
+  finalPricing?: {
+    finalSubtotal: number;
+    finalShipping: number;
+    finalTotal: number;
+  };
 }
 
 export class TelegramService {
@@ -16,7 +38,6 @@ export class TelegramService {
       return null;
     }
 
-    // Supporta multipli CHAT_ID separati da virgola
     const chatIds = chatId.split(',').map(id => id.trim()).filter(id => id.length > 0);
 
     if (chatIds.length === 0) {
@@ -28,58 +49,54 @@ export class TelegramService {
   }
 
   /**
-   * Invia una notifica Telegram per un nuovo ordine
+   * Invia un messaggio a tutti i CHAT_ID configurati
    */
-  static async sendOrderNotification(orderDetails: OrderDetails, mongoId?: string): Promise<boolean> {
+  private static async sendMessageToAllChats(message: string, context: string): Promise<boolean> {
     const config = this.getConfig();
-    if (!config) {
-      return false;
-    }
+    if (!config) return false;
 
     try {
-      // Formatta il messaggio
-      const message = this.formatOrderMessage(orderDetails, mongoId);
-
-      // Invia il messaggio a tutti i CHAT_ID configurati
       const results = await Promise.allSettled(
         config.chatIds.map(chatId =>
-          fetch(
-            `https://api.telegram.org/bot${config.botToken}/sendMessage`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                chat_id: chatId,
-                text: message,
-                parse_mode: 'HTML',
-              }),
-            }
-          )
+          fetch(`https://api.telegram.org/bot${config.botToken}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: chatId,
+              text: message,
+              parse_mode: 'HTML',
+            }),
+          })
         )
       );
 
-      // Verifica quanti invii sono riusciti
       const successCount = results.filter(r => r.status === 'fulfilled' && r.value.ok).length;
       const totalCount = config.chatIds.length;
 
       if (successCount === 0) {
-        console.error('❌ Nessuna notifica Telegram inviata con successo');
+        console.error(`❌ Nessuna notifica Telegram ${context} inviata con successo`);
         return false;
       }
 
       if (successCount < totalCount) {
-        console.warn(`⚠️ Notifica Telegram inviata a ${successCount}/${totalCount} utenti`);
+        console.warn(`⚠️ Notifica Telegram ${context} inviata a ${successCount}/${totalCount} utenti`);
       } else {
-        console.log(`✅ Notifica Telegram inviata con successo a ${successCount} utenti`);
+        console.log(`✅ Notifica Telegram ${context} inviata con successo a ${successCount} utenti`);
       }
 
       return true;
     } catch (error) {
-      console.error('❌ Errore invio notifica Telegram:', error);
+      console.error(`❌ Errore invio notifica Telegram ${context}:`, error);
       return false;
     }
+  }
+
+  /**
+   * Invia una notifica Telegram per un nuovo ordine
+   */
+  static async sendOrderNotification(orderDetails: OrderDetails, mongoId?: string): Promise<boolean> {
+    const message = this.formatOrderMessage(orderDetails, mongoId);
+    return this.sendMessageToAllChats(message, 'ordine');
   }
 
   /**
@@ -148,68 +165,24 @@ ${orderUrl ? `🔗 <a href="${orderUrl}">Visualizza ordine nel pannello admin</a
    * Invia una notifica Telegram per un preventivo pagato
    */
   static async sendQuotePaidNotification(
-    formData: any,
-    productsInfo: any[],
+    formData: FormData,
+    productsInfo: ProductInfo[],
     mongoId?: string
   ): Promise<boolean> {
-    const config = this.getConfig();
-    if (!config) {
-      return false;
-    }
-
-    try {
-      // Formatta il messaggio
-      const message = this.formatQuotePaidMessage(formData, productsInfo, mongoId);
-
-      // Invia il messaggio a tutti i CHAT_ID configurati
-      const results = await Promise.allSettled(
-        config.chatIds.map(chatId =>
-          fetch(
-            `https://api.telegram.org/bot${config.botToken}/sendMessage`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                chat_id: chatId,
-                text: message,
-                parse_mode: 'HTML',
-              }),
-            }
-          )
-        )
-      );
-
-      // Verifica quanti invii sono riusciti
-      const successCount = results.filter(r => r.status === 'fulfilled' && r.value.ok).length;
-      const totalCount = config.chatIds.length;
-
-      if (successCount === 0) {
-        console.error('❌ Nessuna notifica Telegram preventivo inviata con successo');
-        return false;
-      }
-
-      if (successCount < totalCount) {
-        console.warn(`⚠️ Notifica Telegram preventivo inviata a ${successCount}/${totalCount} utenti`);
-      } else {
-        console.log(`✅ Notifica Telegram preventivo inviata con successo a ${successCount} utenti`);
-      }
-
-      return true;
-    } catch (error) {
-      console.error('❌ Errore invio notifica Telegram preventivo:', error);
-      return false;
-    }
+    const message = this.formatQuotePaidMessage(formData, productsInfo, mongoId);
+    return this.sendMessageToAllChats(message, 'preventivo pagato');
   }
 
   /**
-   * Formatta il messaggio del preventivo pagato per Telegram
+   * Formatta un messaggio generico per preventivo (pagato o confermato)
    */
-  private static formatQuotePaidMessage(
-    formData: any,
-    productsInfo: any[],
-    mongoId?: string
+  private static formatQuoteMessage(
+    formData: FormData,
+    productsInfo: ProductInfo[],
+    mongoId: string | undefined,
+    emoji: string,
+    title: string,
+    dateLabel: string
   ): string {
     const orderNumber = formData.orderId?.slice(-8).toUpperCase() || mongoId?.slice(-8).toUpperCase() || 'N/D';
     const customerName = `${formData.firstName || ''} ${formData.lastName || ''}`.trim() || 'N/D';
@@ -224,21 +197,18 @@ ${orderUrl ? `🔗 <a href="${orderUrl}">Visualizza ordine nel pannello admin</a
     const province = formData.province || '';
     const fullAddress = province ? `${address}, ${province}` : address;
 
-    // Lista prodotti
-    const itemsList = productsInfo.map((item, index) => {
-      return `  ${index + 1}. <b>${item.name}</b> x${item.quantity} - €${(item.price * item.quantity).toFixed(2)}`;
-    }).join('\n') || 'Nessun prodotto';
+    const itemsList = productsInfo.map((item, index) =>
+      `  ${index + 1}. <b>${item.name}</b> x${item.quantity} - €${(item.price * item.quantity).toFixed(2)}`
+    ).join('\n') || 'Nessun prodotto';
 
-    // Costruisci l'URL per il preventivo nel pannello admin
     const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || '').replace(/\/$/, '');
     const quoteUrl = mongoId ? `${baseUrl}/admin/forms/${mongoId}` : null;
 
-    // Costruisci il messaggio
-    const message = `
-💰 <b>PREVENTIVO PAGATO!</b> 💰
+    return `
+${emoji} <b>${title}</b> ${emoji}
 
 📋 <b>Preventivo:</b> #${orderNumber}
-📅 <b>Data pagamento:</b> ${new Date().toLocaleDateString('it-IT', {
+📅 <b>${dateLabel}:</b> ${new Date().toLocaleDateString('it-IT', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
@@ -264,8 +234,40 @@ ${fullAddress}
 
 ${quoteUrl ? `🔗 <a href="${quoteUrl}">Visualizza preventivo nel pannello admin</a>` : '🔔 Controlla il pannello admin per gestire il preventivo.'}
 `.trim();
+  }
 
-    return message;
+  /**
+   * Formatta il messaggio del preventivo pagato per Telegram
+   */
+  private static formatQuotePaidMessage(
+    formData: FormData,
+    productsInfo: ProductInfo[],
+    mongoId?: string
+  ): string {
+    return this.formatQuoteMessage(formData, productsInfo, mongoId, '💰', 'PREVENTIVO PAGATO!', 'Data pagamento');
+  }
+
+  /**
+   * Invia una notifica Telegram per un preventivo confermato
+   */
+  static async sendQuoteConfirmedNotification(
+    formData: FormData,
+    productsInfo: ProductInfo[],
+    mongoId?: string
+  ): Promise<boolean> {
+    const message = this.formatQuoteConfirmedMessage(formData, productsInfo, mongoId);
+    return this.sendMessageToAllChats(message, 'preventivo confermato');
+  }
+
+  /**
+   * Formatta il messaggio del preventivo confermato per Telegram
+   */
+  private static formatQuoteConfirmedMessage(
+    formData: FormData,
+    productsInfo: ProductInfo[],
+    mongoId?: string
+  ): string {
+    return this.formatQuoteMessage(formData, productsInfo, mongoId, '✅', 'PREVENTIVO CONFERMATO!', 'Data conferma');
   }
 
   /**

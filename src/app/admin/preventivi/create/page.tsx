@@ -22,6 +22,10 @@ interface FormData {
   selectedProducts: SelectedProduct[];
   shippingCost: number;
   notes: string;
+  createAsConfirmed: boolean;
+  finalSubtotal: number;
+  finalShipping: number;
+  freeShipping: boolean;
 }
 
 export default function CreateCustomQuotePage() {
@@ -41,7 +45,11 @@ export default function CreateCustomQuotePage() {
     customerProvince: '',
     selectedProducts: [],
     shippingCost: 0,
-    notes: ''
+    notes: '',
+    createAsConfirmed: false,
+    finalSubtotal: 0,
+    finalShipping: 0,
+    freeShipping: false
   });
 
   // Auto-compila i campi quando si seleziona un cliente
@@ -59,6 +67,32 @@ export default function CreateCustomQuotePage() {
       }));
     }
   }, [selectedCustomer]);
+
+  // Auto-calcola i prezzi quando cambiano i prodotti selezionati o quando si attiva createAsConfirmed
+  useEffect(() => {
+    if (formData.createAsConfirmed) {
+      // Calcola subtotale basato sui prodotti selezionati
+      const calculatedSubtotal = formData.selectedProducts.reduce((sum, selectedProduct) => {
+        const price = getProductPrice(selectedProduct);
+        const quantity = typeof selectedProduct.quantity === 'string'
+          ? parseInt(selectedProduct.quantity) || 0
+          : selectedProduct.quantity;
+        return sum + (price * quantity);
+      }, 0);
+
+      // Calcola spedizione: €0 se spedizione gratuita, altrimenti €5
+      const calculatedShipping = formData.freeShipping ? 0 : (formData.selectedProducts.length > 0 ? 5 : 0);
+
+      // Aggiorna solo se i valori sono cambiati
+      if (formData.finalSubtotal !== calculatedSubtotal || formData.finalShipping !== calculatedShipping) {
+        setFormData(prev => ({
+          ...prev,
+          finalSubtotal: calculatedSubtotal,
+          finalShipping: calculatedShipping
+        }));
+      }
+    }
+  }, [formData.createAsConfirmed, formData.selectedProducts, formData.freeShipping]);
 
   if (authLoading || productsLoading) {
     return (
@@ -169,15 +203,35 @@ export default function CreateCustomQuotePage() {
         quantity: typeof p.quantity === 'string' ? parseInt(p.quantity) || 1 : p.quantity
       }));
 
-      const apiData = {
+      const apiData: any = {
         customerName: formData.customerName,
         customerEmail: formData.customerEmail,
         customerPhone: formData.customerPhone,
         customerAddress: formData.customerAddress,
         customerProvince: formData.customerProvince,
         selectedProducts: normalizedProducts,
-        notes: formData.notes
+        notes: formData.notes,
+        createAsConfirmed: formData.createAsConfirmed
       };
+
+      // Se createAsConfirmed è true, aggiungi i prezzi finali
+      if (formData.createAsConfirmed) {
+        const finalTotal = formData.finalSubtotal + formData.finalShipping;
+
+        // Calcola il prezzo medio per prodotto (per finalPrices)
+        const totalQuantity = normalizedProducts.reduce((sum, p) => sum + p.quantity, 0);
+        const avgPricePerUnit = totalQuantity > 0 ? formData.finalSubtotal / totalQuantity : 0;
+
+        apiData.finalPricing = {
+          finalPrices: normalizedProducts.map(p => ({
+            productId: p.productId,
+            finalPrice: avgPricePerUnit // Prezzo medio calcolato
+          })),
+          finalSubtotal: formData.finalSubtotal,
+          finalShipping: formData.finalShipping,
+          finalTotal: finalTotal
+        };
+      }
 
       const response = await fetch('/api/admin/preventivi/create', {
         method: 'POST',
@@ -209,7 +263,11 @@ export default function CreateCustomQuotePage() {
             customerProvince: '',
             selectedProducts: [],
             shippingCost: 0,
-            notes: ''
+            notes: '',
+            createAsConfirmed: false,
+            finalSubtotal: 0,
+            finalShipping: 0,
+            freeShipping: false
           });
         }, 600);
       }
@@ -512,6 +570,108 @@ export default function CreateCustomQuotePage() {
 
           {/* Sidebar con riepilogo */}
           <div className="space-y-6">
+            {/* Opzione Preventivo Confermato */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-olive/10 p-6">
+              <h2 className="text-xl font-serif text-olive mb-4">Stato Preventivo</h2>
+
+              <div className="space-y-4">
+                <label className="flex items-start space-x-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.createAsConfirmed}
+                    onChange={(e) => setFormData(prev => ({ ...prev, createAsConfirmed: e.target.checked }))}
+                    className="mt-1 w-5 h-5 text-olive border-olive/30 rounded focus:ring-olive focus:ring-offset-0"
+                  />
+                  <div className="flex-1">
+                    <span className="font-medium text-gray-900 block">Crea come Confermato</span>
+                    <span className="text-sm text-nocciola">
+                      Il preventivo sarà già confermato e invierà notifica Telegram (no email)
+                    </span>
+                  </div>
+                </label>
+
+                {formData.createAsConfirmed && (
+                  <div className="mt-4 pt-4 border-t border-olive/10 space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-nocciola mb-2">
+                        Subtotale (€) *
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        value={formData.finalSubtotal || ''}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          finalSubtotal: parseFloat(e.target.value) || 0
+                        }))}
+                        className="w-full px-3 py-2 border border-olive/20 rounded-lg focus:ring-2 focus:ring-olive/50 focus:border-olive"
+                        placeholder="0.00"
+                        required={formData.createAsConfirmed}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-nocciola mb-2">
+                        Spedizione (€) *
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        value={formData.finalShipping || ''}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          finalShipping: parseFloat(e.target.value) || 0
+                        }))}
+                        className="w-full px-3 py-2 border border-olive/20 rounded-lg focus:ring-2 focus:ring-olive/50 focus:border-olive"
+                        placeholder="0.00"
+                        required={formData.createAsConfirmed}
+                        disabled={formData.freeShipping}
+                      />
+
+                      {/* Checkbox Spedizione Gratuita */}
+                      <label className="flex items-center space-x-2 mt-3 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.freeShipping}
+                          onChange={(e) => setFormData(prev => ({
+                            ...prev,
+                            freeShipping: e.target.checked,
+                            finalShipping: e.target.checked ? 0 : 5
+                          }))}
+                          className="w-4 h-4 text-olive border-olive/30 rounded focus:ring-olive focus:ring-offset-0"
+                        />
+                        <span className="text-sm text-nocciola">
+                          Spedizione gratuita
+                        </span>
+                      </label>
+                    </div>
+
+                    <div className="pt-3 border-t border-olive/10">
+                      <div className="flex justify-between items-center">
+                        <span className="font-semibold text-gray-900">Totale:</span>
+                        <span className="text-xl font-bold text-olive">
+                          €{(formData.finalSubtotal + formData.finalShipping).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                      <div className="flex items-start space-x-2">
+                        <svg className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p className="text-xs text-blue-700">
+                          Creando come confermato, verrà inviata una <strong>notifica Telegram</strong> ma <strong>NON verrà inviata email</strong> al cliente.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
             {/* Riepilogo Totali */}
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-olive/10 p-6">
               <h2 className="text-xl font-serif text-olive mb-4">Riepilogo</h2>
@@ -520,10 +680,12 @@ export default function CreateCustomQuotePage() {
                   <span className="text-nocciola">Prodotti selezionati:</span>
                   <span className="font-medium">{formData.selectedProducts.length}</span>
                 </div>
-                <div className="text-center py-4 text-nocciola">
-                  <p className="text-sm">I prezzi e la spedizione verranno</p>
-                  <p className="text-sm">gestiti nella pagina dei dettagli</p>
-                </div>
+                {!formData.createAsConfirmed && (
+                  <div className="text-center py-4 text-nocciola">
+                    <p className="text-sm">I prezzi e la spedizione verranno</p>
+                    <p className="text-sm">gestiti nella pagina dei dettagli</p>
+                  </div>
+                )}
               </div>
             </div>
 
