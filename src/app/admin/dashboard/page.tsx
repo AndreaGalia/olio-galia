@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAdminStats } from '@/hooks/useAdminStats';
 import AdminLayout from '@/components/admin/AdminLayout';
@@ -9,10 +10,14 @@ import RecentOrdersTable from '@/components/admin/dashboard/RecentOrdersTable';
 import TopProductsCard from '@/components/admin/dashboard/TopProductsCard';
 import SalesChart from '@/components/admin/dashboard/SalesChart';
 import RecentCustomersCard from '@/components/admin/dashboard/RecentCustomersCard';
+import GoalCard from '@/components/admin/GoalCard';
+import GoalManager from '@/components/admin/GoalManager';
 
 export default function AdminDashboardPage() {
   const { stats, loading: statsLoading, refreshStats } = useAdminStats();
   const router = useRouter();
+  const [isGoalManagerOpen, setIsGoalManagerOpen] = useState(false);
+  const [goalRefreshKey, setGoalRefreshKey] = useState(0);
 
   // Calcola trend per le statistiche
   const calculateTrend = (today: number, yesterday: number) => {
@@ -144,6 +149,14 @@ export default function AdminDashboardPage() {
               : undefined
           }
           loading={statsLoading}
+        />
+      </div>
+
+      {/* Goal Section */}
+      <div className="mb-6 sm:mb-8">
+        <GoalCard
+          key={goalRefreshKey}
+          onManageGoal={() => setIsGoalManagerOpen(true)}
         />
       </div>
 
@@ -367,6 +380,16 @@ export default function AdminDashboardPage() {
           </button>
         </div>
       </div>
+
+      {/* Goal Manager Modal */}
+      <GoalManager
+        isOpen={isGoalManagerOpen}
+        onClose={() => setIsGoalManagerOpen(false)}
+        onSuccess={() => {
+          setGoalRefreshKey(prev => prev + 1);
+          refreshStats();
+        }}
+      />
     </AdminLayout>
   );
 }
