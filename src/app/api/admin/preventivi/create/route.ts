@@ -21,6 +21,7 @@ interface CustomQuoteData {
   customerEmail: string;
   customerPhone: string;
   customerAddress: string;
+  customerPostalCode: string;
   customerProvince: string;
   selectedProducts: SelectedProduct[];
   notes?: string;
@@ -137,6 +138,7 @@ export const POST = withAuth(async (request: NextRequest) => {
 
       // Indirizzo
       address: data.customerAddress || '',
+      postalCode: data.customerPostalCode || '',
       province: data.customerProvince || '',
 
       // Cart nel formato standard (come TorinoForm)
@@ -178,12 +180,13 @@ export const POST = withAuth(async (request: NextRequest) => {
       try {
         const totalInCents = Math.round(data.finalPricing.finalTotal * 100);
 
+        // Estrae indirizzo dai campi separati
         const addressParts = (data.customerAddress || '').split(',').map((p: string) => p.trim());
         const addressDetails = addressParts.length > 0 ? {
           line1: addressParts[0] || undefined,
           city: addressParts[1] || undefined,
           state: data.customerProvince || undefined,
-          postal_code: undefined,
+          postal_code: data.customerPostalCode || '',
           country: 'IT'
         } : undefined;
 
