@@ -220,8 +220,6 @@ export const POST = withAuth(async (request: NextRequest) => {
           productsInfo,
           result.insertedId.toString()
         );
-
-        console.log('✅ Notifica Telegram inviata per preventivo confermato');
       } catch (telegramError) {
         console.error('Errore invio notifica Telegram:', telegramError);
       }

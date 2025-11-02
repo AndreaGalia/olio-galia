@@ -6,7 +6,7 @@ import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useProducts } from '@/hooks/useProducts';
 import CustomerSearch from '@/components/admin/CustomerSearch';
 import type { Product } from '@/types/products';
-import type { CustomerDocument } from '@/types/customerTypes';
+import type { CustomerWithStats } from '@/types/customerTypes';
 
 interface SelectedProduct {
   productId: string;
@@ -37,7 +37,7 @@ export default function CreateCustomQuotePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [selectedCustomer, setSelectedCustomer] = useState<CustomerDocument | null>(null);
+  const [selectedCustomer, setSelectedCustomer] = useState<CustomerWithStats | null>(null);
 
   const [formData, setFormData] = useState<FormData>({
     customerName: '',

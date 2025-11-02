@@ -7,7 +7,7 @@ import SearchFilters from '@/components/admin/SearchFilters';
 import Pagination from '@/components/admin/Pagination';
 import EmptyState from '@/components/admin/EmptyState';
 import LoadingSpinner from '@/components/admin/LoadingSpinner';
-import { CustomerDocument } from '@/types/customerTypes';
+import { CustomerWithStats } from '@/types/customerTypes';
 import { getCustomerSourceLabel } from '@/utils/formatters';
 import { useState } from 'react';
 
@@ -31,7 +31,7 @@ export default function AdminCustomersPage() {
     filters,
     setFilters,
     refresh
-  } = useAdminData<CustomerDocument>({
+  } = useAdminData<CustomerWithStats>({
     endpoint: '/api/admin/customers',
     dependencies: [sortBy, sortOrder]
   });

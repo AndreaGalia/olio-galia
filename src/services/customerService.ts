@@ -2,6 +2,7 @@
 import { getDatabase } from '@/lib/mongodb';
 import {
   CustomerDocument,
+  CustomerWithStats,
   CreateCustomerInput,
   UpdateCustomerInput,
   CustomerWithOrders
@@ -10,6 +11,52 @@ import { ObjectId } from 'mongodb';
 
 export class CustomerService {
   private static readonly COLLECTION_NAME = 'customers';
+
+  /**
+   * Calcola totalOrders e totalSpent per un cliente dato l'array di orderIds
+   */
+  private static async calculateCustomerTotals(orderIds: string[]): Promise<{
+    totalOrders: number;
+    totalSpent: number;
+  }> {
+    if (!orderIds || orderIds.length === 0) {
+      return { totalOrders: 0, totalSpent: 0 };
+    }
+
+    const db = await getDatabase();
+    const ordersCollection = db.collection('orders');
+    const formsCollection = db.collection('forms');
+
+    // Recupera ordini
+    const orders = await ordersCollection
+      .find({ id: { $in: orderIds } })
+      .toArray();
+
+    // Recupera preventivi (escludi pending)
+    const quotes = await formsCollection
+      .find({
+        orderId: { $in: orderIds },
+        status: { $ne: 'pending' }
+      })
+      .toArray();
+
+    // Calcola totale ordini (in centesimi)
+    const ordersTotal = orders.reduce((sum, order: any) => {
+      const totalInEuros = order.total || order.pricing?.total || 0;
+      return sum + Math.round(totalInEuros * 100);
+    }, 0);
+
+    // Calcola totale preventivi (in centesimi)
+    const quotesTotal = quotes.reduce((sum, quote: any) => {
+      const totalInEuros = quote.finalPricing?.finalTotal || 0;
+      return sum + Math.round(totalInEuros * 100);
+    }, 0);
+
+    return {
+      totalOrders: orders.length + quotes.length,
+      totalSpent: ordersTotal + quotesTotal
+    };
+  }
 
   /**
    * Crea o aggiorna un cliente automaticamente da un ordine
@@ -43,10 +90,6 @@ export class CustomerService {
           { email: email.toLowerCase() },
           {
             $addToSet: { orders: orderId }, // Aggiungi orderId se non esiste già
-            $inc: {
-              totalOrders: 1,
-              totalSpent: orderTotal
-            },
             $set: {
               'metadata.updatedAt': new Date(),
               // Aggiorna dati solo se forniti
@@ -80,8 +123,6 @@ export class CustomerService {
             province: address.state,
           } : undefined,
           orders: [orderId],
-          totalOrders: 1,
-          totalSpent: orderTotal,
           metadata: {
             createdAt: new Date(),
             updatedAt: new Date(),
@@ -105,7 +146,7 @@ export class CustomerService {
     searchQuery?: string,
     sortBy: 'name' | 'totalOrders' | 'totalSpent' | 'createdAt' = 'createdAt',
     sortOrder: 'asc' | 'desc' = 'desc'
-  ): Promise<{ customers: CustomerDocument[]; total: number; hasMore: boolean }> {
+  ): Promise<{ customers: CustomerWithStats[]; total: number; hasMore: boolean }> {
     try {
       const db = await getDatabase();
       const customersCollection = db.collection<CustomerDocument>(this.COLLECTION_NAME);
@@ -126,27 +167,28 @@ export class CustomerService {
         ];
       }
 
-      // Costruisci sorting
+      // Se sorting per totalOrders/totalSpent, dobbiamo recuperare tutti i clienti e ordinare in memoria
+      const needsMemorySort = sortBy === 'totalOrders' || sortBy === 'totalSpent';
+
+      // Costruisci sorting per DB (solo se non serve sorting in memoria)
       const sortField: any = {};
       if (sortBy === 'name') {
         sortField.firstName = sortOrder === 'asc' ? 1 : -1;
-      } else if (sortBy === 'totalOrders') {
-        sortField.totalOrders = sortOrder === 'asc' ? 1 : -1;
-      } else if (sortBy === 'totalSpent') {
-        sortField.totalSpent = sortOrder === 'asc' ? 1 : -1;
       } else {
+        // Default sorting per createdAt se serve sorting in memoria
         sortField['metadata.createdAt'] = sortOrder === 'asc' ? 1 : -1;
       }
 
-      const [customers, total] = await Promise.all([
-        customersCollection
-          .find(filter)
-          .sort(sortField)
-          .skip(skip)
-          .limit(limit)
-          .toArray(),
-        customersCollection.countDocuments(filter)
-      ]);
+      const total = await customersCollection.countDocuments(filter);
+
+      // Se serve sorting in memoria, recupera tutti i clienti che matchano il filtro
+      // Altrimenti, applica skip e limit sul DB
+      const customers = await customersCollection
+        .find(filter)
+        .sort(sortField)
+        .skip(needsMemorySort ? 0 : skip)
+        .limit(needsMemorySort ? 0 : limit)
+        .toArray();
 
       // Ottimizzazione: Recupera tutti gli orderIds una sola volta
       const allOrderIds = customers.flatMap(c => c.orders);
@@ -184,7 +226,7 @@ export class CustomerService {
       });
 
       // Calcola totali per ogni cliente
-      const customersWithRealTotals = customers.map(customer => {
+      let customersWithRealTotals: CustomerWithStats[] = customers.map(customer => {
         const customerOrders = customer.orders.flatMap(orderId => ordersMap.get(orderId) || []);
         const customerQuotes = customer.orders.flatMap(orderId => quotesMap.get(orderId) || []);
 
@@ -207,10 +249,20 @@ export class CustomerService {
         };
       });
 
+      // Se serve sorting in memoria, applica e poi fai skip/limit
+      if (needsMemorySort) {
+        customersWithRealTotals.sort((a, b) => {
+          const aValue = sortBy === 'totalOrders' ? a.totalOrders : a.totalSpent;
+          const bValue = sortBy === 'totalOrders' ? b.totalOrders : b.totalSpent;
+          return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+        });
+        customersWithRealTotals = customersWithRealTotals.slice(skip, skip + limit);
+      }
+
       return {
         customers: customersWithRealTotals,
         total,
-        hasMore: skip + customers.length < total
+        hasMore: skip + customersWithRealTotals.length < total
       };
     } catch (error) {
       return { customers: [], total: 0, hasMore: false };
@@ -331,8 +383,6 @@ export class CustomerService {
         phone: input.phone,
         address: input.address,
         orders: [],
-        totalOrders: 0,
-        totalSpent: 0,
         metadata: {
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -416,27 +466,36 @@ export class CustomerService {
       const now = new Date();
       const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-      const [totalCustomers, newCustomersThisMonth, topCustomers] = await Promise.all([
+      const [totalCustomers, newCustomersThisMonth, allCustomers] = await Promise.all([
         collection.countDocuments({}),
         collection.countDocuments({
           'metadata.createdAt': { $gte: firstDayOfMonth }
         }),
-        collection
-          .find({})
-          .sort({ totalSpent: -1 })
-          .limit(5)
-          .toArray()
+        collection.find({}).toArray()
       ]);
+
+      // Calcola totali per ogni cliente
+      const customersWithTotals = await Promise.all(
+        allCustomers.map(async (customer) => {
+          const totals = await this.calculateCustomerTotals(customer.orders);
+          return {
+            name: `${customer.firstName} ${customer.lastName}`,
+            email: customer.email,
+            totalSpent: totals.totalSpent,
+            totalOrders: totals.totalOrders,
+          };
+        })
+      );
+
+      // Ordina per totalSpent e prendi top 5
+      const topCustomers = customersWithTotals
+        .sort((a, b) => b.totalSpent - a.totalSpent)
+        .slice(0, 5);
 
       return {
         totalCustomers,
         newCustomersThisMonth,
-        topCustomers: topCustomers.map(c => ({
-          name: `${c.firstName} ${c.lastName}`,
-          email: c.email,
-          totalSpent: c.totalSpent,
-          totalOrders: c.totalOrders,
-        }))
+        topCustomers
       };
     } catch (error) {
       return {
