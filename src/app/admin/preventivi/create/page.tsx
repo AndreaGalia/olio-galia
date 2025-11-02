@@ -17,7 +17,9 @@ interface FormData {
   customerName: string;
   customerEmail: string;
   customerPhone: string;
-  customerAddress: string;
+  customerStreet: string;
+  customerCity: string;
+  customerPostalCode: string;
   customerProvince: string;
   selectedProducts: SelectedProduct[];
   shippingCost: number;
@@ -41,7 +43,9 @@ export default function CreateCustomQuotePage() {
     customerName: '',
     customerEmail: '',
     customerPhone: '',
-    customerAddress: '',
+    customerStreet: '',
+    customerCity: '',
+    customerPostalCode: '',
     customerProvince: '',
     selectedProducts: [],
     shippingCost: 0,
@@ -60,9 +64,9 @@ export default function CreateCustomQuotePage() {
         customerName: `${selectedCustomer.firstName} ${selectedCustomer.lastName}`,
         customerEmail: selectedCustomer.email,
         customerPhone: selectedCustomer.phone || '',
-        customerAddress: selectedCustomer.address
-          ? `${selectedCustomer.address.street}, ${selectedCustomer.address.city} ${selectedCustomer.address.postalCode}, ${selectedCustomer.address.country}`
-          : '',
+        customerStreet: selectedCustomer.address?.street || '',
+        customerCity: selectedCustomer.address?.city || '',
+        customerPostalCode: selectedCustomer.address?.postalCode || '',
         customerProvince: selectedCustomer.address?.province || ''
       }));
     }
@@ -203,11 +207,15 @@ export default function CreateCustomQuotePage() {
         quantity: typeof p.quantity === 'string' ? parseInt(p.quantity) || 1 : p.quantity
       }));
 
+      // Costruisce l'indirizzo completo dai campi separati (Via, Città senza CAP)
+      const fullAddress = `${formData.customerStreet}, ${formData.customerCity}`.trim();
+
       const apiData: any = {
         customerName: formData.customerName,
         customerEmail: formData.customerEmail,
         customerPhone: formData.customerPhone,
-        customerAddress: formData.customerAddress,
+        customerAddress: fullAddress,
+        customerPostalCode: formData.customerPostalCode,
         customerProvince: formData.customerProvince,
         selectedProducts: normalizedProducts,
         notes: formData.notes,
@@ -259,7 +267,9 @@ export default function CreateCustomQuotePage() {
             customerName: '',
             customerEmail: '',
             customerPhone: '',
-            customerAddress: '',
+            customerStreet: '',
+            customerCity: '',
+            customerPostalCode: '',
             customerProvince: '',
             selectedProducts: [],
             shippingCost: 0,
@@ -371,6 +381,46 @@ export default function CreateCustomQuotePage() {
                   />
                 </div>
 
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-nocciola mb-2">
+                    Indirizzo (Via e numero civico)
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.customerStreet}
+                    onChange={(e) => setFormData(prev => ({ ...prev, customerStreet: e.target.value }))}
+                    className="w-full px-4 py-2 border border-olive/20 rounded-lg focus:ring-2 focus:ring-olive/50 focus:border-olive"
+                    placeholder="Via Roma 123"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-nocciola mb-2">
+                    Città
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.customerCity}
+                    onChange={(e) => setFormData(prev => ({ ...prev, customerCity: e.target.value }))}
+                    className="w-full px-4 py-2 border border-olive/20 rounded-lg focus:ring-2 focus:ring-olive/50 focus:border-olive"
+                    placeholder="Torino"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-nocciola mb-2">
+                    CAP
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.customerPostalCode}
+                    onChange={(e) => setFormData(prev => ({ ...prev, customerPostalCode: e.target.value }))}
+                    className="w-full px-4 py-2 border border-olive/20 rounded-lg focus:ring-2 focus:ring-olive/50 focus:border-olive"
+                    placeholder="10100"
+                    maxLength={5}
+                  />
+                </div>
+
                 <div>
                   <label className="block text-sm font-medium text-nocciola mb-2">
                     Provincia
@@ -381,19 +431,7 @@ export default function CreateCustomQuotePage() {
                     onChange={(e) => setFormData(prev => ({ ...prev, customerProvince: e.target.value }))}
                     className="w-full px-4 py-2 border border-olive/20 rounded-lg focus:ring-2 focus:ring-olive/50 focus:border-olive"
                     placeholder="TO"
-                  />
-                </div>
-
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-nocciola mb-2">
-                    Indirizzo
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.customerAddress}
-                    onChange={(e) => setFormData(prev => ({ ...prev, customerAddress: e.target.value }))}
-                    className="w-full px-4 py-2 border border-olive/20 rounded-lg focus:ring-2 focus:ring-olive/50 focus:border-olive"
-                    placeholder="Via, numero civico, città"
+                    maxLength={2}
                   />
                 </div>
               </div>

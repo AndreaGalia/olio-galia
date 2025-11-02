@@ -75,6 +75,7 @@ export const GET = withAuth(async (request: NextRequest, { params }: { params: P
       },
       address: {
         street: form.address,
+        postalCode: form.postalCode,
         province: form.province,
       },
       cart: form.cart,
@@ -164,13 +165,13 @@ export const PATCH = withAuth(async (request: NextRequest, { params }: { params:
         const totalInEuros = finalPricing?.finalTotal || form.finalPricing?.finalTotal || 0;
         const totalInCents = Math.round(totalInEuros * 100);
 
-        // Estrai indirizzo dall'address string (formato: "Via 123, Città, Provincia")
+        // Estrai indirizzo dall'address string (formato: "Via 123, Città")
         const addressParts = (form.address || '').split(',').map((p: string) => p.trim());
         const addressDetails = addressParts.length > 0 ? {
           line1: addressParts[0] || undefined,
           city: addressParts[1] || undefined,
           state: form.province || undefined,
-          postal_code: undefined,
+          postal_code: form.postalCode || '', // Usa il CAP salvato nel form
           country: 'IT'
         } : undefined;
 
