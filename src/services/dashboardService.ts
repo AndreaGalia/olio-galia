@@ -466,6 +466,8 @@ export class DashboardService {
    */
   private static async getCustomerStats(db: any) {
     const customersCollection = db.collection('customers');
+    const ordersCollection = db.collection('orders');
+    const formsCollection = db.collection('forms');
 
     const lastMonth = new Date();
     lastMonth.setMonth(lastMonth.getMonth() - 1);
@@ -482,14 +484,46 @@ export class DashboardService {
         .toArray(),
     ]);
 
-    const recentCustomers: RecentCustomer[] = recentCustomersList.map((customer: any) => ({
-      id: customer._id.toString(),
-      name: `${customer.firstName} ${customer.lastName}`,
-      email: customer.email,
-      totalOrders: customer.totalOrders || 0,
-      totalSpent: customer.totalSpent || 0,
-      createdAt: customer.metadata?.createdAt || new Date(),
-    }));
+    // Calcola totalOrders e totalSpent per ogni cliente recente
+    const recentCustomers: RecentCustomer[] = await Promise.all(
+      recentCustomersList.map(async (customer: any) => {
+        const orderIds = customer.orders || [];
+
+        // Recupera ordini
+        const orders = await ordersCollection
+          .find({ id: { $in: orderIds } })
+          .toArray();
+
+        // Recupera preventivi (escludi pending)
+        const quotes = await formsCollection
+          .find({
+            orderId: { $in: orderIds },
+            status: { $ne: 'pending' }
+          })
+          .toArray();
+
+        // Calcola totale ordini (in centesimi)
+        const ordersTotal = orders.reduce((sum: number, order: any) => {
+          const totalInEuros = order.total || order.pricing?.total || 0;
+          return sum + Math.round(totalInEuros * 100);
+        }, 0);
+
+        // Calcola totale preventivi (in centesimi)
+        const quotesTotal = quotes.reduce((sum: number, quote: any) => {
+          const totalInEuros = quote.finalPricing?.finalTotal || 0;
+          return sum + Math.round(totalInEuros * 100);
+        }, 0);
+
+        return {
+          id: customer._id.toString(),
+          name: `${customer.firstName} ${customer.lastName}`,
+          email: customer.email,
+          totalOrders: orders.length + quotes.length,
+          totalSpent: ordersTotal + quotesTotal,
+          createdAt: customer.metadata?.createdAt || new Date(),
+        };
+      })
+    );
 
     return {
       totalCustomers,

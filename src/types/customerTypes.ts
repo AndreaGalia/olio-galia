@@ -16,13 +16,17 @@ export interface CustomerDocument {
   phone?: string;
   address?: CustomerAddress;
   orders: string[]; // Array di orderIds
-  totalOrders: number;
-  totalSpent: number; // In centesimi
   metadata: {
     createdAt: Date;
     updatedAt: Date;
     source: "manual" | "order" | "quote" | "newsletter";
   };
+}
+
+// Interfaccia estesa con campi calcolati
+export interface CustomerWithStats extends CustomerDocument {
+  totalOrders: number;
+  totalSpent: number; // In centesimi
 }
 
 export interface CustomerWithOrders extends CustomerDocument {

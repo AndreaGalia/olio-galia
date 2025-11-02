@@ -1,16 +1,16 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import type { CustomerDocument } from '@/types/customerTypes';
+import type { CustomerWithStats } from '@/types/customerTypes';
 
 interface CustomerSearchProps {
-  onSelectCustomer: (customer: CustomerDocument | null) => void;
-  selectedCustomer: CustomerDocument | null;
+  onSelectCustomer: (customer: CustomerWithStats | null) => void;
+  selectedCustomer: CustomerWithStats | null;
 }
 
 export default function CustomerSearch({ onSelectCustomer, selectedCustomer }: CustomerSearchProps) {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<CustomerDocument[]>([]);
+  const [results, setResults] = useState<CustomerWithStats[]>([]);
   const [loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -58,7 +58,7 @@ export default function CustomerSearch({ onSelectCustomer, selectedCustomer }: C
     return () => clearTimeout(timeoutId);
   }, [query]);
 
-  const handleSelectCustomer = (customer: CustomerDocument) => {
+  const handleSelectCustomer = (customer: CustomerWithStats) => {
     onSelectCustomer(customer);
     setQuery(`${customer.firstName} ${customer.lastName} (${customer.email})`);
     setShowDropdown(false);

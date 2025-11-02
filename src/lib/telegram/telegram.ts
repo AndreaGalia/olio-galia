@@ -81,8 +81,6 @@ export class TelegramService {
 
       if (successCount < totalCount) {
         console.warn(`⚠️ Notifica Telegram ${context} inviata a ${successCount}/${totalCount} utenti`);
-      } else {
-        console.log(`✅ Notifica Telegram ${context} inviata con successo a ${successCount} utenti`);
       }
 
       return true;

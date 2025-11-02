@@ -1,9 +1,9 @@
 import { useRouter } from 'next/navigation';
-import { CustomerDocument } from '@/types/customerTypes';
+import { CustomerWithStats } from '@/types/customerTypes';
 import { formatCurrency } from '@/utils/formatters';
 
 interface CustomerTableProps {
-  customers: CustomerDocument[];
+  customers: CustomerWithStats[];
 }
 
 export default function CustomerTable({ customers }: CustomerTableProps) {
