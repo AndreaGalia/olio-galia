@@ -2,6 +2,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { CustomerService } from '@/services/customerService';
 import { EmailService } from '@/lib/email/resend';
+import { WhatsAppService } from '@/lib/whatsapp/whatsapp';
+import { WhatsAppNewsletterData } from '@/types/whatsapp';
 
 export async function POST(request: NextRequest) {
   try {
@@ -57,11 +59,41 @@ export async function POST(request: NextRequest) {
       // Non blocchiamo l'iscrizione se l'email fallisce
     }
 
+    // Invia messaggio WhatsApp di benvenuto se abbiamo il numero di telefono
+    let whatsappSent = false;
+    let whatsappError = null;
+
+    if (phone) {
+      try {
+        const whatsappData: WhatsAppNewsletterData = {
+          firstName,
+          lastName,
+          customerPhone: phone,
+        };
+
+        const whatsappResult = await WhatsAppService.sendNewsletterWelcome(whatsappData);
+
+        if (whatsappResult.success) {
+          whatsappSent = true;
+          console.log(`[WhatsApp] Benvenuto newsletter inviato con successo. Message ID: ${whatsappResult.messageId}`);
+        } else {
+          whatsappError = whatsappResult.error || 'Errore nell\'invio WhatsApp';
+          console.warn(`[WhatsApp] Errore nell'invio: ${whatsappError}`);
+        }
+      } catch (error) {
+        whatsappError = error instanceof Error ? error.message : 'Errore sconosciuto nell\'invio WhatsApp';
+        console.error('[WhatsApp] Errore:', whatsappError);
+        // Non interrompiamo il processo per errori WhatsApp
+      }
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Iscrizione completata con successo! Controlla la tua email.',
       customerId,
       emailSent,
+      whatsappSent,
+      whatsappError,
     });
 
   } catch (error: any) {

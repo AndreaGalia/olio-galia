@@ -4,6 +4,8 @@ import { getDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 import { Resend } from 'resend';
 import { createQuoteEmailHTML } from '@/lib/email/quote-template';
+import { WhatsAppService } from '@/lib/whatsapp/whatsapp';
+import { WhatsAppQuoteData } from '@/types/whatsapp';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -115,16 +117,55 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
       throw new Error(`Errore nell'invio dell'email: ${JSON.stringify(emailResult.error || emailResult)}`);
     }
 
+    // Invia notifica WhatsApp se abbiamo il numero di telefono
+    let whatsappSent = false;
+    let whatsappError = null;
+
+    if (form.phone) {
+      try {
+        const whatsappData: WhatsAppQuoteData = {
+          customerName: `${form.firstName} ${form.lastName}`,
+          customerPhone: form.phone,
+          quoteNumber: form.orderId,
+          items: productsInfo.map((item: any) => ({
+            name: item.name,
+            quantity: item.quantity,
+            unitPrice: item.unitPrice,
+            totalPrice: item.totalPrice,
+          })),
+          subtotal: form.finalPricing.finalSubtotal,
+          shipping: form.finalPricing.finalShipping,
+          total: form.finalPricing.finalTotal,
+        };
+
+        const whatsappResult = await WhatsAppService.sendQuote(whatsappData);
+
+        if (whatsappResult.success) {
+          whatsappSent = true;
+          console.log(`[WhatsApp] Preventivo inviato con successo. Message ID: ${whatsappResult.messageId}`);
+        } else {
+          whatsappError = whatsappResult.error || 'Errore nell\'invio WhatsApp';
+          console.warn(`[WhatsApp] Errore nell'invio: ${whatsappError}`);
+        }
+      } catch (error) {
+        whatsappError = error instanceof Error ? error.message : 'Errore sconosciuto nell\'invio WhatsApp';
+        console.error('[WhatsApp] Errore:', whatsappError);
+        // Non interrompiamo il processo per errori WhatsApp
+      }
+    }
+
     // Aggiorna il form con informazioni sull'invio
     await collection.updateOne(
       { _id: form._id },
-      { 
-        $set: { 
+      {
+        $set: {
           quoteSent: true,
           quoteSentAt: new Date(),
           emailId: emailResult.data.id,
+          whatsappSent,
+          whatsappError,
           updatedAt: new Date()
-        } 
+        }
       }
     );
 
@@ -132,6 +173,8 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
       success: true,
       message: 'Preventivo inviato con successo',
       emailId: emailResult.data.id,
+      whatsappSent,
+      whatsappError,
     });
 
   } catch (error) {

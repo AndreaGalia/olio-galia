@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { withAuth } from '@/lib/auth/middleware';
 import { AdminOrderService } from '@/services/adminOrderService';
 import { EmailService } from '@/lib/email/resend';
+import { WhatsAppService } from '@/lib/whatsapp/whatsapp';
+import { WhatsAppShippingData, WhatsAppDeliveryData } from '@/types/whatsapp';
 
 export const GET = withAuth(async (
   request: NextRequest,
@@ -84,15 +86,41 @@ export const PUT = withAuth(async (
         };
 
         const emailSent = await EmailService.sendShippingNotification(shippingNotificationData);
-        
+
         if (emailSent) {
-          
+
         } else {
-          
+
         }
       } catch (emailError) {
-        
+
         // Non blocchiamo la response per un errore di email
+      }
+
+      // Invia notifica WhatsApp se abbiamo il numero di telefono
+      const customerPhone = updatedOrder.customer?.phone;
+      if (customerPhone) {
+        try {
+          const orderNumber = updatedOrder.orderId || updatedOrder.sessionId || updatedOrder.id;
+          const whatsappData: WhatsAppShippingData = {
+            customerName: updatedOrder.customerName || updatedOrder.customer?.name || 'Cliente',
+            customerPhone: customerPhone,
+            orderNumber: orderNumber.slice(-8).toUpperCase(),
+            shippingTrackingId,
+            expectedDelivery: undefined,
+          };
+
+          const whatsappResult = await WhatsAppService.sendShippingNotification(whatsappData);
+
+          if (whatsappResult.success) {
+            console.log(`[WhatsApp] Notifica spedizione inviata con successo. Message ID: ${whatsappResult.messageId}`);
+          } else {
+            console.warn(`[WhatsApp] Errore nell'invio notifica spedizione: ${whatsappResult.error}`);
+          }
+        } catch (whatsappError) {
+          console.error('[WhatsApp] Errore:', whatsappError);
+          // Non blocchiamo la response per errori WhatsApp
+        }
       }
     }
 
@@ -109,15 +137,40 @@ export const PUT = withAuth(async (
         };
 
         const emailSent = await EmailService.sendDeliveryNotification(deliveryNotificationData);
-        
+
         if (emailSent) {
-          
+
         } else {
-          
+
         }
       } catch (emailError) {
-        
+
         // Non blocchiamo la response per un errore di email
+      }
+
+      // Invia notifica WhatsApp se abbiamo il numero di telefono
+      const customerPhone = updatedOrder.customer?.phone;
+      if (customerPhone) {
+        try {
+          const orderNumber = updatedOrder.orderId || updatedOrder.sessionId || updatedOrder.id;
+          const whatsappData: WhatsAppDeliveryData = {
+            customerName: updatedOrder.customerName || updatedOrder.customer?.name || 'Cliente',
+            customerPhone: customerPhone,
+            orderNumber: orderNumber.slice(-8).toUpperCase(),
+            deliveryDate: new Date().toLocaleDateString('it-IT'),
+          };
+
+          const whatsappResult = await WhatsAppService.sendDeliveryConfirmation(whatsappData);
+
+          if (whatsappResult.success) {
+            console.log(`[WhatsApp] Conferma consegna inviata con successo. Message ID: ${whatsappResult.messageId}`);
+          } else {
+            console.warn(`[WhatsApp] Errore nell'invio conferma consegna: ${whatsappResult.error}`);
+          }
+        } catch (whatsappError) {
+          console.error('[WhatsApp] Errore:', whatsappError);
+          // Non blocchiamo la response per errori WhatsApp
+        }
       }
     }
 
