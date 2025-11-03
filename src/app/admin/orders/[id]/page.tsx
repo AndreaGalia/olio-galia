@@ -60,6 +60,8 @@ export default function AdminOrderDetailsPage({
   const [isSubmittingShipping, setIsSubmittingShipping] = useState(false);
   const [shippingSuccess, setShippingSuccess] = useState(false);
   const [shippingError, setShippingError] = useState<string | null>(null);
+  const [hasFeedback, setHasFeedback] = useState<boolean>(false);
+  const [feedbackLoading, setFeedbackLoading] = useState<boolean>(true);
 
   const getShippingStatusBadge = (status: string) => {
     const statusConfig = {
@@ -106,7 +108,7 @@ export default function AdminOrderDetailsPage({
       setError(null);
 
       const response = await fetch(`/api/admin/orders/${orderId}`);
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Errore nel recupero dei dettagli ordine');
@@ -115,12 +117,32 @@ export default function AdminOrderDetailsPage({
       const data = await response.json();
       setOrderDetails(data.order);
 
+      // Verifica se esistono feedback per questo ordine
+      checkFeedbackStatus(orderId);
+
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Errore sconosciuto';
       setError(errorMessage);
-      
+
     } finally {
       setLoading(false);
+    }
+  };
+
+  const checkFeedbackStatus = async (orderIdToCheck: string) => {
+    try {
+      setFeedbackLoading(true);
+      const response = await fetch(`/api/feedback/${orderIdToCheck}`);
+
+      if (response.ok) {
+        const data = await response.json();
+        setHasFeedback(data.exists || false);
+      }
+    } catch (error) {
+      console.error('Errore verifica feedback:', error);
+      setHasFeedback(false);
+    } finally {
+      setFeedbackLoading(false);
     }
   };
 
@@ -327,12 +349,19 @@ export default function AdminOrderDetailsPage({
               {/* Mobile Layout */}
               <div className="block sm:hidden space-y-4">
                 <div className="flex flex-wrap gap-2">
-                  <div className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${
+                  <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${
                     orderDetails.paymentStatus === 'paid'
                       ? 'bg-green-100 text-green-800'
                       : 'bg-yellow-100 text-yellow-800'
                   }`}>
-                    {orderDetails.paymentStatus === 'paid' ? '✓ Pagato' : '⏳ Non Pagato'}
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      {orderDetails.paymentStatus === 'paid' ? (
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      ) : (
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      )}
+                    </svg>
+                    {orderDetails.paymentStatus === 'paid' ? 'Pagato' : 'Non Pagato'}
                   </div>
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                     orderDetails.shippingStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' :
@@ -345,6 +374,18 @@ export default function AdminOrderDetailsPage({
                      orderDetails.shippingStatus === 'shipped' ? 'Spedito' :
                      'Consegnato'}
                   </span>
+                  {!feedbackLoading && (
+                    <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${
+                      hasFeedback
+                        ? 'bg-olive/10 text-olive'
+                        : 'bg-gray-100 text-gray-600'
+                    }`}>
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                      </svg>
+                      {hasFeedback ? 'Feedback' : 'No Feedback'}
+                    </div>
+                  )}
                 </div>
                 <div className="flex justify-between items-center">
                   <div className="text-xs text-nocciola">
@@ -363,15 +404,38 @@ export default function AdminOrderDetailsPage({
 
               {/* Desktop Layout */}
               <div className="hidden sm:flex sm:items-center sm:justify-between">
-                <div className="flex items-center space-x-4">
-                  <div className={`inline-flex px-4 py-2 rounded-full text-sm font-medium ${
+                <div className="flex items-center space-x-4 flex-wrap gap-2">
+                  <div className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium ${
                     orderDetails.paymentStatus === 'paid'
                       ? 'bg-green-100 text-green-800'
                       : 'bg-yellow-100 text-yellow-800'
                   }`}>
-                    {orderDetails.paymentStatus === 'paid' ? '✓ Pagato' : '⏳ Non Pagato'}
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      {orderDetails.paymentStatus === 'paid' ? (
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      ) : (
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      )}
+                    </svg>
+                    {orderDetails.paymentStatus === 'paid' ? 'Pagato' : 'Non Pagato'}
                   </div>
                   {getShippingStatusBadge(orderDetails.shippingStatus)}
+                  {!feedbackLoading && (
+                    <div className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium ${
+                      hasFeedback
+                        ? 'bg-olive/10 text-olive'
+                        : 'bg-gray-100 text-gray-600'
+                    }`}>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        {hasFeedback ? (
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                        ) : (
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                        )}
+                      </svg>
+                      {hasFeedback ? 'Feedback Ricevuto' : 'Nessun Feedback'}
+                    </div>
+                  )}
                   <div className="text-sm text-nocciola">
                     <div className="font-medium">Creato il</div>
                     <div>{new Date(orderDetails.created).toLocaleDateString('it-IT', {

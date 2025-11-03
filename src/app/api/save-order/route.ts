@@ -200,10 +200,8 @@ try {
 
         if (whatsappResult.success) {
           whatsappSent = true;
-          console.log(`[WhatsApp] Notifica ordine inviata con successo. Message ID: ${whatsappResult.messageId}`);
         } else {
           whatsappError = whatsappResult.error || 'Errore nell\'invio WhatsApp';
-          console.warn(`[WhatsApp] Errore nell'invio: ${whatsappError}`);
         }
       } catch (error) {
         whatsappError = error instanceof Error ? error.message : 'Errore sconosciuto nell\'invio WhatsApp';

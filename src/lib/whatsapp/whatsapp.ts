@@ -90,8 +90,6 @@ export class WhatsAppService {
         },
       };
 
-      console.log(`[WhatsApp] Invio messaggio a ${validation.formattedNumber} via Meta Cloud API`);
-
       // Chiamata API
       const response = await fetch(url, {
         method: 'POST',
@@ -116,7 +114,6 @@ export class WhatsAppService {
 
       // Successo
       const messageId = data.messages?.[0]?.id;
-      console.log(`[WhatsApp] Messaggio inviato con successo. Message ID: ${messageId}`);
 
       return {
         success: true,
@@ -199,13 +196,15 @@ export class WhatsAppService {
   /**
    * Invia conferma consegna via WhatsApp
    * @param deliveryData - Dati della consegna
+   * @param feedbackUrl - URL feedback opzionale con token JWT
    * @returns Risultato dell'invio
    */
   static async sendDeliveryConfirmation(
-    deliveryData: WhatsAppDeliveryData
+    deliveryData: WhatsAppDeliveryData,
+    feedbackUrl?: string
   ): Promise<WhatsAppSendResult> {
     try {
-      const message = createDeliveryWhatsAppMessage(deliveryData);
+      const message = createDeliveryWhatsAppMessage(deliveryData, feedbackUrl);
       return await this.sendMessage(deliveryData.customerPhone, message);
     } catch (error) {
       console.error('[WhatsApp] Errore nella creazione del messaggio consegna:', error);

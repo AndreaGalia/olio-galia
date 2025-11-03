@@ -1,6 +1,6 @@
 import { DeliveryNotificationData } from "@/types/email";
 
-export const createDeliveryNotificationHTML = (deliveryData: DeliveryNotificationData): string => {
+export const createDeliveryNotificationHTML = (deliveryData: DeliveryNotificationData, feedbackUrl?: string): string => {
   const { 
     customerName, 
     orderNumber, 
@@ -343,10 +343,18 @@ export const createDeliveryNotificationHTML = (deliveryData: DeliveryNotificatio
                   </p>
                   
                   <p class="thank-you-text" style="font-style: italic; color: #666666;">
-                    Se è soddisfatto del nostro servizio, ci farebbe molto piacere 
+                    Se è soddisfatto del nostro servizio, ci farebbe molto piacere
                     ricevere un suo feedback per aiutare altri clienti nelle loro scelte.
                   </p>
-                  
+
+                  ${feedbackUrl ? `<!-- Feedback Button -->
+                  <div style="text-align: center; margin: 30px 0;">
+                    <a href="${feedbackUrl}"
+                       style="display: inline-block; background-color: #556B2F; color: #ffffff; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-family: Georgia, 'Times New Roman', Times, serif; font-size: 16px; font-weight: bold; text-transform: uppercase;">
+                      ⭐ Lascia un Feedback
+                    </a>
+                  </div>` : ''}
+
                 </td>
               </tr>
               

@@ -142,7 +142,6 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
 
         if (whatsappResult.success) {
           whatsappSent = true;
-          console.log(`[WhatsApp] Preventivo inviato con successo. Message ID: ${whatsappResult.messageId}`);
         } else {
           whatsappError = whatsappResult.error || 'Errore nell\'invio WhatsApp';
           console.warn(`[WhatsApp] Errore nell'invio: ${whatsappError}`);
