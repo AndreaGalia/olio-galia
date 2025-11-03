@@ -113,7 +113,8 @@ Grazie per la tua pazienza! 🫒`;
 /**
  * Template messaggio WhatsApp per conferma consegna
  */
-export function createDeliveryWhatsAppMessage(data: WhatsAppDeliveryData): string {
+export function createDeliveryWhatsAppMessage(data: WhatsAppDeliveryData, feedbackUrl?: string): string {
+
   return `✅ *Olio Galia - Ordine Consegnato!*
 
 Ciao ${data.customerName}! 👋
@@ -125,13 +126,14 @@ ${data.deliveryDate ? `📅 Consegnato il: ${data.deliveryDate}` : ''}
 
 Ci auguriamo che tu sia soddisfatto del tuo acquisto!
 
-Se hai ricevuto tutto correttamente e vuoi condividere la tua esperienza, ci farebbe molto piacere! 💚
+${feedbackUrl ? `⭐ *Lascia un feedback sulla tua esperienza:*
+${feedbackUrl}
 
+La tua opinione è molto importante per noi e ci aiuta a migliorare! 💚
+` : 'Se hai ricevuto tutto correttamente e vuoi condividere la tua esperienza, ci farebbe molto piacere! 💚'}
 Per qualsiasi necessità, assistenza o feedback, siamo sempre qui per te.
 
-Grazie per aver scelto Olio Galia! 🫒
-
-_Ti è piaciuta la tua esperienza? Raccontacelo!_`;
+Grazie per aver scelto Olio Galia! 🫒`;
 }
 
 /**

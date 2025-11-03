@@ -312,7 +312,6 @@ ${quoteUrl ? `🔗 <a href="${quoteUrl}">Visualizza preventivo nel pannello admi
       }
 
       const data = await response.json();
-      console.log('✅ Connessione Telegram OK. Bot:', data.result.username);
       return true;
     } catch (error) {
       console.error('❌ Errore test connessione Telegram:', error);

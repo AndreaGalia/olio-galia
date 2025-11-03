@@ -40,6 +40,7 @@ export interface DeliveryNotificationData {
   customerName: string;
   customerEmail: string;
   orderNumber: string;
+  orderId?: string;  // MongoDB _id per link feedback
   shippingTrackingId?: string;
   deliveryDate?: string;
 }

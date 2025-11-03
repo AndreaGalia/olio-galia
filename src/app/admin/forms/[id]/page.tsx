@@ -65,6 +65,8 @@ export default function FormDetailPage() {
   const [finalPrices, setFinalPrices] = useState<Record<string, number | string>>({});
   const [finalShipping, setFinalShipping] = useState<number | string>(0);
   const [isSendingQuote, setIsSendingQuote] = useState(false);
+  const [hasFeedback, setHasFeedback] = useState<boolean>(false);
+  const [feedbackLoading, setFeedbackLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -84,7 +86,7 @@ export default function FormDetailPage() {
       setError(null);
 
       const response = await fetch(`/api/admin/forms/${params.id}`);
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Errore nel recupero del preventivo');
@@ -92,6 +94,9 @@ export default function FormDetailPage() {
 
       const data = await response.json();
       setForm(data.form);
+
+      // Verifica se esistono feedback per questo preventivo
+      checkFeedbackStatus(params.id as string);
       
       // Inizializza i prezzi finali se già presenti
       if (data.form.finalPricing && data.form.finalPricing.finalPrices) {
@@ -118,6 +123,22 @@ export default function FormDetailPage() {
     }
   };
 
+  const checkFeedbackStatus = async (formIdToCheck: string) => {
+    try {
+      setFeedbackLoading(true);
+      const response = await fetch(`/api/feedback/${formIdToCheck}`);
+
+      if (response.ok) {
+        const data = await response.json();
+        setHasFeedback(data.exists || false);
+      }
+    } catch (error) {
+      console.error('Errore verifica feedback:', error);
+      setHasFeedback(false);
+    } finally {
+      setFeedbackLoading(false);
+    }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -564,15 +585,29 @@ export default function FormDetailPage() {
               {/* Stato e Azioni */}
               <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-olive/10 p-6">
                 <h2 className="text-xl font-serif text-olive mb-4">Stato Preventivo</h2>
-                
+
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-nocciola mb-2">
                       Stato attuale
                     </label>
-                    <span className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full border ${getStatusColor(form.status)}`}>
-                      {getStatusText(form.status)}
-                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      <span className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full border ${getStatusColor(form.status)}`}>
+                        {getStatusText(form.status)}
+                      </span>
+                      {!feedbackLoading && (
+                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 text-sm font-semibold rounded-full border ${
+                          hasFeedback
+                            ? 'bg-olive/10 text-olive border-olive/30'
+                            : 'bg-gray-100 text-gray-600 border-gray-300'
+                        }`}>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                          </svg>
+                          {hasFeedback ? 'Feedback Ricevuto' : 'Nessun Feedback'}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   {/* Azioni Preventivo */}

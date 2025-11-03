@@ -53,6 +53,7 @@ export interface WhatsAppDeliveryData {
   customerName: string;
   customerPhone: string;
   orderNumber: string;
+  orderId?: string;  // MongoDB _id per link feedback
   deliveryDate?: string;
 }
 

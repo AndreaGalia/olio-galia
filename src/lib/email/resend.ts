@@ -60,9 +60,9 @@ export class EmailService {
     }
   }
 
-  static async sendDeliveryNotification(deliveryData: DeliveryNotificationData): Promise<boolean> {
+  static async sendDeliveryNotification(deliveryData: DeliveryNotificationData, feedbackUrl?: string): Promise<boolean> {
     try {
-      const htmlContent = createDeliveryNotificationHTML(deliveryData);
+      const htmlContent = createDeliveryNotificationHTML(deliveryData, feedbackUrl);
 
       const result = await resend.emails.send({
         from: FROM_EMAIL,

@@ -6,6 +6,7 @@ import { Resend } from 'resend';
 import { createDeliveryNotificationHTML } from '@/lib/email/delivery-template';
 import { WhatsAppService } from '@/lib/whatsapp/whatsapp';
 import { WhatsAppDeliveryData } from '@/types/whatsapp';
+import { generateFeedbackUrl } from '@/lib/feedback/token';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -43,14 +44,22 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
       customerName: `${form.firstName} ${form.lastName}`,
       customerEmail: form.email,
       orderNumber: form.orderId,
+      orderId: formId, // MongoDB _id per link feedback
       shippingTrackingId: form.shippingTrackingId || undefined,
       deliveryDate: new Date().toLocaleDateString('it-IT')
     };
 
-    
+    // Genera URL feedback sicuro con token JWT
+    let feedbackUrl: string | undefined;
+    try {
+      feedbackUrl = await generateFeedbackUrl(formId, 'quote');
+    } catch (error) {
+      console.error('[Feedback] Errore nella generazione token:', error);
+      // Continua senza link feedback se fallisce
+    }
 
     // Genera il contenuto HTML dell'email
-    const emailHTML = createDeliveryNotificationHTML(deliveryData);
+    const emailHTML = createDeliveryNotificationHTML(deliveryData, feedbackUrl);
 
     // Invia l'email
     
@@ -79,21 +88,19 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
           customerName: `${form.firstName} ${form.lastName}`,
           customerPhone: form.phone,
           orderNumber: form.orderId,
+          orderId: formId, // MongoDB _id per link feedback
           deliveryDate: new Date().toLocaleDateString('it-IT'),
         };
 
-        const whatsappResult = await WhatsAppService.sendDeliveryConfirmation(whatsappData);
+        const whatsappResult = await WhatsAppService.sendDeliveryConfirmation(whatsappData, feedbackUrl);
 
         if (whatsappResult.success) {
           whatsappSent = true;
-          console.log(`[WhatsApp] Conferma consegna inviata con successo. Message ID: ${whatsappResult.messageId}`);
         } else {
           whatsappError = whatsappResult.error || 'Errore nell\'invio WhatsApp';
-          console.warn(`[WhatsApp] Errore nell'invio: ${whatsappError}`);
         }
       } catch (error) {
         whatsappError = error instanceof Error ? error.message : 'Errore sconosciuto nell\'invio WhatsApp';
-        console.error('[WhatsApp] Errore:', whatsappError);
         // Non interrompiamo il processo per errori WhatsApp
       }
     }
