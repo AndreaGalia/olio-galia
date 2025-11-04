@@ -10,7 +10,7 @@ import { BatchFeedbackData, FeedbackDocument } from '@/types/feedback';
 export async function POST(request: NextRequest) {
   try {
     const body: BatchFeedbackData = await request.json();
-    const { orderId, customerEmail, customerName, orderType, feedbacks } = body;
+    const { orderId, customerEmail, customerName, isAnonymous, orderType, feedbacks } = body;
 
     // Validazione input base
     const missingFields: string[] = [];
@@ -98,6 +98,7 @@ export async function POST(request: NextRequest) {
         comment: feedback.comment.trim(),
         customerEmail: customerEmail.toLowerCase().trim(),
         customerName: customerName.trim(),
+        isAnonymous: isAnonymous || false, // Default false per retrocompatibilità
         orderType,
         createdAt: new Date(),
       });

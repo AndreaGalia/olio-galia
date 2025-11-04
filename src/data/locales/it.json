@@ -746,5 +746,69 @@
       "myOrders": "I miei ordini"
     },
     "footer": "Grazie per aver scelto Olio Galia per la tua spesa di qualità a Torino"
+  },
+  "feedback": {
+    "loading": "Caricamento...",
+    "error": {
+      "invalidToken": "Link non valido o scaduto. Il link è valido per 30 giorni dalla consegna.",
+      "orderNotFound": "Ordine non trovato",
+      "loadingError": "Errore nel caricamento delle informazioni",
+      "submitError": "Errore nell'invio dei feedback"
+    },
+    "alreadySubmitted": {
+      "title": "Feedback già inviati",
+      "message": "Hai già inviato i tuoi feedback per questo ordine.",
+      "backButton": "Torna alla Home"
+    },
+    "success": {
+      "title": "Grazie per i tuoi Feedback!",
+      "message": "I tuoi feedback sono molto preziosi per noi e ci aiutano a migliorare continuamente i nostri prodotti e servizi.",
+      "exploreProducts": "Esplora i nostri prodotti",
+      "backToHome": "Torna alla Home"
+    },
+    "form": {
+      "title": "I tuoi Feedback",
+      "subtitle": "Valuta ogni prodotto acquistato",
+      "orderInfo": {
+        "order": "Ordine",
+        "quote": "Preventivo",
+        "customer": "Cliente:",
+        "products": "Prodotti:",
+        "productsToReview": "Prodotti da valutare:"
+      },
+      "rating": {
+        "label": "Come valuti questo prodotto?",
+        "satisfaction": {
+          "1": "Molto insoddisfatto",
+          "2": "Insoddisfatto",
+          "3": "Neutrale",
+          "4": "Soddisfatto",
+          "5": "Molto soddisfatto"
+        }
+      },
+      "comment": {
+        "label": "La tua opinione su questo prodotto",
+        "placeholder": "Condividi la tua esperienza con {productName}...",
+        "minChars": "Minimo 10 caratteri",
+        "maxChars": "{current}/{max}"
+      },
+      "anonymous": {
+        "label": "Invia recensione in modo anonimo",
+        "description": "Se attivi questa opzione, il tuo nome non sarà visibile pubblicamente. I tuoi dati saranno comunque salvati per motivi di sicurezza e tracciabilità dell'ordine."
+      },
+      "productNumber": "#{number}",
+      "quantity": "Quantità: {count}",
+      "submit": "Invia {count} Feedback",
+      "submitting": "Invio in corso...",
+      "error": {
+        "title": "Errori",
+        "selectRating": "Seleziona una valutazione per \"{productName}\"",
+        "addComment": "Inserisci un commento per \"{productName}\"",
+        "commentTooLong": "Il commento per \"{productName}\" è troppo lungo"
+      }
+    },
+    "footer": {
+      "note": "I tuoi feedback ci aiutano a migliorare i nostri prodotti e servizi. Grazie per il tuo tempo!"
+    }
   }
 }   

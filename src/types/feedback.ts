@@ -12,8 +12,9 @@ export interface FeedbackDocument {
   productName: string;         // Nome del prodotto
   rating: number;              // Valutazione da 1 a 5 stelle
   comment: string;             // Commento del cliente (max 500 caratteri)
-  customerEmail: string;       // Email del cliente
-  customerName: string;        // Nome del cliente
+  customerEmail: string;       // Email del cliente (sempre salvata per anti-abuso)
+  customerName: string;        // Nome del cliente (sempre salvato per tracciabilità)
+  isAnonymous: boolean;        // Se true, nome nascosto nella visualizzazione pubblica
   orderType: 'order' | 'quote'; // Tipo: ordine o preventivo
   createdAt: Date;             // Data creazione feedback
 }
@@ -29,6 +30,7 @@ export interface CreateFeedbackData {
   comment: string;
   customerEmail: string;
   customerName: string;
+  isAnonymous: boolean;
   orderType: 'order' | 'quote';
 }
 
@@ -49,6 +51,7 @@ export interface BatchFeedbackData {
   orderId: string;
   customerEmail: string;
   customerName: string;
+  isAnonymous: boolean;        // Se true, il cliente vuole rimanere anonimo
   orderType: 'order' | 'quote';
   feedbacks: ProductFeedbackData[];
 }

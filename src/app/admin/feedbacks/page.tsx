@@ -25,6 +25,7 @@ interface FeedbackItem {
   comment: string;
   customerName: string;
   customerEmail: string;
+  isAnonymous: boolean;
   createdAt: Date;
   orderInfo?: {
     orderNumber: string;
@@ -380,9 +381,24 @@ export default function AdminFeedbacksPage() {
                       }`}>
                         {feedback.orderType === 'order' ? 'Ordine' : 'Preventivo'}
                       </span>
+                      {feedback.isAnonymous && (
+                        <span className="px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700 flex items-center gap-1">
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                          </svg>
+                          Anonimo
+                        </span>
+                      )}
                     </div>
-                    <h3 className="font-semibold text-gray-900">{feedback.customerName}</h3>
-                    <p className="text-sm text-gray-600">{feedback.customerEmail}</p>
+                    <h3 className="font-semibold text-gray-900">
+                      {feedback.isAnonymous ? 'Cliente Anonimo' : feedback.customerName}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {feedback.isAnonymous
+                        ? `${feedback.customerEmail.charAt(0)}***@${feedback.customerEmail.split('@')[1] || '***'}`
+                        : feedback.customerEmail
+                      }
+                    </p>
                     {feedback.productName && (
                       <p className="text-sm text-olive font-medium mt-1 flex items-center gap-1">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

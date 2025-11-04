@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import StarRating from '@/components/feedback/StarRating';
+import { useT } from '@/hooks/useT';
 
 interface OrderInfo {
   orderId: string;
@@ -45,6 +46,8 @@ export default function FeedbackPage() {
   const params = useParams();
   const router = useRouter();
   const token = params.orderId as string;
+  const { translate } = useT();
+  const successDivRef = useRef<HTMLDivElement>(null);
 
   const [loading, setLoading] = useState(true);
   const [orderInfo, setOrderInfo] = useState<OrderInfo | null>(null);
@@ -53,10 +56,18 @@ export default function FeedbackPage() {
 
   const [uniqueProducts, setUniqueProducts] = useState<UniqueProduct[]>([]);
   const [productFeedbacks, setProductFeedbacks] = useState<Record<string, ProductFeedback>>({});
+  const [isAnonymous, setIsAnonymous] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const maxCommentLength = 500;
+
+  // Scroll to top on success
+  useEffect(() => {
+    if (success && successDivRef.current) {
+      successDivRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [success]);
 
   // Carica informazioni ordine e verifica se esiste già un feedback
   useEffect(() => {
@@ -76,7 +87,7 @@ export default function FeedbackPage() {
         const orderData = await orderResponse.json();
 
         if (!orderResponse.ok || !orderData.success) {
-          setError(orderData.error || 'Link non valido o scaduto');
+          setError(orderData.error || translate('feedback.error.invalidToken'));
           setLoading(false);
           return;
         }
@@ -84,7 +95,6 @@ export default function FeedbackPage() {
         setOrderInfo(orderData.order);
 
         // Raggruppa prodotti uguali (stesso nome = stesso prodotto)
-        // Mantieni anche il productId del primo item con quel nome
         const productsMap = new Map<string, { productId?: string | null; quantity: number }>();
         orderData.order.items.forEach((item: { productId?: string | null; name: string; quantity: number }) => {
           const existing = productsMap.get(item.name);
@@ -126,7 +136,7 @@ export default function FeedbackPage() {
         setLoading(false);
       } catch (err) {
         console.error('Errore nel caricamento:', err);
-        setError('Errore nel caricamento delle informazioni');
+        setError(translate('feedback.error.loadingError'));
         setLoading(false);
       }
     };
@@ -160,7 +170,7 @@ export default function FeedbackPage() {
     e.preventDefault();
 
     if (!orderInfo) {
-      setError('Informazioni ordine mancanti');
+      setError(translate('feedback.error.orderNotFound'));
       return;
     }
 
@@ -170,13 +180,13 @@ export default function FeedbackPage() {
 
     feedbackArray.forEach(fb => {
       if (fb.rating === 0) {
-        errors.push(`Seleziona una valutazione per "${fb.productName}"`);
+        errors.push(translate('feedback.form.error.selectRating', { productName: fb.productName }));
       }
       if (!fb.comment || fb.comment.trim().length === 0) {
-        errors.push(`Inserisci un commento per "${fb.productName}"`);
+        errors.push(translate('feedback.form.error.addComment', { productName: fb.productName }));
       }
       if (fb.comment.length > maxCommentLength) {
-        errors.push(`Il commento per "${fb.productName}" è troppo lungo`);
+        errors.push(translate('feedback.form.error.commentTooLong', { productName: fb.productName }));
       }
     });
 
@@ -193,6 +203,7 @@ export default function FeedbackPage() {
         orderId: orderInfo.orderId,
         customerEmail: orderInfo.customerEmail,
         customerName: orderInfo.customerName,
+        isAnonymous: isAnonymous,
         orderType: orderInfo.orderType,
         feedbacks: feedbackArray.map(fb => ({
           productId: fb.productId || null,
@@ -213,7 +224,7 @@ export default function FeedbackPage() {
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        setError(data.error || 'Errore nell\'invio dei feedback');
+        setError(data.error || translate('feedback.error.submitError'));
         setSubmitting(false);
         return;
       }
@@ -222,7 +233,7 @@ export default function FeedbackPage() {
       setSubmitting(false);
     } catch (err) {
       console.error('Errore nell\'invio:', err);
-      setError('Errore nell\'invio dei feedback');
+      setError(translate('feedback.error.submitError'));
       setSubmitting(false);
     }
   };
@@ -233,7 +244,7 @@ export default function FeedbackPage() {
       <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-olive mx-auto mb-4"></div>
-          <p className="text-olive font-serif text-xl">Caricamento...</p>
+          <p className="text-olive font-serif text-xl">{translate('feedback.loading')}</p>
         </div>
       </div>
     );
@@ -249,13 +260,13 @@ export default function FeedbackPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-serif text-olive mb-4 uppercase">Attenzione</h1>
+          <h1 className="text-2xl font-serif text-olive mb-4 uppercase">{translate('feedback.error.invalidToken').split('.')[0]}</h1>
           <p className="text-gray-700 mb-6 whitespace-pre-line">{error}</p>
           <button
             onClick={() => router.push('/')}
             className="bg-olive text-white px-6 py-3 rounded-lg hover:bg-salvia transition-colors font-serif uppercase"
           >
-            Torna alla Home
+            {translate('feedback.alreadySubmitted.backButton')}
           </button>
         </div>
       </div>
@@ -273,8 +284,8 @@ export default function FeedbackPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h1 className="text-2xl font-serif text-olive mb-4 uppercase">Feedback già inviati</h1>
-            <p className="text-gray-700 mb-6">Hai già inviato i tuoi feedback per questo ordine.</p>
+            <h1 className="text-2xl font-serif text-olive mb-4 uppercase">{translate('feedback.alreadySubmitted.title')}</h1>
+            <p className="text-gray-700 mb-6">{translate('feedback.alreadySubmitted.message')}</p>
           </div>
 
           {existingFeedback.feedbacks && existingFeedback.feedbacks.length > 0 && (
@@ -299,7 +310,7 @@ export default function FeedbackPage() {
               onClick={() => router.push('/')}
               className="bg-olive text-white px-6 py-3 rounded-lg hover:bg-salvia transition-colors font-serif uppercase"
             >
-              Torna alla Home
+              {translate('feedback.alreadySubmitted.backButton')}
             </button>
           </div>
         </div>
@@ -310,28 +321,28 @@ export default function FeedbackPage() {
   // Success state
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige flex items-center justify-center px-4">
+      <div ref={successDivRef} className="min-h-screen bg-gradient-to-br from-sabbia to-beige flex items-center justify-center px-4">
         <div className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full text-center">
           <div className="flex justify-center mb-4">
             <svg className="w-16 h-16 text-olive" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-serif text-olive mb-4 uppercase">Grazie per i tuoi Feedback!</h1>
+          <h1 className="text-2xl font-serif text-olive mb-4 uppercase">{translate('feedback.success.title')}</h1>
           <p className="text-gray-700 mb-6">
-            I tuoi feedback sono molto preziosi per noi e ci aiutano a migliorare continuamente i nostri prodotti e servizi.
+            {translate('feedback.success.message')}
           </p>
           <button
             onClick={() => router.push('/products')}
             className="bg-olive text-white px-6 py-3 rounded-lg hover:bg-salvia transition-colors font-serif uppercase mb-3 w-full"
           >
-            Esplora i nostri prodotti
+            {translate('feedback.success.exploreProducts')}
           </button>
           <button
             onClick={() => router.push('/')}
             className="text-olive hover:text-salvia transition-colors font-serif uppercase"
           >
-            Torna alla Home
+            {translate('feedback.success.backToHome')}
           </button>
         </div>
       </div>
@@ -345,8 +356,8 @@ export default function FeedbackPage() {
         <div className="bg-white rounded-lg shadow-xl overflow-hidden">
           {/* Header */}
           <div className="bg-olive text-white p-6 sm:p-8 text-center">
-            <h1 className="text-2xl sm:text-3xl font-serif uppercase mb-2">I tuoi Feedback</h1>
-            <p className="text-beige text-sm sm:text-base">Valuta ogni prodotto acquistato</p>
+            <h1 className="text-2xl sm:text-3xl font-serif uppercase mb-2">{translate('feedback.form.title')}</h1>
+            <p className="text-beige text-sm sm:text-base">{translate('feedback.form.subtitle')}</p>
           </div>
 
           {/* Content */}
@@ -355,13 +366,13 @@ export default function FeedbackPage() {
             {orderInfo && (
               <div className="bg-beige rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
                 <h2 className="font-serif text-olive text-base sm:text-lg uppercase mb-3 sm:mb-4">
-                  {orderInfo.orderType === 'order' ? 'Ordine' : 'Preventivo'} #{orderInfo.orderNumber.slice(-8).toUpperCase()}
+                  {translate(`feedback.form.orderInfo.${orderInfo.orderType}`)} #{orderInfo.orderNumber.slice(-8).toUpperCase()}
                 </h2>
                 <p className="text-gray-700 mb-2 text-sm sm:text-base">
-                  <strong>Cliente:</strong> {orderInfo.customerName}
+                  <strong>{translate('feedback.form.orderInfo.customer')}</strong> {orderInfo.customerName}
                 </p>
                 <p className="text-gray-700 text-sm sm:text-base">
-                  <strong>Prodotti da valutare:</strong> {uniqueProducts.length}
+                  <strong>{translate('feedback.form.orderInfo.productsToReview')}</strong> {uniqueProducts.length}
                 </p>
               </div>
             )}
@@ -375,15 +386,19 @@ export default function FeedbackPage() {
                     <div className="flex items-center justify-between mb-4 sm:mb-6 pb-4 border-b border-sabbia">
                       <div className="flex-1">
                         <h3 className="font-serif text-olive text-lg sm:text-xl uppercase">{product.productName}</h3>
-                        <p className="text-xs sm:text-sm text-gray-600">Quantità: {product.quantity}</p>
+                        <p className="text-xs sm:text-sm text-gray-600">
+                          {translate('feedback.form.quantity', { count: product.quantity.toString() })}
+                        </p>
                       </div>
-                      <span className="text-2xl sm:text-3xl text-olive font-bold ml-2">#{index + 1}</span>
+                      <span className="text-2xl sm:text-3xl text-olive font-bold ml-2">
+                        {translate('feedback.form.productNumber', { number: (index + 1).toString() })}
+                      </span>
                     </div>
 
                     {/* Rating */}
                     <div className="mb-6 sm:mb-8">
                       <label className="block font-serif text-olive text-base sm:text-lg uppercase mb-4 sm:mb-5 text-center">
-                        Come valuti questo prodotto?
+                        {translate('feedback.form.rating.label')}
                       </label>
                       <div className="flex justify-center py-2">
                         <StarRating
@@ -394,11 +409,7 @@ export default function FeedbackPage() {
                       </div>
                       {productFeedbacks[product.productName]?.rating > 0 && (
                         <p className="text-center mt-3 sm:mt-4 text-sm sm:text-base text-gray-700 font-medium">
-                          {productFeedbacks[product.productName].rating === 1 && "Molto insoddisfatto"}
-                          {productFeedbacks[product.productName].rating === 2 && "Insoddisfatto"}
-                          {productFeedbacks[product.productName].rating === 3 && "Neutrale"}
-                          {productFeedbacks[product.productName].rating === 4 && "Soddisfatto"}
-                          {productFeedbacks[product.productName].rating === 5 && "Molto soddisfatto"}
+                          {translate(`feedback.form.rating.satisfaction.${productFeedbacks[product.productName].rating}`)}
                         </p>
                       )}
                     </div>
@@ -406,7 +417,7 @@ export default function FeedbackPage() {
                     {/* Comment */}
                     <div>
                       <label htmlFor={`comment-${product.productName}`} className="block font-serif text-olive text-base sm:text-lg uppercase mb-3">
-                        La tua opinione su questo prodotto
+                        {translate('feedback.form.comment.label')}
                       </label>
                       <textarea
                         id={`comment-${product.productName}`}
@@ -416,17 +427,20 @@ export default function FeedbackPage() {
                         maxLength={maxCommentLength}
                         rows={5}
                         className="w-full px-4 py-3 border-2 border-sabbia rounded-lg focus:border-olive focus:outline-none disabled:bg-gray-100 disabled:cursor-not-allowed resize-none text-base leading-relaxed"
-                        placeholder={`Condividi la tua esperienza con ${product.productName}...`}
+                        placeholder={translate('feedback.form.comment.placeholder', { productName: product.productName })}
                         required
                       />
                       <div className="flex justify-between items-center mt-2">
-                        <p className="text-xs sm:text-sm text-gray-500">Minimo 10 caratteri</p>
+                        <p className="text-xs sm:text-sm text-gray-500">{translate('feedback.form.comment.minChars')}</p>
                         <p className={`text-xs sm:text-sm ${
                           (productFeedbacks[product.productName]?.comment?.length || 0) > maxCommentLength - 50
                             ? 'text-red-600 font-semibold'
                             : 'text-gray-500'
                         }`}>
-                          {productFeedbacks[product.productName]?.comment?.length || 0}/{maxCommentLength}
+                          {translate('feedback.form.comment.maxChars', {
+                            current: (productFeedbacks[product.productName]?.comment?.length || 0).toString(),
+                            max: maxCommentLength.toString()
+                          })}
                         </p>
                       </div>
                     </div>
@@ -437,10 +451,31 @@ export default function FeedbackPage() {
               {/* Error Message */}
               {error && (
                 <div className="mt-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-lg">
-                  <p className="font-semibold text-sm sm:text-base">Errori</p>
+                  <p className="font-semibold text-sm sm:text-base">{translate('feedback.form.error.title')}</p>
                   <p className="whitespace-pre-line text-sm sm:text-base">{error}</p>
                 </div>
               )}
+
+              {/* Anonymous Checkbox */}
+              <div className="mt-6 sm:mt-8 bg-beige border-2 border-sabbia rounded-lg p-4 sm:p-5">
+                <label className="flex items-start gap-3 cursor-pointer group">
+                  <input
+                    type="checkbox"
+                    checked={isAnonymous}
+                    onChange={(e) => setIsAnonymous(e.target.checked)}
+                    disabled={submitting}
+                    className="mt-1 w-5 h-5 text-olive border-2 border-olive rounded focus:ring-2 focus:ring-olive focus:ring-offset-2 disabled:opacity-50 cursor-pointer"
+                  />
+                  <div className="flex-1">
+                    <span className="text-olive font-semibold text-sm sm:text-base block mb-1">
+                      {translate('feedback.form.anonymous.label')}
+                    </span>
+                    <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">
+                      {translate('feedback.form.anonymous.description')}
+                    </p>
+                  </div>
+                </label>
+              </div>
 
               {/* Submit Button */}
               <button
@@ -451,11 +486,11 @@ export default function FeedbackPage() {
                 {submitting ? (
                   <>
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                    <span>Invio in corso...</span>
+                    <span>{translate('feedback.form.submitting')}</span>
                   </>
                 ) : (
                   <>
-                    <span>Invia {uniqueProducts.length} Feedback</span>
+                    <span>{translate('feedback.form.submit', { count: uniqueProducts.length.toString() })}</span>
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -468,7 +503,7 @@ export default function FeedbackPage() {
 
         {/* Footer Note */}
         <p className="text-center text-gray-600 mt-4 sm:mt-6 text-xs sm:text-sm px-4">
-          I tuoi feedback ci aiutano a migliorare i nostri prodotti e servizi. Grazie per il tuo tempo!
+          {translate('feedback.footer.note')}
         </p>
       </div>
     </div>

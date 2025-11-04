@@ -7,7 +7,6 @@ import { verifyFeedbackToken } from '@/lib/feedback/token';
 /**
  * POST /api/feedback/verify
  * Verifica un token feedback e restituisce le info ordine
- * (sostituisce /api/feedback/order-info/[orderId])
  */
 export async function POST(request: NextRequest) {
   try {

@@ -746,5 +746,69 @@
       "myOrders": "My orders"
     },
     "footer": "Thank you for choosing Olio Galia for your quality shopping in Turin"
+  },
+  "feedback": {
+    "loading": "Loading...",
+    "error": {
+      "invalidToken": "Invalid or expired link. The link is valid for 30 days from delivery.",
+      "orderNotFound": "Order not found",
+      "loadingError": "Error loading information",
+      "submitError": "Error submitting feedback"
+    },
+    "alreadySubmitted": {
+      "title": "Feedback Already Submitted",
+      "message": "You have already submitted your feedback for this order.",
+      "backButton": "Back to Home"
+    },
+    "success": {
+      "title": "Thank You for Your Feedback!",
+      "message": "Your feedback is very valuable to us and helps us continuously improve our products and services.",
+      "exploreProducts": "Explore our products",
+      "backToHome": "Back to Home"
+    },
+    "form": {
+      "title": "Your Feedback",
+      "subtitle": "Rate each purchased product",
+      "orderInfo": {
+        "order": "Order",
+        "quote": "Quote",
+        "customer": "Customer:",
+        "products": "Products:",
+        "productsToReview": "Products to review:"
+      },
+      "rating": {
+        "label": "How do you rate this product?",
+        "satisfaction": {
+          "1": "Very dissatisfied",
+          "2": "Dissatisfied",
+          "3": "Neutral",
+          "4": "Satisfied",
+          "5": "Very satisfied"
+        }
+      },
+      "comment": {
+        "label": "Your opinion about this product",
+        "placeholder": "Share your experience with {productName}...",
+        "minChars": "Minimum 10 characters",
+        "maxChars": "{current}/{max}"
+      },
+      "anonymous": {
+        "label": "Submit review anonymously",
+        "description": "If you enable this option, your name will not be publicly visible. Your data will still be saved for security and order traceability purposes."
+      },
+      "productNumber": "#{number}",
+      "quantity": "Quantity: {count}",
+      "submit": "Submit {count} Feedback",
+      "submitting": "Submitting...",
+      "error": {
+        "title": "Errors",
+        "selectRating": "Select a rating for \"{productName}\"",
+        "addComment": "Enter a comment for \"{productName}\"",
+        "commentTooLong": "The comment for \"{productName}\" is too long"
+      }
+    },
+    "footer": {
+      "note": "Your feedback helps us improve our products and services. Thank you for your time!"
+    }
   }
 }

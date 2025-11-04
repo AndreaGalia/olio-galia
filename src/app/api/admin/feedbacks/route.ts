@@ -90,6 +90,7 @@ export const GET = withAuth(async (request: NextRequest) => {
           comment: feedback.comment,
           customerName: feedback.customerName,
           customerEmail: feedback.customerEmail,
+          isAnonymous: feedback.isAnonymous || false, // Default false per retrocompatibilità
           createdAt: feedback.createdAt,
           orderInfo,
         };

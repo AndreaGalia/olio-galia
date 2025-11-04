@@ -58,6 +58,7 @@ src/
 | `/cart` | `src/app/(shop)/cart/page.tsx` | Carrello acquisti |
 | `/checkout/success` | `src/app/(shop)/checkout/success/page.tsx` | Conferma ordine |
 | `/conferma-ordine` | `src/app/(shop)/conferma-ordine/page.tsx` | Conferma ordine alternativa |
+| `/feedback/[orderId]` | `src/app/(shop)/feedback/[orderId]/page.tsx` | Form feedback con token JWT |
 
 ## 🔧 Pannello Amministrativo
 
@@ -105,6 +106,11 @@ src/
 | `/admin/customers/create` | `src/app/admin/customers/create/page.tsx` | Creazione manuale cliente |
 | `/admin/customers/[id]` | `src/app/admin/customers/[id]/page.tsx` | Dettaglio cliente e storico ordini |
 
+### Gestione Feedback
+| Route | File | Descrizione |
+|-------|------|-------------|
+| `/admin/feedbacks` | `src/app/admin/feedbacks/page.tsx` | Lista e statistiche feedback clienti |
+
 ### Impostazioni
 | Route | File | Descrizione |
 |-------|------|-------------|
@@ -135,6 +141,13 @@ src/
 | `/api/save-order-pending` | `src/app/api/save-order-pending/route.ts` | POST | Salva ordine pendente |
 | `/api/order-details` | `src/app/api/order-details/route.ts` | GET | Dettagli ordine |
 | `/api/update-stock` | `src/app/api/update-stock/route.ts` | POST | Aggiorna stock prodotti |
+
+#### Feedback Clienti
+| Endpoint | File | Metodi | Descrizione |
+|----------|------|--------|-------------|
+| `/api/feedback/verify` | `src/app/api/feedback/verify/route.ts` | POST | Verifica token JWT e info ordine |
+| `/api/feedback/[orderId]` | `src/app/api/feedback/[orderId]/route.ts` | GET | Verifica esistenza feedback |
+| `/api/feedback/batch` | `src/app/api/feedback/batch/route.ts` | POST | Salva feedback multipli |
 
 #### Utility
 | Endpoint | File | Metodi | Descrizione |
@@ -192,6 +205,13 @@ src/
 |----------|------|--------|-------------|
 | `/api/admin/customers` | `src/app/api/admin/customers/route.ts` | GET, POST | Lista/creazione clienti |
 | `/api/admin/customers/[id]` | `src/app/api/admin/customers/[id]/route.ts` | GET, PUT, DELETE | CRUD cliente singolo |
+
+#### Feedback Admin
+| Endpoint | File | Metodi | Descrizione |
+|----------|------|--------|-------------|
+| `/api/admin/feedbacks` | `src/app/api/admin/feedbacks/route.ts` | GET | Lista feedback con filtri |
+| `/api/admin/feedbacks/stats` | `src/app/api/admin/feedbacks/stats/route.ts` | GET | Statistiche aggregate feedback |
+| `/api/admin/feedbacks/products` | `src/app/api/admin/feedbacks/products/route.ts` | GET | Prodotti unici con feedback |
 
 #### Sistema Admin
 | Endpoint | File | Metodi | Descrizione |
@@ -332,6 +352,7 @@ interface CustomerDocument {
 - ✅ Gestione ordini e preventivi
 - ✅ Sistema form contatti
 - ✅ Gestione clienti completa
+- ✅ Sistema feedback clienti con statistiche
 - ✅ Configurazioni sistema
 
 ### Integrazione Stripe
@@ -361,6 +382,239 @@ interface CustomerDocument {
 - **Indexes**: Indici su campi di ricerca frequente
 - **Aggregation**: Pipeline MongoDB per statistiche
 - **Connection Pooling**: Riutilizzo connessioni DB
+
+## 📝 Sistema Feedback Clienti
+
+### Panoramica
+Sistema completo per la raccolta e gestione dei feedback dei clienti sui prodotti acquistati, integrato con ordini e preventivi.
+
+### Architettura Feedback
+
+#### Token JWT Sicuri
+- **Validità**: 30 giorni dalla generazione
+- **Libreria**: Jose (SignJWT/jwtVerify)
+- **Secret**: JWT_SECRET environment variable
+- **Payload**: `{ orderId, orderType, subject: 'feedback' }`
+- **File**: `src/lib/feedback/token.ts`
+
+#### Flow Completo
+1. **Generazione Link**:
+   - Admin conferma consegna ordine (shippingStatus = 'delivered')
+   - Admin conferma preventivo (status = 'confermato')
+   - Sistema genera token JWT firmato
+   - Link feedback inviato via email: `{baseUrl}/feedback/{token}`
+
+2. **Verifica e Accesso**:
+   - Cliente clicca link feedback
+   - POST `/api/feedback/verify` verifica token JWT
+   - Controlla stato ordine/preventivo
+   - Recupera info ordine e prodotti
+
+3. **Form Multi-Prodotto**:
+   - Cliente vede lista prodotti acquistati
+   - Per ogni prodotto: rating (1-5 stelle) + commento (max 500 char)
+   - Validazione client-side e server-side
+   - Submit batch via POST `/api/feedback/batch`
+
+4. **Salvataggio**:
+   - Controllo duplicati per orderId
+   - Validazione completa di tutti i feedback
+   - insertMany per performance
+   - Risposta success con conteggio feedback salvati
+
+#### API Routes - Pubbliche
+
+| Endpoint | Metodi | Descrizione | File |
+|----------|--------|-------------|------|
+| `/api/feedback/verify` | POST | Verifica token JWT e restituisce info ordine | `src/app/api/feedback/verify/route.ts` |
+| `/api/feedback/[orderId]` | GET | Verifica esistenza feedback per ordine | `src/app/api/feedback/[orderId]/route.ts` |
+| `/api/feedback/batch` | POST | Salva feedback multipli per un ordine | `src/app/api/feedback/batch/route.ts` |
+
+#### API Routes - Admin (Protette)
+
+| Endpoint | Metodi | Descrizione | File |
+|----------|--------|-------------|------|
+| `/api/admin/feedbacks` | GET | Lista feedback con paginazione e filtri | `src/app/api/admin/feedbacks/route.ts` |
+| `/api/admin/feedbacks/stats` | GET | Statistiche aggregate (totale, media, distribuzione, trend) | `src/app/api/admin/feedbacks/stats/route.ts` |
+| `/api/admin/feedbacks/products` | GET | Lista prodotti unici dai feedback | `src/app/api/admin/feedbacks/products/route.ts` |
+
+#### Pagine Frontend
+
+| Route | Tipo | Descrizione | File |
+|-------|------|-------------|------|
+| `/feedback/[orderId]` | Pubblica | Form feedback multi-prodotto con token JWT | `src/app/(shop)/feedback/[orderId]/page.tsx` |
+| `/admin/feedbacks` | Protetta | Pannello admin gestione feedback | `src/app/admin/feedbacks/page.tsx` |
+
+#### Componenti
+
+| Component | Descrizione | Features | File |
+|-----------|-------------|----------|------|
+| `StarRating` | Rating a 5 stelle interattivo | Touch-optimized (48x48px), WCAG compliant, hover states | `src/components/feedback/StarRating.tsx` |
+
+#### Schema Database - Collection `feedbacks`
+
+```typescript
+interface FeedbackDocument {
+  _id: ObjectId;                  // ID MongoDB
+  orderId: string;                // ID ordine/preventivo (MongoDB _id)
+  productId?: string;             // ID prodotto Stripe (opzionale)
+  productName: string;            // Nome prodotto
+  rating: number;                 // Valutazione 1-5 stelle
+  comment: string;                // Commento cliente (max 500 char)
+  customerEmail: string;          // Email cliente (sempre salvata per anti-abuso)
+  customerName: string;           // Nome cliente (sempre salvato per tracciabilità)
+  isAnonymous: boolean;           // Se true, nome nascosto nell'admin panel
+  orderType: 'order' | 'quote';   // Tipo: ordine o preventivo
+  createdAt: Date;                // Data creazione feedback
+}
+```
+
+#### Indici MongoDB Raccomandati
+
+```javascript
+// Indice composito per filtri e ordinamento
+db.feedbacks.createIndex({
+  "orderType": 1,
+  "productName": 1,
+  "rating": -1,
+  "createdAt": -1
+});
+
+// Indice per controllo duplicati
+db.feedbacks.createIndex({ "orderId": 1 });
+
+// Indice per filtro prodotti
+db.feedbacks.createIndex({ "productName": 1 });
+
+// Indice per statistiche
+db.feedbacks.createIndex({ "rating": 1 });
+db.feedbacks.createIndex({ "createdAt": -1 });
+
+// Indice per ricerca clienti
+db.feedbacks.createIndex({ "customerEmail": 1 });
+```
+
+### Features Feedback
+
+#### Pagina Pubblica Feedback
+- ✅ Verifica token JWT con scadenza 30 giorni
+- ✅ Form multi-prodotto (batch submission)
+- ✅ **Opzione Anonimato**: Checkbox per inviare recensione anonima
+- ✅ Rating stelle con hover e touch feedback
+- ✅ Validazione real-time commenti (max 500 char)
+- ✅ Mobile-first UX responsive
+- ✅ Touch targets WCAG 2.1 AA compliant (min 48x48px)
+- ✅ Prevenzione feedback duplicati
+- ✅ Stati: loading, error, success, già inviato
+- ✅ Raggruppamento prodotti per nome con quantità
+
+#### Pannello Admin Feedback
+- ✅ **Dashboard Card**: Accesso rapido da dashboard admin
+- ✅ **Statistiche Real-time**:
+  - Totale feedback ricevuti
+  - Media valutazione (arrotondata a 1 decimale)
+  - Distribuzione rating (1-5 stelle)
+  - Feedback per tipo (ordini vs preventivi)
+  - Trend mensile ultimi 6 mesi
+- ✅ **Filtri Avanzati**:
+  - Tipo ordine (tutti/ordini/preventivi)
+  - Prodotto specifico (dropdown dinamico)
+  - Rating minimo (1-5 stelle)
+  - Ordinamento (data/rating, asc/desc)
+- ✅ **Paginazione**: 20 feedback per pagina
+- ✅ **Gestione Privacy**:
+  - Badge "Anonimo" per feedback anonimi
+  - Nome mostrato come "Cliente Anonimo"
+  - Email offuscata (es. "c***@email.com")
+  - Dati reali salvati per tracciabilità
+- ✅ **Info Dettagliate**:
+  - Stelle visualizzate
+  - Nome e email cliente (con privacy)
+  - Prodotto specifico
+  - Numero ordine e data
+  - Commento completo
+
+#### Integrazione con Sistema E-commerce
+- ✅ **Ordini**: Link feedback dopo consegna (`shippingStatus = 'delivered'`)
+- ✅ **Preventivi**: Link feedback dopo conferma (`status = 'confermato'`)
+- ✅ **Email Automatiche**: Invio link feedback via Resend
+- ✅ **Telegram Notifiche**: Alert admin su nuovi feedback (opzionale)
+- ✅ **ProductId Tracking**: Collegamento feedback-prodotto per analytics
+
+#### Validazioni e Sicurezza
+- ✅ Token JWT con firma HMAC SHA-256
+- ✅ Verifica expiry e subject claim
+- ✅ Controllo stato ordine prima di mostrare form
+- ✅ Validazione server-side completa:
+  - Rating: intero 1-5
+  - Commento: non vuoto, max 500 caratteri
+  - Email: formato valido, lowercase
+  - OrderType: solo 'order' o 'quote'
+- ✅ Prevenzione duplicati via orderId
+- ✅ Sanitizzazione input (trim, lowercase email)
+- ✅ **Privacy GDPR Compliant**:
+  - Dati reali sempre salvati per anti-abuso
+  - isAnonymous flag per visualizzazione pubblica
+  - Tracciabilità ordini mantenuta
+
+#### Performance Optimizations
+- ✅ React.useCallback per event handlers
+- ✅ Paginazione API (limit/skip)
+- ✅ Aggregation pipelines MongoDB per stats
+- ✅ Projection per fetch solo campi necessari
+- ✅ Parallel fetching (stats + products + feedbacks)
+- ✅ InsertMany per batch operations
+- ✅ Indici MongoDB per query veloci
+
+#### Mobile UX Improvements
+- ✅ Stelle grandi: text-5xl/6xl su mobile
+- ✅ Touch targets: min 48x48px (WCAG AA)
+- ✅ CSS touch-manipulation per performance
+- ✅ Active states: scale-95 feedback tattile
+- ✅ Padding responsive: py-6/py-12 sm breakpoint
+- ✅ Textarea: 5 righe su mobile
+- ✅ Submit button: min 56px height
+- ✅ Testo responsive: text-2xl/text-3xl
+
+#### Metriche e Analytics
+- **Totale Feedback**: Conteggio feedback ricevuti
+- **Media Rating**: Valutazione media ponderata
+- **Distribuzione Stelle**: Istogramma 1-5 stelle
+- **Per Tipo**: Ordini vs Preventivi
+- **Trend Mensile**: Conteggio e media ultimi 6 mesi
+- **Per Prodotto**: Filtro prodotto specifico
+- **Ultimi 5**: Preview feedback recenti
+
+### Types e Interfacce
+
+**File**: `src/types/feedback.ts`
+
+```typescript
+// Documento MongoDB
+interface FeedbackDocument
+
+// Creazione feedback singolo
+interface CreateFeedbackData
+
+// Feedback prodotto (batch)
+interface ProductFeedbackData
+
+// Batch multipli prodotti
+interface BatchFeedbackData
+
+// Risposta API
+interface FeedbackResponse
+
+// Verifica esistenza
+interface FeedbackExistsResponse
+
+// Info ordine per form
+interface OrderFeedbackInfo
+```
+
+### Documentazione Tecnica
+- **FEEDBACK_OPTIMIZATION.md**: Indici MongoDB e performance gains
+- **FEEDBACK_IMPROVEMENTS_SUMMARY.md**: Changelog features implementate
 
 ## 🔧 Configurazione e Deploy
 
