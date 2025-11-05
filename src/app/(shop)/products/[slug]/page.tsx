@@ -12,6 +12,7 @@ import ProductInfoSection from "@/components/singleProductPage/ProductInfoSectio
 import ProductDetailsCards from "@/components/singleProductPage/ProductDetailsCards";
 import RelatedProductsSection from "@/components/singleProductPage/RelatedProductsSection";
 import CustomHTMLRenderer from "@/components/singleProductPage/CustomHTMLRenderer";
+import ProductReviews from "@/components/reviews/ProductReviews";
 
 
 interface ProductDetailPageProps {
@@ -93,6 +94,14 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
             />
           </>
         )}
+
+        {/* Separatore visivo prima delle recensioni */}
+        <div className="my-12 border-t-2 border-olive/20"></div>
+
+        {/* Recensioni prodotto */}
+        <div className="mb-16">
+          <ProductReviews productSlug={slug} />
+        </div>
 
         {/* Prodotti correlati (sempre visibili) */}
         <RelatedProductsSection products={relatedProducts} />

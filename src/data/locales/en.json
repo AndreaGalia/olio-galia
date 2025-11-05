@@ -810,5 +810,31 @@
     "footer": {
       "note": "Your feedback helps us improve our products and services. Thank you for your time!"
     }
+  },
+  "productReviews": {
+    "title": "Customer Reviews",
+    "subtitle": "{count} reviews",
+    "noReviews": "No reviews available for this product yet.",
+    "beFirst": "Be the first to leave a review after your purchase!",
+    "averageRating": "Average rating",
+    "totalReviews": "Based on {count} reviews",
+    "filter": {
+      "all": "All stars",
+      "label": "Filter by rating",
+      "stars": "{count} stars"
+    },
+    "review": {
+      "anonymous": "Anonymous Customer",
+      "verified": "Verified Purchase",
+      "helpful": "Helpful?"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {current} of {total}",
+      "showing": "Showing {from}-{to} of {total} reviews"
+    },
+    "loading": "Loading reviews...",
+    "error": "Error loading reviews. Please try again later."
   }
 }
