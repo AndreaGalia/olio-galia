@@ -429,6 +429,7 @@ Sistema completo per la raccolta e gestione dei feedback dei clienti sui prodott
 | `/api/feedback/verify` | POST | Verifica token JWT e restituisce info ordine | `src/app/api/feedback/verify/route.ts` |
 | `/api/feedback/[orderId]` | GET | Verifica esistenza feedback per ordine | `src/app/api/feedback/[orderId]/route.ts` |
 | `/api/feedback/batch` | POST | Salva feedback multipli per un ordine | `src/app/api/feedback/batch/route.ts` |
+| `/api/products/[slug]/feedbacks` | GET | Recupera recensioni pubbliche per prodotto con filtri e stats | `src/app/api/products/[slug]/feedbacks/route.ts` |
 
 #### API Routes - Admin (Protette)
 
@@ -450,6 +451,8 @@ Sistema completo per la raccolta e gestione dei feedback dei clienti sui prodott
 | Component | Descrizione | Features | File |
 |-----------|-------------|----------|------|
 | `StarRating` | Rating a 5 stelle interattivo | Touch-optimized (48x48px), WCAG compliant, hover states | `src/components/feedback/StarRating.tsx` |
+| `StarDisplay` | Stelle read-only per visualizzazione | 3 dimensioni (sm/md/lg), accessibile, mobile-optimized | `src/components/reviews/StarDisplay.tsx` |
+| `ProductReviews` | Sezione recensioni pubbliche prodotto | Statistiche, filtri stelle, paginazione (5/pag), auto-scroll, multilingua | `src/components/reviews/ProductReviews.tsx` |
 
 #### Schema Database - Collection `feedbacks`
 
@@ -485,6 +488,9 @@ db.feedbacks.createIndex({ "orderId": 1 });
 
 // Indice per filtro prodotti
 db.feedbacks.createIndex({ "productName": 1 });
+
+// Indice per recensioni pubbliche per productId
+db.feedbacks.createIndex({ "productId": 1, "createdAt": -1 });
 
 // Indice per statistiche
 db.feedbacks.createIndex({ "rating": 1 });
@@ -533,6 +539,16 @@ db.feedbacks.createIndex({ "customerEmail": 1 });
   - Prodotto specifico
   - Numero ordine e data
   - Commento completo
+
+#### Recensioni Pubbliche Prodotti
+- ✅ **Visualizzazione Pagina Prodotto**: Sezione recensioni sotto CustomHTMLRenderer
+- ✅ **Statistiche Live**: Media rating, totale recensioni, distribuzione stelle (1-5)
+- ✅ **Filtri Interattivi**: Filtro per stelle specifiche o tutte
+- ✅ **Paginazione Smart**: 5 recensioni/pagina con auto-scroll smooth su mobile
+- ✅ **Privacy-First**: Nome nascosto per recensioni anonime, badge "Anonimo"
+- ✅ **Multilingua**: Supporto IT/EN con traduzioni complete e date localizzate
+- ✅ **Mobile-Optimized**: Design responsive, touch-friendly, stile global.css
+- ✅ **Badge Verificato**: Mostra "Acquisto Verificato" per ogni recensione
 
 #### Integrazione con Sistema E-commerce
 - ✅ **Ordini**: Link feedback dopo consegna (`shippingStatus = 'delivered'`)

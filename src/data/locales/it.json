@@ -810,5 +810,31 @@
     "footer": {
       "note": "I tuoi feedback ci aiutano a migliorare i nostri prodotti e servizi. Grazie per il tuo tempo!"
     }
+  },
+  "productReviews": {
+    "title": "Recensioni dei Clienti",
+    "subtitle": "{count} recensioni",
+    "noReviews": "Nessuna recensione disponibile per questo prodotto.",
+    "beFirst": "Sii il primo a lasciare una recensione dopo l'acquisto!",
+    "averageRating": "Media valutazioni",
+    "totalReviews": "Basato su {count} recensioni",
+    "filter": {
+      "all": "Tutte le stelle",
+      "label": "Filtra per valutazione",
+      "stars": "{count} stelle"
+    },
+    "review": {
+      "anonymous": "Cliente Anonimo",
+      "verified": "Acquisto Verificato",
+      "helpful": "Utile?"
+    },
+    "pagination": {
+      "previous": "Precedente",
+      "next": "Successivo",
+      "page": "Pagina {current} di {total}",
+      "showing": "Mostrando {from}-{to} di {total} recensioni"
+    },
+    "loading": "Caricamento recensioni...",
+    "error": "Errore nel caricamento delle recensioni. Riprova più tardi."
   }
 }   
