@@ -49,6 +49,7 @@ src/
 | `/` | `src/app/page.tsx` | Homepage principale |
 | `/about` | `src/app/(marketing)/about/page.tsx` | Pagina chi siamo |
 | `/contact` | `src/app/(marketing)/contact/page.tsx` | Contatti e form |
+| `/smaltimento-rifiuti` | `src/app/(marketing)/smaltimento-rifiuti/page.tsx` | Guida riciclaggio packaging con tabella materiali (IT/EN) |
 
 ### E-commerce Pages
 | Route | File | Descrizione |

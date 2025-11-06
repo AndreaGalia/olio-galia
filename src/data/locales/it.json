@@ -836,5 +836,69 @@
     },
     "loading": "Caricamento recensioni...",
     "error": "Errore nel caricamento delle recensioni. Riprova più tardi."
+  },
+  "wasteDisposalPage": {
+    "hero": {
+      "badge": "Sostenibilità Ambientale",
+      "title": "Guida allo Smaltimento dei Rifiuti",
+      "subtitle": "Come riciclare correttamente il packaging dei nostri prodotti",
+      "description": "La sostenibilità è importante per noi. Segui questa guida per riciclare correttamente ogni componente della nostra confezione e contribuire alla protezione dell'ambiente."
+    },
+    "table": {
+      "title": "Tabella di Riciclaggio",
+      "subtitle": "Componenti e materiali",
+      "headers": {
+        "component": "Componente",
+        "material": "Materiale",
+        "code": "Codice"
+      },
+      "items": {
+        "bottle": {
+          "name": "Flacone",
+          "material": "Vetro",
+          "code": "GL70"
+        },
+        "pipette": {
+          "name": "Pipetta",
+          "material": "Vetro",
+          "code": "GL70"
+        },
+        "ring": {
+          "name": "Ghiera",
+          "material": "Plastica",
+          "code": "PP5"
+        },
+        "bulb": {
+          "name": "Bulbo",
+          "material": "Indifferenziato",
+          "code": "-"
+        },
+        "label": {
+          "name": "Etichetta",
+          "material": "Plastica",
+          "code": "Da definire"
+        }
+      }
+    },
+    "instructions": {
+      "title": "Istruzioni per il Riciclaggio",
+      "steps": [
+        {
+          "title": "Separa i Componenti",
+          "description": "Rimuovi con cura ogni componente dal flacone: pipetta, ghiera e bulbo."
+        },
+        {
+          "title": "Pulisci i Contenitori",
+          "description": "Sciacqua il flacone e la pipetta per rimuovere eventuali residui di olio."
+        },
+        {
+          "title": "Smaltisci Correttamente",
+          "description": "Segui le indicazioni della tabella per conferire ogni componente nel giusto contenitore di raccolta differenziata."
+        }
+      ]
+    },
+    "footer": {
+      "note": "Per ulteriori informazioni sullo smaltimento dei rifiuti, consulta le linee guida del tuo comune di residenza."
+    }
   }
 }   

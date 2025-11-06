@@ -836,5 +836,69 @@
     },
     "loading": "Loading reviews...",
     "error": "Error loading reviews. Please try again later."
+  },
+  "wasteDisposalPage": {
+    "hero": {
+      "badge": "Environmental Sustainability",
+      "title": "Waste Disposal Guide",
+      "subtitle": "How to properly recycle our product packaging",
+      "description": "Sustainability is important to us. Follow this guide to properly recycle each component of our packaging and contribute to environmental protection."
+    },
+    "table": {
+      "title": "Recycling Table",
+      "subtitle": "Components and materials",
+      "headers": {
+        "component": "Component",
+        "material": "Material",
+        "code": "Code"
+      },
+      "items": {
+        "bottle": {
+          "name": "Bottle",
+          "material": "Glass",
+          "code": "GL70"
+        },
+        "pipette": {
+          "name": "Pipette",
+          "material": "Glass",
+          "code": "GL70"
+        },
+        "ring": {
+          "name": "Ring",
+          "material": "Plastic",
+          "code": "PP5"
+        },
+        "bulb": {
+          "name": "Bulb",
+          "material": "General waste",
+          "code": "-"
+        },
+        "label": {
+          "name": "Label",
+          "material": "Plastic",
+          "code": "To be defined"
+        }
+      }
+    },
+    "instructions": {
+      "title": "Recycling Instructions",
+      "steps": [
+        {
+          "title": "Separate Components",
+          "description": "Carefully remove each component from the bottle: pipette, ring, and bulb."
+        },
+        {
+          "title": "Clean Containers",
+          "description": "Rinse the bottle and pipette to remove any oil residue."
+        },
+        {
+          "title": "Dispose Correctly",
+          "description": "Follow the table instructions to place each component in the appropriate recycling bin."
+        }
+      ]
+    },
+    "footer": {
+      "note": "For more information on waste disposal, consult your local municipality's guidelines."
+    }
   }
 }
