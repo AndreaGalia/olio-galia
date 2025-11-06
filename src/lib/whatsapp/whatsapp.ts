@@ -5,6 +5,7 @@ import {
   WhatsAppShippingData,
   WhatsAppDeliveryData,
   WhatsAppNewsletterData,
+  WhatsAppReviewRequestData,
   WhatsAppSendResult,
 } from '@/types/whatsapp';
 import { validatePhoneNumber } from './phone-validator';
@@ -13,7 +14,8 @@ import {
   createQuoteWhatsAppMessage,
   createShippingWhatsAppMessage,
   createDeliveryWhatsAppMessage,
-  createNewsletterWelcomeWhatsAppMessage
+  createNewsletterWelcomeWhatsAppMessage,
+  createReviewRequestWhatsAppMessage
 } from './message-templates';
 
 // Configurazione Meta Cloud API (WhatsApp Business API)
@@ -229,6 +231,29 @@ export class WhatsAppService {
       return await this.sendMessage(newsletterData.customerPhone, message);
     } catch (error) {
       console.error('[WhatsApp] Errore nella creazione del messaggio newsletter:', error);
+      return {
+        success: false,
+        error: 'Errore nella creazione del messaggio',
+        errorCode: 'MESSAGE_CREATION_ERROR',
+      };
+    }
+  }
+
+  /**
+   * Invia richiesta recensione via WhatsApp
+   * @param reviewData - Dati per richiesta recensione
+   * @param feedbackUrl - URL feedback con token JWT
+   * @returns Risultato dell'invio
+   */
+  static async sendReviewRequest(
+    reviewData: WhatsAppReviewRequestData,
+    feedbackUrl: string
+  ): Promise<WhatsAppSendResult> {
+    try {
+      const message = createReviewRequestWhatsAppMessage(reviewData, feedbackUrl);
+      return await this.sendMessage(reviewData.customerPhone, message);
+    } catch (error) {
+      console.error('[WhatsApp] Errore nella creazione del messaggio richiesta recensione:', error);
       return {
         success: false,
         error: 'Errore nella creazione del messaggio',

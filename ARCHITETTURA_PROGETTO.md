@@ -186,6 +186,7 @@ src/
 |----------|------|--------|-------------|
 | `/api/admin/orders` | `src/app/api/admin/orders/route.ts` | GET | Lista ordini admin |
 | `/api/admin/orders/[id]` | `src/app/api/admin/orders/[id]/route.ts` | GET, PUT | Dettaglio/modifica ordine |
+| `/api/admin/orders/[id]/request-review` | `src/app/api/admin/orders/[id]/request-review/route.ts` | POST | Richiesta recensione manuale (24h limit) |
 
 #### Preventivi Admin
 | Endpoint | File | Metodi | Descrizione |
@@ -200,6 +201,7 @@ src/
 | `/api/admin/forms/[id]` | `src/app/api/admin/forms/[id]/route.ts` | GET, PUT, DELETE | Gestione form singolo |
 | `/api/admin/forms/[id]/send-quote` | `src/app/api/admin/forms/[id]/send-quote/route.ts` | POST | Invio preventivo |
 | `/api/admin/forms/[id]/send-delivery-confirmation` | `src/app/api/admin/forms/[id]/send-delivery-confirmation/route.ts` | POST | Conferma consegna |
+| `/api/admin/forms/[id]/request-review` | `src/app/api/admin/forms/[id]/request-review/route.ts` | POST | Richiesta recensione manuale (24h limit) |
 
 #### Gestione Clienti Admin
 | Endpoint | File | Metodi | Descrizione |
@@ -354,6 +356,7 @@ interface CustomerDocument {
 - ✅ Sistema form contatti
 - ✅ Gestione clienti completa
 - ✅ Sistema feedback clienti con statistiche
+- ✅ Richiesta recensione manuale con protezione 24h
 - ✅ Configurazioni sistema
 
 ### Integrazione Stripe
@@ -501,6 +504,24 @@ db.feedbacks.createIndex({ "createdAt": -1 });
 db.feedbacks.createIndex({ "customerEmail": 1 });
 ```
 
+### Richiesta Recensione Manuale
+
+Sistema per richiedere recensioni ai clienti da pannello admin con protezione anti-spam.
+
+#### Funzionamento
+- **Trigger**: Bottone in dettaglio ordine (delivered) o preventivo (confermato)
+- **Condizione**: Nessun feedback esistente per ordine/preventivo
+- **Protezione 24h**: Max 1 richiesta al giorno per ordine
+- **Invio**: Email + WhatsApp con link JWT sicuro (30gg validità)
+- **Contatori**: `reviewRequestCount`, `lastReviewRequestDate` in collections orders/forms
+- **Template**: Email e WhatsApp amichevoli (`src/lib/email/review-request-template.ts`)
+
+#### UI Admin
+- Bottone gradient purple-pink visibile solo se condizioni soddisfatte
+- Contatore richieste inviate + timestamp ultimo invio
+- Timer ore rimanenti prima prossimo invio
+- Messaggi successo/errore real-time
+
 ### Features Feedback
 
 #### Pagina Pubblica Feedback
@@ -554,7 +575,9 @@ db.feedbacks.createIndex({ "customerEmail": 1 });
 #### Integrazione con Sistema E-commerce
 - ✅ **Ordini**: Link feedback dopo consegna (`shippingStatus = 'delivered'`)
 - ✅ **Preventivi**: Link feedback dopo conferma (`status = 'confermato'`)
-- ✅ **Email Automatiche**: Invio link feedback via Resend
+- ✅ **Email Automatiche**: Invio link feedback via Resend (auto + richieste manuali)
+- ✅ **WhatsApp**: Messaggi amichevoli con link feedback (auto + richieste manuali)
+- ✅ **Richieste Manuali**: Bottone admin con protezione 24h e contatori
 - ✅ **Telegram Notifiche**: Alert admin su nuovi feedback (opzionale)
 - ✅ **ProductId Tracking**: Collegamento feedback-prodotto per analytics
 
@@ -650,6 +673,12 @@ JWT_SECRET=your-secret-key
 
 # Email (Resend)
 RESEND_API_KEY=re_...
+FROM_EMAIL=Olio Galia <noreply@tuosito.com>
+
+# WhatsApp (Meta Business API)
+WHATSAPP_ENABLED=true
+META_WHATSAPP_PHONE_NUMBER_ID=your-phone-number-id
+META_WHATSAPP_ACCESS_TOKEN=your-access-token
 
 # Telegram (Notifiche ordini)
 TELEGRAM_BOT_TOKEN=your-bot-token

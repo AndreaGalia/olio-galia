@@ -67,6 +67,16 @@ export interface WhatsAppNewsletterData {
 }
 
 /**
+ * Dati per messaggio WhatsApp di richiesta recensione
+ */
+export interface WhatsAppReviewRequestData {
+  customerName: string;
+  customerPhone: string;
+  orderNumber: string;
+  orderType?: 'order' | 'quote';
+}
+
+/**
  * Risultato invio WhatsApp
  */
 export interface WhatsAppSendResult {
