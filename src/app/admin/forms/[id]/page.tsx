@@ -52,6 +52,8 @@ interface FormDetails {
   created: string;
   notes: string;
   itemCount: number;
+  reviewRequestCount?: number;
+  lastReviewRequestDate?: string;
 }
 
 export default function FormDetailPage() {
@@ -67,6 +69,9 @@ export default function FormDetailPage() {
   const [isSendingQuote, setIsSendingQuote] = useState(false);
   const [hasFeedback, setHasFeedback] = useState<boolean>(false);
   const [feedbackLoading, setFeedbackLoading] = useState<boolean>(true);
+  const [isRequestingReview, setIsRequestingReview] = useState(false);
+  const [reviewRequestSuccess, setReviewRequestSuccess] = useState(false);
+  const [reviewRequestError, setReviewRequestError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -327,6 +332,48 @@ export default function FormDetailPage() {
       </div>
     );
   }
+
+  const handleReviewRequest = async () => {
+    setIsRequestingReview(true);
+    setReviewRequestError(null);
+    setReviewRequestSuccess(false);
+
+    try {
+      const response = await fetch(`/api/admin/forms/${params.id}/request-review`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Errore nell\'invio della richiesta recensione');
+      }
+
+      // Aggiorna i dati del form con il nuovo contatore
+      if (form) {
+        setForm({
+          ...form,
+          reviewRequestCount: data.reviewRequestCount,
+          lastReviewRequestDate: data.lastReviewRequestDate,
+        });
+      }
+
+      setReviewRequestSuccess(true);
+
+      setTimeout(() => {
+        setReviewRequestSuccess(false);
+      }, 5000);
+
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Errore sconosciuto';
+      setReviewRequestError(errorMessage);
+    } finally {
+      setIsRequestingReview(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sabbia via-beige to-sabbia/80">
@@ -707,6 +754,121 @@ export default function FormDetailPage() {
                   )}
                 </div>
               </div>
+
+              {/* Bottone Richiesta Recensione - Solo se confermato e NON esiste già feedback */}
+              {form.status === 'confermato' && !hasFeedback && !feedbackLoading && (
+                <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-4 sm:p-6 border border-purple-200 shadow-lg">
+                  <div className="flex items-center mb-4">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mr-3 sm:mr-4">
+                      <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <h2 className="text-lg sm:text-xl font-serif text-purple-900 font-semibold">Richiedi Recensione</h2>
+                      <p className="text-sm text-purple-700">Invia una richiesta amichevole al cliente</p>
+                    </div>
+                  </div>
+
+                  {/* Contatore e Ultimo Invio */}
+                  {(form.reviewRequestCount || 0) > 0 && (
+                    <div className="bg-white rounded-lg p-4 mb-4 border border-purple-200">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="flex items-center justify-between sm:justify-start gap-2">
+                          <span className="text-sm font-medium text-purple-700">Richieste inviate:</span>
+                          <span className="inline-flex items-center justify-center w-8 h-8 bg-purple-500 text-white text-sm font-bold rounded-full">
+                            {form.reviewRequestCount}
+                          </span>
+                        </div>
+                        {form.lastReviewRequestDate && (
+                          <div className="text-sm text-purple-600">
+                            <span className="font-medium">Ultimo invio:</span>{' '}
+                            {new Date(form.lastReviewRequestDate).toLocaleString('it-IT', {
+                              day: '2-digit',
+                              month: 'short',
+                              year: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Timer 24h */}
+                      {form.lastReviewRequestDate && (() => {
+                        const hoursSinceLastRequest = (Date.now() - new Date(form.lastReviewRequestDate).getTime()) / (1000 * 60 * 60);
+                        const hoursRemaining = Math.ceil(24 - hoursSinceLastRequest);
+                        if (hoursRemaining > 0) {
+                          return (
+                            <div className="mt-3 pt-3 border-t border-purple-200">
+                              <p className="text-xs text-purple-600 flex items-center">
+                                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                ⏱ Prossimo invio disponibile tra: <strong className="ml-1">{hoursRemaining} ore</strong>
+                              </p>
+                            </div>
+                          );
+                        }
+                        return null;
+                      })()}
+                    </div>
+                  )}
+
+                  {/* Info Box */}
+                  <div className="bg-purple-100/50 border border-purple-200 rounded-lg p-4 mb-4">
+                    <p className="text-purple-800 text-sm">
+                      <strong>📧 Cosa succede?</strong> Verrà inviata un'email amichevole
+                      {form.customer?.phone && ' e un messaggio WhatsApp'}
+                      {' '}al cliente con un link sicuro per lasciare una recensione.
+                    </p>
+                  </div>
+
+                  {/* Messaggi Successo/Errore */}
+                  {reviewRequestSuccess && (
+                    <div className="bg-green-100 border-2 border-green-300 text-green-800 px-4 py-3 rounded-xl flex items-center mb-4">
+                      <svg className="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span className="font-medium">✨ Richiesta recensione inviata con successo!</span>
+                    </div>
+                  )}
+
+                  {reviewRequestError && (
+                    <div className="bg-red-100 border-2 border-red-300 text-red-800 px-4 py-3 rounded-xl flex items-center mb-4">
+                      <svg className="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span className="font-medium">{reviewRequestError}</span>
+                    </div>
+                  )}
+
+                  {/* Bottone */}
+                  <button
+                    onClick={handleReviewRequest}
+                    disabled={isRequestingReview || (() => {
+                      if (!form.lastReviewRequestDate) return false;
+                      const hoursSinceLastRequest = (Date.now() - new Date(form.lastReviewRequestDate).getTime()) / (1000 * 60 * 60);
+                      return hoursSinceLastRequest < 24;
+                    })()}
+                    className="w-full px-6 py-3 sm:py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center shadow-lg hover:shadow-xl"
+                  >
+                    {isRequestingReview ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-3"></div>
+                        <span className="text-sm sm:text-base">Invio in corso...</span>
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        <span className="text-sm sm:text-base">🌟 Richiedi Recensione</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
 
               {/* Informazioni Aggiuntive */}
               <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-olive/10 p-6">

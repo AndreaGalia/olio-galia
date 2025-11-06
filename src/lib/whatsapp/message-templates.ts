@@ -5,6 +5,7 @@ import {
   WhatsAppShippingData,
   WhatsAppDeliveryData,
   WhatsAppNewsletterData,
+  WhatsAppReviewRequestData,
 } from '@/types/whatsapp';
 
 /**
@@ -160,4 +161,30 @@ Per qualsiasi domanda o curiosità, rispondi a questo messaggio o contattaci dir
 Ti aspettiamo sul nostro sito per scoprire i nostri oli! 🫒
 
 _Benvenuto nella famiglia!_`;
+}
+
+/**
+ * Template messaggio WhatsApp amichevole per richiesta recensione
+ */
+export function createReviewRequestWhatsAppMessage(data: WhatsAppReviewRequestData, feedbackUrl: string): string {
+  const orderTypeLabel = data.orderType === 'order' ? 'ordine' : 'preventivo';
+  const orderTypeEmoji = data.orderType === 'order' ? '📦' : '📋';
+
+  return `💚 *Ciao ${data.customerName}!*
+
+Come va? Speriamo che tu stia godendo del nostro olio extravergine d'oliva! 🫒✨
+
+${orderTypeEmoji} Riguardo al tuo ${orderTypeLabel} *#${data.orderNumber}*
+
+La tua opinione è *davvero importante* per noi e per aiutare altri clienti a scoprire la qualità del nostro olio! 🌟
+
+Ci dedicheresti qualche minuto per condividere la tua esperienza? Che sia una parola gentile, un suggerimento o semplicemente un "mi piace", ogni tuo feedback ci aiuta a crescere! 😊
+
+⭐ *Lascia la tua recensione qui:*
+${feedbackUrl}
+
+Grazie di cuore per la tua fiducia! 🙏💚
+
+_Con affetto,_
+_Il team di Olio Galia_ 🌿`;
 }

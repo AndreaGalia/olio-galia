@@ -1,9 +1,10 @@
 // lib/email/resend.ts
-import { EmailOrderData, ShippingNotificationData, DeliveryNotificationData, NewsletterWelcomeData } from '@/types/email';
+import { EmailOrderData, ShippingNotificationData, DeliveryNotificationData, NewsletterWelcomeData, ReviewRequestData } from '@/types/email';
 import { Resend } from 'resend';
 import { createOrderConfirmationHTML, createShippingNotificationHTML } from './templates';
 import { createDeliveryNotificationHTML } from './delivery-template';
 import { createNewsletterWelcomeHTML } from './newsletter-template';
+import { createReviewRequestHTML } from './review-request-template';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM_EMAIL = process.env.FROM_EMAIL || 'Olio Galia <onboarding@resend.dev>';
@@ -97,6 +98,33 @@ export class EmailService {
         html: htmlContent,
         headers: {
           'X-Entity-Ref-ID': `newsletter-${newsletterData.email}`,
+        },
+      });
+
+      if (result.error) {
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+
+      return false;
+    }
+  }
+
+  static async sendReviewRequest(reviewData: ReviewRequestData, feedbackUrl: string): Promise<boolean> {
+    try {
+      const htmlContent = createReviewRequestHTML(reviewData, feedbackUrl);
+      const orderTypeLabel = reviewData.orderType === 'order' ? 'Ordine' : 'Preventivo';
+
+      const result = await resend.emails.send({
+        from: FROM_EMAIL,
+        to: [reviewData.customerEmail],
+        subject: `💚 Ci piacerebbe il tuo feedback sul ${orderTypeLabel} #${reviewData.orderNumber} - Olio Galia`,
+        html: htmlContent,
+        headers: {
+          'X-Entity-Ref-ID': reviewData.orderNumber,
+          'X-Email-Type': 'review-request',
         },
       });
 

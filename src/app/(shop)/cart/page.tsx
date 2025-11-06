@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from 'react';
 import { useCart } from '@/contexts/CartContext';
 import { useProducts } from '@/hooks/useProducts';
 import { useT } from '@/hooks/useT';
@@ -26,6 +27,13 @@ export default function CartPage() {
   const { products, loading, error } = useProducts();
   const { settings } = useSettings();
   const { t } = useT();
+
+  // Scroll automatico in alto quando il carrello diventa vuoto
+  useEffect(() => {
+    if (cart.length === 0) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [cart.length]);
   
   // Hook personalizzati
   const totalItems = getTotalItems();

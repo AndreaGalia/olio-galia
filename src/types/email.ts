@@ -50,3 +50,10 @@ export interface NewsletterWelcomeData {
   lastName: string;
   email: string;
 }
+
+export interface ReviewRequestData {
+  customerName: string;
+  customerEmail: string;
+  orderNumber: string;
+  orderType?: 'order' | 'quote';
+}
