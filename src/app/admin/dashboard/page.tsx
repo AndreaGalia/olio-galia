@@ -354,6 +354,33 @@ export default function AdminDashboardPage() {
           </button>
 
           <button
+            onClick={() => router.push('/admin/scenarios')}
+            className="p-4 sm:p-5 lg:p-6 border-2 border-salvia/20 rounded-xl hover:border-salvia hover:bg-salvia/5 transition-all duration-300 group cursor-pointer text-left"
+          >
+            <div className="flex items-center mb-3 sm:mb-4">
+              <svg
+                className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-salvia group-hover:scale-110 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-base sm:text-lg font-semibold text-salvia mb-1 sm:mb-2">
+              Scenari di Fatturato
+            </h3>
+            <p className="text-nocciola text-xs sm:text-sm">
+              Gestisci costi e predizioni di vendita
+            </p>
+          </button>
+
+          <button
             onClick={refreshStats}
             disabled={statsLoading}
             className="p-4 sm:p-5 lg:p-6 border-2 border-salvia/20 rounded-xl hover:border-salvia hover:bg-salvia/5 transition-all duration-300 group disabled:opacity-50 cursor-pointer text-left"

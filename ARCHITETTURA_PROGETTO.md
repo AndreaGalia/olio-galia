@@ -112,6 +112,13 @@ src/
 |-------|------|-------------|
 | `/admin/feedbacks` | `src/app/admin/feedbacks/page.tsx` | Lista e statistiche feedback clienti |
 
+### Gestione Scenari Fatturato
+| Route | File | Descrizione |
+|-------|------|-------------|
+| `/admin/scenarios` | `src/app/admin/scenarios/page.tsx` | Lista scenari con metriche (profitto, margine, ROI) |
+| `/admin/scenarios/new` | `src/app/admin/scenarios/new/page.tsx` | Wizard 6 step per nuovo scenario |
+| `/admin/scenarios/[id]/edit` | `src/app/admin/scenarios/[id]/edit/page.tsx` | Modifica scenario esistente |
+
 ### Impostazioni
 | Route | File | Descrizione |
 |-------|------|-------------|
@@ -229,6 +236,12 @@ src/
 | `/api/admin/goals/[id]` | `src/app/api/admin/goals/[id]/route.ts` | PUT, DELETE | Aggiorna/Elimina obiettivo |
 | `/api/admin/goals/active` | `src/app/api/admin/goals/active/route.ts` | GET | Obiettivo attivo con progresso |
 
+#### Scenari di Fatturato
+| Endpoint | File | Metodi | Descrizione |
+|----------|------|--------|-------------|
+| `/api/admin/scenarios` | `src/app/api/admin/scenarios/route.ts` | GET, POST | Lista/creazione scenari previsione fatturato |
+| `/api/admin/scenarios/[id]` | `src/app/api/admin/scenarios/[id]/route.ts` | GET, PUT, DELETE | CRUD scenario con calcoli real-time |
+
 ## 🗄️ Modelli Dati
 
 ### ProductDocument (MongoDB)
@@ -304,6 +317,33 @@ interface CustomerDocument {
 }
 ```
 
+### ScenarioDocument (MongoDB)
+```typescript
+interface ScenarioDocument {
+  _id?: ObjectId;                     // ID MongoDB
+  name: string;                       // Nome scenario
+  description?: string;               // Descrizione opzionale
+  variousCosts: CostItem[];          // Costi vari (hosting, dominio, ads, packaging)
+  productCosts: ProductCost[];       // Costi prodotti (nome, quantità, costo unitario)
+  salesEstimates: SalesEstimate[];   // Stime vendita per prodotto
+  productPricing: ProductPricing[];  // Prezzi vendita per prodotto
+  calculations: {                     // Calcoli automatici real-time
+    totalVariousCosts: number;        // Totale costi vari (centesimi)
+    totalProductCosts: number;        // Totale costi prodotti (centesimi)
+    totalCosts: number;               // Somma tutti i costi (centesimi)
+    expectedRevenue: number;          // Fatturato previsto (centesimi)
+    expectedProfit: number;           // Profitto atteso (centesimi)
+    profitMargin: number;             // Margine % (0-100)
+    roi: number;                      // ROI % (ritorno investimento)
+  };
+  metadata: {
+    createdAt: Date;
+    updatedAt: Date;
+    isActive: boolean;                // Per archiviare scenari
+  };
+}
+```
+
 ## 🔄 Integrazione Stripe-MongoDB
 
 ### Sincronizzazione Dati
@@ -357,6 +397,7 @@ interface CustomerDocument {
 - ✅ Gestione clienti completa
 - ✅ Sistema feedback clienti con statistiche
 - ✅ Richiesta recensione manuale con protezione 24h
+- ✅ Scenari fatturato con wizard 6 step e calcoli real-time
 - ✅ Configurazioni sistema
 
 ### Integrazione Stripe
