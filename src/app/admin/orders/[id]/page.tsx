@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
+import OrderFeedbacks from '@/components/admin/OrderFeedbacks';
 
 interface AdminOrderDetails {
   id: string;
@@ -1000,6 +1001,11 @@ export default function AdminOrderDetailsPage({
                 ))}
               </div>
             </div>
+
+            {/* Recensioni Cliente - Solo se ci sono feedback */}
+            {hasFeedback && orderId && (
+              <OrderFeedbacks orderId={orderId} orderType="order" />
+            )}
 
             {/* Riepilogo Prezzi */}
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-xl border border-olive/10">

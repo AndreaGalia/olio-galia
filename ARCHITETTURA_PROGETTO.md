@@ -86,13 +86,13 @@ src/
 ### Gestione Ordini
 | Route | File | Descrizione |
 |-------|------|-------------|
-| `/admin/orders` | `src/app/admin/orders/page.tsx` | Lista ordini |
-| `/admin/orders/[id]` | `src/app/admin/orders/[id]/page.tsx` | Dettaglio ordine |
+| `/admin/orders` | `src/app/admin/orders/page.tsx` | Lista ordini con colonna e filtro recensioni |
+| `/admin/orders/[id]` | `src/app/admin/orders/[id]/page.tsx` | Dettaglio ordine con sezione recensioni cliente |
 
 ### Gestione Preventivi
 | Route | File | Descrizione |
 |-------|------|-------------|
-| `/admin/preventivi` | `src/app/admin/preventivi/page.tsx` | Lista preventivi |
+| `/admin/preventivi` | `src/app/admin/preventivi/page.tsx` | Lista preventivi con colonna e filtro recensioni |
 | `/admin/preventivi/create` | `src/app/admin/preventivi/create/page.tsx` | Creazione preventivo |
 
 ### Form Management
@@ -191,14 +191,15 @@ src/
 #### Gestione Ordini Admin
 | Endpoint | File | Metodi | Descrizione |
 |----------|------|--------|-------------|
-| `/api/admin/orders` | `src/app/api/admin/orders/route.ts` | GET | Lista ordini admin |
+| `/api/admin/orders` | `src/app/api/admin/orders/route.ts` | GET | Lista ordini admin (param: feedbackFilter) |
 | `/api/admin/orders/[id]` | `src/app/api/admin/orders/[id]/route.ts` | GET, PUT | Dettaglio/modifica ordine |
+| `/api/admin/orders/[id]/feedbacks` | `src/app/api/admin/orders/[id]/feedbacks/route.ts` | GET | Recensioni ordine specifico |
 | `/api/admin/orders/[id]/request-review` | `src/app/api/admin/orders/[id]/request-review/route.ts` | POST | Richiesta recensione manuale (24h limit) |
 
 #### Preventivi Admin
 | Endpoint | File | Metodi | Descrizione |
 |----------|------|--------|-------------|
-| `/api/admin/preventivi` | `src/app/api/admin/preventivi/route.ts` | GET | Lista preventivi |
+| `/api/admin/preventivi` | `src/app/api/admin/preventivi/route.ts` | GET | Lista preventivi (param: feedbackFilter) |
 | `/api/admin/preventivi/create` | `src/app/api/admin/preventivi/create/route.ts` | POST | Crea preventivo |
 
 #### Form Management Admin
@@ -498,6 +499,7 @@ Sistema completo per la raccolta e gestione dei feedback dei clienti sui prodott
 | `StarRating` | Rating a 5 stelle interattivo | Touch-optimized (48x48px), WCAG compliant, hover states | `src/components/feedback/StarRating.tsx` |
 | `StarDisplay` | Stelle read-only per visualizzazione | 3 dimensioni (sm/md/lg), accessibile, mobile-optimized | `src/components/reviews/StarDisplay.tsx` |
 | `ProductReviews` | Sezione recensioni pubbliche prodotto | Statistiche, filtri stelle, paginazione (5/pag), auto-scroll, multilingua | `src/components/reviews/ProductReviews.tsx` |
+| `OrderFeedbacks` | Recensioni cliente in admin panel | Visualizza recensioni ordine/preventivo, media stelle, badge anonimato | `src/components/admin/OrderFeedbacks.tsx` |
 
 #### Schema Database - Collection `feedbacks`
 

@@ -16,6 +16,7 @@ interface FormSummary {
   created: string;
   itemCount: number;
   finalTotal?: number;
+  hasFeedback?: boolean;
 }
 
 export const GET = withAuth(async (request: NextRequest) => {
@@ -25,12 +26,13 @@ export const GET = withAuth(async (request: NextRequest) => {
     const limit = parseInt(searchParams.get('limit') || '20');
     const status = searchParams.get('status');
     const search = searchParams.get('search');
+    const feedbackFilter = searchParams.get('feedbackFilter') || 'all';
 
     const skip = (page - 1) * limit;
-    
+
     // Costruisci il filtro
     let filter: any = {};
-    
+
     if (status && status !== 'all') {
       filter.status = status;
     }
@@ -50,7 +52,28 @@ export const GET = withAuth(async (request: NextRequest) => {
 
     const db = await getDatabase();
     const collection = db.collection('forms');
-    
+    const feedbackCollection = db.collection('feedbacks');
+
+    // Se c'è un filtro feedback, dobbiamo applicarlo PRIMA della paginazione
+    if (feedbackFilter && feedbackFilter !== 'all') {
+      // Recupera tutti i formIds che hanno feedback
+      const feedbackDocs = await feedbackCollection
+        .find({ orderType: 'quote' })
+        .project({ orderId: 1 })
+        .toArray();
+
+      const formIdsWithFeedback = feedbackDocs.map(f => f.orderId);
+
+      if (feedbackFilter === 'with') {
+        // Solo preventivi CON feedback
+        filter.$and = filter.$and || [];
+        filter.$and.push({ _id: { $in: formIdsWithFeedback.map((id: string) => new ObjectId(id)) } });
+      } else if (feedbackFilter === 'without') {
+        // Solo preventivi SENZA feedback
+        filter._id = { $nin: formIdsWithFeedback.map((id: string) => new ObjectId(id)) };
+      }
+    }
+
     // Recupera i preventivi con paginazione
     const forms = await collection
       .find(filter)
@@ -60,6 +83,20 @@ export const GET = withAuth(async (request: NextRequest) => {
       .toArray();
 
     const total = await collection.countDocuments(filter);
+
+    // Recupera tutti i form IDs
+    const formIds = forms.map(form => form._id.toString());
+
+    // Verifica quali form hanno feedback (query singola per performance)
+    const feedbackMap = new Map<string, boolean>();
+    const feedbacks = await feedbackCollection
+      .find({ orderId: { $in: formIds }, orderType: 'quote' })
+      .project({ orderId: 1 })
+      .toArray();
+
+    feedbacks.forEach(feedback => {
+      feedbackMap.set(feedback.orderId, true);
+    });
 
     // Formatta i risultati
     const formattedForms: FormSummary[] = await Promise.all(
@@ -96,7 +133,8 @@ export const GET = withAuth(async (request: NextRequest) => {
           status: form.status || 'pending',
           created: form.createdAt?.toISOString() || form.timestamp || new Date().toISOString(),
           itemCount,
-          finalTotal: form.finalPricing?.finalTotal
+          finalTotal: form.finalPricing?.finalTotal,
+          hasFeedback: feedbackMap.has(form._id.toString()),
         };
       })
     );
@@ -110,7 +148,7 @@ export const GET = withAuth(async (request: NextRequest) => {
     });
 
   } catch (error) {
-    
+
     return NextResponse.json(
       { error: 'Errore nel recupero dei preventivi' },
       { status: 500 }

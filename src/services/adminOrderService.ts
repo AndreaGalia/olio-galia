@@ -22,6 +22,7 @@ export interface AdminOrderSummary {
     address: string;
     method: string;
   };
+  hasFeedback?: boolean;
 }
 
 export interface AdminOrderDetails extends AdminOrderSummary {
@@ -86,11 +87,12 @@ export class AdminOrderService {
     limit: number = 20,
     status?: string,
     search?: string,
-    includeStripe: boolean = false
+    includeStripe: boolean = false,
+    feedbackFilter?: string
   ): Promise<{ orders: AdminOrderSummary[]; total: number; page: number; totalPages: number }> {
     try {
       const skip = (page - 1) * limit;
-      
+
       // Costruisci il filtro
       let filter: any = {};
       let statusFilter: any = null;
@@ -151,7 +153,28 @@ export class AdminOrderService {
       // Prima prova a recuperare da MongoDB (ordini salvati)
       const db = await getDatabase();
       const collection = db.collection(this.ORDERS_COLLECTION);
-      
+      const feedbackCollection = db.collection('feedbacks');
+
+      // Se c'è un filtro feedback, dobbiamo applicarlo PRIMA della paginazione
+      if (feedbackFilter && feedbackFilter !== 'all') {
+        // Recupera tutti gli orderIds che hanno feedback
+        const feedbackDocs = await feedbackCollection
+          .find({ orderType: 'order' })
+          .project({ orderId: 1 })
+          .toArray();
+
+        const orderIdsWithFeedback = feedbackDocs.map(f => f.orderId);
+
+        if (feedbackFilter === 'with') {
+          // Solo ordini CON feedback
+          filter.$and = filter.$and || [];
+          filter.$and.push({ _id: { $in: orderIdsWithFeedback.map((id: string) => new ObjectId(id)) } });
+        } else if (feedbackFilter === 'without') {
+          // Solo ordini SENZA feedback
+          filter._id = { $nin: orderIdsWithFeedback.map((id: string) => new ObjectId(id)) };
+        }
+      }
+
       const mongoOrders = await collection
         .find(filter)
         .sort({ createdAt: -1 })
@@ -166,6 +189,20 @@ export class AdminOrderService {
 
       // Aggiungi ordini da MongoDB se presenti
       if (mongoOrders.length > 0) {
+        // Recupera tutti gli order IDs
+        const orderIds = mongoOrders.map(order => order._id.toString());
+
+        // Verifica quali ordini hanno feedback (query singola per performance)
+        const feedbackMap = new Map<string, boolean>();
+        const feedbacks = await feedbackCollection
+          .find({ orderId: { $in: orderIds }, orderType: 'order' })
+          .project({ orderId: 1 })
+          .toArray();
+
+        feedbacks.forEach(feedback => {
+          feedbackMap.set(feedback.orderId, true);
+        });
+
         const mongoOrdersData: AdminOrderSummary[] = mongoOrders.map(order => ({
           id: order._id.toString(),
           sessionId: order.sessionId || order.stripeSessionId || order.id || order._id.toString(),
@@ -181,6 +218,7 @@ export class AdminOrderService {
           itemCount: order.items?.length || 0,
           shippingTrackingId: order.shippingTrackingId,
           shipping: order.shipping,
+          hasFeedback: feedbackMap.has(order._id.toString()),
         }));
 
         allOrders = [...mongoOrdersData];

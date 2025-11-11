@@ -16,6 +16,8 @@ interface SearchFiltersProps {
   isLoading?: boolean;
   searchPlaceholder?: string;
   statusOptions?: FilterOption[];
+  feedbackFilter?: string;
+  onFeedbackFilterChange?: (value: string) => void;
 }
 
 export default function SearchFilters({
@@ -26,7 +28,9 @@ export default function SearchFilters({
   onRefresh,
   isLoading = false,
   searchPlaceholder = 'Cerca...',
-  statusOptions
+  statusOptions,
+  feedbackFilter,
+  onFeedbackFilterChange
 }: SearchFiltersProps) {
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
 
@@ -65,6 +69,18 @@ export default function SearchFilters({
                   {option.label}
                 </option>
               ))}
+            </select>
+          )}
+
+          {feedbackFilter !== undefined && onFeedbackFilterChange && (
+            <select
+              value={feedbackFilter}
+              onChange={(e) => onFeedbackFilterChange(e.target.value)}
+              className="px-4 py-2 border border-olive/20 rounded-lg focus:ring-2 focus:ring-olive/50 focus:border-olive"
+            >
+              <option value="all">Tutte le recensioni</option>
+              <option value="with">Con recensione</option>
+              <option value="without">Senza recensione</option>
             </select>
           )}
 
