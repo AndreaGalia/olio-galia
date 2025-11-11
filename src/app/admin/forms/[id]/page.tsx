@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
+import OrderFeedbacks from '@/components/admin/OrderFeedbacks';
 
 interface FormProduct {
   id: string;
@@ -625,6 +626,11 @@ export default function FormDetailPage() {
                   )}
                 </div>
               </div>
+
+              {/* Recensioni Cliente - Solo se ci sono feedback */}
+              {hasFeedback && params.id && (
+                <OrderFeedbacks orderId={params.id as string} orderType="quote" />
+              )}
             </div>
 
             {/* Sidebar con informazioni */}

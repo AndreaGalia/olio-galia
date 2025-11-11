@@ -57,6 +57,10 @@ export function useAdminData<T>({
         params.append('includeStripe', 'true');
       }
 
+      if (filters.feedbackFilter && filters.feedbackFilter !== 'all') {
+        params.append('feedbackFilter', filters.feedbackFilter);
+      }
+
       // Add any additional params from dependencies
       if (dependencies.length > 0) {
         // Extract sortBy and sortOrder from dependencies if present
@@ -96,7 +100,7 @@ export function useAdminData<T>({
       setLoading(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [endpoint, filters.page, filters.status, filters.limit, filters.includeStripe, debouncedSearch, ...(dependencies || [])]);
+  }, [endpoint, filters.page, filters.status, filters.limit, filters.includeStripe, filters.feedbackFilter, debouncedSearch, ...(dependencies || [])]);
 
   const setFilters = useCallback((newFilters: Partial<FilterParams>) => {
     setFiltersState(prev => ({

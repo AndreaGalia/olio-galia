@@ -17,6 +17,7 @@ export interface OrderSummary {
   shippingStatus: OrderShippingStatus;
   created: string;
   itemCount: number;
+  hasFeedback?: boolean;
 }
 
 export interface FormSummary {
@@ -29,6 +30,7 @@ export interface FormSummary {
   created: string;
   itemCount: number;
   finalTotal?: number;
+  hasFeedback?: boolean;
 }
 
 export type OrderPaymentStatus = 'paid' | 'pending' | 'cancelled';
@@ -109,4 +111,5 @@ export interface FilterParams {
   status?: string;
   search?: string;
   includeStripe?: boolean;
+  feedbackFilter?: string;
 }

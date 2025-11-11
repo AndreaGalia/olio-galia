@@ -10,8 +10,9 @@ export const GET = withAuth(async (request: NextRequest) => {
     const status = searchParams.get('status') || 'all';
     const search = searchParams.get('search') || '';
     const includeStripe = searchParams.get('includeStripe') === 'true';
+    const feedbackFilter = searchParams.get('feedbackFilter') || 'all';
 
-    const result = await AdminOrderService.getAllOrders(page, limit, status, search, includeStripe);
+    const result = await AdminOrderService.getAllOrders(page, limit, status, search, includeStripe, feedbackFilter);
 
     return NextResponse.json({
       success: true,
@@ -19,7 +20,7 @@ export const GET = withAuth(async (request: NextRequest) => {
     });
 
   } catch (error) {
-    
+
     return NextResponse.json(
       { error: 'Errore nel recupero degli ordini' },
       { status: 500 }
