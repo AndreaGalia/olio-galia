@@ -107,6 +107,14 @@ src/
 | `/admin/customers/create` | `src/app/admin/customers/create/page.tsx` | Creazione manuale cliente |
 | `/admin/customers/[id]` | `src/app/admin/customers/[id]/page.tsx` | Dettaglio cliente e storico ordini |
 
+### Gestione Venditori
+| Route | File | Descrizione |
+|-------|------|-------------|
+| `/admin/sellers` | `src/app/admin/sellers/page.tsx` | Lista venditori con statistiche e ricerca |
+| `/admin/sellers/create` | `src/app/admin/sellers/create/page.tsx` | Creazione venditore |
+| `/admin/sellers/[id]` | `src/app/admin/sellers/[id]/page.tsx` | Dettaglio venditori: stats, preventivi, pagamenti |
+| `/admin/sellers/[id]/edit` | `src/app/admin/sellers/[id]/edit/page.tsx` | Modifica venditore |
+
 ### Gestione Feedback
 | Route | File | Descrizione |
 |-------|------|-------------|
@@ -216,6 +224,15 @@ src/
 |----------|------|--------|-------------|
 | `/api/admin/customers` | `src/app/api/admin/customers/route.ts` | GET, POST | Lista/creazione clienti |
 | `/api/admin/customers/[id]` | `src/app/api/admin/customers/[id]/route.ts` | GET, PUT, DELETE | CRUD cliente singolo |
+
+#### Gestione Venditori Admin
+| Endpoint | File | Metodi | Descrizione |
+|----------|------|--------|-------------|
+| `/api/admin/sellers` | `src/app/api/admin/sellers/route.ts` | GET, POST | Lista con stats/creazione venditori |
+| `/api/admin/sellers/[id]` | `src/app/api/admin/sellers/[id]/route.ts` | GET, PUT, DELETE | CRUD venditore con statistiche real-time |
+| `/api/admin/sellers/[id]/payments` | `src/app/api/admin/sellers/[id]/payments/route.ts` | POST | Aggiunta pagamento |
+| `/api/admin/sellers/[id]/payments/[paymentId]` | `src/app/api/admin/sellers/[id]/payments/[paymentId]/route.ts` | DELETE | Rimozione pagamento |
+| `/api/admin/sellers/dropdown` | `src/app/api/admin/sellers/dropdown/route.ts` | GET | Lista semplificata per dropdown |
 
 #### Feedback Admin
 | Endpoint | File | Metodi | Descrizione |
@@ -345,6 +362,32 @@ interface ScenarioDocument {
 }
 ```
 
+### SellerDocument (MongoDB)
+```typescript
+interface SellerDocument {
+  _id?: ObjectId;                     // ID MongoDB
+  name: string;                       // Nome venditore
+  phone: string;                      // Telefono
+  email: string;                      // Email (unique, lowercase)
+  commissionPercentage: number;       // % commissione fissa (0-100)
+  quotes: string[];                   // Array _id preventivi confermati
+  payments: Payment[];                // Storico pagamenti
+  metadata: {
+    isActive: boolean;                // Soft delete
+    createdAt: Date;
+    updatedAt: Date;
+  };
+}
+
+interface Payment {
+  _id?: ObjectId;
+  amount: number;                     // Importo in centesimi
+  date: Date;                         // Data pagamento
+  notes?: string;                     // Note opzionali
+  createdAt: Date;
+}
+```
+
 ## 🔄 Integrazione Stripe-MongoDB
 
 ### Sincronizzazione Dati
@@ -396,6 +439,7 @@ interface ScenarioDocument {
 - ✅ Gestione ordini e preventivi
 - ✅ Sistema form contatti
 - ✅ Gestione clienti completa
+- ✅ Gestione venditori con commissioni e pagamenti
 - ✅ Sistema feedback clienti con statistiche
 - ✅ Richiesta recensione manuale con protezione 24h
 - ✅ Scenari fatturato con wizard 6 step e calcoli real-time
@@ -428,6 +472,40 @@ interface ScenarioDocument {
 - **Indexes**: Indici su campi di ricerca frequente
 - **Aggregation**: Pipeline MongoDB per statistiche
 - **Connection Pooling**: Riutilizzo connessioni DB
+
+## 👥 Sistema Gestione Venditori
+
+### Panoramica
+Sistema completo per gestire venditori con tracking commissioni, preventivi associati e pagamenti.
+
+### Features
+- ✅ **CRUD Completo**: Creazione, modifica, eliminazione soft (archive) venditori
+- ✅ **Commissioni Fisse**: % commissione per venditore su preventivi confermati
+- ✅ **Tracking Preventivi**: Associazione automatica preventivi a venditori
+- ✅ **Gestione Pagamenti**: Storico pagamenti con data, importo, note
+- ✅ **Statistiche Real-time**: Fatturato, commissioni, pagato, da pagare
+- ✅ **Ricerca e Ordinamento**: Lista venditori con filtri per fatturato
+- ✅ **Componenti Riutilizzabili**: SellerStatsCard, QuotesTable, PaymentsList, PaymentModal
+- ✅ **Integrazione Preventivi**: Dropdown venditori in form creazione preventivo
+
+### Service Layer
+- **File**: `src/services/sellerService.ts`
+- **Metodi**: getAllSellers, getSellerById, createSeller, updateSeller, deleteSeller (soft), addPayment, removePayment, addQuoteToSeller, getSellersForDropdown
+- **Calcoli**: Statistiche real-time (totalSales, totalCommission, totalPaid, totalUnpaid) solo su preventivi confermati
+
+### Componenti
+| Component | Descrizione | File |
+|-----------|-------------|------|
+| `SellerStatsCard` | Card statistica con colori personalizzabili | `src/components/admin/sellers/SellerStatsCard.tsx` |
+| `QuotesTable` | Tabella preventivi con badge status e link dettaglio | `src/components/admin/sellers/QuotesTable.tsx` |
+| `PaymentsList` | Lista pagamenti con delete e formatting | `src/components/admin/sellers/PaymentsList.tsx` |
+| `PaymentModal` | Modal aggiunta pagamento con validazione | `src/components/admin/sellers/PaymentModal.tsx` |
+
+### Business Rules
+- Solo preventivi con status 'confermato' contano per fatturato e commissioni
+- Commissione calcolata su finalPricing.finalTotal (o finalTotal fallback)
+- Soft delete: venditori con preventivi associati non eliminabili fisicamente
+- Email univoca (lowercase), telefono e nome obbligatori
 
 ## 📝 Sistema Feedback Clienti
 

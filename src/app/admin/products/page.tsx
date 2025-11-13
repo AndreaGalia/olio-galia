@@ -99,7 +99,7 @@ export default function AdminProductsPage() {
       // Ricarica i prodotti
       await fetchProducts();
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Errore nell\'aggiornamento');
+      setError(err instanceof Error ? err.message : 'Errore nell\'aggiornamento');
     }
   };
 
@@ -117,7 +117,7 @@ export default function AdminProductsPage() {
 
       await fetchProducts();
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Errore nell\'aggiornamento');
+      setError(err instanceof Error ? err.message : 'Errore nell\'aggiornamento');
     }
   };
 

@@ -85,6 +85,8 @@ export function useAdminData<T>({
         setData(responseData.forms);
       } else if (responseData.customers) {
         setData(responseData.customers);
+      } else if (responseData.sellers) {
+        setData(responseData.sellers);
       } else if (responseData.data) {
         setData(responseData.data);
       } else {

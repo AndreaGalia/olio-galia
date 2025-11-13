@@ -181,7 +181,7 @@ export default function EditProductPage() {
       } : null);
 
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Errore nell\'aggiornamento');
+      setError(err instanceof Error ? err.message : 'Errore nell\'aggiornamento');
     }
   };
 
