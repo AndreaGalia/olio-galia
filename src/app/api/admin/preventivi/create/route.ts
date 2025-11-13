@@ -4,6 +4,7 @@ import { getDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 import { TelegramService } from '@/lib/telegram/telegram';
 import { CustomerService } from '@/services/customerService';
+import { SellerService } from '@/services/sellerService';
 
 interface SelectedProduct {
   productId: string;
@@ -23,6 +24,7 @@ interface CustomQuoteData {
   customerAddress: string;
   customerPostalCode: string;
   customerProvince: string;
+  sellerId?: string;
   selectedProducts: SelectedProduct[];
   notes?: string;
   createAsConfirmed?: boolean;
@@ -157,6 +159,9 @@ export const POST = withAuth(async (request: NextRequest) => {
       // Note interne
       notes: data.notes || '',
 
+      // Venditore (se presente)
+      sellerId: data.sellerId || undefined,
+
       // Flag per identificare preventivi creati dall'admin
       isAdminCreated: true,
       createdBy: 'admin'
@@ -172,6 +177,16 @@ export const POST = withAuth(async (request: NextRequest) => {
 
     if (!result.insertedId) {
       throw new Error('Errore nell\'inserimento del preventivo');
+    }
+
+    // Aggiorna il venditore se presente
+    if (data.sellerId) {
+      try {
+        await SellerService.addQuoteToSeller(data.sellerId, result.insertedId.toString());
+      } catch (sellerError) {
+        console.error('Errore nell\'aggiornamento del venditore:', sellerError);
+        // Non bloccare il processo
+      }
     }
 
     // Se createAsConfirmed è true, gestisci cliente e notifica Telegram

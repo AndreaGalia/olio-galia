@@ -21,6 +21,7 @@ interface FormData {
   customerCity: string;
   customerPostalCode: string;
   customerProvince: string;
+  sellerId: string;
   selectedProducts: SelectedProduct[];
   shippingCost: number;
   notes: string;
@@ -38,6 +39,7 @@ export default function CreateCustomQuotePage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [selectedCustomer, setSelectedCustomer] = useState<CustomerWithStats | null>(null);
+  const [sellers, setSellers] = useState<Array<{ _id: string; name: string; email: string }>>([]);
 
   const [formData, setFormData] = useState<FormData>({
     customerName: '',
@@ -47,6 +49,7 @@ export default function CreateCustomQuotePage() {
     customerCity: '',
     customerPostalCode: '',
     customerProvince: '',
+    sellerId: '',
     selectedProducts: [],
     shippingCost: 0,
     notes: '',
@@ -55,6 +58,22 @@ export default function CreateCustomQuotePage() {
     finalShipping: 0,
     freeShipping: false
   });
+
+  // Carica i venditori
+  useEffect(() => {
+    const loadSellers = async () => {
+      try {
+        const response = await fetch('/api/admin/sellers/dropdown');
+        const data = await response.json();
+        if (response.ok) {
+          setSellers(data.sellers || []);
+        }
+      } catch (error) {
+        console.error('Errore nel caricamento dei venditori:', error);
+      }
+    };
+    loadSellers();
+  }, []);
 
   // Auto-compila i campi quando si seleziona un cliente
   useEffect(() => {
@@ -219,7 +238,8 @@ export default function CreateCustomQuotePage() {
         customerProvince: formData.customerProvince,
         selectedProducts: normalizedProducts,
         notes: formData.notes,
-        createAsConfirmed: formData.createAsConfirmed
+        createAsConfirmed: formData.createAsConfirmed,
+        sellerId: formData.sellerId || undefined
       };
 
       // Se createAsConfirmed è true, aggiungi i prezzi finali
@@ -271,6 +291,7 @@ export default function CreateCustomQuotePage() {
             customerCity: '',
             customerPostalCode: '',
             customerProvince: '',
+            sellerId: '',
             selectedProducts: [],
             shippingCost: 0,
             notes: '',
@@ -433,6 +454,27 @@ export default function CreateCustomQuotePage() {
                     placeholder="TO"
                     maxLength={2}
                   />
+                </div>
+
+                <div className="md:col-span-2 border-t border-olive/10 pt-4 mt-2">
+                  <label className="block text-sm font-medium text-nocciola mb-2">
+                    Venditore (opzionale)
+                  </label>
+                  <select
+                    value={formData.sellerId}
+                    onChange={(e) => setFormData(prev => ({ ...prev, sellerId: e.target.value }))}
+                    className="w-full px-4 py-2 border border-olive/20 rounded-lg focus:ring-2 focus:ring-olive/50 focus:border-olive"
+                  >
+                    <option value="">Nessun venditore</option>
+                    {sellers.map((seller) => (
+                      <option key={seller._id} value={seller._id}>
+                        {seller.name} ({seller.email})
+                      </option>
+                    ))}
+                  </select>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Seleziona il venditore che ha concluso questo affare per tracciare le commissioni
+                  </p>
                 </div>
               </div>
             </div>

@@ -246,6 +246,31 @@ export default function AdminDashboardPage() {
           </button>
 
           <button
+            onClick={() => router.push('/admin/sellers')}
+            className="p-4 sm:p-5 lg:p-6 border-2 border-olive/20 rounded-xl hover:border-olive hover:bg-olive/5 transition-all duration-300 group cursor-pointer text-left"
+          >
+            <div className="flex items-center mb-3 sm:mb-4">
+              <svg
+                className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-olive group-hover:scale-110 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-base sm:text-lg font-semibold text-olive mb-1 sm:mb-2">
+              Gestisci Venditori
+            </h3>
+            <p className="text-nocciola text-xs sm:text-sm">Visualizza venditori e commissioni</p>
+          </button>
+
+          <button
             onClick={() => router.push('/admin/products')}
             className="p-4 sm:p-5 lg:p-6 border-2 border-salvia/20 rounded-xl hover:border-salvia hover:bg-salvia/5 transition-all duration-300 group cursor-pointer text-left"
           >
