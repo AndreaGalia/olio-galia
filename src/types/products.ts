@@ -14,6 +14,10 @@ export interface ProductTranslations {
   seoKeywords: string[];
   tags: string[];
   customHTML?: string; // HTML personalizzato per layout custom del prodotto
+  // SEO Fields
+  metaTitle?: string; // Titolo SEO personalizzato (max 60 caratteri consigliati)
+  metaDescription?: string; // Meta description (max 160 caratteri consigliati)
+  focusKeyphrase?: string; // Parola chiave principale per SEO
 }
 
 export interface BaseProduct {

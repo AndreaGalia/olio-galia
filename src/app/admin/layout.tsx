@@ -1,10 +1,8 @@
 import { Metadata } from 'next';
+import { generateNoIndexMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
-  title: 'Admin Panel - Olio Galia',
-  description: 'Pannello di amministrazione per la gestione di ordini e preventivi',
-  robots: 'noindex, nofollow', // Prevent search engines from indexing admin pages
-};
+// Blocca l'indicizzazione di tutte le pagine admin
+export const metadata: Metadata = generateNoIndexMetadata('Admin Panel');
 
 export default function AdminRootLayout({
   children,

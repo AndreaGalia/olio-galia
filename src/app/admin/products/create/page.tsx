@@ -59,7 +59,10 @@ export default function CreateProductPage() {
         processing: '',
         awards: [''],
         seoKeywords: [''],
-        tags: ['']
+        tags: [''],
+        metaTitle: '',
+        metaDescription: '',
+        focusKeyphrase: ''
       },
       en: {
         name: '',
@@ -75,7 +78,10 @@ export default function CreateProductPage() {
         processing: '',
         awards: [''],
         seoKeywords: [''],
-        tags: ['']
+        tags: [''],
+        metaTitle: '',
+        metaDescription: '',
+        focusKeyphrase: ''
       }
     },
     slug: {
@@ -496,6 +502,102 @@ export default function CreateProductPage() {
                   + Aggiungi Caratteristica
                 </button>
               </div>
+
+              {/* Campi SEO Italiano */}
+              <div className="pt-4 border-t border-olive/10">
+                <h4 className="text-md font-semibold text-olive mb-3">📈 Ottimizzazione SEO</h4>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Meta Title (Titolo SEO)
+                      <span className="text-xs text-nocciola ml-2">(max 60 caratteri consigliati)</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.translations.it.metaTitle || ''}
+                      onChange={(e) => updateTranslation('it', 'metaTitle', e.target.value)}
+                      className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
+                      placeholder="Titolo ottimizzato per i motori di ricerca"
+                      maxLength={70}
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      {formData.translations.it.metaTitle?.length || 0}/60 caratteri
+                      {(formData.translations.it.metaTitle?.length || 0) > 60 &&
+                        <span className="text-orange-600 ml-2">⚠️ Troppo lungo</span>}
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Meta Description
+                      <span className="text-xs text-nocciola ml-2">(max 160 caratteri consigliati)</span>
+                    </label>
+                    <textarea
+                      value={formData.translations.it.metaDescription || ''}
+                      onChange={(e) => updateTranslation('it', 'metaDescription', e.target.value)}
+                      className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
+                      placeholder="Descrizione che apparirà nei risultati di ricerca Google"
+                      rows={3}
+                      maxLength={200}
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      {formData.translations.it.metaDescription?.length || 0}/160 caratteri
+                      {(formData.translations.it.metaDescription?.length || 0) > 160 &&
+                        <span className="text-orange-600 ml-2">⚠️ Troppo lungo</span>}
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Parola Chiave Principale (Focus Keyphrase)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.translations.it.focusKeyphrase || ''}
+                      onChange={(e) => updateTranslation('it', 'focusKeyphrase', e.target.value)}
+                      className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
+                      placeholder="es: olio extravergine biologico"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      La parola chiave principale su cui vuoi posizionarti
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Parole Chiave Secondarie (SEO Keywords)
+                    </label>
+                    {formData.translations.it.seoKeywords.map((keyword, index) => (
+                      <div key={index} className="flex gap-2 mb-2">
+                        <input
+                          type="text"
+                          value={keyword}
+                          onChange={(e) => updateArrayField('it', 'seoKeywords', index, e.target.value)}
+                          className="flex-1 px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
+                          placeholder="Parola chiave secondaria"
+                        />
+                        {formData.translations.it.seoKeywords.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => removeArrayField('it', 'seoKeywords', index)}
+                            className="px-3 py-2 text-red-600 hover:text-red-800"
+                          >
+                            Rimuovi
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => addArrayField('it', 'seoKeywords')}
+                      className="px-3 py-2 text-olive hover:text-salvia text-sm"
+                    >
+                      + Aggiungi Parola Chiave
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
 
@@ -601,6 +703,102 @@ export default function CreateProductPage() {
                 >
                   + Add Feature
                 </button>
+              </div>
+
+              {/* SEO Fields English */}
+              <div className="pt-4 border-t border-olive/10">
+                <h4 className="text-md font-semibold text-olive mb-3">📈 SEO Optimization</h4>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Meta Title (SEO Title)
+                      <span className="text-xs text-nocciola ml-2">(max 60 characters recommended)</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.translations.en.metaTitle || ''}
+                      onChange={(e) => updateTranslation('en', 'metaTitle', e.target.value)}
+                      className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
+                      placeholder="SEO optimized title"
+                      maxLength={70}
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      {formData.translations.en.metaTitle?.length || 0}/60 characters
+                      {(formData.translations.en.metaTitle?.length || 0) > 60 &&
+                        <span className="text-orange-600 ml-2">⚠️ Too long</span>}
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Meta Description
+                      <span className="text-xs text-nocciola ml-2">(max 160 characters recommended)</span>
+                    </label>
+                    <textarea
+                      value={formData.translations.en.metaDescription || ''}
+                      onChange={(e) => updateTranslation('en', 'metaDescription', e.target.value)}
+                      className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
+                      placeholder="Description that will appear in Google search results"
+                      rows={3}
+                      maxLength={200}
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      {formData.translations.en.metaDescription?.length || 0}/160 characters
+                      {(formData.translations.en.metaDescription?.length || 0) > 160 &&
+                        <span className="text-orange-600 ml-2">⚠️ Too long</span>}
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Focus Keyphrase
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.translations.en.focusKeyphrase || ''}
+                      onChange={(e) => updateTranslation('en', 'focusKeyphrase', e.target.value)}
+                      className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
+                      placeholder="e.g: organic extra virgin olive oil"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Main keyword you want to rank for
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Secondary Keywords (SEO Keywords)
+                    </label>
+                    {formData.translations.en.seoKeywords.map((keyword, index) => (
+                      <div key={index} className="flex gap-2 mb-2">
+                        <input
+                          type="text"
+                          value={keyword}
+                          onChange={(e) => updateArrayField('en', 'seoKeywords', index, e.target.value)}
+                          className="flex-1 px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
+                          placeholder="Secondary keyword"
+                        />
+                        {formData.translations.en.seoKeywords.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => removeArrayField('en', 'seoKeywords', index)}
+                            className="px-3 py-2 text-red-600 hover:text-red-800"
+                          >
+                            Remove
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => addArrayField('en', 'seoKeywords')}
+                      className="px-3 py-2 text-olive hover:text-salvia text-sm"
+                    >
+                      + Add Keyword
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
