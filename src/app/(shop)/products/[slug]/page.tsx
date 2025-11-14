@@ -13,6 +13,7 @@ import ProductDetailsCards from "@/components/singleProductPage/ProductDetailsCa
 import RelatedProductsSection from "@/components/singleProductPage/RelatedProductsSection";
 import CustomHTMLRenderer from "@/components/singleProductPage/CustomHTMLRenderer";
 import ProductReviews from "@/components/reviews/ProductReviews";
+import { StructuredData, generateProductSchema, generateBreadcrumbSchema } from '@/lib/seo/structured-data';
 
 
 interface ProductDetailPageProps {
@@ -42,8 +43,20 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
   // Verifica se il prodotto ha HTML personalizzato (con optional chaining sicuro)
   const hasCustomHTML = Boolean(product.customHTML?.trim());
 
+  // Genera structured data per SEO
+  const productSchema = generateProductSchema(product, 'it');
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: t.productDetailPage.breadcrumb?.products || 'Prodotti', url: '/products' },
+    { name: product.name, url: `/products/${slug}` }
+  ], 'it');
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige">
+      {/* Structured Data per SEO */}
+      <StructuredData data={productSchema} />
+      <StructuredData data={breadcrumbSchema} />
+
       {/* Breadcrumb Navigation */}
       <BreadcrumbNavigation productName={product.name} />
 
