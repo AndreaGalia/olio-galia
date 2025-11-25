@@ -1,10 +1,10 @@
 {
   "hero": {
-    "badge": "Sicilian Tradition since 1950",
+    "badge": "Sicilian Tradition since 1940",
     "title": {
-      "line1": "Healthy and strong",
-      "line2": "like Goliath,",
-      "line3": "only with Galia Oil"
+      "line1": "The Best",
+      "line2": "of Sicily",
+      "line3": "Chosen for You"
     },
     "description": {
       "main": "Extra virgin oil is the fruit of our land, a unique balance of aromas and Sicilian tradition.",
@@ -73,12 +73,12 @@
     },
     "intro": "Three brothers united by passion for the land and respect for traditions. We decided to revive our beloved grandfather's oil company, carrying forward a legacy of authentic flavors and family values.",
     "history": {
-      "title": "Since 1950, A Family Tradition",
-      "paragraph1": "It all began in 1950, when our grandfather Francesco Galia planted the first olive trees in the Sicilian hills. With dedication and love for the land, he built a company that became synonymous with quality and authenticity.",
+      "title": "Since 1940, A Family Tradition",
+      "paragraph1": "It all began in 1940, when our grandfather Francesco Galia planted the first olive trees in the Sicilian hills. With dedication and love for the land, he built a company that became synonymous with quality and authenticity.",
       "paragraph2": "After years when the company remained inactive, we three brothers decided to bring this family heritage back to life. Each with our own skills and specializations, but all united by the same passion for extra virgin olive oil.",
       "paragraph3": "Today, Galia represents the perfect meeting between tradition and innovation, keeping intact the values and methods passed down by our grandfather, but with an eye to the future.",
       "imageCaption": "Historical photo of grandfather Francesco's company",
-      "imageNote": "(Insert image: /nonno-francesco-1950.jpg)",
+      "imageNote": "(Insert image: /nonno-francesco-1940.jpg)",
       "stats": {
         "years": "75+",
         "yearsLabel": "Years of History",
@@ -170,7 +170,7 @@
       },
       {
         "question": "Is the oil really produced in Sicily?",
-        "answer": "Absolutely yes. Our olive groves are located in the Sicilian hills where our grandfather planted the first trees in 1950. Every phase of production takes place on site: from cultivation to harvesting, from milling to bottling. We are proud of our 100% Sicilian origin.",
+        "answer": "Absolutely yes. Our olive groves are located in the Sicilian hills where our grandfather planted the first trees in 1940. Every phase of production takes place on site: from cultivation to harvesting, from milling to bottling. We are proud of our 100% Sicilian origin.",
         "category": "origin"
       },
       {
@@ -222,7 +222,7 @@
       "language": "Language:",
       "cart": "Cart",
       "tagline": "Sicilian Tradition",
-      "since": "Since 1950"
+      "since": "Since 1940"
     },
     "cart": {
       "title": "Cart",
@@ -231,7 +231,7 @@
   },
   "footer": {
     "brand": {
-      "description": "Since 1950, three generations of Sicilian passion in every drop. The Galia brothers continue grandfather Francesco's tradition.",
+      "description": "Since 1940, three generations of Sicilian passion in every drop. The Galia brothers continue grandfather Francesco's tradition.",
       "badges": {
         "dop": "DOP Sicily",
         "bio": "Certified Organic",
@@ -282,13 +282,13 @@
         "main": "Who We Are",
         "subtitle": "A Story of Passion"
       },
-      "description": "Three brothers united by passion for Sicilian land and respect for traditions. Our story begins in 1950 with our grandfather Francesco and continues today with the same dedication and love for superior quality extra virgin oil."
+      "description": "Three brothers united by passion for Sicilian land and respect for traditions. Our story begins in 1940 with our grandfather Francesco and continues today with the same dedication and love for superior quality extra virgin oil."
     },
     "timeline": {
       "title": "Our Story",
       "events": [
         {
-          "year": "1950",
+          "year": "1940",
           "title": "The Beginning",
           "description": "Francesco Galia plants the first 100 olive trees in the hills of Castelvetrano, starting what would become a family tradition.",
           "details": "At only 25 years old and with a loan from the local bank, Francesco buys 5 hectares of hilly land. The choice of the Nocellara del Belice variety proves to be a winner."

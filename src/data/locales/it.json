@@ -1,14 +1,14 @@
 {
   "hero": {
-    "badge": "Tradizione Siciliana dal 1950",
+    "badge": "Tradizione Siciliana dal 1940",
     "title": {
-      "line1": "Sani e forti",
-      "line2": "come Golia,",
-      "line3": "solo con Olio Galia"
+      "line1": "Il Meglio",
+      "line2": "della Sicilia",
+      "line3": "Scelto per Te"
     },
     "description": {
-      "main": "L'olio extravergine è il frutto della nostra terra, un equilibrio unico di profumi e tradizione siciliana.",
-      "secondary": "Ogni goccia racconta una storia di passione, cura artigianale e rispetto per la natura."
+      "main": "We select the finest extra virgin olive oil from our land, an authentic expression of Sicilian tradition and aromas.",
+      "secondary": "Every drop tells a story of passion, craftsmanship, and respect for nature."
     },
     "buttons": {
       "discover": "Scopri i Prodotti",
@@ -73,12 +73,12 @@
     },
     "intro": "Tre fratelli uniti dalla passione per la terra e il rispetto per le tradizioni. Abbiamo deciso di riprendere l'azienda olearia del nostro amato nonno, portando avanti un'eredità di sapori autentici e valori familiari.",
     "history": {
-      "title": "Dal 1950, Una Tradizione di Famiglia",
-      "paragraph1": "Tutto iniziò nel 1950, quando nostro nonno Francesco Galia piantò i primi ulivi nelle colline siciliane. Con dedizione e amore per la terra, costruì un'azienda che divenne sinonimo di qualità e autenticità.",
+      "title": "Dal 1940, Una Tradizione di Famiglia",
+      "paragraph1": "Tutto iniziò nel 1940, quando nostro nonno Francesco Galia piantò i primi ulivi nelle colline siciliane. Con dedizione e amore per la terra, costruì un'azienda che divenne sinonimo di qualità e autenticità.",
       "paragraph2": "Dopo anni in cui l'azienda rimase inattiva, noi tre fratelli abbiamo deciso di riportare in vita questo patrimonio familiare. Ognuno con le proprie competenze e specializzazioni, ma tutti accomunati dalla stessa passione per l'olio extravergine di oliva.",
       "paragraph3": "Oggi, la Galia rappresenta l'incontro perfetto tra tradizione e innovazione, mantenendo intatti i valori e i metodi tramandati dal nonno, ma con uno sguardo rivolto al futuro.",
       "imageCaption": "Foto storica dell'azienda del nonno Francesco",
-      "imageNote": "(Inserire immagine: /nonno-francesco-1950.jpg)",
+      "imageNote": "(Inserire immagine: /nonno-francesco-1940.jpg)",
       "stats": {
         "years": "75+",
         "yearsLabel": "Anni di Storia",
@@ -170,7 +170,7 @@
       },
       {
         "question": "L'olio è davvero prodotto in Sicilia?",
-        "answer": "Assolutamente sì. I nostri uliveti si trovano nelle colline siciliane dove il nostro nonno piantò i primi alberi nel 1950. Ogni fase della produzione avviene in loco: dalla coltivazione alla raccolta, dalla molitura all'imbottigliamento. Siamo orgogliosi della nostra origine 100% siciliana.",
+        "answer": "Assolutamente sì. I nostri uliveti si trovano nelle colline siciliane dove il nostro nonno piantò i primi alberi nel 1940. Ogni fase della produzione avviene in loco: dalla coltivazione alla raccolta, dalla molitura all'imbottigliamento. Siamo orgogliosi della nostra origine 100% siciliana.",
         "category": "origin"
       },
       {
@@ -222,7 +222,7 @@
       "language": "Lingua:",
       "cart": "Carrello",
       "tagline": "Tradizione Siciliana",
-      "since": "Dal 1950"
+      "since": "Dal 1940"
     },
     "cart": {
       "title": "Carrello",
@@ -231,7 +231,7 @@
   },
   "footer": {
     "brand": {
-      "description": "Dal 1950, tre generazioni di passione siciliana in ogni goccia. I fratelli Galia continuano la tradizione del nonno Francesco.",
+      "description": "Dal 1940, tre generazioni di passione siciliana in ogni goccia. I fratelli Galia continuano la tradizione del nonno Francesco.",
       "badges": {
         "dop": "DOP Sicilia",
         "bio": "Bio Certificato",
@@ -282,13 +282,13 @@
         "main": "Chi Siamo",
         "subtitle": "Una Storia di Passione"
       },
-      "description": "Tre fratelli uniti dalla passione per la terra siciliana e il rispetto per le tradizioni. La nostra storia inizia nel 1950 con nostro nonno Francesco e continua oggi con la stessa dedizione e amore per l'olio extravergine di qualità superiore."
+      "description": "Tre fratelli uniti dalla passione per la terra siciliana e il rispetto per le tradizioni. La nostra storia inizia nel 1940 con nostro nonno Francesco e continua oggi con la stessa dedizione e amore per l'olio extravergine di qualità superiore."
     },
     "timeline": {
       "title": "La Nostra Storia",
       "events": [
         {
-          "year": "1950",
+          "year": "1940",
           "title": "Gli Inizi",
           "description": "Francesco Galia pianta i primi 100 ulivi nelle colline di Castelvetrano, iniziando quella che sarebbe diventata una tradizione familiare.",
           "details": "Con soli 25 anni e un prestito dalla banca locale, Francesco acquista 5 ettari di terreno collinare. La scelta della varietà Nocellara del Belice si rivela vincente."
