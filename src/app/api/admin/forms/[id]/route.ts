@@ -62,7 +62,26 @@ export const GET = withAuth(async (request: NextRequest, { params }: { params: P
 
     // Calcola totali (indicativi)
     const subtotal = productsInfo.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    
+
+    // Recupera il telefono aggiornato dal database clienti
+    let customerPhone = form.phone || 'N/D';
+    if (form.email) {
+      try {
+        const customersCollection = db.collection('customers');
+        const customer = await customersCollection.findOne({
+          email: form.email.toLowerCase()
+        });
+
+        // Se troviamo il cliente, usa il telefono aggiornato
+        if (customer && customer.phone) {
+          customerPhone = customer.phone;
+        }
+      } catch (error) {
+        // Se c'è un errore nel recupero del cliente, usa il telefono del form
+        console.warn('[Forms API] Errore recupero cliente:', error);
+      }
+    }
+
     const formattedForm = {
       id: form._id.toString(),
       orderId: form.orderId,
@@ -71,7 +90,7 @@ export const GET = withAuth(async (request: NextRequest, { params }: { params: P
         firstName: form.firstName,
         lastName: form.lastName,
         email: form.email,
-        phone: form.phone,
+        phone: customerPhone, // ← Usa il telefono aggiornato dal database clienti
       },
       address: {
         street: form.address,

@@ -119,7 +119,25 @@ export const POST = withAuth(async (
     let whatsappSent = false;
     let whatsappError = null;
 
-    const customerPhone = order.customer?.phone;
+    // Recupera il telefono aggiornato dal database clienti
+    let customerPhone = order.customer?.phone;
+    if (customerEmail) {
+      try {
+        const customersCollection = db.collection('customers');
+        const customer = await customersCollection.findOne({
+          email: customerEmail.toLowerCase()
+        });
+
+        // Se troviamo il cliente, usa il telefono aggiornato
+        if (customer && customer.phone) {
+          customerPhone = customer.phone;
+        }
+      } catch (error) {
+        // Se c'è un errore nel recupero del cliente, usa il telefono dell'ordine
+        console.warn('[ReviewRequest] Errore recupero cliente:', error);
+      }
+    }
+
     if (customerPhone) {
       try {
         const whatsappData: WhatsAppReviewRequestData = {
