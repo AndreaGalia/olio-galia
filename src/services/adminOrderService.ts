@@ -305,7 +305,7 @@ export class AdminOrderService {
       // Prima prova MongoDB
       const db = await getDatabase();
       const collection = db.collection(this.ORDERS_COLLECTION);
-      
+
       // Prova prima con sessionId/stripeSessionId
       let mongoOrder = await collection.findOne({
         $or: [
@@ -320,11 +320,33 @@ export class AdminOrderService {
       }
 
       if (mongoOrder) {
+        // Recupera email del cliente dall'ordine
+        const customerEmail = mongoOrder.customer?.email || mongoOrder.customerEmail || mongoOrder.email;
+
+        // Cerca il cliente nel database per ottenere il telefono aggiornato
+        let customerPhone = mongoOrder.customer?.phone || 'N/D';
+        if (customerEmail && customerEmail !== 'N/D') {
+          try {
+            const customersCollection = db.collection('customers');
+            const customer = await customersCollection.findOne({
+              email: customerEmail.toLowerCase()
+            });
+
+            // Se troviamo il cliente, usa il telefono aggiornato
+            if (customer && customer.phone) {
+              customerPhone = customer.phone;
+            }
+          } catch (error) {
+            // Se c'è un errore nel recupero del cliente, usa il telefono dell'ordine
+            console.warn('[AdminOrderService] Errore recupero cliente:', error);
+          }
+        }
+
         return {
           id: mongoOrder._id.toString(),
           sessionId: mongoOrder.sessionId || mongoOrder.stripeSessionId || mongoOrder.id || mongoOrder._id.toString(),
           customerName: mongoOrder.customer?.name || mongoOrder.customerName || `${mongoOrder.firstName || ''} ${mongoOrder.lastName || ''}`.trim() || 'N/D',
-          customerEmail: mongoOrder.customer?.email || mongoOrder.customerEmail || mongoOrder.email || 'N/D',
+          customerEmail: customerEmail || 'N/D',
           total: mongoOrder.total || 0,
           currency: mongoOrder.currency || 'eur',
           status: mongoOrder.status || 'completed',
@@ -344,8 +366,8 @@ export class AdminOrderService {
           orderId: mongoOrder.orderId || mongoOrder.sessionId || mongoOrder.id,
           customer: {
             name: mongoOrder.customer?.name || mongoOrder.customerName || `${mongoOrder.firstName || ''} ${mongoOrder.lastName || ''}`.trim() || 'N/D',
-            email: mongoOrder.customer?.email || mongoOrder.customerEmail || mongoOrder.email || 'N/D',
-            phone: mongoOrder.customer?.phone || 'N/D'
+            email: customerEmail || 'N/D',
+            phone: customerPhone // ← Usa il telefono aggiornato dal database clienti
           },
           createdAt: mongoOrder.createdAt?.toISOString(),
           updatedAt: mongoOrder.updatedAt?.toISOString(),
