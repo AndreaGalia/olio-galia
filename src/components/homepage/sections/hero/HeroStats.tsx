@@ -16,7 +16,7 @@ export function HeroStats({ isVisible }: HeroStatsProps) {
         <div className="text-xs md:text-sm text-nocciola font-medium">{t.hero.stats.natural}</div>
       </div>
       <div className="text-center">
-        <div className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold mb-1 md:mb-2 text-olive">1950</div>
+        <div className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold mb-1 md:mb-2 text-olive">1940</div>
         <div className="text-xs md:text-sm text-nocciola font-medium">{t.hero.stats.since}</div>
       </div>
       <div className="text-center">

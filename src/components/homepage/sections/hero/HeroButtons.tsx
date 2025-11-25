@@ -23,14 +23,7 @@ export function HeroButtons({ isVisible }: HeroButtonsProps) {
         <div className="absolute inset-0 bg-gradient-to-r from-salvia via-nocciola to-olive opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
       </Link>
-      
-      <button className="group relative text-olive border-2 border-olive px-6 py-3 md:px-8 md:py-4 rounded-full font-medium hover:bg-olive hover:text-beige transition-all duration-500 flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg backdrop-blur-sm hover:shadow-xl hover:scale-105 overflow-hidden">
-        <svg className="w-4 h-4 md:w-5 md:h-5 group-hover:scale-125 group-hover:rotate-12 transition-all duration-300" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-        </svg>
-        <span>{t.hero.buttons.watch}</span>
-        <div className="absolute inset-0 bg-gradient-to-r from-olive/10 to-salvia/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-      </button>
+
     </div>
   );
 }
