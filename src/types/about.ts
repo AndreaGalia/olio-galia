@@ -37,12 +37,12 @@ export interface TimelineEvent {
 
 // Tipo per statistiche storia aziendale
 export interface HistoryStats {
-  years: string;
-  yearsLabel: string;
+  years?: string;
+  yearsLabel?: string;
   generations: string;
   generationsLabel: string;
-  family: string;
-  familyLabel: string;
+  family?: string;
+  familyLabel?: string;
 }
 
 // Tipo per storia aziendale

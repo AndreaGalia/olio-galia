@@ -69,23 +69,19 @@
     "badge": "La Nostra Storia",
     "title": {
       "line1": "Chi Siamo",
-      "line2": "I Fratelli Galia"
+      "line2": "Famiglia Galia"
     },
-    "intro": "Tre fratelli uniti dalla passione per la terra e il rispetto per le tradizioni. Abbiamo deciso di riprendere l'azienda olearia del nostro amato nonno, portando avanti un'eredità di sapori autentici e valori familiari.",
+    "intro": "La famiglia Galia è unita dalla passione per la selezione del miglior olio extravergine siciliano. Continuiamo la tradizione dell'azienda olearia di famiglia, dedicandoci alla ricerca dell'eccellenza e della qualità superiore.",
     "history": {
-      "title": "Dal 1940, Una Tradizione di Famiglia",
-      "paragraph1": "Tutto iniziò nel 1940, quando nostro nonno Francesco Galia piantò i primi ulivi nelle colline siciliane. Con dedizione e amore per la terra, costruì un'azienda che divenne sinonimo di qualità e autenticità.",
-      "paragraph2": "Dopo anni in cui l'azienda rimase inattiva, noi tre fratelli abbiamo deciso di riportare in vita questo patrimonio familiare. Ognuno con le proprie competenze e specializzazioni, ma tutti accomunati dalla stessa passione per l'olio extravergine di oliva.",
-      "paragraph3": "Oggi, la Galia rappresenta l'incontro perfetto tra tradizione e innovazione, mantenendo intatti i valori e i metodi tramandati dal nonno, ma con uno sguardo rivolto al futuro.",
-      "imageCaption": "Foto storica dell'azienda del nonno Francesco",
-      "imageNote": "(Inserire immagine: /nonno-francesco-1940.jpg)",
+      "title": "Dal 1940, Una Tradizione di Selezione",
+      "paragraph1": "Tutto iniziò nel 1940, quando nostro nonno Paolo Galia piantò i primi ulivi nelle colline siciliane. Con dedizione e amore per la terra, costruì un'azienda che divenne sinonimo di qualità e autenticità.",
+      "paragraph2": "Dopo anni in cui l'azienda rimase inattiva, abbiamo deciso di riportare in vita questo patrimonio familiare, dedicandoci alla selezione del miglior olio extravergine. Seguiamo gli insegnamenti tramandati dal nonno Paolo, scegliendo solo l'eccellenza della nostra terra.",
+      "paragraph3": "Oggi, la Galia rappresenta l'incontro perfetto tra tradizione e innovazione. Selezioniamo con cura ogni bottiglia, mantenendo intatti i valori e i metodi di qualità tramandati dal nonno, ma con uno sguardo rivolto al futuro.",
+      "imageCaption": "Foto storica dell'azienda del nonno Paolo",
+      "imageNote": "(Inserire immagine: /nonno-paolo-1940.jpg)",
       "stats": {
-        "years": "75+",
-        "yearsLabel": "Anni di Storia",
         "generations": "3",
-        "generationsLabel": "Generazioni",
-        "family": "100%",
-        "familyLabel": "Famiglia"
+        "generationsLabel": "Generazioni"
       }
     },
     "brothers": {
@@ -231,7 +227,7 @@
   },
   "footer": {
     "brand": {
-      "description": "Dal 1940, tre generazioni di passione siciliana in ogni goccia. I fratelli Galia continuano la tradizione del nonno Francesco.",
+      "description": "Dal 1940, tre generazioni di passione siciliana in ogni goccia. I fratelli Galia continuano la tradizione del nonno Paolo.",
       "badges": {
         "dop": "DOP Sicilia",
         "bio": "Bio Certificato",
@@ -282,7 +278,7 @@
         "main": "Chi Siamo",
         "subtitle": "Una Storia di Passione"
       },
-      "description": "Tre fratelli uniti dalla passione per la terra siciliana e il rispetto per le tradizioni. La nostra storia inizia nel 1940 con nostro nonno Francesco e continua oggi con la stessa dedizione e amore per l'olio extravergine di qualità superiore."
+      "description": "Tre fratelli uniti dalla passione per la terra siciliana e il rispetto per le tradizioni. La nostra storia inizia nel 1940 con nostro nonno Paolo e continua oggi con la stessa dedizione e amore per l'olio extravergine di qualità superiore."
     },
     "timeline": {
       "title": "La Nostra Storia",
@@ -290,31 +286,31 @@
         {
           "year": "1940",
           "title": "Gli Inizi",
-          "description": "Francesco Galia pianta i primi 100 ulivi nelle colline di Castelvetrano, iniziando quella che sarebbe diventata una tradizione familiare.",
-          "details": "Con soli 25 anni e un prestito dalla banca locale, Francesco acquista 5 ettari di terreno collinare. La scelta della varietà Nocellara del Belice si rivela vincente."
+          "description": "Paolo Galia pianta i primi 100 ulivi nelle colline di Castelvetrano, iniziando quella che sarebbe diventata una tradizione familiare.",
+          "details": "Con soli 25 anni e un prestito dalla banca locale, Paolo acquista 5 ettari di terreno collinare. La scelta della varietà Nocellara del Belice si rivela vincente."
         },
         {
           "year": "1965",
           "title": "L'Espansione",
-          "description": "L'azienda cresce: Francesco acquista nuovi terreni e costruisce il primo frantoio con macine in pietra.",
+          "description": "L'azienda cresce: Paolo acquista nuovi terreni e costruisce il primo frantoio con macine in pietra.",
           "details": "Grazie ai primi successi, l'azienda si espande fino a 15 ettari. Il frantoio viene costruito seguendo i progetti tradizionali siciliani, con macine in pietra lavica dell'Etna."
         },
         {
           "year": "1978",
           "title": "La Generazione Successiva",
-          "description": "I figli di Francesco, Salvatore e Maria, entrano in azienda portando nuove idee e tecnologie.",
+          "description": "I figli di Paolo, Salvatore e Maria, entrano in azienda portando nuove idee e tecnologie.",
           "details": "Salvatore introduce le prime tecniche di agricoltura sostenibile, mentre Maria si occupa della commercializzazione locale. L'azienda raggiunge 25 ettari."
         },
         {
           "year": "1995",
           "title": "Il Periodo Difficile",
-          "description": "Dopo la morte di Francesco, l'azienda attraversa un periodo di difficoltà e viene temporaneamente chiusa.",
+          "description": "Dopo la morte di Paolo, l'azienda attraversa un periodo di difficoltà e viene temporaneamente chiusa.",
           "details": "Le difficoltà economiche e familiari portano alla decisione di sospendere l'attività. Gli uliveti vengono affidati a coltivatori locali per la manutenzione."
         },
         {
           "year": "2018",
           "title": "La Rinascita",
-          "description": "I tre nipoti di Francesco decidono di riportare in vita l'azienda del nonno, unendo tradizione e innovazione.",
+          "description": "I tre nipoti di Paolo decidono di riportare in vita l'azienda del nonno, unendo tradizione e innovazione.",
           "details": "Luca, Andrea e Lorenzo investono i loro risparmi per ristrutturare il frantoio e modernizzare gli impianti, mantenendo i metodi tradizionali di produzione."
         },
         {
@@ -334,7 +330,7 @@
           "name": "Luca Galia",
           "role": "Produzione e Qualità",
           "age": "45 anni",
-          "description": "Il più grande dei fratelli, Luca ha ereditato la passione per la terra dal nonno Francesco. Dopo la laurea in Agraria, ha trascorso anni a perfezionare le tecniche di coltivazione biologica e spremitura a freddo.",
+          "description": "Il più grande dei fratelli, Luca ha ereditato la passione per la terra dal nonno Paolo. Dopo la laurea in Agraria, ha trascorso anni a perfezionare le tecniche di coltivazione biologica e spremitura a freddo.",
           "speciality": "Agronomo specializzato in olivicoltura biologica",
           "quote": "Ogni oliva raccolta porta con sé il sapore della nostra terra",
           "details": "Luca si alza ogni mattina all'alba per controllare personalmente gli uliveti. La sua esperienza gli permette di riconoscere il momento perfetto per la raccolta, quando le olive hanno raggiunto il giusto grado di maturazione.",
@@ -376,7 +372,7 @@
         },
         {
           "title": "Tradizione Autentica",
-          "description": "Preserviamo e trasmettiamo i metodi tramandati da nostro nonno Francesco, adattandoli alle esigenze moderne."
+          "description": "Preserviamo e trasmettiamo i metodi tramandati da nostro nonno Paolo, adattandoli alle esigenze moderne."
         },
         {
           "title": "Sostenibilità",

@@ -1,45 +1,13 @@
 // components/AboutSection.tsx
 "use client";
-import BrothersSection from '@/components/about/BrothersSection';
 import { HistorySection } from '@/components/about/HistorySection';
 import { ValuesSection } from '@/components/about/ValuesSection';
 import { useT } from '@/hooks/useT';
-import { Brother, Value } from '@/types/about';
+import { Value } from '@/types/about';
 import styles from '../../../styles/AboutPage.module.css';
 
 export default function AboutSection() {
   const { t } = useT();
-
-  // Preparazione dati fratelli (versione compatta)
-  const brothers: Brother[] = [
-    {
-      id: 1,
-      name: t.about.brothers.luca.name,
-      role: t.about.brothers.luca.role,
-      description: t.about.brothers.luca.description,
-      speciality: t.about.brothers.luca.speciality,
-      photo: "/luca-galia.jpg",
-      quote: t.about.brothers.luca.quote
-    },
-    {
-      id: 2,
-      name: t.about.brothers.andrea.name,
-      role: t.about.brothers.andrea.role,
-      description: t.about.brothers.andrea.description,
-      speciality: t.about.brothers.andrea.speciality,
-      photo: "/andrea-galia.jpg",
-      quote: t.about.brothers.andrea.quote
-    },
-    {
-      id: 3,
-      name: t.about.brothers.lorenzo.name,
-      role: t.about.brothers.lorenzo.role,
-      description: t.about.brothers.lorenzo.description,
-      speciality: t.about.brothers.lorenzo.speciality,
-      photo: "/lorenzo-galia.jpg",
-      quote: t.about.brothers.lorenzo.quote
-    }
-  ];
 
   // Preparazione dati valori
   const values: Value[] = [
@@ -96,7 +64,7 @@ export default function AboutSection() {
           
           <h2 className={`text-3xl sm:text-4xl lg:text-5xl ${styles.fontSerif} ${styles.textOlive} mb-6 leading-tight`}>
             {t.about.title.line1}
-            <span className={`block italic ${styles.textSalvia}`}>{t.about.title.line2}</span>
+            <span className="block">{t.about.title.line2}</span>
           </h2>
           
           <p className={`text-lg ${styles.textNocciola} max-w-3xl mx-auto leading-relaxed`}>
@@ -106,13 +74,6 @@ export default function AboutSection() {
 
         {/* Storia dell'azienda */}
         <HistorySection history={t.about.history} variant="compact" />
-
-        {/* I tre fratelli */}
-        <BrothersSection 
-          brothers={brothers}
-          title={t.about.brothers.title}
-          variant="compact"
-        />
 
         {/* Valori aziendali */}
         <div className={`${styles.gradientOlive10ToSalvia10} rounded-2xl p-6 sm:p-8 lg:p-10 mb-12`}>
