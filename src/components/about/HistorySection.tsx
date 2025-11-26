@@ -60,7 +60,7 @@ function HistoryImage({ imageCaption, imageNote }: HistoryImageProps) {
       
       {/* Badge vintage */}
       <div className="absolute -top-4 -right-4 bg-salvia text-beige px-3 py-2 rounded-full text-xs font-bold shadow-lg rotate-12">
-        Est. 1950
+        Est. 1940
       </div>
     </div>
   );

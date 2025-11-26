@@ -69,23 +69,19 @@
     "badge": "Our Story",
     "title": {
       "line1": "Who We Are",
-      "line2": "The Galia Brothers"
+      "line2": "Galia Family"
     },
-    "intro": "Three brothers united by passion for the land and respect for traditions. We decided to revive our beloved grandfather's oil company, carrying forward a legacy of authentic flavors and family values.",
+    "intro": "The Galia family is united by the passion for selecting the finest Sicilian extra virgin olive oil. We continue the family oil company tradition, dedicating ourselves to the pursuit of excellence and superior quality.",
     "history": {
-      "title": "Since 1940, A Family Tradition",
-      "paragraph1": "It all began in 1940, when our grandfather Francesco Galia planted the first olive trees in the Sicilian hills. With dedication and love for the land, he built a company that became synonymous with quality and authenticity.",
-      "paragraph2": "After years when the company remained inactive, we three brothers decided to bring this family heritage back to life. Each with our own skills and specializations, but all united by the same passion for extra virgin olive oil.",
-      "paragraph3": "Today, Galia represents the perfect meeting between tradition and innovation, keeping intact the values and methods passed down by our grandfather, but with an eye to the future.",
-      "imageCaption": "Historical photo of grandfather Francesco's company",
-      "imageNote": "(Insert image: /nonno-francesco-1940.jpg)",
+      "title": "Since 1940, A Tradition of Selection",
+      "paragraph1": "It all began in 1940, when our grandfather Paolo Galia planted the first olive trees in the Sicilian hills. With dedication and love for the land, he built a company that became synonymous with quality and authenticity.",
+      "paragraph2": "After years when the company remained inactive, we decided to bring this family heritage back to life, dedicating ourselves to selecting the finest extra virgin oil. We follow the teachings passed down by grandfather Paolo, choosing only the excellence of our land.",
+      "paragraph3": "Today, Galia represents the perfect meeting between tradition and innovation. We carefully select every bottle, keeping intact the values and quality methods passed down by our grandfather, but with an eye to the future.",
+      "imageCaption": "Historical photo of grandfather Paolo's company",
+      "imageNote": "(Insert image: /nonno-paolo-1940.jpg)",
       "stats": {
-        "years": "75+",
-        "yearsLabel": "Years of History",
         "generations": "3",
-        "generationsLabel": "Generations",
-        "family": "100%",
-        "familyLabel": "Family"
+        "generationsLabel": "Generations"
       }
     },
     "brothers": {
@@ -231,7 +227,7 @@
   },
   "footer": {
     "brand": {
-      "description": "Since 1940, three generations of Sicilian passion in every drop. The Galia brothers continue grandfather Francesco's tradition.",
+      "description": "Since 1940, three generations of Sicilian passion in every drop. The Galia brothers continue grandfather Paolo's tradition.",
       "badges": {
         "dop": "DOP Sicily",
         "bio": "Certified Organic",
@@ -282,7 +278,7 @@
         "main": "Who We Are",
         "subtitle": "A Story of Passion"
       },
-      "description": "Three brothers united by passion for Sicilian land and respect for traditions. Our story begins in 1940 with our grandfather Francesco and continues today with the same dedication and love for superior quality extra virgin oil."
+      "description": "Three brothers united by passion for Sicilian land and respect for traditions. Our story begins in 1940 with our grandfather Paolo and continues today with the same dedication and love for superior quality extra virgin oil."
     },
     "timeline": {
       "title": "Our Story",
@@ -290,31 +286,31 @@
         {
           "year": "1940",
           "title": "The Beginning",
-          "description": "Francesco Galia plants the first 100 olive trees in the hills of Castelvetrano, starting what would become a family tradition.",
-          "details": "At only 25 years old and with a loan from the local bank, Francesco buys 5 hectares of hilly land. The choice of the Nocellara del Belice variety proves to be a winner."
+          "description": "Paolo Galia plants the first 100 olive trees in the hills of Castelvetrano, starting what would become a family tradition.",
+          "details": "At only 25 years old and with a loan from the local bank, Paolo buys 5 hectares of hilly land. The choice of the Nocellara del Belice variety proves to be a winner."
         },
         {
           "year": "1965",
           "title": "The Expansion",
-          "description": "The company grows: Francesco buys new land and builds the first oil mill with stone millstones.",
+          "description": "The company grows: Paolo buys new land and builds the first oil mill with stone millstones.",
           "details": "Thanks to the first successes, the company expands to 15 hectares. The oil mill is built following traditional Sicilian designs, with Etna lava stone millstones."
         },
         {
           "year": "1978",
           "title": "The Next Generation",
-          "description": "Francesco's children, Salvatore and Maria, enter the company bringing new ideas and technologies.",
+          "description": "Paolo's children, Salvatore and Maria, enter the company bringing new ideas and technologies.",
           "details": "Salvatore introduces the first sustainable agriculture techniques, while Maria takes care of local marketing. The company reaches 25 hectares."
         },
         {
           "year": "1995",
           "title": "The Difficult Period",
-          "description": "After Francesco's death, the company goes through a difficult period and is temporarily closed.",
+          "description": "After Paolo's death, the company goes through a difficult period and is temporarily closed.",
           "details": "Economic and family difficulties lead to the decision to suspend activity. The olive groves are entrusted to local farmers for maintenance."
         },
         {
           "year": "2018",
           "title": "The Rebirth",
-          "description": "Francesco's three grandsons decide to bring their grandfather's company back to life, combining tradition and innovation.",
+          "description": "Paolo's three grandsons decide to bring their grandfather's company back to life, combining tradition and innovation.",
           "details": "Luca, Andrea and Lorenzo invest their savings to renovate the oil mill and modernize the facilities, maintaining traditional production methods."
         },
         {
@@ -334,7 +330,7 @@
           "name": "Luca Galia",
           "role": "Production and Quality",
           "age": "45 years old",
-          "description": "The eldest of the brothers, Luca inherited the passion for the land from his grandfather Francesco. After graduating in Agriculture, he spent years perfecting organic cultivation and cold pressing techniques.",
+          "description": "The eldest of the brothers, Luca inherited the passion for the land from his grandfather Paolo. After graduating in Agriculture, he spent years perfecting organic cultivation and cold pressing techniques.",
           "speciality": "Agronomist specialized in organic olive growing",
           "quote": "Each harvested olive carries the flavor of our land",
           "details": "Luca gets up every morning at dawn to personally check the olive groves. His experience allows him to recognize the perfect moment for harvesting, when the olives have reached the right degree of ripeness.",
@@ -376,7 +372,7 @@
         },
         {
           "title": "Authentic Tradition",
-          "description": "We preserve and transmit the methods passed down by our grandfather Francesco, adapting them to modern needs."
+          "description": "We preserve and transmit the methods passed down by our grandfather Paolo, adapting them to modern needs."
         },
         {
           "title": "Sustainability",
