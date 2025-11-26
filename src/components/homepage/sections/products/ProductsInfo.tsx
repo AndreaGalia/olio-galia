@@ -9,7 +9,7 @@ export function ProductsInfo() {
     <div className="mt-24 sm:mt-28">
       <div className="text-center mb-16">
         <h3 className="text-2xl sm:text-3xl font-serif text-olive mb-4">
-          {t.products.whyChoose.title} <span className="italic text-salvia">{t.products.whyChoose.subtitle}</span>
+          {t.products.whyChoose.title} <span>{t.products.whyChoose.subtitle}</span>
         </h3>
         <p className="text-nocciola max-w-2xl mx-auto">
           {t.products.whyChoose.description}

@@ -14,7 +14,7 @@ export function ProductsHeader() {
       
       <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif text-olive mb-8 leading-tight">
         {t.products.title.line1}
-        <span className="block italic text-transparent bg-gradient-to-r from-salvia to-olive bg-clip-text">
+        <span className="block">
           {t.products.title.line2}
         </span>
       </h2>
