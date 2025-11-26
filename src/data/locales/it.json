@@ -187,7 +187,7 @@
     ],
     "contact": {
       "title": "Non hai trovato la risposta?",
-      "description": "I fratelli Galia sono sempre disponibili per rispondere alle tue domande e aiutarti a scegliere l'olio perfetto per te.",
+      "description": "Siamo sempre disponibili per rispondere alle tue domande e aiutarti a scegliere l'olio perfetto per te.",
       "buttons": {
         "email": "Scrivi una Email",
         "phone": "Chiamaci",
@@ -198,8 +198,8 @@
         "phone": "Telefono",
         "whatsapp": "WhatsApp",
         "emailAddress": "info@oliogalia.it",
-        "phoneNumber": "+39 123 456 7890",
-        "whatsappNumber": "+39 123 456 7890"
+        "phoneNumber": "+39 379 328 7648",
+        "whatsappNumber": "+39 379 328 7648"
       }
     },
     "loading": "Caricamento FAQ...",

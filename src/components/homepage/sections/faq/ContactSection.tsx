@@ -5,10 +5,12 @@ import ContactInfo from './ContactInfo';
 
 interface ContactSectionProps {
   contact: Contact;
+  onEmailClick: () => void;
+  onPhoneClick: () => void;
   onWhatsAppClick: () => void;
 }
 
-export default function ContactSection({ contact, onWhatsAppClick }: ContactSectionProps) {
+export default function ContactSection({ contact, onEmailClick, onPhoneClick, onWhatsAppClick }: ContactSectionProps) {
   return (
     <div className="mt-12 sm:mt-16">
       <div className="bg-gradient-to-r from-olive/10 to-salvia/10 rounded-2xl p-6 sm:p-8 text-center">
@@ -27,9 +29,11 @@ export default function ContactSection({ contact, onWhatsAppClick }: ContactSect
           {contact.description}
         </p>
         
-        <ContactButtons 
-          buttons={contact.buttons} 
-          onWhatsAppClick={onWhatsAppClick} 
+        <ContactButtons
+          buttons={contact.buttons}
+          onEmailClick={onEmailClick}
+          onPhoneClick={onPhoneClick}
+          onWhatsAppClick={onWhatsAppClick}
         />
 
         <ContactInfo info={contact.info} />

@@ -8,6 +8,7 @@ import CategoryPills from './faq/CategoryPills';
 import FAQItem from './faq/FAQItem';
 import ContactSection from './faq/ContactSection';
 import { useLocale } from '@/contexts/LocaleContext';
+import { openEmail, openPhone, openWhatsApp } from '@/utils/contactActions';
 
 export default function FAQSection() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -67,9 +68,19 @@ export default function FAQSection() {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
+  const handleEmailClick = () => {
+    openEmail(t.faq.contact.info.emailAddress);
+  };
+
+  const handlePhoneClick = () => {
+    openPhone(t.faq.contact.info.phoneNumber);
+  };
+
   const handleWhatsAppClick = () => {
-    const message = encodeURIComponent(t.contactPage.whatsappMessage);
-    window.open(`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER}?text=${message}`, '_blank');
+    openWhatsApp(
+      process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER || t.faq.contact.info.whatsappNumber,
+      t.contactPage.whatsappMessage
+    );
   };
 
   return (
@@ -113,8 +124,10 @@ export default function FAQSection() {
           </div>
         )}
 
-        <ContactSection 
+        <ContactSection
           contact={t.faq.contact}
+          onEmailClick={handleEmailClick}
+          onPhoneClick={handlePhoneClick}
           onWhatsAppClick={handleWhatsAppClick}
         />
       </div>
