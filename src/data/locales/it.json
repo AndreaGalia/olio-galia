@@ -30,7 +30,7 @@
       "line1": "Oli Extravergini",
       "line2": "Siciliani Autentici"
     },
-    "description": "Ogni goccia racconta una storia di tradizione, passione e dedizione tramandati attraverso tre generazioni di maestri oleari.",
+    "description": "Dalla terra siciliana alla tua tavola: selezioniamo solo il miglior olio extravergine, tramandando la tradizione e la passione di tre generazioni.",
     "features": {
       "handPicked": "Raccolto a mano",
       "coldPressed": "Molito a freddo",
@@ -57,7 +57,7 @@
       },
       "tradition": {
         "title": "Tradizione Autentica",
-        "description": "Tre generazioni di esperienza e amore per la terra siciliana in ogni goccia"
+        "description": "Ogni bottiglia è selezionata con l'esperienza e la passione di maestri oleari siciliani"
       }
     },
     "cta": {

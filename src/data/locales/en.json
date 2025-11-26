@@ -7,8 +7,8 @@
       "line3": "Chosen for You"
     },
     "description": {
-      "main": "We select the finest extra virgin olive oil from our land, an authentic expression of Sicilian tradition and aromas.",
-      "secondary": "Every drop tells a story of passion, craftsmanship, and respect for nature."
+      "main": "We select the finest extra virgin olive oil from our land, authentic fruit of Sicilian tradition and aromas.",
+      "secondary": "Every drop tells a story of passion, artisanal care, and respect for nature."
     },
     "buttons": {
       "discover": "Discover Products",
@@ -30,7 +30,7 @@
       "line1": "Extra Virgin Oils",
       "line2": "Authentic Sicilian"
     },
-    "description": "Each drop tells a story of tradition, passion and dedication passed down through three generations of oil masters.",
+    "description": "From Sicilian land to your table: we select only the finest extra virgin oil, passing down the tradition and passion of three generations.",
     "features": {
       "handPicked": "Hand picked",
       "coldPressed": "Cold pressed",
@@ -57,7 +57,7 @@
       },
       "tradition": {
         "title": "Authentic Tradition",
-        "description": "Three generations of experience and love for Sicilian land in every drop"
+        "description": "Every bottle is selected with the experience and passion of Sicilian oil masters"
       }
     },
     "cta": {
