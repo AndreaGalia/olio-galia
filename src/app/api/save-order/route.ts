@@ -6,8 +6,6 @@ import { OrderDetails } from '@/types/checkoutSuccessTypes';
 import { EmailOrderData, EmailOrderDataExtended } from '@/types/email';
 import { EmailService } from '@/lib/email/resend';
 import { TelegramService } from '@/lib/telegram/telegram';
-import { WhatsAppService } from '@/lib/whatsapp/whatsapp';
-import { WhatsAppOrderData } from '@/types/whatsapp';
 
 export async function POST(request: NextRequest) {
   try {
@@ -177,41 +175,6 @@ try {
       emailError = 'Email del cliente non disponibile';
     }
 
-    // Invia notifica WhatsApp se abbiamo il numero di telefono
-    let whatsappSent = false;
-    let whatsappError = null;
-
-    if (orderDetails.customer?.phone) {
-      try {
-        const whatsappData: WhatsAppOrderData = {
-          customerName: orderDetails.customer?.name || 'Cliente',
-          customerPhone: orderDetails.customer.phone,
-          orderNumber: emailData.orderNumber, // Usa lo stesso numero dell'email (già formattato)
-          orderDate: emailData.orderDate,
-          items: emailData.items.map((item) => ({
-            name: item.name,
-            quantity: item.quantity,
-            price: item.price,
-          })),
-          total: emailData.total,
-        };
-
-        const whatsappResult = await WhatsAppService.sendOrderConfirmation(whatsappData);
-
-        if (whatsappResult.success) {
-          whatsappSent = true;
-        } else {
-          whatsappError = whatsappResult.error || 'Errore nell\'invio WhatsApp';
-        }
-      } catch (error) {
-        whatsappError = error instanceof Error ? error.message : 'Errore sconosciuto nell\'invio WhatsApp';
-        console.error('[WhatsApp] Errore:', whatsappError);
-        // Non interrompiamo il processo per errori WhatsApp
-      }
-    } else {
-      whatsappError = 'Numero di telefono non disponibile';
-    }
-
     return NextResponse.json({
       success: true,
       message: 'Ordine salvato con successo',
@@ -220,8 +183,6 @@ try {
       duplicate: false,
       emailSent,
       emailError,
-      whatsappSent,
-      whatsappError,
       telegramSent,
       telegramError
     });

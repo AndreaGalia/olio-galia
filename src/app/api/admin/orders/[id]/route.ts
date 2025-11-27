@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { withAuth } from '@/lib/auth/middleware';
 import { AdminOrderService } from '@/services/adminOrderService';
 import { EmailService } from '@/lib/email/resend';
-import { WhatsAppService } from '@/lib/whatsapp/whatsapp';
-import { WhatsAppShippingData, WhatsAppDeliveryData } from '@/types/whatsapp';
 import { generateFeedbackUrl } from '@/lib/feedback/token';
 
 export const GET = withAuth(async (
@@ -97,27 +95,6 @@ export const PUT = withAuth(async (
 
         // Non blocchiamo la response per un errore di email
       }
-
-      // Invia notifica WhatsApp se abbiamo il numero di telefono
-      const customerPhone = updatedOrder.customer?.phone;
-      if (customerPhone) {
-        try {
-          const orderNumber = updatedOrder.orderId || updatedOrder.sessionId || updatedOrder.id;
-          const whatsappData: WhatsAppShippingData = {
-            customerName: updatedOrder.customerName || updatedOrder.customer?.name || 'Cliente',
-            customerPhone: customerPhone,
-            orderNumber: orderNumber.slice(-8).toUpperCase(),
-            shippingTrackingId,
-            expectedDelivery: undefined,
-          };
-
-          const whatsappResult = await WhatsAppService.sendShippingNotification(whatsappData);
-
-        } catch (whatsappError) {
-          console.error('[WhatsApp] Errore:', whatsappError);
-          // Non blocchiamo la response per errori WhatsApp
-        }
-      }
     }
 
     // Invia email di conferma consegna se lo stato è 'delivered'
@@ -154,27 +131,6 @@ export const PUT = withAuth(async (
       } catch (emailError) {
 
         // Non blocchiamo la response per un errore di email
-      }
-
-      // Invia notifica WhatsApp se abbiamo il numero di telefono
-      const customerPhone = updatedOrder.customer?.phone;
-      if (customerPhone) {
-        try {
-          const orderNumber = updatedOrder.orderId || updatedOrder.sessionId || updatedOrder.id;
-          const whatsappData: WhatsAppDeliveryData = {
-            customerName: updatedOrder.customerName || updatedOrder.customer?.name || 'Cliente',
-            customerPhone: customerPhone,
-            orderNumber: orderNumber.slice(-8).toUpperCase(),
-            orderId: id, // MongoDB _id per link feedback
-            deliveryDate: new Date().toLocaleDateString('it-IT'),
-          };
-
-          const whatsappResult = await WhatsAppService.sendDeliveryConfirmation(whatsappData, feedbackUrl);
-
-        } catch (whatsappError) {
-          console.error('[WhatsApp] Errore:', whatsappError);
-          // Non blocchiamo la response per errori WhatsApp
-        }
       }
     }
 

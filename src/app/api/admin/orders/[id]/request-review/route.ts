@@ -3,9 +3,7 @@ import { withAuth } from '@/lib/auth/middleware';
 import { getDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 import { EmailService } from '@/lib/email/resend';
-import { WhatsAppService } from '@/lib/whatsapp/whatsapp';
 import { ReviewRequestData } from '@/types/email';
-import { WhatsAppReviewRequestData } from '@/types/whatsapp';
 import { generateFeedbackUrl } from '@/lib/feedback/token';
 
 export const POST = withAuth(async (
@@ -115,52 +113,7 @@ export const POST = withAuth(async (
       console.error('[Email] Errore:', emailError);
     }
 
-    // 8. Invia WhatsApp (se ha numero telefono)
-    let whatsappSent = false;
-    let whatsappError = null;
-
-    // Recupera il telefono aggiornato dal database clienti
-    let customerPhone = order.customer?.phone;
-    if (customerEmail) {
-      try {
-        const customersCollection = db.collection('customers');
-        const customer = await customersCollection.findOne({
-          email: customerEmail.toLowerCase()
-        });
-
-        // Se troviamo il cliente, usa il telefono aggiornato
-        if (customer && customer.phone) {
-          customerPhone = customer.phone;
-        }
-      } catch (error) {
-        // Se c'è un errore nel recupero del cliente, usa il telefono dell'ordine
-        console.warn('[ReviewRequest] Errore recupero cliente:', error);
-      }
-    }
-
-    if (customerPhone) {
-      try {
-        const whatsappData: WhatsAppReviewRequestData = {
-          customerName,
-          customerPhone,
-          orderNumber: orderNumber.slice(-8).toUpperCase(),
-          orderType: 'order'
-        };
-
-        const whatsappResult = await WhatsAppService.sendReviewRequest(whatsappData, feedbackUrl);
-
-        if (whatsappResult.success) {
-          whatsappSent = true;
-        } else {
-          whatsappError = whatsappResult.error || 'Errore nell\'invio WhatsApp';
-        }
-      } catch (error) {
-        whatsappError = error instanceof Error ? error.message : 'Errore sconosciuto nell\'invio WhatsApp';
-        console.error('[WhatsApp] Errore:', whatsappError);
-      }
-    }
-
-    // 9. Aggiorna database con contatore e data ultimo invio
+    // 8. Aggiorna database con contatore e data ultimo invio
     const now = new Date();
 
     await ordersCollection.updateOne(
@@ -180,8 +133,6 @@ export const POST = withAuth(async (
       message: 'Richiesta recensione inviata con successo',
       emailSent,
       emailError,
-      whatsappSent,
-      whatsappError,
       reviewRequestCount: (order.reviewRequestCount || 0) + 1,
       lastReviewRequestDate: now,
     });
