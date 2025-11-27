@@ -153,10 +153,11 @@ src/
 | Endpoint | File | Metodi | Descrizione |
 |----------|------|--------|-------------|
 | `/api/create-checkout-session` | `src/app/api/create-checkout-session/route.ts` | POST | Crea sessione Stripe Checkout |
-| `/api/save-order` | `src/app/api/save-order/route.ts` | POST | Salva ordine completato |
+| `/api/save-order` | `src/app/api/save-order/route.ts` | POST | Salva ordine completato (client-side fallback) |
 | `/api/save-order-pending` | `src/app/api/save-order-pending/route.ts` | POST | Salva ordine pendente |
 | `/api/order-details` | `src/app/api/order-details/route.ts` | GET | Dettagli ordine |
 | `/api/update-stock` | `src/app/api/update-stock/route.ts` | POST | Aggiorna stock prodotti |
+| `/api/webhooks/stripe` | `src/app/api/webhooks/stripe/route.ts` | POST | Webhook Stripe (salvataggio ordini garantito) |
 
 #### Feedback Clienti
 | Endpoint | File | Metodi | Descrizione |
@@ -407,6 +408,65 @@ interface Payment {
    - Supporto per prezzi scontati (originalPrice)
    - Aggiornamento prezzi con gestione default price
 
+### Gestione Ordini e Webhook
+
+#### Flusso Ordine Completo
+
+**1. Pagamento Stripe**:
+- Cliente completa il checkout su Stripe
+- Stripe processa il pagamento
+- Redirect a `/checkout/success?session_id=xxx`
+
+**2. Salvataggio Doppio Binario**:
+- **Client-side** (fallback): Hook `useOrderSave` su pagina success
+  - Attende 500ms dopo caricamento pagina
+  - POST `/api/save-order` con sessionId
+  - Funziona solo se l'utente non chiude il browser
+- **Server-side** (garantito): Webhook Stripe
+  - Stripe invia evento `checkout.session.completed` al server
+  - POST `/api/webhooks/stripe` con firma crittografica
+  - **Funziona sempre**, indipendentemente dal comportamento del cliente
+  - Retry automatico di Stripe in caso di errore
+
+**3. Logica di Salvataggio** (identica per entrambi i flussi):
+- Verifica idempotenza: controlla se ordine esiste già
+- Recupera dettagli ordine da Stripe
+- Salva ordine in MongoDB
+- Crea/aggiorna cliente
+- Controlla e allega fattura/ricevuta
+- Invia notifica Telegram
+- Invia email conferma ordine
+
+#### Webhook Stripe - Implementazione
+
+**File**: `src/app/api/webhooks/stripe/route.ts`
+
+**Sicurezza**:
+- ✅ Verifica firma webhook con `stripe.webhooks.constructEvent()`
+- ✅ Secret webhook da variabile d'ambiente `STRIPE_WEBHOOK_SECRET`
+- ✅ Protezione contro replay attacks
+
+**Idempotenza**:
+- ✅ Controllo duplicati tramite `OrderService.orderExists(sessionId)`
+- ✅ Return 200 per eventi duplicati (evita retry infiniti)
+- ✅ Safe per webhook multipli o retry di Stripe
+
+**Eventi Gestiti**:
+- `checkout.session.completed`: Salva ordine completo
+
+**Configurazione Webhook su Stripe**:
+1. Dashboard Stripe → Developers → Webhooks
+2. Add endpoint: `https://tuosito.com/api/webhooks/stripe`
+3. Events to send: `checkout.session.completed`
+4. Copia webhook signing secret → `STRIPE_WEBHOOK_SECRET`
+
+**Vantaggi Webhook**:
+- ✅ Garantisce salvataggio ordine al 100%
+- ✅ Indipendente da comportamento cliente
+- ✅ Retry automatico di Stripe
+- ✅ Ordine salvato anche se utente chiude browser subito
+- ✅ Production-ready pattern utilizzato da tutti i principali e-commerce
+
 ## 🔐 Sistema di Autenticazione
 
 ### Amministratori
@@ -633,9 +693,9 @@ Sistema per richiedere recensioni ai clienti da pannello admin con protezione an
 - **Trigger**: Bottone in dettaglio ordine (delivered) o preventivo (confermato)
 - **Condizione**: Nessun feedback esistente per ordine/preventivo
 - **Protezione 24h**: Max 1 richiesta al giorno per ordine
-- **Invio**: Email + WhatsApp con link JWT sicuro (30gg validità)
+- **Invio**: Email con link JWT sicuro (30gg validità)
 - **Contatori**: `reviewRequestCount`, `lastReviewRequestDate` in collections orders/forms
-- **Template**: Email e WhatsApp amichevoli (`src/lib/email/review-request-template.ts`)
+- **Template**: Email amichevole (`src/lib/email/review-request-template.ts`)
 
 #### UI Admin
 - Bottone gradient purple-pink visibile solo se condizioni soddisfatte
@@ -697,7 +757,6 @@ Sistema per richiedere recensioni ai clienti da pannello admin con protezione an
 - ✅ **Ordini**: Link feedback dopo consegna (`shippingStatus = 'delivered'`)
 - ✅ **Preventivi**: Link feedback dopo conferma (`status = 'confermato'`)
 - ✅ **Email Automatiche**: Invio link feedback via Resend (auto + richieste manuali)
-- ✅ **WhatsApp**: Messaggi amichevoli con link feedback (auto + richieste manuali)
 - ✅ **Richieste Manuali**: Bottone admin con protezione 24h e contatori
 - ✅ **Telegram Notifiche**: Alert admin su nuovi feedback (opzionale)
 - ✅ **ProductId Tracking**: Collegamento feedback-prodotto per analytics
@@ -795,11 +854,6 @@ JWT_SECRET=your-secret-key
 # Email (Resend)
 RESEND_API_KEY=re_...
 FROM_EMAIL=Olio Galia <noreply@tuosito.com>
-
-# WhatsApp (Meta Business API)
-WHATSAPP_ENABLED=true
-META_WHATSAPP_PHONE_NUMBER_ID=your-phone-number-id
-META_WHATSAPP_ACCESS_TOKEN=your-access-token
 
 # Telegram (Notifiche ordini)
 TELEGRAM_BOT_TOKEN=your-bot-token
