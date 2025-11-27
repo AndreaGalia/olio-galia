@@ -41,6 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="it">
       <head>
+        <meta name="format-detection" content="telephone=no" />
         <link rel="stylesheet" href="https://use.typekit.net/mew4ocs.css" />
       </head>
       <body className={`${roboto.variable}`}>

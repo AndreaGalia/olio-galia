@@ -73,7 +73,7 @@
     },
     "intro": "The Galia family is united by the passion for selecting the finest Sicilian extra virgin olive oil. We continue the family oil company tradition, dedicating ourselves to the pursuit of excellence and superior quality.",
     "history": {
-      "title": "Since 1940, A Tradition of Selection",
+      "title": "A Tradition of Excellence",
       "paragraph1": "It all began in 1940, when our grandfather Paolo Galia planted the first olive trees in the Sicilian hills. With dedication and love for the land, he built a company that became synonymous with quality and authenticity.",
       "paragraph2": "After years when the company remained inactive, we decided to bring this family heritage back to life, dedicating ourselves to selecting the finest extra virgin oil. We follow the teachings passed down by grandfather Paolo, choosing only the excellence of our land.",
       "paragraph3": "Today, Galia represents the perfect meeting between tradition and innovation. We carefully select every bottle, keeping intact the values and quality methods passed down by our grandfather, but with an eye to the future.",
@@ -197,9 +197,9 @@
         "email": "Email",
         "phone": "Phone",
         "whatsapp": "WhatsApp",
-        "emailAddress": "info@oliogalia.it",
-        "phoneNumber": "+39 379 328 7648",
-        "whatsappNumber": "+39 379 328 7648"
+        "emailAddress": "info@example.it",
+        "phoneNumber": "+39 XXX XXX XXXX",
+        "whatsappNumber": "+39 XXX XXX XXXX"
       }
     },
     "loading": "Loading FAQs...",
@@ -227,34 +227,28 @@
   },
   "footer": {
     "brand": {
-      "description": "Since 1940, three generations of Sicilian passion in every drop. The Galia brothers continue grandfather Paolo's tradition.",
+      "description": "Since 1940, three generations of Sicilian passion in every drop. We continue grandfather Paolo's tradition with dedication and love for excellence.",
       "badges": {
-        "dop": "DOP Sicily",
-        "bio": "Certified Organic",
-        "natural": "100% Natural"
+        "sicilian": "100% Sicilian",
+        "extraVirgin": "100% Extra Virgin"
       }
     },
     "products": {
-      "title": "Our Oils",
+      "title": "Our Products",
       "classic": "Classic Extra Virgin Oil",
-      "organic": "Organic Extra Virgin Oil",
-      "premium": "Premium Extra Virgin Oil",
-      "gifts": "Gift Sets",
-      "tastings": "Tastings"
+      "bodyOil": "Wellness Body Oil"
     },
     "info": {
       "title": "Information",
       "story": "Our Story",
-      "production": "How We Produce",
-      "certifications": "Certifications",
-      "visits": "Company Visits",
-      "shipping": "Shipping & Returns"
+      "mill": "The Family Mill",
+      "shipping": "Shipping"
     },
     "contact": {
       "title": "Contact",
-      "address": "Via degli Ulivi 123, Sicily",
-      "phone": "+39 123 456 7890",
-      "email": "info@oliogalia.it",
+      "address": "Via Example 123, City",
+      "phone": "+39 XXX XXX XXXX",
+      "email": "info@example.it",
       "social": "Follow us"
     },
     "newsletter": {
@@ -264,8 +258,28 @@
       "button": "Subscribe",
       "privacy": "We respect your privacy. You can unsubscribe at any time."
     },
+    "newsletterModal": {
+      "title": "🌿 Subscribe to Newsletter",
+      "description": "Receive exclusive offers and news directly in your inbox",
+      "close": "Close",
+      "firstName": "First Name",
+      "firstNamePlaceholder": "John",
+      "lastName": "Last Name",
+      "lastNamePlaceholder": "Doe",
+      "email": "Email",
+      "emailPlaceholder": "john.doe@example.com",
+      "phone": "Phone",
+      "phoneOptional": "(optional)",
+      "phonePlaceholder": "+39 123 456 7890",
+      "privacy": "By subscribing you agree to receive communications from Olio Galia. You can unsubscribe at any time.",
+      "cancel": "Cancel",
+      "submit": "Subscribe",
+      "sending": "Sending...",
+      "required": "*"
+    },
     "bottom": {
-      "copyright": "© 2024 Olio Galia. All rights reserved. | VAT: 12345678901",
+      "copyrightText": "Olio Galia. All rights reserved.",
+      "vatLabel": "VAT:",
       "privacy": "Privacy Policy",
       "cookies": "Cookie Policy",
       "terms": "Terms of Service"
@@ -575,12 +589,12 @@
     "methods": [
       {
         "title": "Email",
-        "value": "info@oliogalia.it",
+        "value": "info@example.it",
         "description": "Write for detailed information about our products"
       },
       {
         "title": "WhatsApp",
-        "value": "+39 366 136 8797",
+        "value": "+39 XXX XXX XXXX",
         "description": "Direct contact for immediate response"
       }
     ],

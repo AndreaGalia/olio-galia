@@ -16,16 +16,16 @@ export default function ContactPage() {
     {
       icon: <EmailIcon />,
       title: t.contactPage.methods[0].title,
-      value: t.contactPage.methods[0].value,
+      value: process.env.NEXT_PUBLIC_CONTACT_EMAIL || t.contactPage.methods[0].value,
       description: t.contactPage.methods[0].description,
       action: () => openEmail()
     },
     {
       icon: <WhatsAppIcon />,
       title: t.contactPage.methods[1].title,
-      value: t.contactPage.methods[1].value,
+      value: process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER || t.contactPage.methods[1].value,
       description: t.contactPage.methods[1].description,
-      action: () => openWhatsApp(process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER, t.contactPage.whatsappMessage)
+      action: () => openWhatsApp(process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER || '', t.contactPage.whatsappMessage)
     }
   ];
 

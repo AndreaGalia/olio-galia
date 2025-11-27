@@ -11,7 +11,7 @@ export default function FAQHeader({ badge, title, description }: FAQHeaderProps)
       
       <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif text-olive mb-6 leading-tight">
         {title.line1}
-        <span className="block italic text-salvia">{title.line2}</span>
+        <span className="block">{title.line2}</span>
       </h2>
       
       <p className="text-lg text-nocciola max-w-2xl mx-auto leading-relaxed">

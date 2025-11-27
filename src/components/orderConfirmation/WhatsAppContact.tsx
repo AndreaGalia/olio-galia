@@ -12,7 +12,8 @@ export default function WhatsAppContact({ orderId }: WhatsAppContactProps) {
 
   const generateWhatsAppMessage = () => {
     const message = translate('orderConfirmation.whatsapp.message', { orderId });
-    const phoneNumber = "393661368797";
+    // Usa numero da .env
+    const phoneNumber = (process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER || '').replace(/[\s+\-()]/g, '');
     const encodedMessage = encodeURIComponent(message);
     return `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
   };

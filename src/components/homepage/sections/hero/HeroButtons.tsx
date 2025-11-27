@@ -12,9 +12,9 @@ export function HeroButtons({ isVisible }: HeroButtonsProps) {
 
   return (
     <div className={`flex flex-col sm:flex-row gap-3 md:gap-4 justify-center lg:justify-start ${isVisible ? 'fade-in-up' : ''}`} style={{animationDelay: '0.5s'}}>
-      <Link 
+      <Link
         href="/products"
-        className="group relative bg-gradient-to-r from-olive via-salvia to-olive bg-size-200 bg-pos-0 hover:bg-pos-100 text-beige px-6 py-3 md:px-8 md:py-4 rounded-full font-medium transition-all duration-500 hover:shadow-2xl hover:scale-110 flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg overflow-hidden"
+        className="group relative bg-gradient-to-r from-olive via-salvia to-olive bg-size-200 bg-pos-0 hover:bg-pos-100 text-beige px-6 py-3 md:px-8 md:py-4 rounded-full font-medium transition-all duration-500 hover:shadow-2xl hover:scale-110 flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg overflow-hidden cursor-pointer"
       >  
         <span className="relative z-10">{t.hero.buttons.discover}</span>
         <svg className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-2 group-hover:scale-110 transition-all duration-300 relative z-10" fill="currentColor" viewBox="0 0 20 20">

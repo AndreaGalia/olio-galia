@@ -69,16 +69,16 @@ export default function FAQSection() {
   };
 
   const handleEmailClick = () => {
-    openEmail(t.faq.contact.info.emailAddress);
+    openEmail(process.env.NEXT_PUBLIC_CONTACT_EMAIL || t.faq.contact.info.emailAddress);
   };
 
   const handlePhoneClick = () => {
-    openPhone(t.faq.contact.info.phoneNumber);
+    openPhone(process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER || t.faq.contact.info.phoneNumber);
   };
 
   const handleWhatsAppClick = () => {
     openWhatsApp(
-      process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER || t.faq.contact.info.whatsappNumber,
+      process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER || '',
       t.contactPage.whatsappMessage
     );
   };
