@@ -4,8 +4,6 @@ import { getDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 import { Resend } from 'resend';
 import { createDeliveryNotificationHTML } from '@/lib/email/delivery-template';
-import { WhatsAppService } from '@/lib/whatsapp/whatsapp';
-import { WhatsAppDeliveryData } from '@/types/whatsapp';
 import { generateFeedbackUrl } from '@/lib/feedback/token';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -74,35 +72,8 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
     
 
     if (!emailResult.data?.id) {
-      
+
       throw new Error(`Errore nell'invio dell'email: ${JSON.stringify(emailResult.error || emailResult)}`);
-    }
-
-    // Invia notifica WhatsApp se abbiamo il numero di telefono
-    let whatsappSent = false;
-    let whatsappError = null;
-
-    if (form.phone) {
-      try {
-        const whatsappData: WhatsAppDeliveryData = {
-          customerName: `${form.firstName} ${form.lastName}`,
-          customerPhone: form.phone,
-          orderNumber: form.orderId,
-          orderId: formId, // MongoDB _id per link feedback
-          deliveryDate: new Date().toLocaleDateString('it-IT'),
-        };
-
-        const whatsappResult = await WhatsAppService.sendDeliveryConfirmation(whatsappData, feedbackUrl);
-
-        if (whatsappResult.success) {
-          whatsappSent = true;
-        } else {
-          whatsappError = whatsappResult.error || 'Errore nell\'invio WhatsApp';
-        }
-      } catch (error) {
-        whatsappError = error instanceof Error ? error.message : 'Errore sconosciuto nell\'invio WhatsApp';
-        // Non interrompiamo il processo per errori WhatsApp
-      }
     }
 
     // Aggiorna il form con informazioni sull'invio della conferma
@@ -113,8 +84,6 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
           deliveryConfirmationSent: true,
           deliveryConfirmationSentAt: new Date(),
           deliveryEmailId: emailResult.data.id,
-          whatsappSent,
-          whatsappError,
           updatedAt: new Date()
         }
       }
@@ -124,8 +93,6 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
       success: true,
       message: 'Email di conferma consegna inviata con successo',
       emailId: emailResult.data.id,
-      whatsappSent,
-      whatsappError,
     });
 
   } catch (error) {
