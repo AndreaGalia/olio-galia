@@ -12,7 +12,7 @@ export default function FAQItem({ faq, isActive, onToggle }: FAQItemProps) {
     <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
       <button
         onClick={onToggle}
-        className="w-full px-6 sm:px-8 py-6 sm:py-8 text-left flex items-center justify-between hover:bg-olive/5 transition-colors duration-300"
+        className="w-full px-6 sm:px-8 py-6 sm:py-8 text-left flex items-center justify-between hover:bg-olive/5 transition-colors duration-300 cursor-pointer"
       >
         <div className="flex-1 pr-4">
           <div className="flex items-center gap-3 mb-2">

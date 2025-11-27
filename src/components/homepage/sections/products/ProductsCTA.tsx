@@ -9,9 +9,9 @@ export function ProductsCTA() {
   return (
     <div className="text-center mt-20 sm:mt-24">
       <div className="inline-block p-1 rounded-full bg-gradient-to-r from-olive via-salvia to-nocciola">
-        <Link 
+        <Link
           href="/products"
-          className="bg-white hover:bg-transparent hover:text-white px-12 py-5 rounded-full text-lg font-semibold transition-all duration-500 hover:scale-105 inline-flex items-center gap-4 group text-olive hover:shadow-2xl"
+          className="bg-white hover:bg-transparent hover:text-white px-12 py-5 rounded-full text-lg font-semibold transition-all duration-500 hover:scale-105 inline-flex items-center gap-4 group text-olive hover:shadow-2xl cursor-pointer"
         >
           {t.products.cta.button}
           <svg className="w-6 h-6 transition-transform group-hover:translate-x-1" fill="currentColor" viewBox="0 0 20 20">

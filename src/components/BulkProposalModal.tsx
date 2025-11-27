@@ -69,7 +69,8 @@ function BulkProposalModal({ isOpen, onClose, productName }: {
       date
     });
 
-    const emailURL = `mailto:info@oliogalia.it?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'info@oliogalia.it';
+    const emailURL = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = emailURL;
     onClose();
   };

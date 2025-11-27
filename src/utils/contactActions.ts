@@ -1,12 +1,15 @@
 // utils/contactActions.ts
 
-export const openEmail = (email: string = 'info@oliogalia.it') => {
-  window.open(`mailto:${email}`);
+export const openEmail = (email?: string) => {
+  const emailAddress = email || process.env.NEXT_PUBLIC_CONTACT_EMAIL || '';
+  window.open(`mailto:${emailAddress}`);
 };
 
-export const openWhatsApp = (phone: string = '3661368797', message: string = '') => {
+export const openWhatsApp = (phone: string, message: string = '') => {
+  // Rimuove spazi, + e altri caratteri non numerici dal numero
+  const cleanPhone = phone.replace(/[\s+\-()]/g, '');
   const encodedMessage = encodeURIComponent(message);
-  window.open(`https://wa.me/${phone}?text=${encodedMessage}`, '_blank');
+  window.open(`https://wa.me/${cleanPhone}?text=${encodedMessage}`, '_blank');
 };
 
 export const openPhone = (phone: string) => {
