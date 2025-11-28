@@ -3,9 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 
 // Import degli hook personalizzati
-import { useOrderDetails } from '@/hooks/useOrderDetails';
-import { useOrderSave } from '@/hooks/useOrderSave';
-import { useStockUpdate } from '@/hooks/useStockUpdate';
+import { useOrderPolling } from '@/hooks/useOrderPolling';
 import { useInvoiceStatus } from '@/hooks/useInvoiceStatus';
 import { useReceiptStatus } from '@/hooks/useReceiptStatus';
 import { useCartCleanup } from '@/hooks/useCartCleanup';
@@ -20,14 +18,14 @@ import OrderSummaryDisplay from '@/components/checkoutSuccessPage/OrderSummaryDi
 export default function CheckoutSuccessContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('session_id');
-  
-  // Utilizzo degli hook personalizzati
-  const { orderDetails, loadingOrder } = useOrderDetails(sessionId);
-  const orderSaveStatus = useOrderSave(sessionId, orderDetails, loadingOrder);
-  const { processing, stockUpdateStatus } = useStockUpdate(sessionId);
+
+  // Polling per attendere che il webhook salvi l'ordine
+  const { order, loading, error } = useOrderPolling(sessionId);
+
+  // Status documenti
   const invoiceStatus = useInvoiceStatus(sessionId);
   const receiptStatus = useReceiptStatus(sessionId);
-  
+
   // Pulizia del carrello
   useCartCleanup(sessionId);
 
@@ -37,15 +35,15 @@ export default function CheckoutSuccessContent() {
         {/* Hero Section */}
         <SuccessHeroSection
           sessionId={sessionId}
-          orderDetails={orderDetails}
+          orderDetails={order}
           invoiceStatus={invoiceStatus}
           receiptStatus={receiptStatus}
         />
 
         {/* Riepilogo Ordine */}
-        <OrderSummaryDisplay 
-          orderDetails={orderDetails}
-          loading={loadingOrder}
+        <OrderSummaryDisplay
+          orderDetails={order}
+          loading={loading}
         />
 
         {/* Timeline Process */}
