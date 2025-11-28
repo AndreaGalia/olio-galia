@@ -3,10 +3,9 @@
 import { useT } from '@/hooks/useT';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import BrothersSection from '@/components/about/BrothersSection';
 import { ValuesSection } from '@/components/about/ValuesSection';
 import { TimelineSection } from '@/components/about/TimelineSection';
-import { BrotherFull, TimelineEvent, Value } from '@/types/about';
+import { TimelineEvent, Value } from '@/types/about';
 import styles from '../../../styles/AboutPage.module.css';
 
 export default function AboutPage() {
@@ -17,19 +16,6 @@ export default function AboutPage() {
     setIsVisible(true);
   }, []);
 
-  // Preparazione dati fratelli (versione completa)
-  const brothers: BrotherFull[] = t.aboutPage.brothers.profiles.map((profile: any, index: number) => ({
-    id: index + 1,
-    name: profile.name,
-    role: profile.role,
-    age: profile.age,
-    description: profile.description,
-    speciality: profile.speciality,
-    photo: `/${profile.name.toLowerCase().replace(' ', '-')}.jpg`,
-    quote: profile.quote,
-    details: profile.details,
-    achievements: profile.achievements
-  }));
 
   // Preparazione dati valori (versione estesa)
   const values: Value[] = t.aboutPage.values.items.map((item: any, index: number) => {
@@ -69,7 +55,7 @@ export default function AboutPage() {
     <div className={`min-h-screen ${styles.gradientBeigeViaSabbia}`}>
       
       {/* Hero Section */}
-      <section className="relative py-16 sm:py-20 lg:py-24 overflow-hidden">
+      <section className="relative py-10 sm:py-12 lg:py-16 overflow-hidden">
         {/* Sfondo decorativo */}
         <div className="absolute inset-0 opacity-5">
           <div className={`absolute top-20 left-8 w-32 h-32 rounded-full ${styles.bgOlive} animate-pulse`}></div>
@@ -84,12 +70,12 @@ export default function AboutPage() {
               {t.aboutPage.hero.badge}
             </div>
             
-            <h1 
-              className={`text-4xl sm:text-5xl lg:text-6xl ${styles.fontSerif} ${styles.textOlive} mb-6 leading-tight ${isVisible ? styles.slideInUp : ''}`} 
+            <h1
+              className={`text-4xl sm:text-5xl lg:text-6xl ${styles.fontSerif} ${styles.textOlive} mb-6 leading-tight ${isVisible ? styles.slideInUp : ''}`}
               style={{animationDelay: '0.1s'}}
             >
               {t.aboutPage.hero.title.main}
-              <span className={`block italic ${styles.textSalvia} text-3xl sm:text-4xl lg:text-5xl mt-2`}>
+              <span className={`block text-4xl sm:text-5xl lg:text-6xl mt-2`}>
                 {t.aboutPage.hero.title.subtitle}
               </span>
             </h1>
@@ -105,24 +91,13 @@ export default function AboutPage() {
       </section>
 
       {/* Timeline Storia */}
-      <TimelineSection 
+      <TimelineSection
         timeline={t.aboutPage.timeline.events as TimelineEvent[]}
         title={t.aboutPage.timeline.title}
       />
 
-      {/* I Tre Fratelli */}
-      <section className={`py-16 sm:py-20 ${styles.gradientOlive5ToSalvia5}`}>
-        <BrothersSection 
-          brothers={brothers}
-          title={t.aboutPage.brothers.title}
-          subtitle={t.aboutPage.brothers.subtitle}
-          achievements={t.aboutPage.brothers.achievements}
-          variant="full"
-        />
-      </section>
-
       {/* I Nostri Valori */}
-      <section className="py-16 sm:py-20">
+      <section className="py-10 sm:py-12">
         <ValuesSection 
           values={values}
           title={t.aboutPage.values.title}
@@ -131,32 +106,8 @@ export default function AboutPage() {
         />
       </section>
 
-      {/* Statistiche Aziendali */}
-      <section className={`py-16 sm:py-20 ${styles.gradientOlive10ToSalvia10}`}>
-        <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div className="space-y-2">
-              <div className={`text-3xl sm:text-4xl ${styles.fontSerif} ${styles.textOlive} font-bold`}>30</div>
-              <div className={`text-sm ${styles.textNocciola} font-medium`}>{t.aboutPage.stats.hectares}</div>
-            </div>
-            <div className="space-y-2">
-              <div className={`text-3xl sm:text-4xl ${styles.fontSerif} ${styles.textOlive} font-bold`}>3000</div>
-              <div className={`text-sm ${styles.textNocciola} font-medium`}>{t.aboutPage.stats.plants}</div>
-            </div>
-            <div className="space-y-2">
-              <div className={`text-3xl sm:text-4xl ${styles.fontSerif} ${styles.textOlive} font-bold`}>15k</div>
-              <div className={`text-sm ${styles.textNocciola} font-medium`}>{t.aboutPage.stats.liters}</div>
-            </div>
-            <div className="space-y-2">
-              <div className={`text-3xl sm:text-4xl ${styles.fontSerif} ${styles.textOlive} font-bold`}>12</div>
-              <div className={`text-sm ${styles.textNocciola} font-medium`}>{t.aboutPage.stats.countries}</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Call to Action */}
-      <section className="py-16 sm:py-20">
+      <section className="py-10 sm:py-12">
         <div className="container mx-auto px-4 sm:px-6 max-w-4xl text-center">
           <h2 className={`text-3xl sm:text-4xl ${styles.fontSerif} ${styles.textOlive} mb-6`}>
             {t.aboutPage.cta.title}
@@ -176,13 +127,16 @@ export default function AboutPage() {
               </svg>
             </Link>
             
-            <button className={`border-2 ${styles.borderOlive} ${styles.textOlive} px-8 py-4 rounded-full text-lg font-medium ${styles.hoverBgOlive} ${styles.hoverTextBeige} transition-all duration-300 hover:scale-105 inline-flex items-center justify-center gap-3`}>
+            <Link
+              href="/contact"
+              className={`border-2 ${styles.borderOlive} ${styles.textOlive} px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer inline-flex items-center justify-center gap-3`}
+            >
               {t.aboutPage.cta.contact}
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                 <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
               </svg>
-            </button>
+            </Link>
           </div>
         </div>
       </section>

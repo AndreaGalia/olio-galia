@@ -17,7 +17,7 @@ export function TimelineSection({ timeline, title }: TimelineSectionProps) {
   const [activeTimeline, setActiveTimeline] = useState<number>(0);
 
   return (
-    <section className="py-16 sm:py-20">
+    <section className="py-10 sm:py-12">
       <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
         <h2 className="text-3xl sm:text-4xl font-serif text-olive text-center mb-12">
           {title}

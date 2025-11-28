@@ -292,7 +292,7 @@
         "main": "Chi Siamo",
         "subtitle": "Una Storia di Passione"
       },
-      "description": "Tre fratelli uniti dalla passione per la terra siciliana e il rispetto per le tradizioni. La nostra storia inizia nel 1940 con nostro nonno Paolo e continua oggi con la stessa dedizione e amore per l'olio extravergine di qualità superiore."
+      "description": "Una famiglia unita dalla passione per la terra siciliana e il rispetto per le tradizioni. La nostra storia inizia nel 1940 con nostro nonno Paolo e continua oggi con la stessa dedizione e amore per l'olio extravergine di qualità superiore."
     },
     "timeline": {
       "title": "La Nostra Storia",
@@ -304,28 +304,10 @@
           "details": "Con soli 25 anni e un prestito dalla banca locale, Paolo acquista 5 ettari di terreno collinare. La scelta della varietà Nocellara del Belice si rivela vincente."
         },
         {
-          "year": "1965",
-          "title": "L'Espansione",
-          "description": "L'azienda cresce: Paolo acquista nuovi terreni e costruisce il primo frantoio con macine in pietra.",
-          "details": "Grazie ai primi successi, l'azienda si espande fino a 15 ettari. Il frantoio viene costruito seguendo i progetti tradizionali siciliani, con macine in pietra lavica dell'Etna."
-        },
-        {
-          "year": "1978",
-          "title": "La Generazione Successiva",
-          "description": "I figli di Paolo, Salvatore e Maria, entrano in azienda portando nuove idee e tecnologie.",
-          "details": "Salvatore introduce le prime tecniche di agricoltura sostenibile, mentre Maria si occupa della commercializzazione locale. L'azienda raggiunge 25 ettari."
-        },
-        {
-          "year": "1995",
-          "title": "Il Periodo Difficile",
-          "description": "Dopo la morte di Paolo, l'azienda attraversa un periodo di difficoltà e viene temporaneamente chiusa.",
-          "details": "Le difficoltà economiche e familiari portano alla decisione di sospendere l'attività. Gli uliveti vengono affidati a coltivatori locali per la manutenzione."
-        },
-        {
           "year": "2018",
           "title": "La Rinascita",
-          "description": "I tre nipoti di Paolo decidono di riportare in vita l'azienda del nonno, unendo tradizione e innovazione.",
-          "details": "Luca, Andrea e Lorenzo investono i loro risparmi per ristrutturare il frantoio e modernizzare gli impianti, mantenendo i metodi tradizionali di produzione."
+          "description": "La famiglia Galia decide di riportare in vita l'azienda del nonno, unendo tradizione e innovazione.",
+          "details": "Investendo risparmi e passione, la famiglia ristruttura il frantoio e modernizza gli impianti, mantenendo i metodi tradizionali di produzione."
         },
         {
           "year": "2024",

@@ -6,7 +6,7 @@ export function ValuesSection({ values, title, subtitle, variant = "compact" }: 
   const gridCols = variant === "full" ? "lg:grid-cols-4" : "md:grid-cols-3";
   
   return (
-    <div className={`${variant === "full" ? "py-16 sm:py-20" : "mb-12"}`}>
+    <div className={`${variant === "full" ? "" : "mb-12"}`}>
       <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
         <h3 className={`${variant === "full" ? "text-3xl sm:text-4xl" : "text-2xl sm:text-3xl"} ${styles.fontSerif} ${styles.textOlive} text-center mb-4`}>
           {title}
