@@ -7,13 +7,12 @@ export default function BenefitsSection() {
   const icons = [
     "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z",
     "M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4",
-    "M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z",
-    "M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"
+    "M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
   ];
-  const colors = ['olive', 'salvia', 'nocciola', 'olive'];
+  const colors = ['olive', 'salvia', 'nocciola'];
 
   return (
-    <section className="py-16 sm:py-20 bg-white/50">
+    <section className="py-10 sm:py-12 bg-white/50">
       <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
         <div className={`text-center mb-12 ${styles.animateFadeInSlow}`}>
           <h2 className="text-3xl sm:text-4xl font-serif text-olive mb-4">
@@ -24,7 +23,7 @@ export default function BenefitsSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {t.productsPage.benefits.items.map((item, index) => (
             <div 
               key={index}

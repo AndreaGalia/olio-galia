@@ -10,7 +10,7 @@ interface CategoryFilterProps {
 export default function CategoryFilter({ categories, selectedCategory, onCategoryChange }: CategoryFilterProps) {
   return (
     <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
-      <div className={`flex flex-wrap justify-center gap-3 mb-12 sm:mb-16 ${styles.animateFadeInSlow}`}>
+      <div className={`flex flex-wrap justify-center gap-3 mb-8 sm:mb-10 ${styles.animateFadeInSlow}`}>
         {categories.map((category) => (
           <button
             key={category.id}
