@@ -5,7 +5,7 @@ export default function ProductsHero() {
   const { t } = useT();
 
   return (
-    <section className="relative py-16 sm:py-20 lg:py-24 overflow-hidden">
+    <section className="relative py-10 sm:py-12 lg:py-16 overflow-hidden">
       {/* Elementi decorativi */}
       <div className="absolute inset-0 opacity-3">
         <div className="absolute top-20 left-12 w-32 h-32 rounded-full bg-olive animate-pulse" 
@@ -22,7 +22,7 @@ export default function ProductsHero() {
           </div>
           
           <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-serif text-olive mb-6 leading-tight ${styles.animateSlideUp}`}>
-            {t.productsPage.hero.title.main} <span className="italic text-salvia">{t.productsPage.hero.title.highlight}</span>
+            {t.productsPage.hero.title.main} <span>{t.productsPage.hero.title.highlight}</span>
           </h1>
           
           <p className={`text-lg text-nocciola max-w-3xl mx-auto leading-relaxed ${styles.animateSlideUpDelay}`}>

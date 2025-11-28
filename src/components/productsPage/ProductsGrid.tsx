@@ -16,7 +16,7 @@ export default function ProductsGrid({ products, onAddToCart }: ProductsGridProp
   const { t } = useT();
 
   return (
-    <section className="pb-16 sm:pb-20 lg:pb-24">
+    <section className="pb-10 sm:pb-12 lg:pb-16">
       <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
         {products.length === 0 ? (
           <div className="text-center py-16">
