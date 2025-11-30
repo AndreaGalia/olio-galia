@@ -3,7 +3,7 @@ import styles from '../../styles/AboutPage.module.css';
 
 
 export function ValuesSection({ values, title, subtitle, variant = "compact" }: ValuesSectionProps) {
-  const gridCols = variant === "full" ? "lg:grid-cols-4" : "md:grid-cols-3";
+  const gridCols = variant === "full" ? "lg:grid-cols-3" : "md:grid-cols-3";
   
   return (
     <div className={`${variant === "full" ? "" : "mb-12"}`}>

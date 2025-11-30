@@ -16,7 +16,7 @@ export default function ContactHero({ hero }: ContactHeroProps) {
       
       <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-serif text-olive mb-6 leading-tight ${styles.animateSlideUp}`}>
         {hero.title.main}
-        <span className="block italic text-salvia">{hero.title.subtitle}</span>
+        <span className="block text-olive">{hero.title.subtitle}</span>
       </h1>
       
       <p className={`text-xl text-nocciola max-w-3xl mx-auto leading-relaxed ${styles.animateFadeInDelay}`}>

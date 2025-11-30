@@ -369,10 +369,6 @@
         {
           "title": "Tradizione Autentica",
           "description": "Preserviamo e trasmettiamo i metodi tramandati da nostro nonno Paolo, adattandoli alle esigenze moderne."
-        },
-        {
-          "title": "Sostenibilità",
-          "description": "Coltiviamo con metodi biologici certificati, rispettando l'ambiente e garantendo un futuro sostenibile alle prossime generazioni."
         }
       ]
     },
@@ -560,7 +556,7 @@
       "badge": "Famiglia Galia",
       "title": {
         "main": "Contatta",
-        "subtitle": "I Tre Fratelli"
+        "subtitle": "La Famiglia Galia"
       },
       "description": "Siamo qui per rispondere alle tue domande e aiutarti a scoprire l'olio extravergine perfetto per la tua tavola. Tre generazioni di passione al tuo servizio."
     },
