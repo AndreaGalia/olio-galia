@@ -1,6 +1,7 @@
 // app/api/forms/save/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { getDatabase } from '@/lib/mongodb';
+import { CustomerService } from '@/services/customerService';
 
 // Funzione per generare un ID ordine univoco
 function generateOrderId(): string {
@@ -28,8 +29,30 @@ export async function POST(request: NextRequest) {
     // Salva direttamente su MongoDB
     const db = await getDatabase();
     const collection = db.collection('forms'); // o 'torino_requests'
-    
+
     const result = await collection.insertOne(dataToSave);
+
+    // Crea o aggiorna il cliente nella collection customers
+    try {
+      await CustomerService.createOrUpdateFromOrder(
+        formData.email,
+        formData.firstName,
+        formData.lastName,
+        formData.phone,
+        formData.address ? {
+          line1: formData.address,
+          city: 'Torino',
+          state: formData.province || 'TO',
+          country: 'IT'
+        } : undefined,
+        orderId,
+        0, // Total in centesimi (preventivo non ha ancora un totale)
+        'quote' // Source type
+      );
+    } catch (customerError) {
+      console.error('Errore creazione/aggiornamento cliente:', customerError);
+      // Non bloccare il salvataggio del form anche se il cliente fallisce
+    }
 
     return NextResponse.json({
       success: true,
