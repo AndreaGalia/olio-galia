@@ -22,19 +22,19 @@ interface LocalizedContent {
 export function generateBaseMetadata(locale: 'it' | 'en' = DEFAULT_LOCALE): Metadata {
   const content: LocalizedContent = {
     it: {
-      title: 'Olio Galia - Olio Extra Vergine di Oliva Biologico',
-      description: 'Scopri l\'eccellenza dell\'olio extra vergine di oliva biologico Olio Galia. Prodotto artigianale italiano di alta qualità.'
+      title: 'Olio Galia - Olio Extra Vergine di Oliva',
+      description: 'Scopri l\'eccellenza dell\'olio extra vergine di oliva Olio Galia. Prodotto artigianale italiano di alta qualità.'
     },
     en: {
-      title: 'Olio Galia - Organic Extra Virgin Olive Oil',
-      description: 'Discover the excellence of Olio Galia organic extra virgin olive oil. High quality Italian artisanal product.'
+      title: 'Olio Galia - Extra Virgin Olive Oil',
+      description: 'Discover the excellence of Olio Galia extra virgin olive oil. High quality Italian artisanal product.'
     }
   };
 
   return {
     title: content[locale].title,
     description: content[locale].description,
-    keywords: ['olio extra vergine', 'olio biologico', 'olio italiano', 'extra virgin olive oil', 'organic'],
+    keywords: ['olio extra vergine', 'olio italiano', 'extra virgin olive oil', 'sicilian olive oil'],
     authors: [{ name: SITE_NAME }],
     creator: SITE_NAME,
     publisher: SITE_NAME,
