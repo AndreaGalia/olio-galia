@@ -24,13 +24,6 @@ export default function WasteDisposalPage() {
 
       {/* Hero Section */}
       <section className="relative py-12 sm:py-16 lg:py-20 overflow-hidden">
-        {/* Decorative background */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-20 left-8 w-32 h-32 rounded-full bg-olive animate-pulse"></div>
-          <div className="absolute bottom-32 right-16 w-24 h-24 rounded-full bg-salvia"></div>
-          <div className="absolute top-1/3 right-1/4 w-16 h-16 rounded-full bg-nocciola"></div>
-        </div>
-
         <div className="container mx-auto px-4 sm:px-6 max-w-5xl relative z-10">
           <div className="text-center">
             <div className={`inline-flex items-center gap-3 bg-olive/10 text-olive px-4 py-2 rounded-full text-sm font-medium mb-6 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>

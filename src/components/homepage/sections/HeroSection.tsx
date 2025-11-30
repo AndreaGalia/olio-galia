@@ -29,7 +29,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className={`${styles.heroSection} relative bg-gradient-to-br from-sabbia to-beige min-h-[60vh] md:min-h-[70vh] lg:min-h-[85vh] xl:min-h-screen flex items-center overflow-hidden py-8 md:py-12 lg:py-16`}>
+    <section className={`${styles.heroSection} relative bg-homepage-bg min-h-[60vh] md:min-h-[70vh] lg:min-h-[85vh] xl:min-h-screen flex items-center overflow-hidden py-8 md:py-12 lg:py-16`}>
       <HeroBackground mousePosition={mousePosition} />
 
       <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10">

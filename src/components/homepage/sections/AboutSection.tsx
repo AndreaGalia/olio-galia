@@ -45,15 +45,7 @@ export default function AboutSection() {
   ];
 
   return (
-    <section className={`relative ${styles.gradientBeigeViaSabbia} py-16 sm:py-20 lg:py-24 overflow-hidden`}>
-      {/* Elementi decorativi di sfondo */}
-      <div className="absolute inset-0 opacity-5">
-        <div className={`absolute top-20 left-8 w-32 h-32 rounded-full ${styles.bgOlive}`}></div>
-        <div className={`absolute bottom-32 right-16 w-24 h-24 rounded-full ${styles.bgSalvia}`}></div>
-        <div className={`absolute top-1/3 right-1/4 w-16 h-16 rounded-full ${styles.bgNocciola}`}></div>
-        <div className={`absolute bottom-1/4 left-1/3 w-20 h-20 rounded-full ${styles.bgOlive20}`}></div>
-      </div>
-
+    <section className={`relative bg-homepage-bg py-16 sm:py-20 lg:py-24 overflow-hidden`}>
       <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10">
         
         {/* Header della sezione */}

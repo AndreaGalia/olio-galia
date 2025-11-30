@@ -84,7 +84,7 @@ export default function FAQSection() {
   };
 
   return (
-    <section className="relative bg-gradient-to-br from-sabbia to-beige py-16 sm:py-20 lg:py-24 overflow-hidden">
+    <section className="relative bg-homepage-bg py-16 sm:py-20 lg:py-24 overflow-hidden">
       <BackgroundDecorations />
 
       <div className="container mx-auto px-4 sm:px-6 max-w-4xl relative z-10">

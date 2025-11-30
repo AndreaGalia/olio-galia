@@ -27,7 +27,7 @@ export default function ProductsSection() {
   }
 
   return (
-    <section className="relative bg-gradient-to-br from-beige via-beige/80 to-olive/5 py-20 sm:py-24 lg:py-32 overflow-hidden">
+    <section className="relative bg-homepage-bg py-20 sm:py-24 lg:py-32 overflow-hidden">
       <ProductsBackground />
       
       <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10">

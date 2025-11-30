@@ -20,14 +20,6 @@ export default function Footer() {
   return (
     <>
       <footer className="relative bg-gradient-to-br from-olive to-salvia text-beige overflow-hidden">
-        {/* Elementi decorativi di sfondo */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-16 left-12 w-24 h-24 rounded-full bg-beige"></div>
-          <div className="absolute bottom-20 right-16 w-32 h-32 rounded-full bg-sabbia"></div>
-          <div className="absolute top-1/2 left-1/4 w-16 h-16 rounded-full bg-nocciola"></div>
-          <div className="absolute bottom-1/3 right-1/3 w-12 h-12 rounded-full bg-beige"></div>
-        </div>
-
         <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10">
           
           {/* Sezione principale del footer */}
