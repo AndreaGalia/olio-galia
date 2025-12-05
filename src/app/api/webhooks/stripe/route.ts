@@ -8,6 +8,8 @@ import { OrderDetails } from '@/types/checkoutSuccessTypes';
 import { EmailOrderDataExtended } from '@/types/email';
 import { EmailService } from '@/lib/email/resend';
 import { TelegramService } from '@/lib/telegram/telegram';
+import { WahaService } from '@/services/wahaService';
+import { WhatsAppTemplates } from '@/lib/whatsapp/templates';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-08-27.basil',
@@ -206,6 +208,36 @@ export async function POST(request: NextRequest) {
           }
         } else {
           console.log('ℹ️ No customer email available, skipping email');
+        }
+
+        // Invia notifica WhatsApp (solo se abilitata e configurata)
+        if (orderDetails.customer?.phone) {
+          try {
+            const isEnabled = await WahaService.isNotificationTypeEnabled('orderConfirmation');
+            if (isEnabled) {
+              const whatsappMessage = await WhatsAppTemplates.orderConfirmation({
+                orderId: emailData.orderNumber,
+                customerName: orderDetails.customer.name || 'Cliente',
+                total: Math.round((orderDetails.pricing?.total || orderDetails.total || 0) * 100),
+                currency: orderDetails.currency || 'EUR',
+                items: orderDetails.items?.map(item => ({
+                  name: item.name || 'Prodotto',
+                  quantity: item.quantity || 1
+                })) || []
+              });
+
+              const whatsappResult = await WahaService.sendTextMessage(
+                orderDetails.customer.phone,
+                whatsappMessage
+              );
+
+              if (!whatsappResult.success) {
+                console.error('⚠️ Failed to send WhatsApp notification:', whatsappResult.error);
+              }
+            }
+          } catch (error) {
+            console.error('⚠️ Error sending WhatsApp notification:', error);
+          }
         }
 
         console.log(`✅ Webhook processing completed for session: ${sessionId}`);

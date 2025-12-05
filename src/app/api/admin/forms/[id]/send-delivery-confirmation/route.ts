@@ -5,6 +5,8 @@ import { ObjectId } from 'mongodb';
 import { Resend } from 'resend';
 import { createDeliveryNotificationHTML } from '@/lib/email/delivery-template';
 import { generateFeedbackUrl } from '@/lib/feedback/token';
+import { WahaService } from '@/services/wahaService';
+import { WhatsAppTemplates } from '@/lib/whatsapp/templates';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -74,6 +76,24 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
     if (!emailResult.data?.id) {
 
       throw new Error(`Errore nell'invio dell'email: ${JSON.stringify(emailResult.error || emailResult)}`);
+    }
+
+    // Invia notifica WhatsApp consegna (preventivo/form)
+    if (form.phone) {
+      try {
+        const isEnabled = await WahaService.isNotificationTypeEnabled('deliveryConfirmation');
+        if (isEnabled) {
+          const whatsappMessage = await WhatsAppTemplates.deliveryConfirmation({
+            orderId: form.orderId,
+            customerName: `${form.firstName} ${form.lastName}`,
+            type: 'quote'
+          });
+
+          await WahaService.sendTextMessage(form.phone, whatsappMessage);
+        }
+      } catch (whatsappError) {
+        console.error('⚠️ Error sending WhatsApp delivery notification:', whatsappError);
+      }
     }
 
     // Aggiorna il form con informazioni sull'invio della conferma

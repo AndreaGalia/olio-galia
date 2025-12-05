@@ -6,6 +6,8 @@ import { OrderDetails } from '@/types/checkoutSuccessTypes';
 import { EmailOrderData, EmailOrderDataExtended } from '@/types/email';
 import { EmailService } from '@/lib/email/resend';
 import { TelegramService } from '@/lib/telegram/telegram';
+import { WahaService } from '@/services/wahaService';
+import { WhatsAppTemplates } from '@/lib/whatsapp/templates';
 
 export async function POST(request: NextRequest) {
   try {
@@ -175,6 +177,41 @@ try {
       emailError = 'Email del cliente non disponibile';
     }
 
+    // Invia notifica WhatsApp (solo se abilitata e configurata)
+    let whatsappSent = false;
+    let whatsappError = null;
+    if (orderDetails.customer?.phone) {
+      try {
+        const isEnabled = await WahaService.isNotificationTypeEnabled('orderConfirmation');
+        if (isEnabled) {
+          const whatsappMessage = await WhatsAppTemplates.orderConfirmation({
+            orderId: emailData.orderNumber,
+            customerName: orderDetails.customer.name || 'Cliente',
+            total: Math.round((orderDetails.pricing?.total || orderDetails.total || 0) * 100),
+            currency: orderDetails.currency || 'EUR',
+            items: orderDetails.items?.map(item => ({
+              name: item.name || 'Prodotto',
+              quantity: item.quantity || 1
+            })) || []
+          });
+
+          const whatsappResult = await WahaService.sendTextMessage(
+            orderDetails.customer.phone,
+            whatsappMessage
+          );
+
+          whatsappSent = whatsappResult.success;
+          if (!whatsappSent) {
+            whatsappError = whatsappResult.error || 'Errore nell\'invio della notifica WhatsApp';
+          }
+        }
+      } catch (error) {
+        whatsappError = error instanceof Error ? error.message : 'Errore sconosciuto nell\'invio WhatsApp';
+      }
+    } else {
+      whatsappError = 'Telefono del cliente non disponibile';
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Ordine salvato con successo',
@@ -184,7 +221,9 @@ try {
       emailSent,
       emailError,
       telegramSent,
-      telegramError
+      telegramError,
+      whatsappSent,
+      whatsappError
     });
 
   } catch (error) {

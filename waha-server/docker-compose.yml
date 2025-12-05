@@ -1,0 +1,62 @@
+# Docker Compose per WAHA (WhatsApp HTTP API)
+# Deployment su server per Olio Galia
+
+version: '3.8'
+
+services:
+  waha:
+    image: devlikeapro/waha:latest
+    container_name: waha-oliogalia
+    restart: unless-stopped
+
+    ports:
+      - "3000:3000"  # API HTTP
+
+    volumes:
+      # Volume persistente per sessioni WhatsApp
+      - waha-sessions:/app/sessions
+
+      # (Opzionale) Volume per file media
+      - waha-media:/app/.sessions
+
+    environment:
+      # Configurazioni WAHA
+      - WAHA_LOG_LEVEL=info
+      - WAHA_PRINT_QR=True  # Stampa QR code nei log per setup iniziale
+
+      # (Opzionale) Security
+      # - WAHA_API_KEY=your-secret-api-key-here
+
+      # (Opzionale) Webhook configuration
+      # - WHATSAPP_HOOK_URL=https://oliogalia.com/api/webhooks/waha
+      # - WHATSAPP_HOOK_EVENTS=message,message.any
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+    networks:
+      - waha-network
+
+    # Limiti risorse (opzionale, adatta al tuo server)
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+volumes:
+  waha-sessions:
+    driver: local
+  waha-media:
+    driver: local
+
+networks:
+  waha-network:
+    driver: bridge

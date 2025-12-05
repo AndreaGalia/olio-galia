@@ -3,6 +3,8 @@ import { withAuth } from '@/lib/auth/middleware';
 import { AdminOrderService } from '@/services/adminOrderService';
 import { EmailService } from '@/lib/email/resend';
 import { generateFeedbackUrl } from '@/lib/feedback/token';
+import { WahaService } from '@/services/wahaService';
+import { WhatsAppTemplates } from '@/lib/whatsapp/templates';
 
 export const GET = withAuth(async (
   request: NextRequest,
@@ -95,6 +97,27 @@ export const PUT = withAuth(async (
 
         // Non blocchiamo la response per un errore di email
       }
+
+      // Invia notifica WhatsApp spedizione
+      const customerPhone = updatedOrder.customer?.phone;
+      if (customerPhone) {
+        try {
+          const isEnabled = await WahaService.isNotificationTypeEnabled('shippingUpdate');
+          if (isEnabled) {
+            const orderNumber = updatedOrder.orderId || updatedOrder.sessionId || updatedOrder.id;
+            const whatsappMessage = await WhatsAppTemplates.shippingUpdate({
+              orderId: orderNumber.slice(-8).toUpperCase(),
+              customerName: updatedOrder.customerName || updatedOrder.customer?.name || 'Cliente',
+              trackingNumber: shippingTrackingId,
+              carrier: 'Corriere Espresso'
+            });
+
+            await WahaService.sendTextMessage(customerPhone, whatsappMessage);
+          }
+        } catch (whatsappError) {
+          console.error('⚠️ Error sending WhatsApp shipping notification:', whatsappError);
+        }
+      }
     }
 
     // Invia email di conferma consegna se lo stato è 'delivered'
@@ -131,6 +154,25 @@ export const PUT = withAuth(async (
       } catch (emailError) {
 
         // Non blocchiamo la response per un errore di email
+      }
+
+      // Invia notifica WhatsApp consegna
+      const customerPhone = updatedOrder.customer?.phone;
+      if (customerPhone) {
+        try {
+          const isEnabled = await WahaService.isNotificationTypeEnabled('deliveryConfirmation');
+          if (isEnabled) {
+            const whatsappMessage = await WhatsAppTemplates.deliveryConfirmation({
+              orderId: orderNumber.slice(-8).toUpperCase(),
+              customerName: updatedOrder.customerName || updatedOrder.customer?.name || 'Cliente',
+              type: 'order'
+            });
+
+            await WahaService.sendTextMessage(customerPhone, whatsappMessage);
+          }
+        } catch (whatsappError) {
+          console.error('⚠️ Error sending WhatsApp delivery notification:', whatsappError);
+        }
       }
     }
 

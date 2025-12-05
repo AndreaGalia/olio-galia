@@ -5,6 +5,8 @@ import { ObjectId } from 'mongodb';
 import { EmailService } from '@/lib/email/resend';
 import { ReviewRequestData } from '@/types/email';
 import { generateFeedbackUrl } from '@/lib/feedback/token';
+import { WahaService } from '@/services/wahaService';
+import { WhatsAppTemplates } from '@/lib/whatsapp/templates';
 
 export const POST = withAuth(async (
   request: NextRequest,
@@ -112,6 +114,33 @@ export const POST = withAuth(async (
       console.error('[Email] Errore:', emailError);
     }
 
+    // 7b. Invia notifica WhatsApp richiesta recensione
+    let whatsappSent = false;
+    let whatsappError = null;
+
+    if (form.phone) {
+      try {
+        const isEnabled = await WahaService.isNotificationTypeEnabled('reviewRequest');
+        if (isEnabled) {
+          const whatsappMessage = await WhatsAppTemplates.reviewRequest({
+            orderId: form.orderId,
+            customerName,
+            feedbackUrl,
+            type: 'quote'
+          });
+
+          const whatsappResult = await WahaService.sendTextMessage(form.phone, whatsappMessage);
+          whatsappSent = whatsappResult.success;
+          if (!whatsappSent) {
+            whatsappError = whatsappResult.error || 'Errore nell\'invio WhatsApp';
+          }
+        }
+      } catch (error) {
+        whatsappError = error instanceof Error ? error.message : 'Errore sconosciuto nell\'invio WhatsApp';
+        console.error('[WhatsApp] Errore:', whatsappError);
+      }
+    }
+
     // 8. Aggiorna database con contatore e data ultimo invio
     const now = new Date();
 
@@ -133,6 +162,8 @@ export const POST = withAuth(async (
       message: 'Richiesta recensione inviata con successo',
       emailSent,
       emailError,
+      whatsappSent,
+      whatsappError,
       reviewRequestCount: (form.reviewRequestCount || 0) + 1,
       lastReviewRequestDate: now,
     });
