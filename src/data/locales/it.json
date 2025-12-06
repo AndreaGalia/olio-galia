@@ -2,16 +2,16 @@
   "hero": {
     "badge": "Tradizione Siciliana dal 1940",
     "title": {
-      "line1": "Il Meglio",
-      "line2": "della Sicilia",
-      "line3": "Scelto per Te"
+      "line1": "Il Meglio della Sicilia",
+      "line2": "Scelto per Te",
+      "line3": ""
     },
     "description": {
-      "main": "Selezioniamo il miglior olio extravergine della nostra terra, frutto autentico della tradizione e dei profumi siciliani.", 
-      "secondary": "Ogni goccia racconta una storia di passione, cura artigianale e rispetto per la natura."
+      "main": "",
+      "secondary": ""
     },
     "buttons": {
-      "discover": "Scopri i Prodotti",
+      "discover": "SCOPRI I PRODOTTI",
       "watch": "Guarda il Video"
     },
     "stats": {

@@ -2,16 +2,16 @@
   "hero": {
     "badge": "Sicilian Tradition since 1940",
     "title": {
-      "line1": "The Best",
-      "line2": "of Sicily",
-      "line3": "Chosen for You"
+      "line1": "The Best of Sicily",
+      "line2": "Chosen for You",
+      "line3": ""
     },
     "description": {
-      "main": "We select the finest extra virgin olive oil from our land, authentic fruit of Sicilian tradition and aromas.",
-      "secondary": "Every drop tells a story of passion, artisanal care, and respect for nature."
+      "main": "",
+      "secondary": ""
     },
     "buttons": {
-      "discover": "Discover Products",
+      "discover": "DISCOVER PRODUCTS",
       "watch": "Watch Video"
     },
     "stats": {
