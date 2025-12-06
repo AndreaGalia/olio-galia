@@ -16,7 +16,7 @@ export default function HeroSection() {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
 
       {/* Video Background con overlay */}
-      <VideoBackground videoUrl="/videos/uliveti_sicilia.mp4" />
+      <VideoBackground videoUrl={process.env.NEXT_PUBLIC_HERO_VIDEO_URL || "/videos/uliveti_sicilia.mp4"} />
 
       {/* Main Content - Centrato */}
       <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6">
