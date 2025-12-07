@@ -146,16 +146,32 @@ export class WahaService {
 
   /**
    * Verifica se un numero ha dato il consenso WhatsApp (opt-in)
-   * Controlla prima nella collection dedicata whatsapp_opt_in, poi in customers, orders e forms
+   * Controlla prima nella collection dedicata whatsapp_opt_in (con e senza 39), poi in customers, orders e forms
    */
   private static async checkWhatsAppOptIn(phoneNumber: string): Promise<boolean> {
     try {
       const db = await getDatabase();
       const cleanedPhone = phoneNumber.replace(/[\s\-()]/g, '').replace(/^\+/, '');
 
+      // Prepara varianti per la ricerca
+      const searchVariants: string[] = [cleanedPhone];
+
+      // Aggiungi variante senza 39 se il numero inizia con 39
+      if (cleanedPhone.startsWith('39')) {
+        searchVariants.push(cleanedPhone.substring(2));
+      }
+      // Aggiungi variante con 39 se il numero è mobile italiano senza prefisso
+      else if (cleanedPhone.match(/^3\d{8,9}$/)) {
+        searchVariants.push('39' + cleanedPhone);
+      }
+
       // Cerca nella collection dedicata whatsapp_opt_in (priorità)
+      // Cerca sia nel campo phone che in phoneVariants
       const optIn = await db.collection('whatsapp_opt_in').findOne({
-        phone: { $regex: new RegExp(`^${cleanedPhone}$`, 'i') }
+        $or: [
+          { phone: { $in: searchVariants } },
+          { phoneVariants: { $in: searchVariants } }
+        ]
       });
 
       if (optIn) {
@@ -461,18 +477,36 @@ export class WahaService {
   /**
    * Abilita WhatsApp opt-in per un numero (permette invio messaggi)
    * Usa collection dedicata whatsapp_opt_in con upsert
+   * Salva sia con che senza prefisso 39 per massima compatibilità
    */
   static async setWhatsAppOptIn(phoneNumber: string, collectionName: 'customers' | 'orders' | 'forms' = 'customers'): Promise<boolean> {
     try {
       const db = await getDatabase();
       const cleanedPhone = phoneNumber.replace(/[\s\-()]/g, '').replace(/^\+/, '');
 
+      // Prepara le varianti del numero
+      const phoneVariants: string[] = [cleanedPhone];
+      let phoneWithout39 = null;
+
+      // Se il numero inizia con 39 (Italia), aggiungi anche la versione senza 39
+      if (cleanedPhone.startsWith('39')) {
+        phoneWithout39 = cleanedPhone.substring(2);
+        phoneVariants.push(phoneWithout39);
+      }
+      // Se il numero NON inizia con 39 ma inizia con 3 (numero mobile italiano), aggiungi versione con 39
+      else if (cleanedPhone.match(/^3\d{8,9}$/)) {
+        const phoneWith39 = '39' + cleanedPhone;
+        phoneVariants.push(phoneWith39);
+      }
+
       // Inserisce o aggiorna nella collection dedicata whatsapp_opt_in
       const result = await db.collection('whatsapp_opt_in').updateOne(
-        { phone: cleanedPhone },
+        { $or: phoneVariants.map(variant => ({ phone: variant })) },
         {
           $set: {
             phone: cleanedPhone,
+            phoneWithout39: phoneWithout39,
+            phoneVariants: phoneVariants,
             originalPhone: phoneNumber,
             optInDate: new Date(),
             updatedAt: new Date()
@@ -514,15 +548,27 @@ export class WahaService {
   /**
    * Disabilita WhatsApp opt-in per un numero
    * Rimuove dalla collection whatsapp_opt_in e dalle altre collection
+   * Cerca sia con che senza prefisso 39
    */
   static async removeWhatsAppOptIn(phoneNumber: string, collectionName: 'customers' | 'orders' | 'forms' = 'customers'): Promise<boolean> {
     try {
       const db = await getDatabase();
       const cleanedPhone = phoneNumber.replace(/[\s\-()]/g, '').replace(/^\+/, '');
 
+      // Prepara varianti per la ricerca
+      const searchVariants: string[] = [cleanedPhone];
+      if (cleanedPhone.startsWith('39')) {
+        searchVariants.push(cleanedPhone.substring(2));
+      } else if (cleanedPhone.match(/^3\d{8,9}$/)) {
+        searchVariants.push('39' + cleanedPhone);
+      }
+
       // Rimuove dalla collection dedicata whatsapp_opt_in
       const result = await db.collection('whatsapp_opt_in').deleteOne({
-        phone: cleanedPhone
+        $or: [
+          { phone: { $in: searchVariants } },
+          { phoneVariants: { $in: searchVariants } }
+        ]
       });
 
       // Rimuove anche dalle altre collection
