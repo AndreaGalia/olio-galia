@@ -4,6 +4,8 @@ import { getDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 import { Resend } from 'resend';
 import { createQuoteEmailHTML } from '@/lib/email/quote-template';
+import { WahaService } from '@/services/wahaService';
+import { WhatsAppTemplates } from '@/lib/whatsapp/templates';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -98,7 +100,7 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
     const emailHTML = createQuoteEmailHTML(quoteData);
 
     // Invia l'email
-    
+
 
     const emailResult = await resend.emails.send({
       from: process.env.FROM_EMAIL || 'Olio Galia <onboarding@resend.dev>',
@@ -108,11 +110,39 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
       html: emailHTML,
     });
 
-    
+
 
     if (!emailResult.data?.id) {
 
       throw new Error(`Errore nell'invio dell'email: ${JSON.stringify(emailResult.error || emailResult)}`);
+    }
+
+    // Invia notifica WhatsApp preventivo
+    let whatsappSent = false;
+    let whatsappError = null;
+
+    if (form.phone) {
+      try {
+        const whatsappMessage = WhatsAppTemplates.quoteConfirmation({
+          quoteId: form.orderId,
+          customerName: `${form.firstName} ${form.lastName}`,
+          total: form.finalPricing.finalTotal,
+          currency: 'EUR',
+          description: form.message || undefined
+        });
+
+        const whatsappResult = await WahaService.sendTextMessage(form.phone, whatsappMessage);
+        whatsappSent = whatsappResult.success;
+        if (!whatsappSent) {
+          whatsappError = whatsappResult.error || 'Errore nell\'invio WhatsApp';
+          console.error('[WhatsApp] Errore invio preventivo:', whatsappError);
+        }
+      } catch (error) {
+        whatsappError = error instanceof Error ? error.message : 'Errore sconosciuto nell\'invio WhatsApp';
+        console.error('[WhatsApp] Errore:', whatsappError);
+      }
+    } else {
+      console.log('ℹ️ [WhatsApp] Numero telefono non disponibile per preventivo', form.orderId);
     }
 
     // Aggiorna il form con informazioni sull'invio
@@ -132,6 +162,8 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
       success: true,
       message: 'Preventivo inviato con successo',
       emailId: emailResult.data.id,
+      whatsappSent,
+      whatsappError,
     });
 
   } catch (error) {

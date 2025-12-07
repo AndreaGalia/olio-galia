@@ -117,6 +117,12 @@ export class WahaService {
       cleaned = cleaned.substring(1);
     }
 
+    // FIX: Aggiungi prefisso 39 per numeri italiani che iniziano con 3 (mobili)
+    // Se il numero inizia con 3 ed è lungo 9-10 cifre, è probabilmente un numero mobile italiano senza prefisso
+    if (cleaned.match(/^3\d{8,9}$/)) {
+      cleaned = '39' + cleaned;
+    }
+
     // Aggiungi @c.us per WhatsApp
     return `${cleaned}@c.us`;
   }
@@ -139,13 +145,64 @@ export class WahaService {
   }
 
   /**
+   * Verifica se un numero ha dato il consenso WhatsApp (opt-in)
+   * Controlla prima nella collection dedicata whatsapp_opt_in, poi in customers, orders e forms
+   */
+  private static async checkWhatsAppOptIn(phoneNumber: string): Promise<boolean> {
+    try {
+      const db = await getDatabase();
+      const cleanedPhone = phoneNumber.replace(/[\s\-()]/g, '').replace(/^\+/, '');
+
+      // Cerca nella collection dedicata whatsapp_opt_in (priorità)
+      const optIn = await db.collection('whatsapp_opt_in').findOne({
+        phone: { $regex: new RegExp(`^${cleanedPhone}$`, 'i') }
+      });
+
+      if (optIn) {
+        return true;
+      }
+
+      // Fallback: cerca nei customers
+      const customer = await db.collection('customers').findOne({
+        phone: { $regex: new RegExp(cleanedPhone, 'i') },
+        whatsappOptIn: true
+      });
+
+      if (customer) {
+        return true;
+      }
+
+      // Fallback: cerca negli orders
+      const order = await db.collection('orders').findOne({
+        'customer.phone': { $regex: new RegExp(cleanedPhone, 'i') },
+        whatsappOptIn: true
+      });
+
+      if (order) {
+        return true;
+      }
+
+      // Fallback: cerca nei forms (preventivi)
+      const form = await db.collection('forms').findOne({
+        phone: { $regex: new RegExp(cleanedPhone, 'i') },
+        whatsappOptIn: true
+      });
+
+      return !!form;
+    } catch (error) {
+      console.error('❌ [WAHA] Error checking opt-in:', error);
+      return false;
+    }
+  }
+
+  /**
    * Invia messaggio di testo via WhatsApp
    */
   static async sendTextMessage(
     phoneNumber: string,
     text: string,
-    options?: { skipIfDisabled?: boolean }
-  ): Promise<{ success: boolean; error?: string }> {
+    options?: { skipIfDisabled?: boolean; skipOptInCheck?: boolean }
+  ): Promise<{ success: boolean; error?: string; optInRequired?: boolean }> {
     try {
       const isEnabled = await this.isWhatsAppEnabled();
       if (!isEnabled) {
@@ -153,6 +210,19 @@ export class WahaService {
           return { success: true }; // Non bloccare il flusso se disabilitato
         }
         return { success: false, error: 'WhatsApp notifications are disabled' };
+      }
+
+      // Verifica opt-in (a meno che non sia esplicitamente skippato, es. per test)
+      if (!options?.skipOptInCheck) {
+        const hasOptIn = await this.checkWhatsAppOptIn(phoneNumber);
+        if (!hasOptIn) {
+          console.warn('⚠️ [WAHA] Customer has not opted-in for WhatsApp:', phoneNumber);
+          return {
+            success: false,
+            error: 'Customer has not opted-in for WhatsApp notifications',
+            optInRequired: true
+          };
+        }
       }
 
       const settings = await this.getWhatsAppSettings();
@@ -342,11 +412,11 @@ export class WahaService {
   /**
    * Test invio messaggio (per admin panel)
    */
-  static async testMessage(phoneNumber: string): Promise<{ success: boolean; error?: string }> {
+  static async testMessage(phoneNumber: string): Promise<{ success: boolean; error?: string; optInRequired?: boolean }> {
     return this.sendTextMessage(
       phoneNumber,
       '🧪 Test message from Olio Galia\n\nWhatsApp integration is working correctly! ✅',
-      { skipIfDisabled: false } // Forza invio anche se disabilitato per testing
+      { skipIfDisabled: false } // Richiede opt-in anche per i test
     );
   }
 
@@ -386,6 +456,172 @@ export class WahaService {
       return false;
     }
     return settings[type] === true;
+  }
+
+  /**
+   * Abilita WhatsApp opt-in per un numero (permette invio messaggi)
+   * Usa collection dedicata whatsapp_opt_in con upsert
+   */
+  static async setWhatsAppOptIn(phoneNumber: string, collectionName: 'customers' | 'orders' | 'forms' = 'customers'): Promise<boolean> {
+    try {
+      const db = await getDatabase();
+      const cleanedPhone = phoneNumber.replace(/[\s\-()]/g, '').replace(/^\+/, '');
+
+      // Inserisce o aggiorna nella collection dedicata whatsapp_opt_in
+      const result = await db.collection('whatsapp_opt_in').updateOne(
+        { phone: cleanedPhone },
+        {
+          $set: {
+            phone: cleanedPhone,
+            originalPhone: phoneNumber,
+            optInDate: new Date(),
+            updatedAt: new Date()
+          },
+          $setOnInsert: {
+            createdAt: new Date(),
+            source: 'manual'
+          }
+        },
+        { upsert: true }
+      );
+
+      // Aggiorna anche nelle altre collection se esistono record con quel numero
+      if (collectionName === 'customers') {
+        await db.collection('customers').updateMany(
+          { phone: { $regex: new RegExp(cleanedPhone, 'i') } },
+          { $set: { whatsappOptIn: true, whatsappOptInDate: new Date() } }
+        );
+      } else if (collectionName === 'orders') {
+        await db.collection('orders').updateMany(
+          { 'customer.phone': { $regex: new RegExp(cleanedPhone, 'i') } },
+          { $set: { whatsappOptIn: true, whatsappOptInDate: new Date() } }
+        );
+      } else {
+        await db.collection('forms').updateMany(
+          { phone: { $regex: new RegExp(cleanedPhone, 'i') } },
+          { $set: { whatsappOptIn: true, whatsappOptInDate: new Date() } }
+        );
+      }
+
+      console.log(`✅ [WAHA] WhatsApp opt-in enabled for ${phoneNumber}`);
+      return result.acknowledged;
+    } catch (error) {
+      console.error('❌ [WAHA] Error setting WhatsApp opt-in:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Disabilita WhatsApp opt-in per un numero
+   * Rimuove dalla collection whatsapp_opt_in e dalle altre collection
+   */
+  static async removeWhatsAppOptIn(phoneNumber: string, collectionName: 'customers' | 'orders' | 'forms' = 'customers'): Promise<boolean> {
+    try {
+      const db = await getDatabase();
+      const cleanedPhone = phoneNumber.replace(/[\s\-()]/g, '').replace(/^\+/, '');
+
+      // Rimuove dalla collection dedicata whatsapp_opt_in
+      const result = await db.collection('whatsapp_opt_in').deleteOne({
+        phone: cleanedPhone
+      });
+
+      // Rimuove anche dalle altre collection
+      if (collectionName === 'customers') {
+        await db.collection('customers').updateMany(
+          { phone: { $regex: new RegExp(cleanedPhone, 'i') } },
+          { $set: { whatsappOptIn: false }, $unset: { whatsappOptInDate: '' } }
+        );
+      } else if (collectionName === 'orders') {
+        await db.collection('orders').updateMany(
+          { 'customer.phone': { $regex: new RegExp(cleanedPhone, 'i') } },
+          { $set: { whatsappOptIn: false }, $unset: { whatsappOptInDate: '' } }
+        );
+      } else {
+        await db.collection('forms').updateMany(
+          { phone: { $regex: new RegExp(cleanedPhone, 'i') } },
+          { $set: { whatsappOptIn: false }, $unset: { whatsappOptInDate: '' } }
+        );
+      }
+
+      console.log(`❌ [WAHA] WhatsApp opt-in disabled for ${phoneNumber}`);
+      return result.deletedCount > 0;
+    } catch (error) {
+      console.error('❌ [WAHA] Error removing WhatsApp opt-in:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Ottieni lista di tutti i numeri con opt-in attivo
+   * Legge dalla collection whatsapp_opt_in e dalle altre collection come fallback
+   */
+  static async getOptInList(): Promise<Array<{ phone: string; optInDate?: Date; source: string }>> {
+    try {
+      const db = await getDatabase();
+      const optInList: Array<{ phone: string; optInDate?: Date; source: string }> = [];
+
+      // Cerca nella collection dedicata whatsapp_opt_in
+      const optIns = await db.collection('whatsapp_opt_in').find({}).toArray();
+      optIns.forEach(optIn => {
+        if (optIn.phone) {
+          optInList.push({
+            phone: optIn.originalPhone || optIn.phone,
+            optInDate: optIn.optInDate || optIn.createdAt,
+            source: optIn.source || 'manual'
+          });
+        }
+      });
+
+      // Cerca nei customers (per retrocompatibilità)
+      const customers = await db.collection('customers').find({ whatsappOptIn: true }).toArray();
+      customers.forEach(customer => {
+        if (customer.phone) {
+          optInList.push({
+            phone: customer.phone,
+            optInDate: customer.whatsappOptInDate,
+            source: 'customers'
+          });
+        }
+      });
+
+      // Cerca negli orders (per retrocompatibilità)
+      const orders = await db.collection('orders').find({ whatsappOptIn: true }).toArray();
+      orders.forEach(order => {
+        if (order.customer?.phone) {
+          optInList.push({
+            phone: order.customer.phone,
+            optInDate: order.whatsappOptInDate,
+            source: 'orders'
+          });
+        }
+      });
+
+      // Cerca nei forms (per retrocompatibilità)
+      const forms = await db.collection('forms').find({ whatsappOptIn: true }).toArray();
+      forms.forEach(form => {
+        if (form.phone) {
+          optInList.push({
+            phone: form.phone,
+            optInDate: form.whatsappOptInDate,
+            source: 'forms'
+          });
+        }
+      });
+
+      // Rimuovi duplicati per numero
+      const uniqueMap = new Map<string, { phone: string; optInDate?: Date; source: string }>();
+      optInList.forEach(item => {
+        const cleaned = item.phone.replace(/[\s\-()]/g, '').replace(/^\+/, '');
+        if (!uniqueMap.has(cleaned)) {
+          uniqueMap.set(cleaned, item);
+        }
+      });
+
+      return Array.from(uniqueMap.values());
+    } catch (error) {
+      console.error('❌ [WAHA] Error getting opt-in list:', error);
+      return [];
+    }
   }
 }
 
