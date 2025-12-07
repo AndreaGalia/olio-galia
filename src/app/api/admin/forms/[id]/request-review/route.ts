@@ -118,7 +118,23 @@ export const POST = withAuth(async (
     let whatsappSent = false;
     let whatsappError = null;
 
-    if (form.phone) {
+    // Cerca il cliente per ottenere il numero di telefono aggiornato
+    let phoneNumber = form.phone; // Fallback al numero del form
+    try {
+      const customersCollection = db.collection('customers');
+      const customer = await customersCollection.findOne({
+        email: form.email.toLowerCase()
+      });
+
+      if (customer && customer.phone) {
+        phoneNumber = customer.phone; // Usa il numero del cliente se disponibile
+        console.log(`📞 [WhatsApp] Using customer phone: ${phoneNumber} instead of form phone: ${form.phone}`);
+      }
+    } catch (error) {
+      console.warn('⚠️ [WhatsApp] Could not fetch customer phone, using form phone');
+    }
+
+    if (phoneNumber) {
       try {
         const isEnabled = await WahaService.isNotificationTypeEnabled('reviewRequest');
         if (isEnabled) {
@@ -129,7 +145,7 @@ export const POST = withAuth(async (
             type: 'quote'
           });
 
-          const whatsappResult = await WahaService.sendTextMessage(form.phone, whatsappMessage);
+          const whatsappResult = await WahaService.sendTextMessage(phoneNumber, whatsappMessage);
           whatsappSent = whatsappResult.success;
           if (!whatsappSent) {
             whatsappError = whatsappResult.error || 'Errore nell\'invio WhatsApp';
@@ -139,6 +155,8 @@ export const POST = withAuth(async (
         whatsappError = error instanceof Error ? error.message : 'Errore sconosciuto nell\'invio WhatsApp';
         console.error('[WhatsApp] Errore:', whatsappError);
       }
+    } else {
+      console.log('ℹ️ [WhatsApp] No phone number available for review request');
     }
 
     // 8. Aggiorna database con contatore e data ultimo invio

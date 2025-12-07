@@ -118,9 +118,24 @@ export const POST = withAuth(async (
     // 7b. Invia notifica WhatsApp richiesta recensione
     let whatsappSent = false;
     let whatsappError = null;
-    const customerPhone = order.customerPhone || order.customer?.phone;
 
-    if (customerPhone) {
+    // Cerca il cliente per ottenere il numero di telefono aggiornato
+    let phoneNumber = order.customerPhone || order.customer?.phone; // Fallback al numero dell'ordine
+    try {
+      const customersCollection = db.collection('customers');
+      const customer = await customersCollection.findOne({
+        email: customerEmail.toLowerCase()
+      });
+
+      if (customer && customer.phone) {
+        phoneNumber = customer.phone; // Usa il numero del cliente se disponibile
+        console.log(`📞 [WhatsApp] Using customer phone: ${phoneNumber} instead of order phone: ${order.customerPhone}`);
+      }
+    } catch (error) {
+      console.warn('⚠️ [WhatsApp] Could not fetch customer phone, using order phone');
+    }
+
+    if (phoneNumber) {
       try {
         const isEnabled = await WahaService.isNotificationTypeEnabled('reviewRequest');
         if (isEnabled) {
@@ -131,7 +146,7 @@ export const POST = withAuth(async (
             type: 'order'
           });
 
-          const whatsappResult = await WahaService.sendTextMessage(customerPhone, whatsappMessage);
+          const whatsappResult = await WahaService.sendTextMessage(phoneNumber, whatsappMessage);
           whatsappSent = whatsappResult.success;
           if (!whatsappSent) {
             whatsappError = whatsappResult.error || 'Errore nell\'invio WhatsApp';
@@ -141,6 +156,8 @@ export const POST = withAuth(async (
         whatsappError = error instanceof Error ? error.message : 'Errore sconosciuto nell\'invio WhatsApp';
         console.error('[WhatsApp] Errore:', whatsappError);
       }
+    } else {
+      console.log('ℹ️ [WhatsApp] No phone number available for review request');
     }
 
     // 8. Aggiorna database con contatore e data ultimo invio
