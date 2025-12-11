@@ -57,35 +57,35 @@ export default function AddToCartButton({
   };
 
   return (
-    <button 
+    <button
       disabled={disabled || isAddingToCart}
       onClick={handleClick}
       className={`
         relative
-        flex-1 rounded-full font-medium 
+        flex-1 font-medium
         flex items-center justify-center
         transition-all duration-500 ease-out
         transform-gpu
         disabled:cursor-not-allowed cursor-pointer
-        ${size === 'compact' 
+        ${size === 'compact'
           ? 'py-3 px-4 text-base gap-2'
           : 'py-3 sm:py-4 px-4 text-base sm:text-lg gap-2 sm:gap-3'
         }
-        ${isAddingToCart 
+        ${isAddingToCart
           ? `
-            bg-gradient-to-r from-emerald-500 to-green-500 
-            text-white 
-            scale-105 
+            bg-green-600
+            text-white
+            scale-105
             shadow-2xl shadow-green-500/30
             animate-pulse
-          ` 
+          `
           : `
-            bg-gradient-to-r from-olive via-olive to-salvia 
-            text-beige 
+            bg-olive
+            text-beige
             hover:shadow-xl hover:shadow-olive/30
-            hover:scale-105 
+            hover:scale-105
             active:scale-95
-            disabled:opacity-50 
+            disabled:opacity-50
             disabled:hover:scale-100
           `
         }
@@ -140,9 +140,9 @@ export default function AddToCartButton({
           </>
         )}
       </div>
-      
+
       <div className={`
-        absolute inset-0 rounded-full
+        absolute inset-0
         ${isAddingToCart ? 'animate-ping bg-green-400/30' : 'opacity-0'}
       `}></div>
     </button>

@@ -27,13 +27,13 @@
     "noProducts": "No products available.",
     "badge": "Our Excellence",
     "title": {
-      "line1": "Extra Virgin Oils",
-      "line2": "Authentic Sicilian"
+      "line1": "Sicilian Products",
+      "line2": "Selected Quality"
     },
-    "description": "From Sicilian land to your table: we select only the finest extra virgin oil, passing down the tradition and passion of three generations.",
+    "description": "Our company selects the finest Sicilian products, bringing to your table the excellence and tradition of our land with passion and dedication.",
     "features": {
-      "handPicked": "Hand picked",
-      "coldPressed": "Cold pressed",
+      "handPicked": "Carefully selected",
+      "coldPressed": "Guaranteed quality",
       "sicilian": "100% Sicilian"
     },
     "product": {
@@ -66,18 +66,18 @@
     }
   },
   "about": {
-    "badge": "Our Story",
+    "badge": "OUR STORY",
     "title": {
       "line1": "Who We Are",
-      "line2": "Galia Family"
+      "line2": "A family story"
     },
-    "intro": "The Galia family is united by the passion for selecting the finest Sicilian extra virgin olive oil. We continue the family oil company tradition, dedicating ourselves to the pursuit of excellence and superior quality.",
+    "intro": "We carry forward the tradition of the family oil company, dedicating ourselves to selecting the finest products from our land. With the same passion of three generations, we bring Sicilian excellence to your tables.",
     "history": {
       "title": "A Tradition of Excellence",
-      "paragraph1": "It all began in 1940, when our grandfather Paolo Galia planted the first olive trees in the Sicilian hills. With dedication and love for the land, he built a company that became synonymous with quality and authenticity.",
-      "paragraph2": "After years when the company remained inactive, we decided to bring this family heritage back to life, dedicating ourselves to selecting the finest extra virgin oil. We follow the teachings passed down by grandfather Paolo, choosing only the excellence of our land.",
-      "paragraph3": "Today, Galia represents the perfect meeting between tradition and innovation. We carefully select every bottle, keeping intact the values and quality methods passed down by our grandfather, but with an eye to the future.",
-      "imageCaption": "Historical photo of grandfather Paolo's company",
+      "paragraph1": "It all began in 1940, when the first olive trees were planted in the Sicilian hills. With dedication and love for the land, a company was built that became synonymous with quality and authenticity.",
+      "paragraph2": "After years when the company remained inactive, we decided to bring this family heritage back to life, dedicating ourselves to selecting the finest Sicilian products. We carry forward this tradition, choosing only the excellence of our land.",
+      "paragraph3": "Today, OLIO GALIA represents the perfect meeting between tradition and innovation. We carefully select every product, keeping intact the values and quality methods of the family tradition, but with an eye to the future.",
+      "imageCaption": "Historical photo of the company",
       "imageNote": "(Insert image: /nonno-paolo-1940.jpg)",
       "stats": {
         "generations": "3",
@@ -132,7 +132,7 @@
       "line1": "Frequently",
       "line2": "Asked Questions"
     },
-    "description": "Find answers to the most common questions about our extra virgin oils, production and services offered by the Galia family.",
+    "description": "Find answers to the most common questions about our extra virgin oils, production and services offered by OLIO GALIA.",
     "categories": {
       "production": "Production",
       "products": "Products",
@@ -227,7 +227,7 @@
   },
   "footer": {
     "brand": {
-      "description": "Since 1940, three generations of Sicilian passion in every drop. We continue grandfather Paolo's tradition with dedication and love for excellence.",
+      "description": "Since 1940, three generations of Sicilian passion in every drop. We continue the family tradition with dedication and love for excellence.",
       "badges": {
         "sicilian": "100% Sicilian",
         "extraVirgin": "100% Extra Virgin"
@@ -235,8 +235,8 @@
     },
     "products": {
       "title": "Our Products",
-      "classic": "Classic Extra Virgin Oil",
-      "bodyOil": "Wellness Body Oil"
+      "classic": "EXTRA VIRGIN OLIVE OIL",
+      "bodyOil": "WELLNESS BODY OIL"
     },
     "info": {
       "title": "Information",
@@ -259,7 +259,7 @@
       "privacy": "We respect your privacy. You can unsubscribe at any time."
     },
     "newsletterModal": {
-      "title": "🌿 Subscribe to Newsletter",
+      "title": "Subscribe to Newsletter",
       "description": "Receive exclusive offers and news directly in your inbox",
       "close": "Close",
       "firstName": "First Name",
@@ -380,7 +380,7 @@
     },
     "cta": {
       "title": "Discover Our Oil",
-      "description": "Taste the authenticity of Sicilian extra virgin olive oil, produced with passion and tradition by the Galia family.",
+      "description": "Taste the authenticity of Sicilian extra virgin olive oil, produced with passion and tradition by OLIO GALIA.",
       "catalog": "Go to Catalog",
       "contact": "Contact Us"
     }

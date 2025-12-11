@@ -101,7 +101,14 @@ export default function AboutPage() {
             {t.aboutPage.cta.title}
           </h2>
           <p className={`text-lg ${styles.textNocciola} mb-8 max-w-2xl mx-auto`}>
-            {t.aboutPage.cta.description}
+            {t.aboutPage.cta.description.split('OLIO GALIA').map((part, index, array) => (
+              index === array.length - 1 ? part : (
+                <span key={index}>
+                  {part}
+                  <span className="font-bold">OLIO GALIA</span>
+                </span>
+              )
+            ))}
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

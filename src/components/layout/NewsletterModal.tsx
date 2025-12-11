@@ -61,9 +61,9 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+      <div className="bg-white w-full max-w-md max-h-[90vh] overflow-y-auto border border-olive/20">
         {/* Header */}
-        <div className="bg-gradient-to-br from-olive to-salvia p-4 sm:p-6 text-beige sticky top-0 z-10">
+        <div className="bg-olive p-4 sm:p-6 text-beige sticky top-0 z-10">
           <div className="flex justify-between items-start gap-3">
             <div className="flex-1">
               <h3 className="text-xl sm:text-2xl font-serif mb-1 sm:mb-2">
@@ -91,7 +91,7 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
           {/* Message Banner */}
           {message && (
             <div
-              className={`p-3 sm:p-4 rounded-lg text-sm ${
+              className={`p-3 sm:p-4 text-sm ${
                 message.type === 'success'
                   ? 'bg-green-50 text-green-800 border border-green-200'
                   : 'bg-red-50 text-red-800 border border-red-200'
@@ -111,7 +111,7 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
               required
               value={newsletterForm.firstName}
               onChange={(e) => setNewsletterForm({ ...newsletterForm, firstName: e.target.value })}
-              className="w-full px-4 py-3 sm:py-3.5 rounded-lg border border-gray-300 focus:border-olive focus:ring-2 focus:ring-olive/20 transition-colors text-olive text-base touch-manipulation"
+              className="w-full px-4 py-3 sm:py-3.5 border border-gray-300 focus:border-olive focus:ring-2 focus:ring-olive/20 transition-colors text-olive text-base touch-manipulation"
               placeholder={t.footer.newsletterModal.firstNamePlaceholder}
             />
           </div>
@@ -126,7 +126,7 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
               required
               value={newsletterForm.lastName}
               onChange={(e) => setNewsletterForm({ ...newsletterForm, lastName: e.target.value })}
-              className="w-full px-4 py-3 sm:py-3.5 rounded-lg border border-gray-300 focus:border-olive focus:ring-2 focus:ring-olive/20 transition-colors text-olive text-base touch-manipulation"
+              className="w-full px-4 py-3 sm:py-3.5 border border-gray-300 focus:border-olive focus:ring-2 focus:ring-olive/20 transition-colors text-olive text-base touch-manipulation"
               placeholder={t.footer.newsletterModal.lastNamePlaceholder}
             />
           </div>
@@ -141,7 +141,7 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
               required
               value={newsletterForm.email}
               onChange={(e) => setNewsletterForm({ ...newsletterForm, email: e.target.value })}
-              className="w-full px-4 py-3 sm:py-3.5 rounded-lg border border-gray-300 focus:border-olive focus:ring-2 focus:ring-olive/20 transition-colors text-olive text-base touch-manipulation"
+              className="w-full px-4 py-3 sm:py-3.5 border border-gray-300 focus:border-olive focus:ring-2 focus:ring-olive/20 transition-colors text-olive text-base touch-manipulation"
               placeholder={t.footer.newsletterModal.emailPlaceholder}
             />
           </div>
@@ -155,7 +155,7 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
               type="tel"
               value={newsletterForm.phone}
               onChange={(e) => setNewsletterForm({ ...newsletterForm, phone: e.target.value })}
-              className="w-full px-4 py-3 sm:py-3.5 rounded-lg border border-gray-300 focus:border-olive focus:ring-2 focus:ring-olive/20 transition-colors text-olive text-base touch-manipulation"
+              className="w-full px-4 py-3 sm:py-3.5 border border-gray-300 focus:border-olive focus:ring-2 focus:ring-olive/20 transition-colors text-olive text-base touch-manipulation"
               placeholder={t.footer.newsletterModal.phonePlaceholder}
             />
           </div>
@@ -170,7 +170,7 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
             <button
               type="button"
               onClick={handleClose}
-              className="w-full sm:flex-1 px-6 py-3.5 sm:py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors touch-manipulation text-base cursor-pointer disabled:cursor-not-allowed"
+              className="w-full sm:flex-1 px-6 py-3.5 sm:py-3 border-2 border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors touch-manipulation text-base cursor-pointer disabled:cursor-not-allowed"
               disabled={loading}
             >
               {t.footer.newsletterModal.cancel}
@@ -178,7 +178,7 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
             <button
               type="submit"
               disabled={loading}
-              className="w-full sm:flex-1 bg-gradient-to-br from-olive to-salvia text-beige px-6 py-3.5 sm:py-3 rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation text-base cursor-pointer"
+              className="w-full sm:flex-1 bg-olive text-beige px-6 py-3.5 sm:py-3 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation text-base cursor-pointer border border-olive/20"
             >
               {loading ? t.footer.newsletterModal.sending : t.footer.newsletterModal.submit}
             </button>

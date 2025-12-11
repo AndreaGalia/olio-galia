@@ -16,46 +16,24 @@ export default function ProductCard({ product, index, onAddToCart }: ProductCard
   const isOutOfStock = !product.inStock || product.stockQuantity === 0;
 
   return (
-    <div 
-      className={`group relative bg-white/95 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] border border-olive/5 ${styles.animateFadeInCard} ${
-        isOutOfStock ? 'opacity-75 grayscale' : ''
+    <div
+      className={`relative bg-beige/30 border border-olive/10 transition-all duration-300 ${styles.animateFadeInCard} ${
+        isOutOfStock ? 'opacity-60' : ''
       }`}
       style={{ animationDelay: `${index * 100}ms` }}
     >
-      {/* Badge */}
-      <div className={`absolute -top-2 -right-2 px-3 py-1 rounded-full text-xs font-bold text-white shadow-md rotate-12 z-10 ${
-        product.color === 'olive' ? 'bg-olive' : 
-        product.color === 'salvia' ? 'bg-salvia' : 'bg-nocciola'
-      } ${isOutOfStock ? 'opacity-50' : ''}`}>
-        {product.badge}
-      </div>
-
-      {/* SOLD OUT Badge */}
-      {isOutOfStock && (
-        <div className="absolute top-4 left-4 bg-gradient-to-r from-red-600 to-red-700 text-white px-4 py-2 rounded-full text-sm font-bold z-20 shadow-lg animate-pulse">
-          SOLD OUT
-        </div>
-      )}
-
-      {/* Sconto */}
-      {!isOutOfStock && product.originalPrice && product.originalPrice !== 'null' && (
-        <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold z-10">
-          {t.productsPage.product.discount}
-        </div>
-      )}
-
       {/* Immagine prodotto */}
       <ProductImage product={product} isOutOfStock={isOutOfStock} />
 
       {/* Contenuto */}
-      <div className="space-y-4">
+      <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
         <ProductInfo product={product} isOutOfStock={isOutOfStock} />
         <ProductPrice product={product} isOutOfStock={isOutOfStock} />
         <StockInfo product={product} isOutOfStock={isOutOfStock} />
-        <ProductActions 
-          product={product} 
-          isOutOfStock={isOutOfStock} 
-          onAddToCart={() => onAddToCart(product.id)} 
+        <ProductActions
+          product={product}
+          isOutOfStock={isOutOfStock}
+          onAddToCart={() => onAddToCart(product.id)}
         />
       </div>
     </div>
@@ -69,24 +47,29 @@ interface ProductSubComponentProps {
 }
 
 function ProductImage({ product, isOutOfStock }: ProductSubComponentProps) {
+  const { t } = useT();
   return (
-    <div className="relative mb-6 flex justify-center">
-      <div className={`w-full h-48 relative rounded-xl overflow-hidden bg-gradient-to-br from-sabbia/30 to-beige/50 ${
-        isOutOfStock ? 'opacity-60' : ''
-      }`}>
+    <div className="relative w-full bg-white border-b border-olive/10">
+      <div className="relative w-full h-56 sm:h-64 md:h-72">
         <Image
           src={product.images[0]}
           alt={product.name}
           fill
-          className={`object-contain group-hover:scale-105 transition-transform duration-300 ${
-            isOutOfStock ? 'opacity-60' : ''
-          }`}
+          className={`object-cover ${isOutOfStock ? 'grayscale opacity-50' : ''}`}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
-        
+
+        {/* Sconto badge */}
+        {!isOutOfStock && product.originalPrice && product.originalPrice !== 'null' && (
+          <div className="absolute top-3 left-3 bg-olive text-beige px-3 py-1 text-xs font-bold tracking-wider">
+            {t.productsPage.product.discount}
+          </div>
+        )}
+
+        {/* Out of stock overlay */}
         {isOutOfStock && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-xl">
-            <div className="bg-red-600/90 text-white px-6 py-3 rounded-xl font-bold text-lg shadow-xl transform -rotate-12">
+          <div className="absolute inset-0 flex items-center justify-center bg-olive/80">
+            <div className="text-beige px-6 py-3 text-base sm:text-lg font-bold tracking-widest">
               SOLD OUT
             </div>
           </div>
@@ -98,63 +81,51 @@ function ProductImage({ product, isOutOfStock }: ProductSubComponentProps) {
 
 function ProductInfo({ product, isOutOfStock }: ProductSubComponentProps) {
   return (
-    <div className="text-center">
-      <h3 className={`text-lg sm:text-xl font-serif text-olive mb-2 leading-tight ${
-        isOutOfStock ? 'opacity-60' : ''
+    <div className="space-y-1">
+      <h3 className={`text-base sm:text-lg text-olive leading-tight tracking-wide ${
+        isOutOfStock ? 'opacity-50' : ''
       }`}>
         {product.name}
       </h3>
-      <p className={`text-sm text-nocciola leading-relaxed px-2 ${
-        isOutOfStock ? 'opacity-60' : ''
+      <p className={`text-xs sm:text-sm text-olive ${
+        isOutOfStock ? 'opacity-50' : ''
       }`}>
-        {product.description}
+        {product.size}
       </p>
-      <div className={`text-xs text-nocciola/80 italic border-t border-olive/10 pt-3 px-2 mt-4 ${
-        isOutOfStock ? 'opacity-60' : ''
-      }`}>
-        {product.details}
-      </div>
     </div>
   );
 }
 
 function ProductPrice({ product, isOutOfStock }: ProductSubComponentProps) {
   return (
-    <div className="flex justify-center items-center gap-2 pt-3 border-t border-olive/10">
-      <div className="text-center">
-        {!isOutOfStock && product.originalPrice && product.originalPrice !== 'null' && (
-          <div className="text-sm text-nocciola/60 line-through mb-1">
-            €{product.originalPrice}
-          </div>
-        )}
-        <div className={`text-2xl font-serif font-bold text-olive ${
-          isOutOfStock ? 'opacity-50' : ''
-        }`}>
-          €{product.price}
-        </div>
-        <div className={`text-sm text-nocciola mt-1 ${
-          isOutOfStock ? 'opacity-50' : ''
-        }`}>
-          {product.size}
-        </div>
+    <div className="flex items-baseline gap-2 border-t border-olive/10 pt-3">
+      <div className={`text-2xl sm:text-3xl font-bold text-olive ${
+        isOutOfStock ? 'opacity-50' : ''
+      }`}>
+        €{product.price}
       </div>
+      {!isOutOfStock && product.originalPrice && product.originalPrice !== 'null' && (
+        <div className="text-sm sm:text-base text-olive/60 line-through">
+          €{product.originalPrice}
+        </div>
+      )}
     </div>
   );
 }
 
-function StockInfo({ product, isOutOfStock }: ProductSubComponentProps) {
-  const { t, translate } = useT();
+function StockInfo({ isOutOfStock }: ProductSubComponentProps) {
+  const { t } = useT();
 
   return (
-    <div className="text-center text-xs">
+    <div className="text-xs sm:text-sm">
       {isOutOfStock ? (
-        <span className="text-red-600 font-bold bg-red-50 px-3 py-1 rounded-full border border-red-200">
+        <div className="text-red-700 bg-red-50 px-3 py-1.5 border-l-2 border-red-700">
           {t.productsPage.product.outOfStock}
-        </span>
+        </div>
       ) : (
-        <span className="text-green-600 bg-green-50 px-3 py-1 rounded-full border border-green-200">
-          {translate('productsPage.product.available', { count: product.stockQuantity })}
-        </span>
+        <div className="text-olive bg-olive/5 px-3 py-1.5 border-l-2 border-olive">
+          {t.productDetailPage.stockAvaible}
+        </div>
       )}
     </div>
   );
@@ -168,18 +139,18 @@ function ProductActions({ product, isOutOfStock, onAddToCart }: ProductActionsPr
   const { t } = useT();
 
   return (
-    <div className={`flex gap-2 ${styles.animateSlideUpButtons}`}>
+    <div className="grid grid-cols-2 gap-2 sm:gap-3">
       <AddToCartButton
         onAddToCart={onAddToCart}
         disabled={isOutOfStock}
         quantity={1}
         size="compact"
       />
-      
-      <Link 
+
+      <Link
         href={`/products/${product.slug}`}
-        className={`flex-1 bg-olive/10 text-olive py-3 px-4 rounded-full font-medium hover:bg-olive/20 hover:shadow-lg transition-all duration-300 text-base border border-olive/20 hover:border-olive/40 flex items-center justify-center hover:scale-105 ${
-          isOutOfStock ? 'opacity-50 cursor-not-allowed hover:scale-100 hover:shadow-none hover:bg-olive/10' : ''
+        className={`bg-white text-olive py-3 px-4 font-medium transition-all duration-300 text-sm sm:text-base border border-olive/30 flex items-center justify-center ${
+          isOutOfStock ? 'opacity-50 cursor-not-allowed' : 'hover:bg-olive hover:text-beige'
         }`}
       >
         {t.productsPage.product.details}

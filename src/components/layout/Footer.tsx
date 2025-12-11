@@ -184,7 +184,7 @@ export default function Footer() {
               <div className="flex justify-center">
                 <button
                   onClick={handleNewsletterClick}
-                  className="bg-beige text-olive px-8 py-3 rounded-full font-medium hover:bg-sabbia transition-colors duration-300 cursor-pointer shadow-lg hover:shadow-xl"
+                  className="bg-beige text-olive px-8 py-3 font-medium transition-colors duration-300 cursor-pointer border border-olive/20"
                 >
                   {t.footer.newsletter.button}
                 </button>

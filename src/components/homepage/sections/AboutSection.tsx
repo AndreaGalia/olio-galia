@@ -51,13 +51,12 @@ export default function AboutSection() {
         {/* Header della sezione */}
         <div className="text-center mb-12 sm:mb-16">
           <div className={`inline-flex items-center gap-2 ${styles.bgOlive10} ${styles.textOlive} px-4 py-2 rounded-full text-sm font-medium mb-6`}>
-            <div className={`w-2 h-2 ${styles.bgOlive} rounded-full`}></div>
             {t.about.badge}
           </div>
           
-          <h2 className={`text-3xl sm:text-4xl lg:text-5xl ${styles.fontSerif} ${styles.textOlive} mb-6 leading-tight`}>
-            {t.about.title.line1}
-            <span className="block">{t.about.title.line2}</span>
+          <h2 className={`${styles.fontSerif} ${styles.textOlive} mb-6 leading-tight`}>
+            <span className="block mb-1 md:mb-2 text-lg sm:text-3xl md:text-4xl lg:text-5xl">{t.about.title.line1}</span>
+            <span className="block text-base sm:text-xl md:text-2xl lg:text-3xl">{t.about.title.line2}</span>
           </h2>
           
           <p className={`text-lg ${styles.textNocciola} max-w-3xl mx-auto leading-relaxed`}>
@@ -68,25 +67,13 @@ export default function AboutSection() {
         {/* Storia dell'azienda */}
         <HistorySection history={t.about.history} variant="compact" />
 
-        {/* Valori aziendali */}
-        <div className={`${styles.gradientOlive10ToSalvia10} rounded-2xl p-6 sm:p-8 lg:p-10 mb-12`}>
-          <ValuesSection 
-            values={values}
-            title={t.about.values.title}
-            variant="compact"
-          />
-        </div>
-
         {/* Call to action */}
         <div className="text-center">
           <Link
             href="/about"
-            className={`${styles.gradientOliveToSalvia} ${styles.textBeige} px-8 sm:px-10 py-4 rounded-full text-lg font-medium ${styles.ctaButton} inline-flex items-center gap-3 cursor-pointer`}
+            className="inline-block bg-olive text-beige px-6 py-3 md:px-8 md:py-4 text-xs md:text-sm font-medium transition-all duration-300 border border-olive/20 uppercase tracking-wider"
           >
             {t.about.cta}
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-            </svg>
           </Link>
         </div>
       </div>

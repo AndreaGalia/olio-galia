@@ -99,7 +99,6 @@ export interface FAQTranslations {
 }
 
 export interface FAQHeaderProps {
-  badge: string;
   title: FAQTitle;
   description: string;
 }

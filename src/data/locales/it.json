@@ -27,13 +27,13 @@
     "noProducts": "Nessun prodotto disponibile.",
     "badge": "La Nostra Eccellenza",
     "title": {
-      "line1": "Oli Extravergini",
-      "line2": "Siciliani Autentici"
+      "line1": "Prodotti Siciliani",
+      "line2": "di Qualità"
     },
-    "description": "Dalla terra siciliana alla tua tavola: selezioniamo solo il miglior olio extravergine, tramandando la tradizione e la passione di tre generazioni.",
+    "description": "La nostra azienda seleziona i migliori prodotti siciliani, portando sulla tua tavola l'eccellenza e la tradizione della nostra terra con passione e dedizione.",
     "features": {
-      "handPicked": "Raccolto a mano",
-      "coldPressed": "Molito a freddo",
+      "handPicked": "Selezionati con cura",
+      "coldPressed": "Qualità garantita",
       "sicilian": "100% Siciliano"
     },
     "product": {
@@ -66,18 +66,18 @@
     }
   },
   "about": {
-    "badge": "La Nostra Storia",
+    "badge": "LA NOSTRA STORIA",
     "title": {
       "line1": "Chi Siamo",
-      "line2": "Famiglia Galia"
+      "line2": "Una storia di famiglia"
     },
-    "intro": "La famiglia Galia è unita dalla passione per la selezione del miglior olio extravergine siciliano. Continuiamo la tradizione dell'azienda olearia di famiglia, dedicandoci alla ricerca dell'eccellenza e della qualità superiore.",
+    "intro": "Portiamo avanti la tradizione dell'azienda olearia di famiglia, dedicandoci alla selezione dei migliori prodotti della nostra terra. Con la stessa passione di tre generazioni, portiamo sulle vostre tavole l'eccellenza siciliana.",
     "history": {
       "title": "Una Tradizione di Eccellenza",
-      "paragraph1": "Tutto iniziò nel 1940, quando nostro nonno Paolo Galia piantò i primi ulivi nelle colline siciliane. Con dedizione e amore per la terra, costruì un'azienda che divenne sinonimo di qualità e autenticità.",
-      "paragraph2": "Dopo anni in cui l'azienda rimase inattiva, abbiamo deciso di riportare in vita questo patrimonio familiare, dedicandoci alla selezione del miglior olio extravergine. Seguiamo gli insegnamenti tramandati dal nonno Paolo, scegliendo solo l'eccellenza della nostra terra.",
-      "paragraph3": "Oggi, la Galia rappresenta l'incontro perfetto tra tradizione e innovazione. Selezioniamo con cura ogni bottiglia, mantenendo intatti i valori e i metodi di qualità tramandati dal nonno, ma con uno sguardo rivolto al futuro.",
-      "imageCaption": "Foto storica dell'azienda del nonno Paolo",
+      "paragraph1": "Tutto iniziò nel 1940, quando furono piantati i primi ulivi nelle colline siciliane. Con dedizione e amore per la terra, fu costruita un'azienda che divenne sinonimo di qualità e autenticità.",
+      "paragraph2": "Dopo anni in cui l'azienda rimase inattiva, abbiamo deciso di riportare in vita questo patrimonio familiare, dedicandoci alla selezione dei migliori prodotti siciliani. Portiamo avanti questa tradizione, scegliendo solo l'eccellenza della nostra terra.",
+      "paragraph3": "Oggi, OLIO GALIA rappresenta l'incontro perfetto tra tradizione e innovazione. Selezioniamo con cura ogni prodotto, mantenendo intatti i valori e i metodi di qualità della tradizione familiare, ma con uno sguardo rivolto al futuro.",
+      "imageCaption": "Foto storica dell'azienda",
       "imageNote": "(Inserire immagine: /nonno-paolo-1940.jpg)",
       "stats": {
         "generations": "3",
@@ -132,7 +132,7 @@
       "line1": "Domande",
       "line2": "Frequenti"
     },
-    "description": "Trova le risposte alle domande più comuni sui nostri oli extravergini, la produzione e i servizi offerti dalla famiglia Galia.",
+    "description": "Trova le risposte alle domande più comuni sui nostri oli extravergini, la produzione e i servizi offerti da OLIO GALIA.",
     "categories": {
       "production": "Produzione",
       "products": "Prodotti", 
@@ -227,7 +227,7 @@
   },
   "footer": {
     "brand": {
-      "description": "Dal 1940, tre generazioni di passione siciliana in ogni goccia. Continuiamo la tradizione del nonno Paolo con dedizione e amore per l'eccellenza.",
+      "description": "Dal 1940, tre generazioni di passione siciliana in ogni goccia. Continuiamo la tradizione di famiglia con dedizione e amore per l'eccellenza.",
       "badges": {
         "sicilian": "100% Siciliano",
         "extraVirgin": "100% Extravergine"
@@ -235,8 +235,8 @@
     },
     "products": {
       "title": "I Nostri Prodotti",
-      "classic": "Olio Extravergine Classico",
-      "bodyOil": "Olio Corpo Benessere"
+      "classic": "OLIO EXTRAVERGINE DI OLIVA",
+      "bodyOil": "OLIO CORPO BENESSERE"
     },
     "info": {
       "title": "Informazioni",
@@ -259,7 +259,7 @@
       "privacy": "Rispettiamo la tua privacy. Puoi annullare l'iscrizione in qualsiasi momento."
     },
     "newsletterModal": {
-      "title": "🌿 Iscriviti alla Newsletter",
+      "title": "Iscriviti alla Newsletter",
       "description": "Ricevi offerte esclusive e novità direttamente nella tua casella di posta",
       "close": "Chiudi",
       "firstName": "Nome",
@@ -380,7 +380,7 @@
     },
     "cta": {
       "title": "Scopri il Nostro Olio",
-      "description": "Assapora l'autenticità dell'olio extravergine di oliva siciliano, prodotto con passione e tradizione dalla famiglia Galia.",
+      "description": "Assapora l'autenticità dell'olio extravergine di oliva siciliano, prodotto con passione e tradizione da OLIO GALIA.",
       "catalog": "Vai al Catalogo",
       "contact": "Contattaci"
     }
