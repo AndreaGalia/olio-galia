@@ -39,19 +39,19 @@ export default function ProductInfoSection({
       {/* Product header */}
       <div>
         <div className="flex items-center gap-2 sm:gap-3 mb-2 flex-wrap">
-          <span className={`bg-olive/10 text-olive px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${
+          <span className={`bg-olive/10 text-olive px-2 sm:px-3 py-1 border border-olive/20 text-xs sm:text-sm font-medium ${
             isOutOfStock ? 'opacity-50' : ''
           }`}>
             {product.categoryDisplay}
           </span>
-          <span className={`bg-olive text-beige px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold ${
+          <span className={`bg-olive text-beige px-2 sm:px-3 py-1 border border-olive/20 text-xs sm:text-sm font-bold ${
             isOutOfStock ? 'opacity-50' : ''
           }`}>
             {product.badge}
           </span>
           {/* Badge SOLD OUT prominente accanto ai badge esistenti */}
           {isOutOfStock && (
-            <span className="bg-gradient-to-r from-red-600 to-red-700 text-white px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-bold shadow-lg animate-pulse">
+            <span className="bg-red-600 text-white px-3 sm:px-4 py-1 border border-red-700 text-xs sm:text-sm font-bold">
               SOLD OUT
             </span>
           )}
@@ -71,7 +71,7 @@ export default function ProductInfoSection({
       </div>
 
       {/* Price and quantity */}
-      <div className="bg-white/80 rounded-2xl p-6 shadow-lg">
+      <div className="bg-white border border-olive/10 p-6">
         <div className="flex items-end gap-4 mb-4">
           {product.originalPrice && product.originalPrice !== 'null' && (
             <span className="text-xl text-nocciola/60 line-through">
@@ -89,10 +89,10 @@ export default function ProductInfoSection({
         <div className="flex items-center gap-4 mb-6">
           <div className="flex items-center gap-3">
             <label className="text-sm font-medium text-olive">{t.productDetailPage.product.quantity}</label>
-            <div className={`flex items-center border border-olive/20 rounded-full overflow-hidden ${
+            <div className={`flex items-center border border-olive/20 ${
               isOutOfStock ? 'opacity-50 pointer-events-none' : ''
             }`}>
-              <button 
+              <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
                 className="px-3 py-2 hover:bg-olive/10 transition-colors cursor-pointer"
                 disabled={isOutOfStock}
@@ -102,7 +102,7 @@ export default function ProductInfoSection({
               <span className="px-4 py-2 bg-olive/5 text-center min-w-[50px]">
                 {quantity}
               </span>
-              <button 
+              <button
                 onClick={() => setQuantity(Math.min(product.stockQuantity, quantity + 1))}
                 className="px-3 py-2 hover:bg-olive/10 transition-colors cursor-pointer"
                 disabled={isOutOfStock || quantity >= product.stockQuantity}
@@ -115,7 +115,7 @@ export default function ProductInfoSection({
           <div className="text-sm text-nocciola">
             {product.inStock ? (
               <span className="text-green-600">
-                {translate('productDetailPage.product.available', { count: product.stockQuantity })}
+                {t.productDetailPage.product.available}
               </span>
             ) : (
               <span className="text-red-600">{t.productDetailPage.product.outOfStock}</span>
@@ -130,14 +130,14 @@ export default function ProductInfoSection({
             quantity={quantity}
             size="full"
           />
-          <Link 
+          <Link
             href="/cart"
             onClick={(e) => {
               e.preventDefault();
               handleAddToCart();
               router.push('/cart');
             }}
-            className={`px-6 py-4 bg-olive/10 text-olive hover:bg-olive hover:text-beige transition-all duration-300 rounded-full border border-olive/20 cursor-pointer ${
+            className={`px-6 py-4 bg-olive/10 text-olive hover:bg-olive hover:text-beige transition-all duration-300 border border-olive/20 cursor-pointer ${
               isOutOfStock ? 'opacity-50 pointer-events-none' : ''
             }`}
           >

@@ -38,7 +38,7 @@
     },
     "product": {
       "discount": "SCONTO",
-      "available": "✓ Disponibile ({count} pezzi)",
+      "available": "✓ Disponibile",
       "outOfStock": "✗ Esaurito",
       "details": "Dettagli",
       "addToCart": "Aggiungi"
@@ -300,20 +300,20 @@
         {
           "year": "1940",
           "title": "Gli Inizi",
-          "description": "Paolo Galia pianta i primi 100 ulivi nelle colline di Castelvetrano, iniziando quella che sarebbe diventata una tradizione familiare.",
-          "details": "Con soli 25 anni e un prestito dalla banca locale, Paolo acquista 5 ettari di terreno collinare. La scelta della varietà Nocellara del Belice si rivela vincente."
+          "description": "Nasce l'azienda olearia di famiglia nelle colline siciliane, con i primi uliveti dedicati alla produzione di olio extravergine di qualità.",
+          "details": "L'azienda inizia la sua attività con piccoli appezzamenti di terreno collinare coltivati a ulivi. La scelta della varietà Tonda Iblea si rivela vincente."
         },
         {
-          "year": "2018",
-          "title": "La Rinascita",
-          "description": "La famiglia Galia decide di riportare in vita l'azienda del nonno, unendo tradizione e innovazione.",
-          "details": "Investendo risparmi e passione, la famiglia ristruttura il frantoio e modernizza gli impianti, mantenendo i metodi tradizionali di produzione."
+          "year": "2020",
+          "title": "L'Idea",
+          "description": "La famiglia inizia a progettare OLIO GALIA, un brand moderno che possa onorare la tradizione olearia di famiglia.",
+          "details": "Nasce l'idea di creare un marchio dedicato alla selezione e promozione dell'eccellenza dell'olio extravergine siciliano, unendo tradizione e innovazione."
         },
         {
-          "year": "2024",
-          "title": "Il Presente",
-          "description": "Oggi l'azienda Galia è riconosciuta per la qualità del suo olio extravergine e la sostenibilità ambientale.",
-          "details": "Con 30 ettari coltivati biologicamente e 3000 piante di ulivo, l'azienda produce 15.000 litri di olio extravergine all'anno, esportando in tutta Europa."
+          "year": "2025",
+          "title": "L'Apertura",
+          "description": "OLIO GALIA apre ufficialmente, iniziando la selezione dei migliori prodotti siciliani per portare l'eccellenza sulle vostre tavole.",
+          "details": "Il brand diventa realtà: con passione e dedizione, la famiglia seleziona i migliori oli extravergini e prodotti della tradizione siciliana di qualità superiore."
         }
       ]
     },
@@ -368,7 +368,7 @@
         },
         {
           "title": "Tradizione Autentica",
-          "description": "Preserviamo e trasmettiamo i metodi tramandati da nostro nonno Paolo, adattandoli alle esigenze moderne."
+          "description": "Preserviamo e trasmettiamo i metodi della tradizione olearia siciliana, adattandoli alle esigenze moderne."
         }
       ]
     },
@@ -380,7 +380,7 @@
     },
     "cta": {
       "title": "Scopri il Nostro Olio",
-      "description": "Assapora l'autenticità dell'olio extravergine di oliva siciliano, prodotto con passione e tradizione da OLIO GALIA.",
+      "description": "Assapora l'autenticità dell'olio extravergine di oliva siciliano, selezionato con passione e tradizione da OLIO GALIA.",
       "catalog": "Vai al Catalogo",
       "contact": "Contattaci"
     }
@@ -403,7 +403,7 @@
     },
     "product": {
       "discount": "SCONTO",
-      "available": "✓ Disponibile ({count} pezzi)",
+      "available": "✓ Disponibile",
       "outOfStock": "✗ Esaurito",
       "details": "Dettagli",
       "addToCart": "Aggiungi al Carrello"
@@ -441,7 +441,7 @@
     },
     "product": {
       "quantity": "Quantità:",
-      "available": "✓ Disponibile ({count} pezzi)",
+      "available": "✓ Disponibile",
       "outOfStock": "✗ Esaurito",
       "characteristics": "Caratteristiche",
       "nutritionalInfo": "Valori Nutrizionali",
@@ -538,7 +538,7 @@
   "freeShipping": {
     "title": "Spedizione gratuita",
     "remaining": "Aggiungi €{amount} di prodotti per la spedizione gratuita!",
-    "qualified": "🎉 Hai diritto alla spedizione gratuita!"
+    "qualified": "Hai diritto alla spedizione gratuita!"
   },
   "shippingNote": "*Prezzo per l'Europa. €{worldPrice} per spedizioni internazionali.",
   "invoice": {
@@ -555,10 +555,10 @@
     "hero": {
       "badge": "Famiglia Galia",
       "title": {
-        "main": "Contatta",
-        "subtitle": "La Famiglia Galia"
+        "main": "Contattaci",
+        "subtitle": ""
       },
-      "description": "Siamo qui per rispondere alle tue domande e aiutarti a scoprire l'olio extravergine perfetto per la tua tavola. Tre generazioni di passione al tuo servizio."
+      "description": "Hai domande sui nostri prodotti? Siamo qui per aiutarti a scegliere l'olio extravergine e i prodotti siciliani perfetti per te."
     },
     "methods": [
       {

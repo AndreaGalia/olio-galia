@@ -89,7 +89,7 @@ function BulkProposalModal({ isOpen, onClose, productName }: {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl p-6 w-full max-w-md md:max-w-lg lg:max-w-2xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-white border border-olive/10 p-6 w-full max-w-md md:max-w-lg lg:max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-xl md:text-2xl font-serif text-olive">{t.bulkProposal.modal.title}</h3>
           <button 
@@ -112,7 +112,7 @@ function BulkProposalModal({ isOpen, onClose, productName }: {
               <label className="block text-sm md:text-base font-medium text-olive mb-3">
                 {t.bulkProposal.modal.form.quantityLabel}
               </label>
-              <div className="flex items-center border border-olive/20 rounded-lg overflow-hidden w-full sm:max-w-xs">
+              <div className="flex items-center border border-olive/20 w-full sm:max-w-xs">
                 <button 
                   type="button"
                   onClick={() => setQuantity(Math.max(5, quantity - 1))}
@@ -146,7 +146,7 @@ function BulkProposalModal({ isOpen, onClose, productName }: {
                 type="text"
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
-                className="w-full px-4 py-3 md:py-4 border border-olive/20 rounded-lg focus:outline-none focus:border-olive text-base"
+                className="w-full px-4 py-3 md:py-4 border border-olive/20 focus:outline-none focus:border-olive text-base"
                 required
               />
             </div>
@@ -159,7 +159,7 @@ function BulkProposalModal({ isOpen, onClose, productName }: {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 md:py-4 border border-olive/20 rounded-lg focus:outline-none focus:border-olive text-base"
+                className="w-full px-4 py-3 md:py-4 border border-olive/20 focus:outline-none focus:border-olive text-base"
                 required
               />
             </div>
@@ -172,7 +172,7 @@ function BulkProposalModal({ isOpen, onClose, productName }: {
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="w-full px-4 py-3 md:py-4 border border-olive/20 rounded-lg focus:outline-none focus:border-olive text-base"
+                className="w-full px-4 py-3 md:py-4 border border-olive/20 focus:outline-none focus:border-olive text-base"
               />
             </div>
 
@@ -183,7 +183,7 @@ function BulkProposalModal({ isOpen, onClose, productName }: {
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="w-full px-4 py-3 md:py-4 border border-olive/20 rounded-lg focus:outline-none focus:border-olive h-24 md:h-32 resize-none text-base"
+                className="w-full px-4 py-3 md:py-4 border border-olive/20 focus:outline-none focus:border-olive h-24 md:h-32 resize-none text-base"
                 placeholder={t.bulkProposal.modal.form.messagePlaceholder}
               />
             </div>
@@ -195,7 +195,7 @@ function BulkProposalModal({ isOpen, onClose, productName }: {
               {t.bulkProposal.modal.form.methodLabel}
             </label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <label className="flex items-center gap-3 p-4 md:p-5 border border-olive/20 rounded-lg cursor-pointer hover:bg-olive/5 transition-colors">
+              <label className="flex items-center gap-3 p-4 md:p-5 border border-olive/20 cursor-pointer hover:bg-olive/5 transition-colors">
                 <input
                   type="radio"
                   name="method"
@@ -215,7 +215,7 @@ function BulkProposalModal({ isOpen, onClose, productName }: {
                 </div>
               </label>
 
-              <label className="flex items-center gap-3 p-4 md:p-5 border border-olive/20 rounded-lg cursor-pointer hover:bg-olive/5 transition-colors">
+              <label className="flex items-center gap-3 p-4 md:p-5 border border-olive/20 cursor-pointer hover:bg-olive/5 transition-colors">
                 <input
                   type="radio"
                   name="method"
@@ -279,15 +279,15 @@ export function BulkProposalSection({ productName }: { productName: string }) {
 
   return (
     <>
-      <div className="bg-olive/10 rounded-xl p-4 border border-olive/20">
+      <div className="bg-olive/10 p-4 border border-olive/20">
         <div className="flex items-center justify-between">
           <div>
             <h4 className="font-medium text-olive mb-1">{t.bulkProposal.section.title}</h4>
             <p className="text-sm text-nocciola">{t.bulkProposal.section.description}</p>
           </div>
-          <button 
+          <button
             onClick={() => setIsModalOpen(true)}
-            className="px-4 py-2 bg-olive text-beige rounded-lg hover:bg-olive/90 transition-colors flex items-center gap-2 cursor-pointer"
+            className="px-4 py-2 bg-olive text-beige border border-olive/20 hover:bg-salvia transition-colors flex items-center gap-2 cursor-pointer"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />

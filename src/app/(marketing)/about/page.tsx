@@ -19,7 +19,7 @@ export default function AboutPage() {
 
   // Preparazione dati valori (versione estesa)
   const values: Value[] = t.aboutPage.values.items.map((item: any, index: number) => {
-    const colors = ['olive', 'salvia', 'nocciola'];
+    const colors = ['olive', 'salvia', 'olive'];
     const icons = [
       (
         <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
@@ -53,26 +53,23 @@ export default function AboutPage() {
       <section className="relative py-10 sm:py-12 lg:py-16 overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 max-w-6xl relative z-10">
           <div className="text-center">
-            <div className={`inline-flex items-center gap-3 ${styles.bgOlive10} ${styles.textOlive} px-4 py-2 rounded-full text-sm font-medium mb-6 ${isVisible ? styles.slideInUp : ''}`}>
-              <div className={`w-2 h-2 ${styles.bgOlive} rounded-full animate-pulse`}></div>
-              {t.aboutPage.hero.badge}
-            </div>
-            
-            <h1
-              className={`text-4xl sm:text-5xl lg:text-6xl ${styles.fontSerif} ${styles.textOlive} mb-6 leading-tight ${isVisible ? styles.slideInUp : ''}`}
+            <h2
+              className={`${styles.fontSerif} ${styles.textOlive} mb-6 leading-tight ${isVisible ? styles.slideInUp : ''}`}
               style={{animationDelay: '0.1s'}}
             >
-              {t.aboutPage.hero.title.main}
-              <span className={`block text-4xl sm:text-5xl lg:text-6xl mt-2`}>
-                {t.aboutPage.hero.title.subtitle}
+              <span className="block mb-1 md:mb-2 text-lg sm:text-3xl md:text-4xl lg:text-5xl">
+                {t.about.title.line1}
               </span>
-            </h1>
-            
-            <p 
-              className={`text-xl ${styles.textNocciola} max-w-4xl mx-auto leading-relaxed ${isVisible ? styles.slideInUp : ''}`} 
+              <span className="block text-base sm:text-xl md:text-2xl lg:text-3xl">
+                {t.about.title.line2}
+              </span>
+            </h2>
+
+            <p
+              className={`text-lg ${styles.textNocciola} max-w-3xl mx-auto leading-relaxed ${isVisible ? styles.slideInUp : ''}`}
               style={{animationDelay: '0.2s'}}
             >
-              {t.aboutPage.hero.description}
+              {t.about.intro}
             </p>
           </div>
         </div>
@@ -112,25 +109,18 @@ export default function AboutPage() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link 
+            <Link
               href="/products"
-              className={`${styles.gradientOliveToSalvia} ${styles.textBeige} px-8 py-4 rounded-full text-lg font-medium ${styles.ctaButton} inline-flex items-center justify-center gap-3`}
+              className={`${styles.bgOlive} ${styles.textBeige} px-8 py-4 text-lg font-medium transition-all duration-300 border border-olive/20 uppercase tracking-wider`}
             >
               {t.aboutPage.cta.catalog}
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
             </Link>
-            
+
             <Link
               href="/contact"
-              className={`border-2 ${styles.borderOlive} ${styles.textOlive} px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer inline-flex items-center justify-center gap-3`}
+              className={`bg-white ${styles.textOlive} border ${styles.borderOlive} px-8 py-4 text-lg font-medium transition-all duration-300`}
             >
               {t.aboutPage.cta.contact}
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-              </svg>
             </Link>
           </div>
         </div>

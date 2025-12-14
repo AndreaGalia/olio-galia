@@ -8,7 +8,7 @@ export function ValuesSection({ values, title, subtitle, variant = "compact" }: 
   return (
     <div className={`${variant === "full" ? "" : "mb-12"}`}>
       <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
-        <h3 className={`${variant === "full" ? "text-3xl sm:text-4xl" : "text-2xl sm:text-3xl"} ${styles.fontSerif} ${styles.textOlive} text-center mb-4`}>
+        <h3 className={`${variant === "full" ? "text-lg sm:text-3xl md:text-4xl lg:text-5xl" : "text-2xl sm:text-3xl"} ${styles.fontSerif} ${styles.textOlive} text-center mb-4`}>
           {title}
         </h3>
         {subtitle && (
@@ -49,7 +49,7 @@ function ValueCard({ value }: ValueCardProps) {
           {value.icon}
         </div>
       </div>
-      <h4 className={`text-lg ${styles.fontSerif} ${styles.textOlive} ${styles.hoverTextSalvia} transition-colors duration-300`}>
+      <h4 className={`text-lg ${styles.fontSerif} ${styles.textOlive}`}>
         {value.title}
       </h4>
       <p className={`text-sm ${styles.textNocciola} leading-relaxed`}>

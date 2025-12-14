@@ -67,6 +67,7 @@ export default function AddToCartButton({
         transition-all duration-500 ease-out
         transform-gpu
         disabled:cursor-not-allowed cursor-pointer
+        border
         ${size === 'compact'
           ? 'py-3 px-4 text-base gap-2'
           : 'py-3 sm:py-4 px-4 text-base sm:text-lg gap-2 sm:gap-3'
@@ -75,6 +76,7 @@ export default function AddToCartButton({
           ? `
             bg-green-600
             text-white
+            border-green-700
             scale-105
             shadow-2xl shadow-green-500/30
             animate-pulse
@@ -82,6 +84,7 @@ export default function AddToCartButton({
           : `
             bg-olive
             text-beige
+            border-olive/20
             hover:shadow-xl hover:shadow-olive/30
             hover:scale-105
             active:scale-95
@@ -95,18 +98,17 @@ export default function AddToCartButton({
         {isAddingToCart ? (
           <>
             <div className="relative">
-              <svg 
-                className={size === 'compact' ? 'w-5 h-5' : 'w-5 h-5 sm:w-6 sm:h-6'}
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24" 
+              <svg
+                className={`${size === 'compact' ? 'w-5 h-5' : 'w-5 h-5 sm:w-6 sm:h-6'} animate-pulse`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
                 strokeWidth="3"
               >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="M5 13l4 4L19 7"
-                  className="animate-pulse"
                 />
               </svg>
             </div>
@@ -117,17 +119,17 @@ export default function AddToCartButton({
         ) : (
           <>
             <div className="relative">
-              <svg 
+              <svg
                 className={`transition-transform duration-300 ${size === 'compact' ? 'w-5 h-5' : 'w-5 h-5 sm:w-6 sm:h-6'}`}
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24" 
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
                 strokeWidth="2"
               >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" 
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
                 />
               </svg>
               {size === 'full' && (

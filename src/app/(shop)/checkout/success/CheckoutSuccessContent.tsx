@@ -30,7 +30,7 @@ export default function CheckoutSuccessContent() {
   useCartCleanup(sessionId);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sabbia via-beige to-sabbia/80">
+    <div className="min-h-screen bg-homepage-bg">
       <div className="container mx-auto px-4 py-16">
         {/* Hero Section */}
         <SuccessHeroSection

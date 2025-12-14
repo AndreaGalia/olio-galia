@@ -198,19 +198,11 @@
 }
 
 .valueCard {
-  transition: transform 0.3s ease-in-out;
-}
-
-.valueCard:hover {
-  transform: scale(1.05);
+  /* Stile minimale - no hover effects */
 }
 
 .valueIcon {
-  transition: all 0.3s ease-in-out;
-}
-
-.valueCard:hover .valueIcon {
-  transform: scale(1.1);
+  /* Stile minimale - no hover effects */
 }
 
 .timelineItem {

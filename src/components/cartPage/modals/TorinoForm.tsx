@@ -54,7 +54,7 @@ export default function TorinoForm({ onSubmit, cart, isLoading = false, onCancel
             onChange={handleChange}
             disabled={isLoading}
             required
-            className="p-3 border-2 border-nocciola/30 rounded-xl w-full bg-white/80 focus:border-olive focus:bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-olive/20 placeholder-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-3 border-2 border-nocciola/30 w-full bg-white/80 focus:border-olive focus:bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-olive/20 placeholder-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
           />
         </div>
         <div className="group">
@@ -66,7 +66,7 @@ export default function TorinoForm({ onSubmit, cart, isLoading = false, onCancel
             onChange={handleChange}
             disabled={isLoading}
             required
-            className="p-3 border-2 border-nocciola/30 rounded-xl w-full bg-white/80 focus:border-olive focus:bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-olive/20 placeholder-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-3 border-2 border-nocciola/30 w-full bg-white/80 focus:border-olive focus:bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-olive/20 placeholder-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
           />
         </div>
       </div>
@@ -79,7 +79,7 @@ export default function TorinoForm({ onSubmit, cart, isLoading = false, onCancel
         onChange={handleChange}
         disabled={isLoading}
         required
-        className="p-3 border-2 border-nocciola/30 rounded-xl w-full bg-white/80 focus:border-olive focus:bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-olive/20 placeholder-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="p-3 border-2 border-nocciola/30 w-full bg-white/80 focus:border-olive focus:bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-olive/20 placeholder-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
       />
 
       <input
@@ -90,7 +90,7 @@ export default function TorinoForm({ onSubmit, cart, isLoading = false, onCancel
         onChange={handleChange}
         disabled={isLoading}
         required
-        className="p-3 border-2 border-nocciola/30 rounded-xl w-full bg-white/80 focus:border-olive focus:bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-olive/20 placeholder-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="p-3 border-2 border-nocciola/30 w-full bg-white/80 focus:border-olive focus:bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-olive/20 placeholder-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
       />
 
       <input
@@ -101,7 +101,7 @@ export default function TorinoForm({ onSubmit, cart, isLoading = false, onCancel
         onChange={handleChange}
         disabled={isLoading}
         required
-        className="p-3 border-2 border-nocciola/30 rounded-xl w-full bg-white/80 focus:border-olive focus:bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-olive/20 placeholder-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="p-3 border-2 border-nocciola/30 w-full bg-white/80 focus:border-olive focus:bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-olive/20 placeholder-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
       />
 
       <div className="relative">
@@ -110,7 +110,7 @@ export default function TorinoForm({ onSubmit, cart, isLoading = false, onCancel
           name="province"
           value={formData.province}
           disabled
-          className="p-3 border-2 border-nocciola/20 rounded-xl w-full bg-nocciola/10 text-gray-600 cursor-not-allowed"
+          className="p-3 border-2 border-nocciola/20 w-full bg-nocciola/10 text-gray-600 cursor-not-allowed"
         />
         <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
           <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,14 +124,14 @@ export default function TorinoForm({ onSubmit, cart, isLoading = false, onCancel
           type="button"
           onClick={onCancel}
           disabled={isLoading}
-          className="px-3 sm:px-6 py-2 sm:py-3 rounded-xl bg-white border-2 border-nocciola/30 text-gray-700 font-medium hover:bg-nocciola/10 hover:border-nocciola/50 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base whitespace-nowrap"
+          className="px-3 sm:px-6 py-2 sm:py-3 bg-white border-2 border-nocciola/30 text-gray-700 font-medium hover:bg-nocciola/10 hover:border-nocciola/50 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base whitespace-nowrap cursor-pointer uppercase tracking-wider"
         >
           {t.torinoCheckout.modal.form.buttons.cancel}
         </button>
         <button
           type="submit"
           disabled={isLoading}
-          className="px-3 sm:px-8 py-2 sm:py-3 rounded-xl bg-gradient-to-r from-olive to-salvia text-beige font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 flex items-center gap-1 sm:gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 text-sm sm:text-base whitespace-nowrap"
+          className="px-3 sm:px-8 py-2 sm:py-3 bg-olive text-beige font-semibold transition-all duration-200 flex items-center gap-1 sm:gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base whitespace-nowrap cursor-pointer border border-olive/20 uppercase tracking-wider"
         >
           {isLoading ? (
             <>

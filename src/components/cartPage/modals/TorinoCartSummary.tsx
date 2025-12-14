@@ -25,12 +25,12 @@ export default function TorinoCartSummary({ cart, products }: TorinoCartSummaryP
         </svg>
         {t.torinoCheckout.modal.cartSummary.title}
       </h3>
-      <div className="bg-white rounded-xl shadow-sm border border-nocciola/20 overflow-hidden">
+      <div className="bg-white border border-nocciola/20 overflow-hidden">
         {cartItems.map((item, idx) =>
           item ? (
-            <motion.div 
-              key={idx} 
-              className="flex justify-between items-center p-4 hover:bg-beige/50 transition-colors"
+            <motion.div
+              key={idx}
+              className="flex justify-between items-center p-4 hover:bg-beige/50 transition-colors border-b border-nocciola/10 last:border-b-0"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: idx * 0.1 }}
@@ -38,7 +38,7 @@ export default function TorinoCartSummary({ cart, products }: TorinoCartSummaryP
               <span className="text-gray-800 font-medium">{item.name}</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm text-gray-500">{t.torinoCheckout.modal.cartSummary.quantity}</span>
-                <span className="bg-olive/10 text-olive px-2 py-1 rounded-full text-sm font-semibold">
+                <span className="bg-olive/10 text-olive px-2 py-1 border border-olive/20 text-sm font-semibold">
                   {item.quantity}
                 </span>
               </div>

@@ -74,7 +74,7 @@ export default function CartPage() {
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif text-olive">
             {t.cartPage.title}
           </h1>
-          <span className="bg-olive text-beige px-3 py-1 rounded-full text-sm font-bold whitespace-nowrap">
+          <span className="bg-olive text-beige px-3 py-1 text-sm font-bold whitespace-nowrap border border-olive/20">
             {totalItems} {itemCountLabel}
           </span>
         </div>

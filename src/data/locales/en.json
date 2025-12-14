@@ -38,14 +38,14 @@
     },
     "product": {
       "discount": "DISCOUNT",
-      "available": "✓ Available ({count} pieces)",
+      "available": "✓ Available",
       "outOfStock": "✗ Out of stock",
       "details": "Details",
       "addToCart": "Add"
     },
     "whyChoose": {
       "title": "Why Choose",
-      "subtitle": "Galia Oil",
+      "subtitle": "Olio Galia",
       "description": "Our dedication to quality is reflected in every aspect of production",
       "quality": {
         "title": "Certified Quality",
@@ -300,20 +300,20 @@
         {
           "year": "1940",
           "title": "The Beginning",
-          "description": "Paolo Galia plants the first 100 olive trees in the hills of Castelvetrano, starting what would become a family tradition.",
-          "details": "At only 25 years old and with a loan from the local bank, Paolo buys 5 hectares of hilly land. The choice of the Nocellara del Belice variety proves to be a winner."
+          "description": "The family olive oil company is founded in the Sicilian hills, with the first olive groves dedicated to producing quality extra virgin oil.",
+          "details": "The company begins its activity with small plots of hilly land cultivated with olive trees. The choice of the Tonda Iblea variety proves to be successful."
         },
         {
-          "year": "2018",
-          "title": "The Rebirth",
-          "description": "The Galia family decides to bring their grandfather's company back to life, combining tradition and innovation.",
-          "details": "Investing savings and passion, the family renovates the oil mill and modernizes the facilities, maintaining traditional production methods."
+          "year": "2020",
+          "title": "The Idea",
+          "description": "The family begins to design OLIO GALIA, a modern brand that can honor the family's olive oil tradition.",
+          "details": "The idea is born to create a brand dedicated to selecting and promoting the excellence of Sicilian extra virgin olive oil, combining tradition and innovation."
         },
         {
-          "year": "2024",
-          "title": "The Present",
-          "description": "Today the Galia company is recognized for the quality of its extra virgin oil and environmental sustainability.",
-          "details": "With 30 organically cultivated hectares and 3000 olive trees, the company produces 15,000 liters of extra virgin oil per year, exporting throughout Europe."
+          "year": "2025",
+          "title": "The Opening",
+          "description": "OLIO GALIA officially opens, beginning the selection of the finest Sicilian products to bring excellence to your table.",
+          "details": "The brand becomes reality: with passion and dedication, the family selects the finest extra virgin oils and products of superior quality Sicilian tradition."
         }
       ]
     },
@@ -336,10 +336,10 @@
           "name": "Andrea Galia",
           "role": "Sales and Marketing",
           "age": "42 years old",
-          "description": "Andrea brought a breath of modernity to the family business. His commercial vision has allowed Galia oil to reach national and international markets, always maintaining product authenticity.",
+          "description": "Andrea brought a breath of modernity to the family business. His commercial vision has allowed Olio Galia to reach national and international markets, always maintaining product authenticity.",
           "speciality": "Degree in Marketing and Communication - Master in Export Management",
           "quote": "We bring Sicilian tradition to the world, one bottle at a time",
-          "details": "Andrea has developed a network of distributors throughout Europe and created partnerships with starred restaurants that appreciate the quality of Galia oil.",
+          "details": "Andrea has developed a network of distributors throughout Europe and created partnerships with starred restaurants that appreciate the quality of Olio Galia.",
           "achievements": ["Export to 12 Countries", "Partnership with 50+ Restaurants", "ISO 22000 Certification"]
         },
         {
@@ -368,7 +368,7 @@
         },
         {
           "title": "Authentic Tradition",
-          "description": "We preserve and transmit the methods passed down by our grandfather Paolo, adapting them to modern needs."
+          "description": "We preserve and transmit the methods of Sicilian olive oil tradition, adapting them to modern needs."
         }
       ]
     },
@@ -380,7 +380,7 @@
     },
     "cta": {
       "title": "Discover Our Oil",
-      "description": "Taste the authenticity of Sicilian extra virgin olive oil, produced with passion and tradition by OLIO GALIA.",
+      "description": "Taste the authenticity of Sicilian extra virgin olive oil, selected with passion and tradition by OLIO GALIA.",
       "catalog": "Go to Catalog",
       "contact": "Contact Us"
     }
@@ -403,7 +403,7 @@
     },
     "product": {
       "discount": "DISCOUNT",
-      "available": "✓ Available ({count} pieces)",
+      "available": "✓ Available",
       "outOfStock": "✗ Out of stock",
       "details": "Details",
       "addToCart": "Add to Cart"
@@ -441,7 +441,7 @@
     },
     "product": {
       "quantity": "Quantity:",
-      "available": "✓ Available ({count} pieces)",
+      "available": "✓ Available",
       "outOfStock": "✗ Out of stock",
       "characteristics": "Characteristics",
       "nutritionalInfo": "Nutritional Information",
@@ -480,7 +480,7 @@
         "whatsappButton": "Open WhatsApp",
         "emailButton": "Open Email"
       },
-      "whatsappMessage": "*GALIA OIL QUOTE REQUEST*\n\n *Product:* {productName}\n *Requested quantity:* {quantity} pieces\n\n *Customer Details:*\n• Name: {customerName}\n• Email: {email}{phone}\n\n{message}*Request date:* {date}\n\nThank you for your interest in our products!",
+      "whatsappMessage": "*Olio Galia QUOTE REQUEST*\n\n *Product:* {productName}\n *Requested quantity:* {quantity} pieces\n\n *Customer Details:*\n• Name: {customerName}\n• Email: {email}{phone}\n\n{message}*Request date:* {date}\n\nThank you for your interest in our products!",
       "emailSubject": "Quote Request - {productName}",
       "emailBody": "Hello,\n\nI would like to request a quote for the following product:\n\nPRODUCT: {productName}\nQUANTITY: {quantity} pieces\n\nCUSTOMER DETAILS:\nName: {customerName}\nEmail: {email}{phone}\n\n{message}Request date: {date}\n\nBest regards,\n{customerName}"
     }
@@ -538,7 +538,7 @@
   "freeShipping": {
     "title": "Free shipping",
     "remaining": "Add €{amount} of products for free shipping!",
-    "qualified": "🎉 You qualify for free shipping!"
+    "qualified": "You qualify for free shipping!"
   },
   "shippingNote": "*Price for Europe. €{worldPrice} for international shipping.",
   "invoice": {
@@ -555,10 +555,10 @@
     "hero": {
       "badge": "Galia Family",
       "title": {
-        "main": "Contact",
-        "subtitle": "The Galia Family"
+        "main": "Contact Us",
+        "subtitle": ""
       },
-      "description": "We are here to answer your questions and help you discover the perfect extra virgin oil for your table. Three generations of passion at your service."
+      "description": "Do you have questions about our products? We are here to help you choose the perfect extra virgin olive oil and Sicilian products for you."
     },
     "methods": [
       {

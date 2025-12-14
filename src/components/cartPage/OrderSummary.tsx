@@ -60,7 +60,7 @@ export default function OrderSummary({
   const finalTotal = total + displayShippingCost;
 
   return (
-    <div className="bg-white/90 rounded-2xl p-6 shadow-lg sticky top-4">
+    <div className="bg-white border border-olive/10 p-6 sticky top-4">
       <h2 className="text-xl font-serif text-olive mb-6">{t.cartPage.summary.title}</h2>
       
       {/* Free shipping indicator */}
@@ -90,7 +90,7 @@ export default function OrderSummary({
         </div>
         
         {displayShippingCost > 0 && (
-          <div className="text-xs text-nocciola/70 bg-blue-50 p-3 rounded-lg">
+          <div className="text-xs text-nocciola/70 bg-blue-50 border border-blue-100 p-3">
             {translate('cartPage.shippingNote', { worldPrice: shippingCosts.world.toFixed(2) })}
           </div>
         )}
@@ -104,13 +104,13 @@ export default function OrderSummary({
       </div>
 
       {/* Checkbox per fattura */}
-      <div className="mb-4 p-4 bg-olive/5 rounded-xl">
+      <div className="mb-4 p-4 bg-olive/5 border border-olive/10">
         <label className="flex items-start gap-3 cursor-pointer">
           <input
             type="checkbox"
             checked={needsInvoice}
             onChange={(e) => setNeedsInvoice(e.target.checked)}
-            className="mt-1 rounded border-olive/30 text-olive focus:ring-olive focus:ring-offset-0"
+            className="mt-1 border-olive/30 text-olive focus:ring-olive focus:ring-offset-0"
           />
           <div>
             <span className="text-olive font-medium text-sm block">
@@ -124,14 +124,14 @@ export default function OrderSummary({
       </div>
 
       <div className="space-y-3">
-        <button 
+        <button
           onClick={onCheckout}
           disabled={checkoutLoading || cart.length === 0}
-          className="w-full cursor-pointer bg-gradient-to-r from-olive to-salvia text-beige py-4 rounded-full font-medium hover:shadow-xl transition-all duration-300 hover:scale-105 text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+          className="w-full cursor-pointer bg-olive text-beige py-4 font-medium transition-all duration-300 text-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 border border-olive/20 uppercase tracking-wider"
         >
           {checkoutLoading ? (
             <>
-              <div className="w-5 h-5 border-2 border-beige/30 border-t-beige rounded-full animate-spin"></div>
+              <div className="w-5 h-5 border-2 border-beige/30 border-t-beige animate-spin"></div>
               {t.cartPage.summary.processing}
             </>
           ) : (
@@ -143,17 +143,17 @@ export default function OrderSummary({
             </>
           )}
         </button>
-        
-        <Link 
+
+        <Link
           href="/products"
-          className="w-full block text-center py-3 border border-olive text-olive rounded-full hover:bg-olive/5 transition-colors font-medium"
+          className="w-full block text-center py-3 border border-olive text-olive hover:bg-olive/5 transition-colors font-medium"
         >
           {t.cartPage.summary.continueShopping}
         </Link>
       </div>
 
       {needsInvoice && (
-        <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+        <div className="mt-4 p-3 bg-blue-50 border border-blue-100">
           <p className="text-blue-800 text-xs">
             {t.cartPage.invoice.checkoutNote}
           </p>
@@ -161,16 +161,16 @@ export default function OrderSummary({
       )}
 
       <div className="mt-6 pt-4 border-t border-olive/20">
-        <button 
+        <button
           onClick={clearCart}
-          className="w-full cursor-pointer text-center text-red-500 hover:text-red-700 text-sm font-medium py-2 hover:bg-red-50 rounded-lg transition-colors"
+          className="w-full cursor-pointer text-center text-red-500 hover:text-red-700 text-sm font-medium py-2 border border-transparent hover:border-red-200 transition-colors"
         >
           {t.cartPage.summary.clearCart}
         </button>
       </div>
 
       {/* Info spedizione */}
-      <div className="mt-6 p-4 bg-olive/5 rounded-xl">
+      <div className="mt-6 p-4 bg-olive/5 border border-olive/10">
         <div className="flex items-start gap-3">
           <svg className="w-5 h-5 text-olive mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -185,7 +185,7 @@ export default function OrderSummary({
       </div>
 
       {/* Sicurezza checkout */}
-      <div className="mt-4 p-4 bg-green-50 rounded-xl">
+      <div className="mt-4 p-4 bg-green-50 border border-green-100">
         <div className="flex items-center gap-2 mb-2">
           <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />

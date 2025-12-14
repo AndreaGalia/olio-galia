@@ -7,7 +7,6 @@ import ErrorMessage from '@/components/common/ErrorMessage';
 import ProductsHero from '@/components/productsPage/ProductsHero';
 import CategoryFilter from '@/components/productsPage/CategoryFilter';
 import ProductsGrid from '@/components/productsPage/ProductsGrid';
-import BenefitsSection from '@/components/productsPage/BenefitsSection';
 import { useAddToCart } from '@/hooks/useAddToCart';
 
 export default function ProductsPage() {
@@ -30,18 +29,19 @@ export default function ProductsPage() {
   if (error) return <ErrorMessage error={error} onRetry={() => window.location.reload()} />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige">
-      <ProductsHero />
-      <CategoryFilter 
-        categories={allCategories}
-        selectedCategory={selectedCategory}
-        onCategoryChange={setSelectedCategory}
-      />
-      <ProductsGrid 
-        products={filteredProducts}
-        onAddToCart={handleAddToCart}
-      />
-      <BenefitsSection />
-    </div>
+    <>
+      <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige">
+        <ProductsHero />
+        <CategoryFilter
+          categories={allCategories}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+        />
+        <ProductsGrid
+          products={filteredProducts}
+          onAddToCart={handleAddToCart}
+        />
+      </div>
+    </>
   );
 }

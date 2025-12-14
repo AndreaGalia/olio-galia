@@ -7,9 +7,9 @@ export default function OrderSummaryDisplay({ orderDetails, loading }: OrderSumm
   if (loading) {
     return (
       <div className="max-w-3xl mx-auto mb-16">
-        <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-olive/10">
+        <div className="bg-white border border-olive/10 p-8">
           <div className="text-center">
-            <div className="w-8 h-8 border-2 border-olive/30 border-t-olive rounded-full animate-spin mx-auto mb-4"></div>
+            <div className="w-8 h-8 border-2 border-olive/30 border-t-olive animate-spin mx-auto mb-4"></div>
             <p className="text-nocciola">{t.checkoutSuccess.loading.orderSummary}</p>
           </div>
         </div>
@@ -21,15 +21,26 @@ export default function OrderSummaryDisplay({ orderDetails, loading }: OrderSumm
 
   return (
     <div className="max-w-3xl mx-auto mb-16">
-      <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-olive/10">
+      <div className="bg-white border border-olive/10 p-8">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-serif text-olive mb-2">{t.checkoutSuccess.orderSummary.title}</h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-olive to-salvia mx-auto rounded-full"></div>
+          <h2 className="text-3xl font-serif text-olive">{t.checkoutSuccess.orderSummary.title}</h2>
         </div>
+
+        {/* Numero Ordine */}
+        {orderDetails.paymentIntent && (
+          <div className="bg-olive/5 border border-olive/10 p-4 mb-8">
+            <div className="flex items-center justify-center gap-3">
+              <span className="text-sm font-medium text-nocciola/80 uppercase tracking-wide">{t.checkoutSuccess.hero.orderNumber}</span>
+              <span className="text-xl font-serif text-olive font-bold tracking-wider">
+                #{orderDetails.paymentIntent.slice(-8).toUpperCase()}
+              </span>
+            </div>
+          </div>
+        )}
 
         {/* Informazioni Cliente */}
         <div className="grid md:grid-cols-2 gap-6 mb-8">
-          <div className="bg-beige/50 rounded-2xl p-6">
+          <div className="bg-beige/50 border border-olive/10 p-6">
             <h3 className="font-serif text-lg text-olive mb-4 flex items-center gap-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -44,7 +55,7 @@ export default function OrderSummaryDisplay({ orderDetails, loading }: OrderSumm
             </p>
           </div>
 
-          <div className="bg-beige/50 rounded-2xl p-6">
+          <div className="bg-beige/50 border border-olive/10 p-6">
             <h3 className="font-serif text-lg text-olive mb-4 flex items-center gap-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -69,10 +80,10 @@ export default function OrderSummaryDisplay({ orderDetails, loading }: OrderSumm
           
           <div className="space-y-4">
             {orderDetails.items?.map((item, index) => (
-              <div key={index} className="flex items-center justify-between p-4 bg-gradient-to-r from-sabbia/30 to-beige/30 rounded-2xl border border-nocciola/10">
+              <div key={index} className="flex items-center justify-between p-4 bg-beige/30 border border-nocciola/10">
                 <div className="flex items-center gap-4">
                   {item.image && (
-                    <div className="w-16 h-16 bg-olive/10 rounded-xl flex items-center justify-center overflow-hidden">
+                    <div className="w-16 h-16 bg-olive/10 border border-olive/10 flex items-center justify-center overflow-hidden">
                       <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                     </div>
                   )}
@@ -96,7 +107,7 @@ export default function OrderSummaryDisplay({ orderDetails, loading }: OrderSumm
 
         {/* Totale */}
         <div className="border-t border-nocciola/20 pt-6">
-          <div className="bg-gradient-to-r from-olive/10 to-salvia/10 rounded-2xl p-6">
+          <div className="bg-olive/5 border border-olive/10 p-6">
             
             {/* Subtotale prodotti */}
             <div className="flex justify-between items-center mb-4">
@@ -112,7 +123,7 @@ export default function OrderSummaryDisplay({ orderDetails, loading }: OrderSumm
               <div className="flex items-center gap-2">
                 <span className="text-nocciola">{t.checkoutSuccess.orderSummary.shippingCost}</span>
                 {orderDetails.pricing?.shippingCost === 0 && (
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 border border-green-200 font-medium">
                     {t.checkoutSuccess.freeShipping}
                   </span>
                 )}

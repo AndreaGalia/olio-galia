@@ -27,13 +27,13 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
     : 0;
 
   return (
-    <div className="bg-white/90 rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+    <div className="bg-white border border-olive/10 p-4 sm:p-6 transition-all duration-300">
       {/* Mobile Layout */}
       <div className="block sm:hidden">
         <div className="flex gap-4 mb-4">
-          <div className="w-20 h-24 bg-gradient-to-br from-olive/10 to-salvia/10 rounded-xl p-2 flex-shrink-0">
-            <img 
-              src={product.images[0]} 
+          <div className="w-20 h-24 bg-beige/50 border border-olive/10 p-2 flex-shrink-0">
+            <img
+              src={product.images[0]}
               alt={product.name}
               className="w-full h-full object-contain"
             />
@@ -52,16 +52,16 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
         
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <button 
+            <button
               onClick={() => updateQuantity(cartItem.id, cartItem.quantity - 1)}
-              className="w-10 h-10 rounded-full border border-olive/20 flex items-center justify-center hover:bg-olive hover:text-beige transition-colors"
+              className="w-10 h-10 border border-olive/20 flex items-center justify-center hover:bg-olive hover:text-beige transition-colors"
             >
               −
             </button>
             <span className="w-12 text-center font-bold text-lg text-olive">{cartItem.quantity}</span>
-            <button 
+            <button
               onClick={() => updateQuantity(cartItem.id, cartItem.quantity + 1)}
-              className="w-10 h-10 rounded-full border border-olive/20 flex items-center justify-center hover:bg-olive hover:text-beige transition-colors"
+              className="w-10 h-10 border border-olive/20 flex items-center justify-center hover:bg-olive hover:text-beige transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={cartItem.quantity >= product.stockQuantity}
             >
               +
@@ -91,9 +91,9 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
 
       {/* Desktop Layout */}
       <div className="hidden sm:flex items-center gap-6">
-        <div className="w-20 h-24 bg-gradient-to-br from-olive/10 to-salvia/10 rounded-xl p-2 flex-shrink-0">
-          <img 
-            src={product.images[0]} 
+        <div className="w-20 h-24 bg-beige/50 border border-olive/10 p-2 flex-shrink-0">
+          <img
+            src={product.images[0]}
             alt={product.name}
             className="w-full h-full object-contain"
           />
@@ -114,16 +114,16 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
         </div>
 
         <div className="flex items-center gap-4">
-          <button 
+          <button
             onClick={() => updateQuantity(cartItem.id, cartItem.quantity - 1)}
-            className="w-12 h-12 rounded-full border border-olive/20 flex items-center justify-center hover:bg-olive hover:text-beige transition-colors text-lg font-medium"
+            className="w-12 h-12 border border-olive/20 flex items-center justify-center hover:bg-olive hover:text-beige transition-colors text-lg font-medium"
           >
             −
           </button>
           <span className="w-16 text-center font-bold text-xl text-olive">{cartItem.quantity}</span>
-          <button 
+          <button
             onClick={() => updateQuantity(cartItem.id, cartItem.quantity + 1)}
-            className="w-12 h-12 rounded-full border border-olive/20 flex items-center justify-center hover:bg-olive hover:text-beige transition-colors text-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-12 h-12 border border-olive/20 flex items-center justify-center hover:bg-olive hover:text-beige transition-colors text-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={cartItem.quantity >= product.stockQuantity}
           >
             +
@@ -139,9 +139,9 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
           )}
         </div>
 
-        <button 
+        <button
           onClick={() => removeFromCart(cartItem.id)}
-          className="text-red-500 hover:text-red-700 p-3 hover:bg-red-50 rounded-full transition-colors"
+          className="text-red-500 hover:text-red-700 p-3 border border-transparent hover:border-red-200 transition-colors"
           aria-label={t.cartPage.product.remove}
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

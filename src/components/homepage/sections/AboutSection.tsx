@@ -40,7 +40,7 @@ export default function AboutSection() {
       ),
       title: t.about.values.tradition.title,
       description: t.about.values.tradition.description,
-      color: 'nocciola'
+      color: 'olive'
     }
   ];
 
