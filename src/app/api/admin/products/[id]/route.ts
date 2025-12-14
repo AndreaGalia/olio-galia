@@ -26,21 +26,22 @@ export async function GET(
       );
     }
 
-    // Ottieni dati da Stripe
-    const [stripeProduct, stripePrice] = await Promise.all([
-      stripe.products.retrieve(mongoProduct.stripeProductId),
-      stripe.prices.retrieve(mongoProduct.stripePriceId)
-    ]);
+    // Ottieni dati da Stripe solo se il prodotto ha gli ID Stripe
+    let productWithStripeData: any = { ...mongoProduct };
 
-    const productWithStripeData = {
-      ...mongoProduct,
-      stripeData: {
+    if (mongoProduct.stripeProductId && mongoProduct.stripePriceId) {
+      const [stripeProduct, stripePrice] = await Promise.all([
+        stripe.products.retrieve(mongoProduct.stripeProductId),
+        stripe.prices.retrieve(mongoProduct.stripePriceId)
+      ]);
+
+      productWithStripeData.stripeData = {
         name: stripeProduct.name,
         price: stripePrice.unit_amount ? stripePrice.unit_amount / 100 : 0,
         available_quantity: parseInt(stripeProduct.metadata?.available_quantity || '0'),
         active: stripeProduct.active
-      }
-    };
+      };
+    }
 
     return NextResponse.json(productWithStripeData);
   } catch (error) {
@@ -69,7 +70,9 @@ export async function PUT(
       images,
       nutritionalInfo,
       translations,
-      slug
+      slug,
+      stripeProductId: newStripeProductId,
+      stripePriceId: newStripePriceId
     } = data;
 
     // Ottieni prodotto esistente da MongoDB
@@ -85,65 +88,152 @@ export async function PUT(
       );
     }
 
-    // Aggiorna prodotto su Stripe se necessario
-    if (translations.it.name || translations.it.description || images) {
-      // Filtra le immagini vuote e valida gli URL
-      const validImages = (images || [])
-        .filter((img: string) => img && img.trim() !== '')
-        .filter((img: string) => {
-          try {
-            new URL(img);
-            return true;
-          } catch {
-            return false;
-          }
-        });
+    // Determina gli ID Stripe da usare (nuovi se forniti, altrimenti esistenti)
+    const finalStripeProductId = newStripeProductId !== undefined ? newStripeProductId : existingProduct.stripeProductId;
+    const finalStripePriceId = newStripePriceId !== undefined ? newStripePriceId : existingProduct.stripePriceId;
 
-      await stripe.products.update(existingProduct.stripeProductId, {
-        name: translations.it.name,
-        description: translations.it.description,
-        images: validImages,
-        metadata: {
-          category,
-          size,
-          color: color || '',
-          mongo_category: category,
-          last_updated: new Date().toISOString()
-        }
-      });
+    // Validazione ID Stripe se forniti
+    if (finalStripeProductId && !finalStripeProductId.startsWith('prod_')) {
+      return NextResponse.json(
+        { error: 'Stripe Product ID non valido (deve iniziare con "prod_")' },
+        { status: 400 }
+      );
+    }
+    if (finalStripePriceId && !finalStripePriceId.startsWith('price_')) {
+      return NextResponse.json(
+        { error: 'Stripe Price ID non valido (deve iniziare con "price_")' },
+        { status: 400 }
+      );
     }
 
-    // Aggiorna prezzo su Stripe se cambiato
-    if (price && parseFloat(price) !== parseFloat(existingProduct.price)) {
-      // Crea nuovo prezzo
-      const newPrice = await stripe.prices.create({
-        product: existingProduct.stripeProductId,
-        unit_amount: Math.round(parseFloat(price) * 100),
-        currency: 'eur'
-      });
-
-      // Aggiorna il prodotto Stripe per impostare il nuovo prezzo come default
-      await stripe.products.update(existingProduct.stripeProductId, {
-        default_price: newPrice.id
-      });
-
-      // Ora possiamo disattivare il prezzo vecchio
+    // Verifica se gli ID Stripe esistono su Stripe (se forniti)
+    if (finalStripeProductId && finalStripePriceId) {
       try {
-        await stripe.prices.update(existingProduct.stripePriceId, {
-          active: false
+        await stripe.products.retrieve(finalStripeProductId);
+        await stripe.prices.retrieve(finalStripePriceId);
+      } catch (err) {
+        return NextResponse.json(
+          { error: 'ID Stripe non trovati. Verifica di aver inserito gli ID corretti dalla dashboard Stripe.' },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Aggiorna prodotto su Stripe SOLO se aveva già Stripe IDs prima
+    // Se stiamo AGGIUNGENDO Stripe IDs per la prima volta, NON aggiorniamo Stripe
+    const isAddingStripeForFirstTime = !existingProduct.stripeProductId && finalStripeProductId;
+
+    if (finalStripeProductId && finalStripePriceId && !isAddingStripeForFirstTime) {
+      if (translations.it.name || translations.it.description || images) {
+        // Filtra le immagini vuote e valida gli URL
+        const validImages = (images || [])
+          .filter((img: string) => img && img.trim() !== '')
+          .filter((img: string) => {
+            try {
+              new URL(img);
+              return true;
+            } catch {
+              return false;
+            }
+          });
+
+        await stripe.products.update(finalStripeProductId, {
+          name: translations.it.name,
+          description: translations.it.description,
+          images: validImages,
+          metadata: {
+            category,
+            size,
+            color: color || '',
+            mongo_category: category,
+            last_updated: new Date().toISOString()
+          }
         });
-      } catch (priceError) {
-        // Se non riusciamo a disattivare il prezzo vecchio, non è un errore critico
       }
 
-      // Aggiorna il prodotto su MongoDB con il nuovo price ID
+      // Aggiorna prezzo su Stripe se cambiato
+      if (price && parseFloat(price) !== parseFloat(existingProduct.price)) {
+        // Crea nuovo prezzo
+        const newPrice = await stripe.prices.create({
+          product: finalStripeProductId,
+          unit_amount: Math.round(parseFloat(price) * 100),
+          currency: 'eur'
+        });
+
+        // Aggiorna il prodotto Stripe per impostare il nuovo prezzo come default
+        await stripe.products.update(finalStripeProductId, {
+          default_price: newPrice.id
+        });
+
+        // Ora possiamo disattivare il prezzo vecchio (se esiste)
+        try {
+          if (finalStripePriceId) {
+            await stripe.prices.update(finalStripePriceId, {
+              active: false
+            });
+          }
+        } catch (priceError) {
+          // Se non riusciamo a disattivare il prezzo vecchio, non è un errore critico
+        }
+
+        // Aggiorna il prodotto su MongoDB con il nuovo price ID e gli ID Stripe
+        // IMPORTANTE: NON aggiorniamo il campo 'id' per mantenere l'ID locale permanente
+        await db.collection('products').updateOne(
+          { id: productId },
+          {
+            $set: {
+              // id: NON aggiornato - rimane quello locale originale
+              stripeProductId: finalStripeProductId,
+              stripePriceId: newPrice.id,
+              category,
+              price: price.toString(),
+              originalPrice,
+              size,
+              color: color || '',
+              images: images || [],
+              nutritionalInfo: nutritionalInfo || {},
+              translations,
+              slug,
+              'metadata.updatedAt': new Date()
+            }
+          }
+        );
+      } else {
+        // Aggiorna MongoDB con gli ID Stripe (potrebbero essere cambiati)
+        // IMPORTANTE: NON aggiorniamo il campo 'id' per mantenere l'ID locale permanente
+        await db.collection('products').updateOne(
+          { id: productId },
+          {
+            $set: {
+              // id: NON aggiornato - rimane quello locale originale
+              stripeProductId: finalStripeProductId,
+              stripePriceId: finalStripePriceId,
+              category,
+              price: price?.toString() || existingProduct.price,
+              originalPrice,
+              size,
+              color: color || '',
+              images: images || [],
+              nutritionalInfo: nutritionalInfo || {},
+              translations,
+              slug,
+              'metadata.updatedAt': new Date()
+            }
+          }
+        );
+      }
+    } else if (isAddingStripeForFirstTime) {
+      // CASO SPECIALE: Stiamo AGGIUNGENDO Stripe IDs per la prima volta
+      // Non aggiorniamo Stripe, solo salviamo gli ID in MongoDB
       await db.collection('products').updateOne(
         { id: productId },
         {
           $set: {
-            stripePriceId: newPrice.id,
+            // id: NON aggiornato - rimane quello locale originale
+            stripeProductId: finalStripeProductId,
+            stripePriceId: finalStripePriceId,
             category,
-            price: price.toString(),
+            price: price?.toString() || existingProduct.price,
             originalPrice,
             size,
             color: color || '',
@@ -156,11 +246,15 @@ export async function PUT(
         }
       );
     } else {
-      // Aggiorna solo MongoDB
+      // Prodotto senza Stripe - aggiorna solo MongoDB (rimuovi ID Stripe se erano presenti)
+      // IMPORTANTE: NON aggiorniamo il campo 'id' per mantenere l'ID locale permanente
       await db.collection('products').updateOne(
         { id: productId },
         {
           $set: {
+            // id: NON aggiornato - rimane quello locale originale
+            stripeProductId: undefined,
+            stripePriceId: undefined,
             category,
             price: price?.toString() || existingProduct.price,
             originalPrice,
@@ -232,10 +326,12 @@ export async function DELETE(
       );
     }
 
-    // Disattiva prodotto su Stripe (non può essere eliminato se ha transazioni)
-    await stripe.products.update(existingProduct.stripeProductId, {
-      active: false
-    });
+    // Disattiva prodotto su Stripe se è un prodotto Stripe (non può essere eliminato se ha transazioni)
+    if (existingProduct.stripeProductId) {
+      await stripe.products.update(existingProduct.stripeProductId, {
+        active: false
+      });
+    }
 
     // Elimina definitivamente da MongoDB
     const deleteResult = await db.collection('products').deleteOne(
@@ -249,9 +345,13 @@ export async function DELETE(
       );
     }
 
+    const message = existingProduct.stripeProductId
+      ? 'Prodotto eliminato con successo da MongoDB e disattivato su Stripe'
+      : 'Prodotto eliminato con successo da MongoDB';
+
     return NextResponse.json({
       success: true,
-      message: 'Prodotto eliminato con successo da MongoDB e disattivato su Stripe'
+      message
     });
 
   } catch (error) {

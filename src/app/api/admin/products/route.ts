@@ -31,8 +31,13 @@ export async function GET(request: NextRequest) {
 
     // Combina i dati MongoDB con quelli di Stripe
     const productsWithStripeData = mongoProducts.map(product => {
+      // Verifica se il prodotto ha ID Stripe prima di cercare i dati
+      if (!product.stripeProductId) {
+        return { ...product, stripeData: undefined };
+      }
+
       const stripeProduct = stripeProducts.data.find(sp => sp.id === product.stripeProductId);
-      const stripePrice = priceMap[product.stripeProductId];
+      const stripePrice = product.stripeProductId ? priceMap[product.stripeProductId] : undefined;
 
       return {
         ...product,
@@ -66,7 +71,10 @@ export async function POST(request: NextRequest) {
       images,
       nutritionalInfo,
       translations,
-      slug
+      slug,
+      isStripeProduct,
+      stripeProductId,
+      stripePriceId
     } = data;
 
     // Validazione dei dati richiesti
@@ -77,54 +85,59 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 1. Crea prodotto su Stripe
-    // Filtra le immagini vuote e valida gli URL
-    const validImages = (images || [])
-      .filter((img: string) => img && img.trim() !== '')
-      .filter((img: string) => {
-        try {
-          new URL(img);
-          return true;
-        } catch {
-          return false;
-        }
-      });
+    // IMPORTANTE: L'ID locale è sempre permanente e non cambia mai
+    // Questo permette ai preventivi/ordini di mantenere il riferimento corretto
+    const localId = `local_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 
-    const stripeProduct = await stripe.products.create({
-      name: translations.it.name,
-      description: translations.it.description,
-      images: validImages,
-      metadata: {
-        category,
-        size,
-        color: color || '',
-        available_quantity: '0', // Inizia con stock 0
-        mongo_category: category
+    let finalStripeProductId: string | undefined;
+    let finalStripePriceId: string | undefined;
+
+    // CASO 1: Prodotto con Stripe (collegamento manuale agli ID esistenti)
+    if (isStripeProduct && stripeProductId && stripePriceId) {
+      // Validazione ID Stripe
+      if (!stripeProductId.startsWith('prod_')) {
+        return NextResponse.json(
+          { error: 'Stripe Product ID non valido (deve iniziare con "prod_")' },
+          { status: 400 }
+        );
       }
-    });
+      if (!stripePriceId.startsWith('price_')) {
+        return NextResponse.json(
+          { error: 'Stripe Price ID non valido (deve iniziare con "price_")' },
+          { status: 400 }
+        );
+      }
 
-    // 2. Crea prezzo su Stripe
-    const stripePrice = await stripe.prices.create({
-      product: stripeProduct.id,
-      unit_amount: Math.round(parseFloat(price) * 100), // Converti in centesimi
-      currency: 'eur'
-    });
+      // Verifica che il prodotto esista su Stripe
+      try {
+        await stripe.products.retrieve(stripeProductId);
+        await stripe.prices.retrieve(stripePriceId);
+      } catch (err) {
+        return NextResponse.json(
+          { error: 'ID Stripe non trovati. Verifica di aver inserito gli ID corretti dalla dashboard Stripe.' },
+          { status: 400 }
+        );
+      }
 
-    // 3. Imposta il prezzo come default per il prodotto
-    await stripe.products.update(stripeProduct.id, {
-      default_price: stripePrice.id
-    });
+      finalStripeProductId = stripeProductId;
+      finalStripePriceId = stripePriceId;
+    }
+    // CASO 2: Prodotto senza Stripe (solo MongoDB)
+    else {
+      finalStripeProductId = undefined;
+      finalStripePriceId = undefined;
+    }
 
-    // 4. Salva su MongoDB
+    // Salva su MongoDB
     const { db } = await connectToDatabase();
 
     const productDocument: ProductDocument = {
-      id: stripeProduct.id, // Usa l'ID di Stripe come ID MongoDB
+      id: localId, // SEMPRE l'ID locale, mai sovrascritto
       category,
       price: price.toString(),
       originalPrice: originalPrice ? originalPrice.toString() : undefined,
-      stripeProductId: stripeProduct.id,
-      stripePriceId: stripePrice.id,
+      stripeProductId: finalStripeProductId, // ID Stripe separato (opzionale)
+      stripePriceId: finalStripePriceId, // Price ID Stripe separato (opzionale)
       size,
       inStock: false, // Inizialmente non in stock
       stockQuantity: 0,
@@ -141,16 +154,19 @@ export async function POST(request: NextRequest) {
     };
 
     const { _id, ...productToInsert } = productDocument;
-    await db.collection('products').insertOne(productToInsert);
+    const result = await db.collection('products').insertOne(productToInsert);
 
     return NextResponse.json({
       success: true,
-      productId: stripeProduct.id,
-      stripeProductId: stripeProduct.id,
-      stripePriceId: stripePrice.id
+      productId: localId, // Ritorna l'ID locale permanente
+      mongoObjectId: result.insertedId.toString(), // Ritorna anche MongoDB _id
+      stripeProductId: finalStripeProductId,
+      stripePriceId: finalStripePriceId,
+      isStripeProduct: !!finalStripeProductId
     });
 
   } catch (error) {
+    console.error('Errore creazione prodotto:', error);
     return NextResponse.json(
       { error: 'Errore nella creazione del prodotto' },
       { status: 500 }

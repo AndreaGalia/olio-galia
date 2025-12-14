@@ -46,32 +46,55 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
       );
     }
 
-    // Recupera informazioni sui prodotti (già implementato in route.ts principale)
+    // Recupera informazioni sui prodotti da MongoDB e/o Stripe
     const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+    const productsCollection = db.collection('products');
     const productsInfo = [];
-    
+
     if (form.cart && Array.isArray(form.cart)) {
       for (const item of form.cart) {
         try {
-          const product = await stripe.products.retrieve(item.id);
-          
+          // Prima cerca il prodotto in MongoDB per ID locale
+          let mongoProduct = await productsCollection.findOne({ id: item.id });
+
+          // Fallback: se non trovato per ID locale, prova con stripeProductId (per vecchi dati)
+          if (!mongoProduct && item.id.startsWith('prod_')) {
+            mongoProduct = await productsCollection.findOne({ stripeProductId: item.id });
+          }
+
           // Usa il prezzo finale dal preventivo
           const finalPriceData = form.finalPricing.finalPrices.find((fp: any) => fp.productId === item.id);
           const finalPrice = finalPriceData ? finalPriceData.finalPrice : 0;
-          
+
+          let productName = `Prodotto ${item.id}`; // Fallback di default
+
+          // Se il prodotto ha Stripe IDs, prova a recuperare il nome da Stripe
+          if (mongoProduct?.stripeProductId) {
+            try {
+              const stripeProduct = await stripe.products.retrieve(mongoProduct.stripeProductId);
+              productName = stripeProduct.name;
+            } catch (stripeError) {
+              // Se Stripe fallisce, usa il nome da MongoDB
+              productName = mongoProduct.translations?.it?.name || mongoProduct.name || productName;
+            }
+          } else if (mongoProduct) {
+            // Prodotto solo MongoDB (senza Stripe) - usa nome MongoDB
+            productName = mongoProduct.translations?.it?.name || mongoProduct.name || productName;
+          }
+
           productsInfo.push({
-            name: product.name,
+            name: productName,
             quantity: item.quantity,
             unitPrice: finalPrice,
             totalPrice: finalPrice * item.quantity
           });
         } catch (error) {
-          
-          
+          console.error('Errore recupero prodotto per email:', error);
+
           // Usa i dati del preventivo come fallback
           const finalPriceData = form.finalPricing.finalPrices.find((fp: any) => fp.productId === item.id);
           const finalPrice = finalPriceData ? finalPriceData.finalPrice : 0;
-          
+
           productsInfo.push({
             name: `Prodotto ${item.id}`,
             quantity: item.quantity,

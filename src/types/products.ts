@@ -25,8 +25,8 @@ export interface BaseProduct {
   category: string;
   price: string;
   originalPrice?: string;
-  stripeProductId: string;
-  stripePriceId: string;
+  stripeProductId?: string; // Opzionale - può essere vuoto se non configurato con Stripe
+  stripePriceId?: string;   // Opzionale - può essere vuoto se non configurato con Stripe
   size: string;
   inStock: boolean;
   stockQuantity: number;

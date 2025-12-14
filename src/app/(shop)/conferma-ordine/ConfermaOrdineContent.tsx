@@ -42,13 +42,13 @@ export default function ConfermaOrdineContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-beige via-sabbia/20 to-beige py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige py-12 px-4">
       <div className="max-w-2xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-nocciola/20"
+          className="bg-beige border border-olive/10"
         >
           <OrderHero orderId={orderId} />
 

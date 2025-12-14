@@ -22,6 +22,10 @@ interface ProductFormData {
     it: string;
     en: string;
   };
+  // Campi Stripe opzionali
+  isStripeProduct: boolean;
+  stripeProductId?: string;
+  stripePriceId?: string;
 }
 
 interface Category {
@@ -87,7 +91,11 @@ export default function CreateProductPage() {
     slug: {
       it: '',
       en: ''
-    }
+    },
+    // Default: non è un prodotto Stripe (creazione manuale)
+    isStripeProduct: false,
+    stripeProductId: '',
+    stripePriceId: ''
   });
 
   // Carica le categorie da MongoDB
@@ -217,6 +225,19 @@ export default function CreateProductPage() {
         throw new Error('Nome (IT/EN), categoria e prezzo sono obbligatori');
       }
 
+      // Validazione Stripe se selezionato
+      if (formData.isStripeProduct) {
+        if (!formData.stripeProductId || !formData.stripePriceId) {
+          throw new Error('Se il prodotto è configurato con Stripe, devi inserire Stripe Product ID e Stripe Price ID');
+        }
+        if (!formData.stripeProductId.startsWith('prod_')) {
+          throw new Error('Stripe Product ID deve iniziare con "prod_"');
+        }
+        if (!formData.stripePriceId.startsWith('price_')) {
+          throw new Error('Stripe Price ID deve iniziare con "price_"');
+        }
+      }
+
       // Genera slug automaticamente se non specificati
       const finalData = {
         ...formData,
@@ -241,7 +262,14 @@ export default function CreateProductPage() {
             tags: formData.translations.en.tags.filter(t => t.trim())
           }
         },
-        images: formData.images.filter(img => img.trim())
+        images: formData.images.filter(img => img.trim()),
+        // Includi i campi Stripe solo se configurati
+        ...(formData.isStripeProduct ? {
+          stripeProductId: formData.stripeProductId,
+          stripePriceId: formData.stripePriceId,
+          // Imposta l'ID principale del prodotto con lo Stripe Product ID
+          id: formData.stripeProductId 
+        } : {})
       };
 
       const response = await fetch('/api/admin/products', {
@@ -358,6 +386,70 @@ export default function CreateProductPage() {
                 />
               </div>
             </div>
+          </section>
+
+          {/* Configurazione Stripe */}
+          <section>
+            <h3 className="text-lg font-semibold text-olive mb-4">Configurazione Stripe</h3>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+              <div className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  id="isStripeProduct"
+                  checked={formData.isStripeProduct}
+                  onChange={(e) => setFormData(prev => ({ ...prev, isStripeProduct: e.target.checked }))}
+                  className="mt-1 h-4 w-4 text-olive focus:ring-olive border-olive/30 rounded"
+                />
+                <div className="flex-1">
+                  <label htmlFor="isStripeProduct" className="font-medium text-gray-900 cursor-pointer">
+                    ✓ Questo è un prodotto Stripe
+                  </label>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Seleziona questa opzione se hai già creato il prodotto su Stripe e vuoi collegarlo manualmente inserendo gli ID.
+                    Se non selezionato, il prodotto sarà vendibile solo tramite Checkout Torino.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Campi ID Stripe - visibili solo se checkbox è selezionata */}
+            {formData.isStripeProduct && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Stripe Product ID *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.stripeProductId}
+                    onChange={(e) => setFormData(prev => ({ ...prev, stripeProductId: e.target.value }))}
+                    className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive font-mono text-sm"
+                    placeholder="prod_xxxxxxxxxxxxx"
+                    required={formData.isStripeProduct}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Inserisci l'ID del prodotto dalla dashboard Stripe (inizia con "prod_")
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Stripe Price ID *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.stripePriceId}
+                    onChange={(e) => setFormData(prev => ({ ...prev, stripePriceId: e.target.value }))}
+                    className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive font-mono text-sm"
+                    placeholder="price_xxxxxxxxxxxxx"
+                    required={formData.isStripeProduct}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Inserisci l'ID del prezzo dalla dashboard Stripe (inizia con "price_")
+                  </p>
+                </div>
+              </div>
+            )}
           </section>
 
           {/* Immagini */}

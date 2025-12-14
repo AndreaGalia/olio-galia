@@ -2,10 +2,14 @@ import { useState, useEffect } from 'react';
 
 interface Settings {
   torino_checkout_enabled: boolean;
+  stripe_enabled: boolean;
 }
 
 export function useSettings() {
-  const [settings, setSettings] = useState<Settings>({ torino_checkout_enabled: false });
+  const [settings, setSettings] = useState<Settings>({
+    torino_checkout_enabled: false,
+    stripe_enabled: true // Default: Stripe abilitato
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

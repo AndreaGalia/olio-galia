@@ -4,25 +4,30 @@ import { getDatabase } from '@/lib/mongodb';
 import { CustomerService } from '@/services/customerService';
 
 // Funzione per generare un ID ordine univoco
-function generateOrderId(): string {
+function generateOrderId(type: string): string {
   const timestamp = Date.now().toString(36);
   const random = Math.random().toString(36).substring(2, 8);
-  return `TO-${timestamp}-${random}`.toUpperCase();
+  // Prefisso basato sul tipo: TO per Torino, IT per Italia/Europa
+  const prefix = type === 'italia_delivery' ? 'IT' : 'TO';
+  return `${prefix}-${timestamp}-${random}`.toUpperCase();
 }
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.json();
 
-    // Genera un orderId univoco
-    const orderId = generateOrderId();
+    // Ottieni il tipo dalla request o usa torino_delivery come default
+    const deliveryType = formData.type || 'torino_delivery';
+
+    // Genera un orderId univoco in base al tipo
+    const orderId = generateOrderId(deliveryType);
 
     // Aggiungi timestamp e orderId
     const dataToSave = {
       ...formData,
       orderId, // ← AGGIUNTO: ID ordine univoco
       createdAt: new Date(),
-      type: 'torino_form', // per identificare il tipo di form
+      type: deliveryType, // usa il tipo dalla request
       status: 'pending' // stato iniziale
     };
 
@@ -41,9 +46,9 @@ export async function POST(request: NextRequest) {
         formData.phone,
         formData.address ? {
           line1: formData.address,
-          city: 'Torino',
-          state: formData.province || 'TO',
-          country: 'IT'
+          city: deliveryType === 'italia_delivery' ? (formData.city || '') : 'Torino',
+          state: formData.province || (deliveryType === 'italia_delivery' ? '' : 'TO'),
+          country: formData.country || 'IT'
         } : undefined,
         orderId,
         0, // Total in centesimi (preventivo non ha ancora un totale)

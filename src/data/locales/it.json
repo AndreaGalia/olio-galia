@@ -698,6 +698,48 @@
       }
     }
   },
+  "deliveryZone": {
+    "selector": {
+      "title": "Dove ti trovi?",
+      "subtitle": "Seleziona la tua zona per continuare con l'ordine",
+      "torino": {
+        "title": "Torino e provincia",
+        "description": "Consegna gratuita 24-48 ore"
+      },
+      "italia": {
+        "title": "Italia/Europa",
+        "description": "Preventivo gratuito 24h"
+      }
+    },
+    "details": {
+      "backButton": "Cambia zona",
+      "torino": {
+        "badge": "Torino e provincia",
+        "title": "Consegna Gratuita a Domicilio",
+        "description": "Ricevi il tuo ordine comodamente a casa senza alcun costo di spedizione. Riceverai un preventivo con le opzioni di pagamento via email.",
+        "features": {
+          "freeShipping": "Spedizione gratuita",
+          "fastDelivery": "Consegna in 24-48 ore",
+          "quoteByEmail": "Preventivo via email"
+        }
+      },
+      "italia": {
+        "badge": "Italia/Europa",
+        "title": "Richiedi un Preventivo Gratuito",
+        "description": "Spediamo in tutta Italia e in Europa! Compila un breve form e ricevi entro 24 ore un preventivo personalizzato con i costi di spedizione.",
+        "processTitle": "Come funziona:",
+        "process": {
+          "step1": "Compila il form con i tuoi dati",
+          "step2": "Ricevi preventivo via email entro 24 ore",
+          "step3": "Conferma l'ordine se ti soddisfa"
+        }
+      }
+    },
+    "summary": {
+      "title": "Riepilogo",
+      "subtitle": "Seleziona la tua zona"
+    }
+  },
   "orderConfirmation": {
     "hero": {
       "title": "Richiesta inviata!",
@@ -708,28 +750,28 @@
       "title": "Prossimi passi",
       "processing": {
         "title": "Elaborazione richiesta",
-        "description": "Stiamo preparando il tuo preventivo personalizzato per la consegna nell'area di Torino"
+        "description": "Stiamo preparando il tuo preventivo personalizzato con i costi di spedizione per la tua zona"
       },
       "contact": {
-        "title": "Contatto entro 24 ore",
+        "title": "Ti contattiamo entro 24 ore",
         "description": "Riceverai il preventivo con le modalità di pagamento disponibili: PayPal, Satispay o Bonifico bancario"
       },
       "delivery": {
-        "title": "Consegna gratuita",
-        "description": "Una volta confermato l'ordine, organizzeremo la consegna gratuita nella zona di Torino"
+        "title": "Organizzazione consegna",
+        "description": "Una volta confermato l'ordine, organizzeremo la spedizione con corriere espresso nella tua zona"
       }
     },
     "whatsapp": {
       "title": "Vuoi accelerare i tempi?",
       "description": "Contattaci direttamente su WhatsApp con il numero del tuo ordine per ricevere il preventivo più rapidamente",
       "button": "Contatta su WhatsApp",
-      "message": "Ciao! Ho appena inviato una richiesta di preventivo per la consegna a Torino.\n\nNumero ordine: {orderId}\n\nVorrei accelerare i tempi per ricevere il preventivo e le informazioni sui metodi di pagamento.\n\nGrazie!"
+      "message": "Ciao! Ho appena inviato una richiesta di preventivo.\n\nNumero ordine: {orderId}\n\nVorrei accelerare i tempi per ricevere il preventivo e le informazioni sui metodi di pagamento.\n\nGrazie!"
     },
     "navigation": {
       "backToShop": "Torna al negozio",
       "myOrders": "I miei ordini"
     },
-    "footer": "Grazie per aver scelto Olio Galia per la tua spesa di qualità a Torino"
+    "footer": "Grazie per aver scelto Olio Galia per la tua spesa di qualità"
   },
   "feedback": {
     "loading": "Caricamento...",

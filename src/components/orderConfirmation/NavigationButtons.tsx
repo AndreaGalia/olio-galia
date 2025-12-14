@@ -21,11 +21,8 @@ export default function NavigationButtons() {
     >
       <button
         onClick={handleBackToShop}
-        className="px-8 py-3 rounded-xl bg-gradient-to-r from-olive to-salvia text-beige font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2"
+        className="px-8 py-3 bg-olive text-beige font-semibold transition-colors duration-300 border border-olive/20 uppercase tracking-wider cursor-pointer"
       >
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-        </svg>
         {t.orderConfirmation.navigation.backToShop}
       </button>
     </motion.div>

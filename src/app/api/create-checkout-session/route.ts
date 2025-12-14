@@ -1,6 +1,7 @@
 // app/api/create-checkout-session/route.ts
 import Stripe from 'stripe';
 import { NextRequest, NextResponse } from 'next/server';
+import { connectToDatabase } from '@/lib/mongodb';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -66,9 +67,42 @@ const validateProductAvailability = (product: Stripe.Product, requestedQuantity:
   }
 };
 
+// Mappa gli ID locali agli ID Stripe
+const mapLocalIdsToStripeIds = async (items: CartItem[]) => {
+  const { db } = await connectToDatabase();
+  const mappedItems: CartItem[] = [];
+
+  for (const item of items) {
+    // Se l'ID inizia con "local_", è un ID locale MongoDB
+    if (item.id.startsWith('local_')) {
+      // Cerca il prodotto in MongoDB per ottenere lo stripeProductId
+      const mongoProduct = await db.collection('products').findOne({ id: item.id });
+
+      if (!mongoProduct) {
+        throw new Error(`Prodotto non trovato: ${item.id}`);
+      }
+
+      if (!mongoProduct.stripeProductId) {
+        throw new Error(`Il prodotto "${mongoProduct.translations?.it?.name || item.id}" non è disponibile per il checkout online. Richiedi un preventivo invece.`);
+      }
+
+      // Usa lo stripeProductId invece dell'ID locale
+      mappedItems.push({
+        ...item,
+        id: mongoProduct.stripeProductId
+      });
+    } else {
+      // È già un ID Stripe, usa così com'è
+      mappedItems.push(item);
+    }
+  }
+
+  return mappedItems;
+};
+
 const buildLineItems = (
-  items: CartItem[], 
-  products: Stripe.Product[], 
+  items: CartItem[],
+  products: Stripe.Product[],
   priceMap: Record<string, Stripe.Price>
 ) => {
   const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
@@ -76,7 +110,7 @@ const buildLineItems = (
 
   for (const item of items) {
     const product = products.find(p => p.id === item.id);
-    
+
     if (!product) {
       throw new Error('Prodotto non trovato');
     }
@@ -89,7 +123,7 @@ const buildLineItems = (
         price: price.id,
         quantity: item.quantity,
       });
-      
+
       totalAmount += price.unit_amount * item.quantity;
     }
   }
@@ -199,6 +233,9 @@ export async function POST(request: NextRequest) {
 
     validateCartItems(items);
 
+    // Mappa gli ID locali agli ID Stripe (se necessario)
+    const mappedItems = await mapLocalIdsToStripeIds(items);
+
     // Fetch data from Stripe
     const [productsResult, pricesResult] = await Promise.all([
       stripe.products.list({ active: true }),
@@ -206,11 +243,11 @@ export async function POST(request: NextRequest) {
     ]);
 
     const priceMap = createPriceMap(pricesResult.data);
-    
-    // Build line items and calculate total
+
+    // Build line items and calculate total (usa gli ID mappati)
     const { lineItems, totalAmount } = buildLineItems(
-      items, 
-      productsResult.data, 
+      mappedItems,
+      productsResult.data,
       priceMap
     );
 

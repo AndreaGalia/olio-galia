@@ -25,6 +25,7 @@ interface WhatsAppSettings {
 
 interface AdminSettings {
   torino_checkout_enabled: boolean;
+  stripe_enabled: boolean;
   whatsapp: WhatsAppSettings;
 }
 
@@ -38,6 +39,7 @@ export default function AdminSettingsPage() {
   const router = useRouter();
   const [settings, setSettings] = useState<AdminSettings>({
     torino_checkout_enabled: false,
+    stripe_enabled: true, // Default: Stripe abilitato
     whatsapp: {
       enabled: false,
       apiUrl: '',
@@ -249,6 +251,32 @@ export default function AdminSettingsPage() {
         <h2 className="text-xl font-semibold text-olive mb-6">Funzionalità Checkout</h2>
 
         <div className="space-y-4">
+          {/* Toggle Stripe */}
+          <div className="flex items-center justify-between p-4 border border-olive/10 rounded-lg bg-blue-50/30">
+            <div>
+              <h3 className="font-medium text-gray-900">Integrazione Stripe</h3>
+              <p className="text-sm text-gray-600">
+                Abilita i pagamenti online con Stripe. Se disabilitato, solo Checkout Torino sarà disponibile.
+              </p>
+            </div>
+            <div className="flex items-center">
+              <button
+                type="button"
+                onClick={() => handleToggleChange('stripe_enabled')}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  settings.stripe_enabled ? 'bg-olive' : 'bg-gray-200'
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    settings.stripe_enabled ? 'translate-x-6' : 'translate-x-1'
+                  }`}
+                />
+              </button>
+            </div>
+          </div>
+
+          {/* Toggle Checkout Torino */}
           <div className="flex items-center justify-between p-4 border border-olive/10 rounded-lg">
             <div>
               <h3 className="font-medium text-gray-900">Checkout Torino</h3>
