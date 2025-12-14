@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
     if (!settings) {
       return NextResponse.json({
         torino_checkout_enabled: false,
+        stripe_enabled: true, // Default: Stripe abilitato
         whatsapp: {
           enabled: false,
           apiUrl: '',
@@ -42,6 +43,11 @@ export async function GET(request: NextRequest) {
       };
     }
 
+    // Assicura che esista stripe_enabled (default true per compatibilità)
+    if (settings.stripe_enabled === undefined) {
+      settings.stripe_enabled = true;
+    }
+
     return NextResponse.json(settings);
   } catch (error) {
 
@@ -61,12 +67,19 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { torino_checkout_enabled, whatsapp } = body;
+    const { torino_checkout_enabled, stripe_enabled, whatsapp } = body;
 
     // Validazione
     if (torino_checkout_enabled !== undefined && typeof torino_checkout_enabled !== 'boolean') {
       return NextResponse.json(
         { error: 'torino_checkout_enabled deve essere un boolean' },
+        { status: 400 }
+      );
+    }
+
+    if (stripe_enabled !== undefined && typeof stripe_enabled !== 'boolean') {
+      return NextResponse.json(
+        { error: 'stripe_enabled deve essere un boolean' },
         { status: 400 }
       );
     }
@@ -80,6 +93,10 @@ export async function PUT(request: NextRequest) {
 
     if (torino_checkout_enabled !== undefined) {
       updateData.torino_checkout_enabled = torino_checkout_enabled;
+    }
+
+    if (stripe_enabled !== undefined) {
+      updateData.stripe_enabled = stripe_enabled;
     }
 
     if (whatsapp !== undefined) {
@@ -112,6 +129,7 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({
       success: true,
       torino_checkout_enabled,
+      stripe_enabled,
       whatsapp
     });
   } catch (error) {

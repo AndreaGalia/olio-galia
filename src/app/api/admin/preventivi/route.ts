@@ -99,6 +99,8 @@ export const GET = withAuth(async (request: NextRequest) => {
     });
 
     // Formatta i risultati
+    const productsCollection = db.collection('products');
+
     const formattedForms: FormSummary[] = await Promise.all(
       forms.map(async (form) => {
         let itemCount = 0;
@@ -107,20 +109,43 @@ export const GET = withAuth(async (request: NextRequest) => {
         // Calcola il numero di prodotti e il totale stimato
         if (form.cart && Array.isArray(form.cart)) {
           itemCount = form.cart.length;
-          
-          // Prova a recuperare i prezzi da Stripe per calcolare il totale stimato
-          try {
-            for (const item of form.cart) {
-              const product = await stripe.products.retrieve(item.id);
-              const prices = await stripe.prices.list({ product: item.id });
-              
-              if (prices.data[0] && prices.data[0].unit_amount) {
-                estimatedTotal += (prices.data[0].unit_amount / 100) * item.quantity;
+
+          // Recupera i prezzi da MongoDB e/o Stripe
+          for (const item of form.cart) {
+            try {
+              // Prima cerca il prodotto in MongoDB per ID locale
+              let mongoProduct = await productsCollection.findOne({ id: item.id });
+
+              // Fallback: se non trovato per ID locale, prova con stripeProductId (per vecchi dati)
+              if (!mongoProduct && item.id.startsWith('prod_')) {
+                mongoProduct = await productsCollection.findOne({ stripeProductId: item.id });
               }
+
+              let productPrice = 0;
+
+              // Se il prodotto ha Stripe IDs, recupera da Stripe
+              if (mongoProduct?.stripeProductId) {
+                try {
+                  const prices = await stripe.prices.list({ product: mongoProduct.stripeProductId });
+                  if (prices.data[0] && prices.data[0].unit_amount) {
+                    productPrice = prices.data[0].unit_amount / 100;
+                  } else {
+                    productPrice = mongoProduct.price || 0;
+                  }
+                } catch (stripeError) {
+                  // Fallback a MongoDB se Stripe fallisce
+                  productPrice = mongoProduct.price || 0;
+                }
+              } else if (mongoProduct) {
+                // Prodotto solo MongoDB (senza Stripe)
+                productPrice = mongoProduct.price || 0;
+              }
+
+              estimatedTotal += productPrice * item.quantity;
+            } catch (error) {
+              console.error('Errore recupero prezzo prodotto:', error);
+              // Continua con gli altri prodotti
             }
-          } catch (error) {
-            
-            estimatedTotal = 0;
           }
         }
 

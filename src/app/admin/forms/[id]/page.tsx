@@ -511,10 +511,10 @@ export default function FormDetailPage() {
                         ) : (
                           <>
                             <p className="font-semibold text-olive">
-                              €{(form.finalPricing?.finalPrices?.find(fp => fp.productId === product.id)?.finalPrice || product.price).toFixed(2)} cad.
+                              €{Number(form.finalPricing?.finalPrices?.find(fp => fp.productId === product.id)?.finalPrice || product.price || 0).toFixed(2)} cad.
                             </p>
                             <p className="text-sm text-nocciola">
-                              Tot: €{((form.finalPricing?.finalPrices?.find(fp => fp.productId === product.id)?.finalPrice || product.price) * product.quantity).toFixed(2)}
+                              Tot: €{(Number(form.finalPricing?.finalPrices?.find(fp => fp.productId === product.id)?.finalPrice || product.price || 0) * product.quantity).toFixed(2)}
                             </p>
                           </>
                         )}

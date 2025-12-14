@@ -8,7 +8,8 @@ export async function GET() {
 
     // Ritorna solo le impostazioni pubbliche necessarie al frontend
     return NextResponse.json({
-      torino_checkout_enabled: settings?.torino_checkout_enabled || false
+      torino_checkout_enabled: settings?.torino_checkout_enabled || false,
+      stripe_enabled: settings?.stripe_enabled !== undefined ? settings.stripe_enabled : true // Default true per compatibilità
     });
   } catch (error) {
     

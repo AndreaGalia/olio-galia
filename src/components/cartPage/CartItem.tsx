@@ -98,7 +98,7 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
             className="w-full h-full object-contain"
           />
         </div>
-        
+
         <div className="flex-1">
           <h3 className="font-serif text-olive text-xl font-medium mb-1">{product.name}</h3>
           <p className="text-nocciola text-sm mb-2">{product.size}</p>

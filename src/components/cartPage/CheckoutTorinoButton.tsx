@@ -10,7 +10,11 @@ import { useProducts } from "@/hooks/useProducts";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { useT } from "@/hooks/useT";
 
-export default function CheckoutTorinoButton() {
+interface CheckoutTorinoButtonProps {
+  minimal?: boolean;
+}
+
+export default function CheckoutTorinoButton({ minimal = false }: CheckoutTorinoButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const { translate } = useT();
@@ -62,10 +66,11 @@ useEffect(() => {
 
   return (
     <>
-      <CheckoutButton 
-        onClick={() => setIsOpen(true)} 
-        totalItems={totalItems} 
-        disabled={totalItems === 0} 
+      <CheckoutButton
+        onClick={() => setIsOpen(true)}
+        totalItems={totalItems}
+        disabled={totalItems === 0}
+        minimal={minimal}
       />
 
       <TorinoCheckoutModal

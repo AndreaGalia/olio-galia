@@ -698,6 +698,48 @@
       }
     }
   },
+  "deliveryZone": {
+    "selector": {
+      "title": "Where are you located?",
+      "subtitle": "Select your area to continue with your order",
+      "torino": {
+        "title": "Turin and province",
+        "description": "Free delivery 24-48 hours"
+      },
+      "italia": {
+        "title": "Italy/Europe",
+        "description": "Free quote within 24h"
+      }
+    },
+    "details": {
+      "backButton": "Change area",
+      "torino": {
+        "badge": "Turin and province",
+        "title": "Free Home Delivery",
+        "description": "Receive your order comfortably at home without any shipping costs. You will receive a quote with payment options via email.",
+        "features": {
+          "freeShipping": "Free shipping",
+          "fastDelivery": "Delivery in 24-48 hours",
+          "quoteByEmail": "Quote via email"
+        }
+      },
+      "italia": {
+        "badge": "Italy/Europe",
+        "title": "Request a Free Quote",
+        "description": "We ship throughout Italy and Europe! Fill out a short form and receive a personalized quote with shipping costs within 24 hours.",
+        "processTitle": "How it works:",
+        "process": {
+          "step1": "Fill out the form with your details",
+          "step2": "Receive quote via email within 24 hours",
+          "step3": "Confirm the order if you're satisfied"
+        }
+      }
+    },
+    "summary": {
+      "title": "Summary",
+      "subtitle": "Select your area"
+    }
+  },
   "orderConfirmation": {
     "hero": {
       "title": "Request sent!",
@@ -708,28 +750,28 @@
       "title": "Next steps",
       "processing": {
         "title": "Request processing",
-        "description": "We are preparing your personalized quote for delivery in the Turin area"
+        "description": "We are preparing your personalized quote with shipping costs for your area"
       },
       "contact": {
-        "title": "Contact within 24 hours",
+        "title": "We'll contact you within 24 hours",
         "description": "You will receive the quote with available payment methods: PayPal, Satispay or Bank transfer"
       },
       "delivery": {
-        "title": "Free delivery",
-        "description": "Once the order is confirmed, we will organize free delivery in the Turin area"
+        "title": "Delivery organization",
+        "description": "Once the order is confirmed, we will organize express courier shipping to your area"
       }
     },
     "whatsapp": {
       "title": "Want to speed up the process?",
       "description": "Contact us directly on WhatsApp with your order number to receive the quote more quickly",
       "button": "Contact on WhatsApp",
-      "message": "Hi! I just sent a quote request for delivery in Turin.\n\nOrder number: {orderId}\n\nI would like to speed up the process to receive the quote and payment method information.\n\nThank you!"
+      "message": "Hi! I just sent a quote request.\n\nOrder number: {orderId}\n\nI would like to speed up the process to receive the quote and payment method information.\n\nThank you!"
     },
     "navigation": {
       "backToShop": "Back to shop",
       "myOrders": "My orders"
     },
-    "footer": "Thank you for choosing Olio Galia for your quality shopping in Turin"
+    "footer": "Thank you for choosing Olio Galia for your quality shopping"
   },
   "feedback": {
     "loading": "Loading...",

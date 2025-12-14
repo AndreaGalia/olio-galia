@@ -13,8 +13,8 @@ export default function OrderFooter() {
       transition={{ delay: 1.2 }}
       className="mt-8 text-center"
     >
-      <p className="text-sm text-gray-500 bg-white/50 rounded-xl p-4 border border-nocciola/20">
-        💚 {t.orderConfirmation.footer}
+      <p className="text-sm text-nocciola bg-beige/50 p-4 border border-olive/10">
+        {t.orderConfirmation.footer}
       </p>
     </motion.div>
   );

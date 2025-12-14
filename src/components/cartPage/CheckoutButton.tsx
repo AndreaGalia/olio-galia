@@ -6,15 +6,30 @@ interface CheckoutButtonProps {
   onClick: () => void;
   totalItems: number;
   disabled?: boolean;
+  minimal?: boolean;
 }
 
-export default function CheckoutButton({ onClick, totalItems, disabled = false }: CheckoutButtonProps) {
+export default function CheckoutButton({ onClick, totalItems, disabled = false, minimal = false }: CheckoutButtonProps) {
   const { t, translate } = useT();
-  
-  const itemLabel = totalItems === 1 
-    ? t.torinoCheckout.button.itemSingle 
+
+  const itemLabel = totalItems === 1
+    ? t.torinoCheckout.button.itemSingle
     : t.torinoCheckout.button.itemPlural;
 
+  if (minimal) {
+    // Layout minimale su unica riga per mobile quando Stripe è disabilitato
+    return (
+      <button
+        onClick={onClick}
+        disabled={disabled}
+        className="w-full bg-olive text-beige font-medium py-3 px-4 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer border border-olive/20 text-sm uppercase tracking-wider"
+      >
+        {t.torinoCheckout.button.subtitle}
+      </button>
+    );
+  }
+
+  // Layout originale con Stripe attivo
   return (
     <div className="mt-4">
       <div className="bg-olive/5 border border-olive/20 p-4">
@@ -44,7 +59,7 @@ export default function CheckoutButton({ onClick, totalItems, disabled = false }
           )}
           <span className="text-xs opacity-80 flex-shrink-0">→</span>
         </button>
-        
+
         {totalItems === 0 && (
           <p className="text-xs text-gray-500 mt-2 text-center">
             {t.torinoCheckout.button.emptyCartMessage}

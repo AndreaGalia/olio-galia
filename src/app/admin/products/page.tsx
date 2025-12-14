@@ -84,16 +84,24 @@ export default function AdminProductsPage() {
     </>
   );
 
-  const handleUpdateStock = async (productId: string, newQuantity: number) => {
+  const handleUpdateStock = async (product: ProductWithStripe, newQuantity: number) => {
     try {
+      const hasStripe = !!(product.stripeProductId && product.stripePriceId);
+
       const response = await fetch('/api/admin/products/update-stock', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productId, quantity: newQuantity })
+        body: JSON.stringify({
+          productId: product.stripeProductId,
+          mongoId: product.id,
+          quantity: newQuantity,
+          hasStripe: hasStripe
+        })
       });
 
       if (!response.ok) {
-        throw new Error('Errore nell\'aggiornamento dello stock');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Errore nell\'aggiornamento dello stock');
       }
 
       // Ricarica i prodotti
@@ -302,7 +310,7 @@ export default function AdminProductsPage() {
 
 interface ProductRowProps {
   product: ProductWithStripe;
-  onUpdateStock: (productId: string, newQuantity: number) => void;
+  onUpdateStock: (product: ProductWithStripe, newQuantity: number) => void;
   onToggleActive: (productId: string, currentActive: boolean) => void;
   onEdit: () => void;
   onDelete: (productId: string, productName: string) => void;
@@ -310,10 +318,11 @@ interface ProductRowProps {
 
 function ProductTableRow({ product, onUpdateStock, onToggleActive, onEdit, onDelete }: ProductRowProps) {
   const [isEditingStock, setIsEditingStock] = useState(false);
-  const [stockValue, setStockValue] = useState(product.stripeData?.available_quantity || 0);
+  const currentStock = product.stripeData?.available_quantity ?? product.stockQuantity ?? 0;
+  const [stockValue, setStockValue] = useState(currentStock);
 
   const handleStockSubmit = () => {
-    onUpdateStock(product.stripeProductId, stockValue);
+    onUpdateStock(product, stockValue);
     setIsEditingStock(false);
   };
 
@@ -339,7 +348,7 @@ function ProductTableRow({ product, onUpdateStock, onToggleActive, onEdit, onDel
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="text-sm font-bold text-olive">
-          €{product.stripeData?.price?.toFixed(2) || 'N/A'}
+          €{Number(product.stripeData?.price ?? product.price ?? 0).toFixed(2)}
         </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
@@ -361,7 +370,7 @@ function ProductTableRow({ product, onUpdateStock, onToggleActive, onEdit, onDel
             <button
               onClick={() => {
                 setIsEditingStock(false);
-                setStockValue(product.stripeData?.available_quantity || 0);
+                setStockValue(currentStock);
               }}
               className="text-red-600 hover:text-red-800 cursor-pointer"
             >
@@ -374,10 +383,10 @@ function ProductTableRow({ product, onUpdateStock, onToggleActive, onEdit, onDel
             onClick={() => setIsEditingStock(true)}
           >
             <span className={`text-sm font-medium ${
-              (product.stripeData?.available_quantity || 0) > 10 ? 'text-green-600' :
-              (product.stripeData?.available_quantity || 0) > 0 ? 'text-yellow-600' : 'text-red-600'
+              currentStock > 10 ? 'text-green-600' :
+              currentStock > 0 ? 'text-yellow-600' : 'text-red-600'
             }`}>
-              {product.stripeData?.available_quantity || 0}
+              {currentStock}
             </span>
             <svg className="w-3 h-3 text-olive/40 group-hover:text-olive" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -387,7 +396,7 @@ function ProductTableRow({ product, onUpdateStock, onToggleActive, onEdit, onDel
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
         <button
-          onClick={() => onToggleActive(product.stripeProductId, product.metadata.isActive)}
+          onClick={() => onToggleActive(product.id, product.metadata.isActive)}
           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
             product.metadata.isActive
               ? 'bg-green-100 text-green-800 hover:bg-green-200'
@@ -410,10 +419,11 @@ function ProductTableRow({ product, onUpdateStock, onToggleActive, onEdit, onDel
 
 function ProductCard({ product, onUpdateStock, onToggleActive, onEdit, onDelete }: ProductRowProps) {
   const [isEditingStock, setIsEditingStock] = useState(false);
-  const [stockValue, setStockValue] = useState(product.stripeData?.available_quantity || 0);
+  const currentStock = product.stripeData?.available_quantity ?? product.stockQuantity ?? 0;
+  const [stockValue, setStockValue] = useState(currentStock);
 
   const handleStockSubmit = () => {
-    onUpdateStock(product.stripeProductId, stockValue);
+    onUpdateStock(product, stockValue);
     setIsEditingStock(false);
   };
 
@@ -434,7 +444,7 @@ function ProductCard({ product, onUpdateStock, onToggleActive, onEdit, onDelete 
               <p className="text-xs text-nocciola">{product.category} • {product.size}</p>
             </div>
             <button
-              onClick={() => onToggleActive(product.stripeProductId, product.metadata.isActive)}
+              onClick={() => onToggleActive(product.id, product.metadata.isActive)}
               className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                 product.metadata.isActive
                   ? 'bg-green-100 text-green-800'
@@ -447,7 +457,7 @@ function ProductCard({ product, onUpdateStock, onToggleActive, onEdit, onDelete 
 
           <div className="flex justify-between items-center mb-3">
             <div className="text-sm font-bold text-olive">
-              €{product.stripeData?.price?.toFixed(2) || 'N/A'}
+              €{Number(product.stripeData?.price ?? product.price ?? 0).toFixed(2)}
             </div>
             <div className="flex items-center space-x-2">
               <span className="text-xs text-nocciola">Stock:</span>
@@ -469,7 +479,7 @@ function ProductCard({ product, onUpdateStock, onToggleActive, onEdit, onDelete 
                   <button
                     onClick={() => {
                       setIsEditingStock(false);
-                      setStockValue(product.stripeData?.available_quantity || 0);
+                      setStockValue(currentStock);
                     }}
                     className="text-red-600 hover:text-red-800 cursor-pointer"
                   >
@@ -479,12 +489,12 @@ function ProductCard({ product, onUpdateStock, onToggleActive, onEdit, onDelete 
               ) : (
                 <span
                   className={`text-sm font-medium cursor-pointer ${
-                    (product.stripeData?.available_quantity || 0) > 10 ? 'text-green-600' :
-                    (product.stripeData?.available_quantity || 0) > 0 ? 'text-yellow-600' : 'text-red-600'
+                    currentStock > 10 ? 'text-green-600' :
+                    currentStock > 0 ? 'text-yellow-600' : 'text-red-600'
                   }`}
                   onClick={() => setIsEditingStock(true)}
                 >
-                  {product.stripeData?.available_quantity || 0}
+                  {currentStock}
                 </span>
               )}
             </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useCart } from '@/contexts/CartContext';
 import { useProducts } from '@/hooks/useProducts';
 import { useT } from '@/hooks/useT';
@@ -21,6 +21,10 @@ import CartItem from '@/components/cartPage/CartItem';
 import OrderSummary from '@/components/cartPage/OrderSummary';
 import { Product } from '@/types/products';
 import CheckoutTorinoButton from '@/components/cartPage/CheckoutTorinoButton';
+import PreventivoCheckoutButton from '@/components/cartPage/PreventivoCheckoutButton';
+import DeliveryZoneSelector from '@/components/cartPage/DeliveryZoneSelector';
+import DeliveryZoneDetails from '@/components/cartPage/DeliveryZoneDetails';
+import DeliveryZoneSummary from '@/components/cartPage/DeliveryZoneSummary';
 
 export default function CartPage() {
   const { cart, getTotalItems } = useCart();
@@ -28,13 +32,16 @@ export default function CartPage() {
   const { settings } = useSettings();
   const { t } = useT();
 
+  // State per la scelta della zona di consegna
+  const [deliveryChoice, setDeliveryChoice] = useState<'torino' | 'italia' | null>(null);
+
   // Scroll automatico in alto quando il carrello diventa vuoto
   useEffect(() => {
     if (cart.length === 0) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [cart.length]);
-  
+
   // Hook personalizzati
   const totalItems = getTotalItems();
   const { total, savings } = useCartCalculations(cart, products);
@@ -49,6 +56,24 @@ export default function CartPage() {
     handleCloseError,
     handleRetryCheckout
   } = useCheckoutHandler();
+
+  // Verifica se il checkout Stripe è disponibile per i prodotti nel carrello
+  const canUseStripeCheckout = () => {
+    // Se Stripe è disabilitato globalmente, non può essere usato
+    if (!settings.stripe_enabled) return false;
+
+    // Verifica che tutti i prodotti nel carrello abbiano gli ID Stripe
+    const cartProducts = cart.map(cartItem =>
+      products.find((p: Product) => p.id === cartItem.id)
+    ).filter(Boolean);
+
+    // Se almeno un prodotto non ha stripeProductId o stripePriceId, Stripe non può essere usato
+    return cartProducts.every(product =>
+      product?.stripeProductId && product?.stripePriceId
+    );
+  };
+
+  const stripeCheckoutAvailable = canUseStripeCheckout();
 
   // Stati di caricamento, errore e carrello vuoto
   if (loading) return <LoadingSpinner message={t.cartPage.loading} />;
@@ -79,9 +104,9 @@ export default function CartPage() {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           {/* Sezione sinistra: prodotti + bottone Torino */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 min-w-0">
             {/* Lista prodotti */}
             <div className="space-y-4 mb-6">
               {cart.map((cartItem) => {
@@ -90,7 +115,7 @@ export default function CartPage() {
 
                 return (
                   <CartItem
-                    key={cartItem.id}
+                    key={product.stripeProductId || product.id}
                     cartItem={cartItem}
                     product={product}
                   />
@@ -98,24 +123,56 @@ export default function CartPage() {
               })}
             </div>
 
-            {/* Bottone checkout Torino sotto i prodotti - mostra solo se abilitato dall'admin */}
-            {settings.torino_checkout_enabled && <CheckoutTorinoButton />}
+            {/* Bottone checkout Torino sotto i prodotti - mostra solo se Stripe è disponibile e checkout Torino abilitato */}
+            {settings.torino_checkout_enabled && stripeCheckoutAvailable && <CheckoutTorinoButton />}
           </div>
 
           {/* Riepilogo ordine */}
-          <div className="lg:col-span-1">
-            <OrderSummary
-              total={total}
-              savings={savings}
-              totalItems={totalItems}
-              itemLabel={itemLabel}
-              onCheckout={() => handleCheckout(cart)}
-              needsInvoice={needsInvoice}
-              setNeedsInvoice={setNeedsInvoice}
-              checkoutLoading={checkoutLoading}
-            />
+          <div className="lg:col-span-1 min-w-0">
+            {!stripeCheckoutAvailable ? (
+              // Visualizzazione speciale quando Stripe non è disponibile
+              <DeliveryZoneSummary
+                total={total}
+                savings={savings}
+                totalItems={totalItems}
+                itemLabel={itemLabel}
+              />
+            ) : (
+              // Visualizzazione normale con Stripe
+              <OrderSummary
+                total={total}
+                savings={savings}
+                totalItems={totalItems}
+                itemLabel={itemLabel}
+                onCheckout={() => handleCheckout(cart)}
+                needsInvoice={needsInvoice}
+                setNeedsInvoice={setNeedsInvoice}
+                checkoutLoading={checkoutLoading}
+                stripeCheckoutDisabled={false}
+              />
+            )}
           </div>
         </div>
+
+        {/* Sezione Scelta Consegna - A tutta larghezza sotto il riepilogo */}
+        {!stripeCheckoutAvailable && (
+          <div className="mt-8">
+            <div className="bg-beige/30 border border-olive/10 p-6 lg:p-8">
+              {!deliveryChoice ? (
+                // Schermata iniziale: scelta zona
+                <DeliveryZoneSelector
+                  onSelectZone={setDeliveryChoice}
+                />
+              ) : (
+                // Schermata dopo la scelta
+                <DeliveryZoneDetails
+                  zone={deliveryChoice}
+                  onBack={() => setDeliveryChoice(null)}
+                />
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

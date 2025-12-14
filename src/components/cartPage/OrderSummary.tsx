@@ -21,6 +21,7 @@ interface OrderSummaryProps {
   needsInvoice: boolean;
   setNeedsInvoice: (value: boolean) => void;
   checkoutLoading: boolean;
+  stripeCheckoutDisabled?: boolean;
 }
 
 export default function OrderSummary({
@@ -31,7 +32,8 @@ export default function OrderSummary({
   onCheckout,
   needsInvoice,
   setNeedsInvoice,
-  checkoutLoading
+  checkoutLoading,
+  stripeCheckoutDisabled = false
 }: OrderSummaryProps) {
   const { clearCart, cart } = useCart();
   const { t, translate } = useT();
@@ -124,25 +126,28 @@ export default function OrderSummary({
       </div>
 
       <div className="space-y-3">
-        <button
-          onClick={onCheckout}
-          disabled={checkoutLoading || cart.length === 0}
-          className="w-full cursor-pointer bg-olive text-beige py-4 font-medium transition-all duration-300 text-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 border border-olive/20 uppercase tracking-wider"
-        >
-          {checkoutLoading ? (
-            <>
-              <div className="w-5 h-5 border-2 border-beige/30 border-t-beige animate-spin"></div>
-              {t.cartPage.summary.processing}
-            </>
-          ) : (
-            <>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-              </svg>
-              {t.cartPage.summary.checkout}
-            </>
-          )}
-        </button>
+        {/* Mostra bottone Stripe solo se disponibile */}
+        {!stripeCheckoutDisabled && (
+          <button
+            onClick={onCheckout}
+            disabled={checkoutLoading || cart.length === 0}
+            className="w-full cursor-pointer bg-olive text-beige py-4 font-medium transition-all duration-300 text-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 border border-olive/20 uppercase tracking-wider"
+          >
+            {checkoutLoading ? (
+              <>
+                <div className="w-5 h-5 border-2 border-beige/30 border-t-beige animate-spin"></div>
+                {t.cartPage.summary.processing}
+              </>
+            ) : (
+              <>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                </svg>
+                {t.cartPage.summary.checkout}
+              </>
+            )}
+          </button>
+        )}
 
         <Link
           href="/products"

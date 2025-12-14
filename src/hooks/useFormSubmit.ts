@@ -38,7 +38,8 @@ export function useFormSubmit(): UseFormSubmitReturn {
         body: JSON.stringify({
           ...formData,
           timestamp: new Date().toISOString(),
-          type: 'torino_delivery',
+          // Il type viene passato da formData, default a torino_delivery se non specificato
+          type: formData.type || 'torino_delivery',
         }),
       });
 

@@ -29,24 +29,73 @@ export const GET = withAuth(async (request: NextRequest, { params }: { params: P
       );
     }
 
-    // Recupera informazioni sui prodotti da Stripe
+    // Recupera informazioni sui prodotti da MongoDB e/o Stripe
     const productsInfo = [];
+    const productsCollection = db.collection('products');
+
     if (form.cart && Array.isArray(form.cart)) {
       for (const item of form.cart) {
         try {
-          const product = await stripe.products.retrieve(item.id);
-          const prices = await stripe.prices.list({ product: item.id });
-          
-          productsInfo.push({
-            id: item.id,
-            name: product.name,
-            description: product.description,
-            image: product.images?.[0] || null,
-            quantity: item.quantity,
-            price: prices.data[0] ? (prices.data[0].unit_amount || 0) / 100 : 0,
-            currency: prices.data[0]?.currency || 'eur',
-          });
+          // Prima cerca il prodotto in MongoDB per ID locale
+          let mongoProduct = await productsCollection.findOne({ id: item.id });
+
+          // Fallback: se non trovato per ID locale, prova con stripeProductId (per vecchi dati)
+          if (!mongoProduct && item.id.startsWith('prod_')) {
+            mongoProduct = await productsCollection.findOne({ stripeProductId: item.id });
+          }
+
+          // Se il prodotto ha Stripe IDs, recupera anche da Stripe
+          if (mongoProduct?.stripeProductId) {
+            try {
+              const stripeProduct = await stripe.products.retrieve(mongoProduct.stripeProductId);
+              const prices = await stripe.prices.list({ product: mongoProduct.stripeProductId });
+
+              productsInfo.push({
+                id: item.id,
+                name: stripeProduct.name,
+                description: stripeProduct.description,
+                image: stripeProduct.images?.[0] || mongoProduct.images?.[0] || null,
+                quantity: item.quantity,
+                price: prices.data[0] ? (prices.data[0].unit_amount || 0) / 100 : mongoProduct.price || 0,
+                currency: prices.data[0]?.currency || 'eur',
+              });
+            } catch (stripeError) {
+              // Fallback a dati MongoDB se Stripe fallisce
+              productsInfo.push({
+                id: item.id,
+                name: mongoProduct.translations?.it?.name || mongoProduct.name || 'Prodotto',
+                description: mongoProduct.translations?.it?.description || mongoProduct.description || null,
+                image: mongoProduct.images?.[0] || null,
+                quantity: item.quantity,
+                price: mongoProduct.price || 0,
+                currency: 'eur',
+              });
+            }
+          } else if (mongoProduct) {
+            // Prodotto solo MongoDB (senza Stripe)
+            productsInfo.push({
+              id: item.id,
+              name: mongoProduct.translations?.it?.name || mongoProduct.name || 'Prodotto',
+              description: mongoProduct.translations?.it?.description || mongoProduct.description || null,
+              image: mongoProduct.images?.[0] || null,
+              quantity: item.quantity,
+              price: mongoProduct.price || 0,
+              currency: 'eur',
+            });
+          } else {
+            // Prodotto non trovato né in MongoDB né in Stripe
+            productsInfo.push({
+              id: item.id,
+              name: `Prodotto ${item.id}`,
+              description: null,
+              image: null,
+              quantity: item.quantity,
+              price: 0,
+              currency: 'eur',
+            });
+          }
         } catch (error) {
+          console.error('Errore recupero prodotto:', error);
           productsInfo.push({
             id: item.id,
             name: `Prodotto ${item.id}`,
@@ -210,22 +259,64 @@ export const PATCH = withAuth(async (request: NextRequest, { params }: { params:
 
       // Invia notifica Telegram per preventivo pagato
       try {
-        // Recupera informazioni sui prodotti da Stripe per la notifica
+        // Recupera informazioni sui prodotti da MongoDB e/o Stripe per la notifica
         const productsInfo = [];
+        const productsCollection = db.collection('products');
+
         if (form.cart && Array.isArray(form.cart)) {
           for (const item of form.cart) {
             try {
-              const product = await stripe.products.retrieve(item.id);
-              const prices = await stripe.prices.list({ product: item.id });
+              // Prima cerca il prodotto in MongoDB per ID locale
+              let mongoProduct = await productsCollection.findOne({ id: item.id });
 
-              productsInfo.push({
-                id: item.id,
-                name: product.name,
-                description: product.description,
-                quantity: item.quantity,
-                price: prices.data[0] ? (prices.data[0].unit_amount || 0) / 100 : 0,
-              });
+              // Fallback: se non trovato per ID locale, prova con stripeProductId (per vecchi dati)
+              if (!mongoProduct && item.id.startsWith('prod_')) {
+                mongoProduct = await productsCollection.findOne({ stripeProductId: item.id });
+              }
+
+              // Se il prodotto ha Stripe IDs, recupera anche da Stripe
+              if (mongoProduct?.stripeProductId) {
+                try {
+                  const stripeProduct = await stripe.products.retrieve(mongoProduct.stripeProductId);
+                  const prices = await stripe.prices.list({ product: mongoProduct.stripeProductId });
+
+                  productsInfo.push({
+                    id: item.id,
+                    name: stripeProduct.name,
+                    description: stripeProduct.description,
+                    quantity: item.quantity,
+                    price: prices.data[0] ? (prices.data[0].unit_amount || 0) / 100 : mongoProduct.price || 0,
+                  });
+                } catch (stripeError) {
+                  // Fallback a dati MongoDB se Stripe fallisce
+                  productsInfo.push({
+                    id: item.id,
+                    name: mongoProduct.translations?.it?.name || mongoProduct.name || 'Prodotto',
+                    description: mongoProduct.translations?.it?.description || mongoProduct.description || null,
+                    quantity: item.quantity,
+                    price: mongoProduct.price || 0,
+                  });
+                }
+              } else if (mongoProduct) {
+                // Prodotto solo MongoDB (senza Stripe)
+                productsInfo.push({
+                  id: item.id,
+                  name: mongoProduct.translations?.it?.name || mongoProduct.name || 'Prodotto',
+                  description: mongoProduct.translations?.it?.description || mongoProduct.description || null,
+                  quantity: item.quantity,
+                  price: mongoProduct.price || 0,
+                });
+              } else {
+                // Prodotto non trovato
+                productsInfo.push({
+                  id: item.id,
+                  name: `Prodotto ${item.id}`,
+                  quantity: item.quantity,
+                  price: 0,
+                });
+              }
             } catch (error) {
+              console.error('Errore recupero prodotto per notifica:', error);
               productsInfo.push({
                 id: item.id,
                 name: `Prodotto ${item.id}`,

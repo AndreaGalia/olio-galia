@@ -156,17 +156,23 @@ export default function EditProductPage() {
     if (!product) return;
 
     try {
+      // Determina se il prodotto ha Stripe IDs
+      const hasStripe = !!(product.stripeProductId && product.stripePriceId);
+
       const response = await fetch('/api/admin/products/update-stock', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          productId: product.stripeProductId,
-          quantity: newQuantity
+          productId: product.stripeProductId, // Può essere undefined per prodotti non-Stripe
+          mongoId: product.id, // ID MongoDB
+          quantity: newQuantity,
+          hasStripe: hasStripe
         })
       });
 
       if (!response.ok) {
-        throw new Error('Errore nell\'aggiornamento dello stock');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Errore nell\'aggiornamento dello stock');
       }
 
       // Aggiorna il prodotto locale
@@ -192,6 +198,14 @@ export default function EditProductPage() {
     setError(null);
 
     try {
+      // Validazione ID Stripe se presenti
+      if (product.stripeProductId && !product.stripeProductId.startsWith('prod_')) {
+        throw new Error('Stripe Product ID deve iniziare con "prod_"');
+      }
+      if (product.stripePriceId && !product.stripePriceId.startsWith('price_')) {
+        throw new Error('Stripe Price ID deve iniziare con "price_"');
+      }
+
       const response = await fetch(`/api/admin/products/${productId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -219,7 +233,10 @@ export default function EditProductPage() {
               tags: product.translations.en.tags.filter(t => t.trim())
             }
           },
-          slug: product.slug
+          slug: product.slug,
+          // Includi i campi Stripe se presenti
+          stripeProductId: product.stripeProductId || undefined,
+          stripePriceId: product.stripePriceId || undefined
         })
       });
 
@@ -372,6 +389,69 @@ export default function EditProductPage() {
                   onChange={(e) => setProduct(prev => prev ? { ...prev, color: e.target.value } : null)}
                   className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
                 />
+              </div>
+            </div>
+          </section>
+
+          {/* Configurazione Stripe */}
+          <section>
+            <h3 className="text-lg font-semibold text-olive mb-4">Configurazione Stripe</h3>
+
+            {/* Info corrente */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+              <h4 className="font-medium text-gray-900 mb-2">Stato Attuale:</h4>
+              {product.stripeProductId && product.stripePriceId ? (
+                <div className="space-y-1 text-sm">
+                  <p className="text-green-700">✓ Prodotto collegato a Stripe</p>
+                  <p className="text-gray-600 font-mono">Product ID: {product.stripeProductId}</p>
+                  <p className="text-gray-600 font-mono">Price ID: {product.stripePriceId}</p>
+                </div>
+              ) : (
+                <p className="text-yellow-700">⚠️ Prodotto NON collegato a Stripe (vendibile solo con Checkout Torino)</p>
+              )}
+            </div>
+
+            {/* Modifica configurazione */}
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Stripe Product ID
+                  </label>
+                  <input
+                    type="text"
+                    value={product.stripeProductId || ''}
+                    onChange={(e) => setProduct(prev => prev ? { ...prev, stripeProductId: e.target.value || undefined } : null)}
+                    className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive font-mono text-sm"
+                    placeholder="prod_xxxxxxxxxxxxx"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Inserisci l'ID del prodotto dalla dashboard Stripe (inizia con "prod_")
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Stripe Price ID
+                  </label>
+                  <input
+                    type="text"
+                    value={product.stripePriceId || ''}
+                    onChange={(e) => setProduct(prev => prev ? { ...prev, stripePriceId: e.target.value || undefined } : null)}
+                    className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive font-mono text-sm"
+                    placeholder="price_xxxxxxxxxxxxx"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Inserisci l'ID del prezzo dalla dashboard Stripe (inizia con "price_")
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                <p className="text-sm text-gray-700">
+                  <strong>💡 Suggerimento:</strong> Per collegare questo prodotto a Stripe, crea prima il prodotto nella dashboard Stripe,
+                  poi copia qui gli ID generati. Lascia vuoti i campi per mantenere il prodotto solo su MongoDB.
+                </p>
               </div>
             </div>
           </section>
