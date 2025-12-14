@@ -105,10 +105,11 @@ export class ProductService {
   // Helper per localizzazione
   private static localizeProduct(product: ProductDocument, locale: SupportedLocale): Product {
     const translation = product.translations[locale] || product.translations['it'];
-    
+
     return {
       ...product,
       ...translation,
+      images: product.images || [], // ✅ Preserva sempre le immagini dal documento prodotto
       slug: product.slug[locale] || product.slug['it'],
       _id: undefined, // Rimuovi _id dalla response
       translations: undefined,
