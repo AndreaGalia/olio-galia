@@ -57,3 +57,19 @@ export interface ReviewRequestData {
   orderNumber: string;
   orderType?: 'order' | 'quote';
 }
+
+export interface QuoteEmailData {
+  customerName: string;
+  customerEmail: string;
+  orderId: string;
+  items: Array<{
+    name: string;
+    quantity: number;
+    unitPrice: number;
+    totalPrice: number;
+  }>;
+  subtotal: number;
+  shipping: number;
+  total: number;
+  customerPhone: string;
+}

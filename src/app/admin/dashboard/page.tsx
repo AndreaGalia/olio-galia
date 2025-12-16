@@ -352,6 +352,33 @@ export default function AdminDashboardPage() {
           </button>
 
           <button
+            onClick={() => router.push('/admin/email-templates')}
+            className="p-4 sm:p-5 lg:p-6 border-2 border-olive/20 rounded-xl hover:border-olive hover:bg-olive/5 transition-all duration-300 group cursor-pointer text-left"
+          >
+            <div className="flex items-center mb-3 sm:mb-4">
+              <svg
+                className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-olive group-hover:scale-110 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-base sm:text-lg font-semibold text-olive mb-1 sm:mb-2">
+              Gestisci Template Email
+            </h3>
+            <p className="text-nocciola text-xs sm:text-sm">
+              Configura i template delle email
+            </p>
+          </button>
+
+          <button
             onClick={() => router.push('/admin/feedbacks')}
             className="p-4 sm:p-5 lg:p-6 border-2 border-olive/20 rounded-xl hover:border-olive hover:bg-olive/5 transition-all duration-300 group cursor-pointer text-left"
           >

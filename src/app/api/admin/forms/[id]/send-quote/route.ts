@@ -2,18 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { withAuth } from '@/lib/auth/middleware';
 import { getDatabase } from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
-import { Resend } from 'resend';
-import { createQuoteEmailHTML } from '@/lib/email/quote-template';
+import { EmailService } from '@/lib/email/resend';
 import { WahaService } from '@/services/wahaService';
 import { WhatsAppTemplates } from '@/lib/whatsapp/templates';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const POST = withAuth(async (request: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   try {
     // Verifica che la API key sia configurata
     if (!process.env.RESEND_API_KEY) {
-      
       return NextResponse.json(
         { error: 'Configurazione email mancante' },
         { status: 500 }
@@ -117,27 +113,11 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
       customerPhone: form.phone
     };
 
-    
+    // Invia l'email usando EmailService (usa template dal DB con fallback)
+    const emailSent = await EmailService.sendQuoteEmail(quoteData);
 
-    // Genera il contenuto HTML dell'email
-    const emailHTML = createQuoteEmailHTML(quoteData);
-
-    // Invia l'email
-
-
-    const emailResult = await resend.emails.send({
-      from: process.env.FROM_EMAIL || 'Olio Galia <onboarding@resend.dev>',
-      to: [form.email],
-      // bcc: ['admin@olio-galia.it'], // Rimuovo BCC per ora
-      subject: `Il tuo Preventivo #${form.orderId} - Olio Galia`,
-      html: emailHTML,
-    });
-
-
-
-    if (!emailResult.data?.id) {
-
-      throw new Error(`Errore nell'invio dell'email: ${JSON.stringify(emailResult.error || emailResult)}`);
+    if (!emailSent) {
+      throw new Error('Errore nell\'invio dell\'email del preventivo');
     }
 
     // Invia notifica WhatsApp preventivo
@@ -175,7 +155,6 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
         $set: {
           quoteSent: true,
           quoteSentAt: new Date(),
-          emailId: emailResult.data.id,
           updatedAt: new Date()
         }
       }
@@ -184,7 +163,6 @@ export const POST = withAuth(async (request: NextRequest, { params }: { params: 
     return NextResponse.json({
       success: true,
       message: 'Preventivo inviato con successo',
-      emailId: emailResult.data.id,
       whatsappSent,
       whatsappError,
     });
