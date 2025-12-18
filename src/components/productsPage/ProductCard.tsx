@@ -55,13 +55,21 @@ function ProductImage({ product, isOutOfStock }: ProductSubComponentProps) {
           src={product.images[0]}
           alt={product.name}
           fill
-          className={`object-cover ${isOutOfStock ? 'grayscale opacity-50' : ''}`}
+          className={`object-contain ${isOutOfStock ? 'grayscale opacity-50' : ''}`}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
 
+        {/* Overlay gradiente per effetto depth - Filtro leggero */}
+        {!isOutOfStock && (
+          <>
+            <div className="absolute inset-0 bg-gradient-to-b from-olive/20 via-olive/10 to-olive/20 pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(85,107,47,0.2)_100%)] pointer-events-none" />
+          </>
+        )}
+
         {/* Sconto badge */}
         {!isOutOfStock && product.originalPrice && product.originalPrice !== 'null' && (
-          <div className="absolute top-3 left-3 bg-olive text-beige px-3 py-1 text-xs font-bold tracking-wider">
+          <div className="absolute top-3 left-3 bg-olive text-beige px-3 py-1 text-xs font-bold tracking-wider z-10">
             {t.productsPage.product.discount}
           </div>
         )}

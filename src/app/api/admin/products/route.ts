@@ -74,7 +74,8 @@ export async function POST(request: NextRequest) {
       slug,
       isStripeProduct,
       stripeProductId,
-      stripePriceId
+      stripePriceId,
+      featured
     } = data;
 
     // Validazione dei dati richiesti
@@ -149,7 +150,8 @@ export async function POST(request: NextRequest) {
       metadata: {
         createdAt: new Date(),
         updatedAt: new Date(),
-        isActive: true
+        isActive: true,
+        featured: featured || false
       }
     };
 

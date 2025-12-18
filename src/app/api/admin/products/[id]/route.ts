@@ -72,7 +72,8 @@ export async function PUT(
       translations,
       slug,
       stripeProductId: newStripeProductId,
-      stripePriceId: newStripePriceId
+      stripePriceId: newStripePriceId,
+      metadata
     } = data;
 
     // Ottieni prodotto esistente da MongoDB
@@ -194,7 +195,8 @@ export async function PUT(
               nutritionalInfo: nutritionalInfo || {},
               translations,
               slug,
-              'metadata.updatedAt': new Date()
+              'metadata.updatedAt': new Date(),
+              'metadata.featured': metadata?.featured || false
             }
           }
         );
@@ -217,7 +219,8 @@ export async function PUT(
               nutritionalInfo: nutritionalInfo || {},
               translations,
               slug,
-              'metadata.updatedAt': new Date()
+              'metadata.updatedAt': new Date(),
+              'metadata.featured': metadata?.featured || false
             }
           }
         );
@@ -241,7 +244,8 @@ export async function PUT(
             nutritionalInfo: nutritionalInfo || {},
             translations,
             slug,
-            'metadata.updatedAt': new Date()
+            'metadata.updatedAt': new Date(),
+            'metadata.featured': metadata?.featured || false
           }
         }
       );
@@ -264,7 +268,8 @@ export async function PUT(
             nutritionalInfo: nutritionalInfo || {},
             translations,
             slug,
-            'metadata.updatedAt': new Date()
+            'metadata.updatedAt': new Date(),
+            'metadata.featured': metadata?.featured || false
           }
         }
       );

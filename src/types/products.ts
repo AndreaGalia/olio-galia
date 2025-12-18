@@ -50,12 +50,19 @@ export interface ProductDocument extends BaseProduct {
     createdAt: Date;
     updatedAt: Date;
     isActive: boolean;
+    featured: boolean; // Mostra in homepage
   };
 }
 
 // Prodotto come restituito dalle API (localizzato)
 export interface Product extends BaseProduct, ProductTranslations {
   slug: string; // Slug localizzato per la lingua corrente
+  metadata?: {
+    createdAt?: Date;
+    updatedAt?: Date;
+    isActive?: boolean;
+    featured?: boolean;
+  };
 }
 
 export interface CategoryTranslations {

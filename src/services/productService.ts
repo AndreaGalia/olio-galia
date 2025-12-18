@@ -113,7 +113,9 @@ export class ProductService {
       slug: product.slug[locale] || product.slug['it'],
       _id: undefined, // Rimuovi _id dalla response
       translations: undefined,
-      metadata: undefined
+      metadata: {
+        featured: product.metadata?.featured || false
+      }
     } as Product;
   }
   

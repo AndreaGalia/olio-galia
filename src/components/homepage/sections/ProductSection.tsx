@@ -28,6 +28,9 @@ export default function ProductsSection() {
     return <ErrorMessage error={error} onRetry={() => window.location.reload()} />;
   }
 
+  // Filtra solo prodotti in evidenza (featured) e limita a 3
+  const featuredProducts = products.filter(p => p.metadata?.featured === true).slice(0, 3);
+
   return (
     <>
       <section className="relative bg-homepage-bg py-20 sm:py-24 lg:py-32 overflow-hidden">
@@ -37,7 +40,7 @@ export default function ProductsSection() {
           <ProductsHeader />
 
           <ProductsGrid
-            products={products}
+            products={featuredProducts}
             onAddToCart={handleAddToCart}
           />
         </div>

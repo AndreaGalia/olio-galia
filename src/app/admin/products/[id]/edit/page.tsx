@@ -234,6 +234,7 @@ export default function EditProductPage() {
             }
           },
           slug: product.slug,
+          metadata: product.metadata,
           // Includi i campi Stripe se presenti
           stripeProductId: product.stripeProductId || undefined,
           stripePriceId: product.stripePriceId || undefined
@@ -389,6 +390,36 @@ export default function EditProductPage() {
                   onChange={(e) => setProduct(prev => prev ? { ...prev, color: e.target.value } : null)}
                   className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
                 />
+              </div>
+            </div>
+          </section>
+
+          {/* Visibilità Homepage */}
+          <section>
+            <h3 className="text-lg font-semibold text-olive mb-4">Visibilità Homepage</h3>
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <div className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  id="featured"
+                  checked={product.metadata?.featured || false}
+                  onChange={(e) => setProduct(prev => prev ? {
+                    ...prev,
+                    metadata: {
+                      ...prev.metadata,
+                      featured: e.target.checked
+                    }
+                  } : null)}
+                  className="mt-1 h-4 w-4 text-olive focus:ring-olive border-olive/30 rounded"
+                />
+                <div className="flex-1">
+                  <label htmlFor="featured" className="font-medium text-gray-900 cursor-pointer">
+                    ⭐ Mostra in Homepage
+                  </label>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Seleziona questa opzione per mostrare il prodotto nella homepage (max 3 prodotti in evidenza).
+                  </p>
+                </div>
               </div>
             </div>
           </section>

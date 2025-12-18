@@ -338,7 +338,14 @@ function ProductTableRow({ product, onUpdateStock, onToggleActive, onEdit, onDel
             />
           )}
           <div>
-            <div className="text-sm font-medium text-olive">{product.translations.it.name}</div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-olive">{product.translations.it.name}</span>
+              {product.metadata?.featured && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                  ⭐ In Evidenza
+                </span>
+              )}
+            </div>
             <div className="text-sm text-nocciola">{product.size}</div>
           </div>
         </div>
@@ -440,7 +447,14 @@ function ProductCard({ product, onUpdateStock, onToggleActive, onEdit, onDelete 
         <div className="flex-1 min-w-0">
           <div className="flex justify-between items-start mb-2">
             <div>
-              <h3 className="text-sm font-medium text-olive truncate">{product.translations.it.name}</h3>
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="text-sm font-medium text-olive truncate">{product.translations.it.name}</h3>
+                {product.metadata?.featured && (
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800 flex-shrink-0">
+                    ⭐
+                  </span>
+                )}
+              </div>
               <p className="text-xs text-nocciola">{product.category} • {product.size}</p>
             </div>
             <button
