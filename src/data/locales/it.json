@@ -926,5 +926,306 @@
     "footer": {
       "note": "Per ulteriori informazioni sullo smaltimento dei rifiuti, consulta le linee guida del tuo comune di residenza."
     }
+  },
+  "privacyPolicy": {
+    "title": "Privacy Policy",
+    "subtitle": "Informativa sul trattamento dei dati personali",
+    "lastUpdate": "Ultimo aggiornamento: 19 Dicembre 2025",
+    "intro": "La presente Privacy Policy descrive le modalità di gestione del sito web in riferimento al trattamento dei dati personali degli utenti che lo consultano, in conformità al Regolamento UE 2016/679 (GDPR) e al D.Lgs. 196/2003 (Codice Privacy).",
+    "sections": {
+      "dataController": {
+        "title": "1. Titolare del Trattamento",
+        "content": "Il Titolare del trattamento dei dati è OLIO GALIA, con sede legale in Sicilia, Italia. Per qualsiasi informazione relativa alla privacy, è possibile contattarci tramite la pagina contatti del sito."
+      },
+      "dataCollected": {
+        "title": "2. Dati Raccolti",
+        "content": "Durante la navigazione e l'utilizzo del nostro e-commerce, potremmo raccogliere le seguenti tipologie di dati:",
+        "list": [
+          "Dati di navigazione: indirizzo IP, tipo di browser, sistema operativo, orario di accesso",
+          "Dati forniti volontariamente: nome, cognome, email, indirizzo di spedizione, numero di telefono",
+          "Dati di pagamento: elaborati tramite Stripe (non conserviamo dati delle carte di credito)",
+          "Cookie tecnici e analytics per migliorare l'esperienza utente"
+        ]
+      },
+      "purpose": {
+        "title": "3. Finalità del Trattamento",
+        "content": "I dati personali vengono trattati per le seguenti finalità:",
+        "list": [
+          "Gestione ed evasione degli ordini",
+          "Comunicazioni relative agli ordini (conferme, spedizioni, assistenza)",
+          "Invio di newsletter e comunicazioni commerciali (solo previo consenso esplicito)",
+          "Adempimenti fiscali e contabili obbligatori per legge",
+          "Analisi statistiche anonime per migliorare il servizio"
+        ]
+      },
+      "legalBasis": {
+        "title": "4. Base Giuridica",
+        "content": "Il trattamento dei dati personali si basa su:",
+        "list": [
+          "Esecuzione del contratto di vendita",
+          "Consenso esplicito dell'utente per finalità di marketing",
+          "Obblighi di legge (fiscali, contabili, amministrativi)"
+        ]
+      },
+      "dataSharing": {
+        "title": "5. Comunicazione dei Dati",
+        "content": "I dati personali possono essere comunicati a:",
+        "list": [
+          "Fornitori di servizi di pagamento (Stripe) per l'elaborazione dei pagamenti",
+          "Corrieri e spedizionieri per la consegna dei prodotti",
+          "Consulenti fiscali e commercialisti per adempimenti di legge",
+          "Autorità competenti quando richiesto dalla legge"
+        ]
+      },
+      "dataRetention": {
+        "title": "6. Conservazione dei Dati",
+        "content": "I dati personali verranno conservati per il tempo strettamente necessario alle finalità per cui sono stati raccolti:",
+        "list": [
+          "Dati degli ordini: 10 anni per obblighi fiscali e contabili",
+          "Dati di marketing: fino alla revoca del consenso",
+          "Dati di navigazione: massimo 24 mesi"
+        ]
+      },
+      "userRights": {
+        "title": "7. Diritti dell'Interessato",
+        "content": "In conformità al GDPR, hai diritto di:",
+        "list": [
+          "Accedere ai tuoi dati personali e ottenerne copia",
+          "Rettificare o aggiornare dati inesatti o incompleti",
+          "Cancellare i tuoi dati (diritto all'oblio)",
+          "Limitare il trattamento dei dati",
+          "Opporti al trattamento per finalità di marketing",
+          "Richiedere la portabilità dei dati",
+          "Revocare il consenso in qualsiasi momento",
+          "Proporre reclamo all'Autorità Garante per la Protezione dei Dati Personali"
+        ]
+      },
+      "security": {
+        "title": "8. Sicurezza dei Dati",
+        "content": "Adottiamo misure di sicurezza tecniche e organizzative adeguate per proteggere i dati personali da accessi non autorizzati, perdita, distruzione o divulgazione accidentale. I pagamenti sono gestiti tramite Stripe con crittografia SSL/TLS."
+      },
+      "changes": {
+        "title": "9. Modifiche alla Privacy Policy",
+        "content": "Ci riserviamo il diritto di modificare o aggiornare questa Privacy Policy in qualsiasi momento. Le modifiche saranno pubblicate su questa pagina con indicazione della data di ultimo aggiornamento."
+      },
+      "contact": {
+        "title": "10. Contatti",
+        "content": "Per esercitare i tuoi diritti o per qualsiasi domanda relativa al trattamento dei dati personali, puoi contattarci attraverso la sezione contatti del sito."
+      }
+    }
+  },
+  "cookiePolicy": {
+    "title": "Cookie Policy",
+    "subtitle": "Informativa sull'uso dei cookie",
+    "lastUpdate": "Ultimo aggiornamento: 19 Dicembre 2025",
+    "intro": "Il nostro sito web utilizza cookie per garantire il corretto funzionamento del sito e migliorare l'esperienza di navigazione. Questa Cookie Policy spiega cosa sono i cookie, come li utilizziamo e come puoi gestirli.",
+    "sections": {
+      "whatAreCookies": {
+        "title": "1. Cosa sono i Cookie",
+        "content": "I cookie sono piccoli file di testo che vengono memorizzati sul tuo dispositivo quando visiti un sito web. Permettono al sito di ricordare le tue azioni e preferenze (come login, lingua, dimensione caratteri) per un determinato periodo, così non devi reinserirle ogni volta che ritorni sul sito."
+      },
+      "cookieTypes": {
+        "title": "2. Tipologie di Cookie Utilizzati",
+        "technical": {
+          "title": "Cookie Tecnici (Necessari)",
+          "description": "Questi cookie sono essenziali per il funzionamento del sito e non possono essere disattivati. Permettono di:",
+          "list": [
+            "Mantenere il carrello degli acquisti durante la navigazione",
+            "Gestire la sessione di login",
+            "Memorizzare le preferenze linguistiche (IT/EN)",
+            "Garantire la sicurezza durante la navigazione"
+          ],
+          "note": "Non richiedono il consenso dell'utente in quanto strettamente necessari."
+        },
+        "analytics": {
+          "title": "Cookie Analytics",
+          "description": "Utilizziamo cookie analytics per raccogliere informazioni anonime su come i visitatori utilizzano il sito:",
+          "list": [
+            "Numero di visitatori e pagine visitate",
+            "Tempo di permanenza sul sito",
+            "Sorgenti di traffico",
+            "Comportamento di navigazione aggregato"
+          ],
+          "note": "Questi dati ci aiutano a migliorare il sito e l'esperienza utente."
+        },
+        "thirdParty": {
+          "title": "Cookie di Terze Parti",
+          "description": "Il nostro sito utilizza servizi di terze parti che potrebbero installare cookie:",
+          "list": [
+            "Stripe: per gestire i pagamenti in modo sicuro",
+            "Google Analytics (se presente): per analisi statistiche anonime",
+            "Social media: se presenti pulsanti di condivisione social"
+          ]
+        }
+      },
+      "cookieManagement": {
+        "title": "3. Come Gestire i Cookie",
+        "content": "Puoi controllare e/o eliminare i cookie come desideri. Puoi cancellare tutti i cookie già presenti sul tuo dispositivo e impostare quasi tutti i browser in modo da bloccarne l'installazione.",
+        "browsers": {
+          "title": "Gestione tramite Browser:",
+          "list": [
+            "Chrome: Impostazioni > Privacy e sicurezza > Cookie",
+            "Firefox: Impostazioni > Privacy e sicurezza > Cookie e dati dei siti web",
+            "Safari: Preferenze > Privacy > Gestisci dati siti web",
+            "Edge: Impostazioni > Cookie e autorizzazioni sito"
+          ]
+        },
+        "note": "Attenzione: disabilitare i cookie tecnici potrebbe compromettere alcune funzionalità del sito, come il carrello degli acquisti."
+      },
+      "cookieList": {
+        "title": "4. Elenco Cookie Utilizzati",
+        "description": "Di seguito l'elenco dei principali cookie utilizzati sul nostro sito:",
+        "items": [
+          {
+            "name": "session_id",
+            "type": "Tecnico",
+            "purpose": "Gestione sessione utente",
+            "duration": "Sessione"
+          },
+          {
+            "name": "cart_data",
+            "type": "Tecnico",
+            "purpose": "Memorizzazione carrello",
+            "duration": "7 giorni"
+          },
+          {
+            "name": "locale",
+            "type": "Tecnico",
+            "purpose": "Preferenza lingua (IT/EN)",
+            "duration": "1 anno"
+          },
+          {
+            "name": "cookie_consent",
+            "type": "Tecnico",
+            "purpose": "Memorizza consenso cookie",
+            "duration": "1 anno"
+          }
+        ]
+      },
+      "consent": {
+        "title": "5. Consenso ai Cookie",
+        "content": "La prima volta che visiti il nostro sito, ti verrà mostrato un banner informativo sui cookie. Puoi scegliere di accettare o rifiutare i cookie non essenziali. I cookie tecnici necessari saranno comunque attivi per garantire il funzionamento del sito."
+      },
+      "updates": {
+        "title": "6. Aggiornamenti",
+        "content": "Questa Cookie Policy può essere aggiornata periodicamente. Ti consigliamo di consultare questa pagina regolarmente per essere informato su eventuali modifiche."
+      },
+      "contact": {
+        "title": "7. Contatti",
+        "content": "Per qualsiasi domanda riguardante l'uso dei cookie, puoi contattarci attraverso la sezione contatti del sito."
+      }
+    }
+  },
+  "termsOfService": {
+    "title": "Termini e Condizioni di Vendita",
+    "subtitle": "Condizioni generali di vendita online",
+    "lastUpdate": "Ultimo aggiornamento: 19 Dicembre 2025",
+    "intro": "I presenti Termini e Condizioni regolano la vendita online dei prodotti offerti da OLIO GALIA. Effettuando un ordine sul nostro sito, dichiari di accettare integralmente le presenti condizioni.",
+    "sections": {
+      "companyInfo": {
+        "title": "1. Informazioni sulla Società",
+        "content": "OLIO GALIA è un'azienda specializzata nella selezione e vendita di prodotti alimentari siciliani di alta qualità, con particolare focus su oli extravergini di oliva."
+      },
+      "contractFormation": {
+        "title": "2. Conclusione del Contratto",
+        "content": "Il contratto di vendita si perfeziona nel momento in cui ricevi la conferma dell'ordine via email. La conferma contiene:",
+        "list": [
+          "Riepilogo dei prodotti ordinati",
+          "Prezzi (IVA inclusa)",
+          "Costi di spedizione",
+          "Indirizzo di consegna",
+          "Modalità e tempi di consegna stimati"
+        ]
+      },
+      "prices": {
+        "title": "3. Prezzi",
+        "content": "Tutti i prezzi indicati sul sito sono in Euro (€) e comprensivi di IVA. I prezzi possono variare senza preavviso, ma il prezzo applicato sarà sempre quello visualizzato al momento dell'ordine.",
+        "shipping": "I costi di spedizione sono calcolati in base al peso, alla destinazione e saranno chiaramente indicati prima del pagamento. Offriamo spedizione gratuita in Italia per ordini superiori a €50."
+      },
+      "payment": {
+        "title": "4. Modalità di Pagamento",
+        "content": "Accettiamo le seguenti modalità di pagamento sicure tramite Stripe:",
+        "list": [
+          "Carte di credito (Visa, Mastercard, American Express)",
+          "Carte di debito",
+          "Altri metodi di pagamento supportati da Stripe"
+        ],
+        "security": "Tutti i pagamenti sono elaborati in modo sicuro tramite Stripe. Non conserviamo i dati delle tue carte di credito sui nostri server."
+      },
+      "shipping": {
+        "title": "5. Spedizioni e Consegne",
+        "timeframes": {
+          "title": "Tempi di Consegna:",
+          "list": [
+            "Italia: 3-5 giorni lavorativi",
+            "Europa: 5-7 giorni lavorativi",
+            "Resto del mondo: 7-15 giorni lavorativi"
+          ]
+        },
+        "tracking": "Riceverai un'email con il numero di tracking non appena l'ordine sarà spedito.",
+        "issues": "In caso di ritardi o problemi con la consegna, ti invitiamo a contattarci immediatamente."
+      },
+      "withdrawal": {
+        "title": "6. Diritto di Recesso",
+        "content": "In conformità al Codice del Consumo (D.Lgs. 206/2005), hai diritto di recedere dal contratto entro 14 giorni dal ricevimento dei prodotti, senza dover fornire alcuna motivazione.",
+        "procedure": {
+          "title": "Come esercitare il recesso:",
+          "list": [
+            "Invia una comunicazione chiara tramite email o la sezione contatti",
+            "Restituisci i prodotti integri e nella confezione originale",
+            "I costi di restituzione sono a tuo carico",
+            "Riceverai il rimborso entro 14 giorni dalla ricezione del reso"
+          ]
+        },
+        "exclusions": {
+          "title": "Esclusioni dal diritto di recesso:",
+          "content": "Il diritto di recesso non si applica a prodotti alimentari deperibili o sigillati che non possono essere restituiti per motivi igienici o di sicurezza, se aperti dopo la consegna."
+        }
+      },
+      "returns": {
+        "title": "7. Resi e Rimborsi",
+        "content": "I prodotti possono essere restituiti se:",
+        "list": [
+          "Sono difettosi o danneggiati al momento della consegna",
+          "Non corrispondono a quanto ordinato",
+          "Si esercita il diritto di recesso entro 14 giorni"
+        ],
+        "procedure": "Contattaci immediatamente in caso di prodotto difettoso. Forniremo istruzioni per il reso e, se necessario, provvederemo alla sostituzione o al rimborso completo (incluse spese di spedizione)."
+      },
+      "warranty": {
+        "title": "8. Garanzia di Conformità",
+        "content": "Tutti i prodotti venduti sono coperti dalla garanzia legale di conformità di 24 mesi, come previsto dal Codice del Consumo. Se un prodotto presenta difetti di conformità, hai diritto alla riparazione, sostituzione, riduzione del prezzo o risoluzione del contratto."
+      },
+      "liability": {
+        "title": "9. Limitazioni di Responsabilità",
+        "content": "OLIO GALIA non sarà responsabile per:",
+        "list": [
+          "Ritardi nella consegna causati dal corriere o eventi di forza maggiore",
+          "Danni indiretti o conseguenti derivanti dall'uso dei prodotti",
+          "Informazioni errate fornite dal cliente (indirizzo di spedizione, email, ecc.)"
+        ]
+      },
+      "intellectualProperty": {
+        "title": "10. Proprietà Intellettuale",
+        "content": "Tutti i contenuti del sito (testi, immagini, loghi, grafica) sono di proprietà di OLIO GALIA o dei rispettivi titolari e sono protetti dalle leggi sul diritto d'autore. È vietata la riproduzione, distribuzione o utilizzo non autorizzato di qualsiasi contenuto."
+      },
+      "privacy": {
+        "title": "11. Privacy e Protezione Dati",
+        "content": "Il trattamento dei dati personali è disciplinato dalla nostra Privacy Policy, consultabile a questo link. Effettuando un ordine, acconsenti al trattamento dei tuoi dati secondo quanto indicato nell'informativa."
+      },
+      "disputes": {
+        "title": "12. Risoluzione delle Controversie",
+        "content": "Per qualsiasi controversia relativa all'interpretazione, esecuzione o validità dei presenti Termini e Condizioni, sarà competente il Foro del luogo di residenza del consumatore (per consumatori residenti in Italia).",
+        "odr": "In conformità al Regolamento UE 524/2013, ti informiamo che puoi utilizzare la piattaforma ODR (Online Dispute Resolution) per la risoluzione alternativa delle controversie, disponibile al seguente link: https://ec.europa.eu/consumers/odr"
+      },
+      "modifications": {
+        "title": "13. Modifiche ai Termini e Condizioni",
+        "content": "Ci riserviamo il diritto di modificare i presenti Termini e Condizioni in qualsiasi momento. Le modifiche saranno pubblicate su questa pagina con indicazione della data di ultimo aggiornamento. Continuando a utilizzare il sito dopo le modifiche, accetti i nuovi termini."
+      },
+      "contact": {
+        "title": "14. Contatti",
+        "content": "Per qualsiasi domanda o chiarimento riguardante i Termini e Condizioni, puoi contattarci attraverso la sezione contatti del sito."
+      }
+    }
   }
 }   

@@ -204,9 +204,9 @@ export default function Footer() {
               </div>
               
               <div className="flex flex-wrap justify-center sm:justify-end gap-4 sm:gap-6 text-sm">
-                <a href="#" className="text-beige/60 hover:text-beige transition-colors duration-300">{t.footer.bottom.privacy}</a>
-                <a href="#" className="text-beige/60 hover:text-beige transition-colors duration-300">{t.footer.bottom.cookies}</a>
-                <a href="#" className="text-beige/60 hover:text-beige transition-colors duration-300">{t.footer.bottom.terms}</a>
+                <a href="/privacy-policy" className="text-beige/60 hover:text-beige transition-colors duration-300">{t.footer.bottom.privacy}</a>
+                <a href="/cookie-policy" className="text-beige/60 hover:text-beige transition-colors duration-300">{t.footer.bottom.cookies}</a>
+                <a href="/termini-servizio" className="text-beige/60 hover:text-beige transition-colors duration-300">{t.footer.bottom.terms}</a>
               </div>
             </div>
           </div>

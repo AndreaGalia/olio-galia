@@ -926,5 +926,306 @@
     "footer": {
       "note": "For more information on waste disposal, consult your local municipality's guidelines."
     }
+  },
+  "privacyPolicy": {
+    "title": "Privacy Policy",
+    "subtitle": "Personal Data Processing Information",
+    "lastUpdate": "Last updated: December 19, 2025",
+    "intro": "This Privacy Policy describes how the website manages personal data of users who consult it, in compliance with EU Regulation 2016/679 (GDPR) and Legislative Decree 196/2003 (Privacy Code).",
+    "sections": {
+      "dataController": {
+        "title": "1. Data Controller",
+        "content": "The Data Controller is OLIO GALIA, with registered office in Sicily, Italy. For any information regarding privacy, you can contact us through the contact page of the site."
+      },
+      "dataCollected": {
+        "title": "2. Data Collected",
+        "content": "During navigation and use of our e-commerce, we may collect the following types of data:",
+        "list": [
+          "Navigation data: IP address, browser type, operating system, access time",
+          "Voluntarily provided data: name, surname, email, shipping address, phone number",
+          "Payment data: processed through Stripe (we do not store credit card data)",
+          "Technical and analytics cookies to improve user experience"
+        ]
+      },
+      "purpose": {
+        "title": "3. Processing Purposes",
+        "content": "Personal data is processed for the following purposes:",
+        "list": [
+          "Order management and fulfillment",
+          "Order-related communications (confirmations, shipments, support)",
+          "Sending newsletters and commercial communications (only with explicit consent)",
+          "Tax and accounting obligations required by law",
+          "Anonymous statistical analysis to improve the service"
+        ]
+      },
+      "legalBasis": {
+        "title": "4. Legal Basis",
+        "content": "The processing of personal data is based on:",
+        "list": [
+          "Execution of the sales contract",
+          "User's explicit consent for marketing purposes",
+          "Legal obligations (tax, accounting, administrative)"
+        ]
+      },
+      "dataSharing": {
+        "title": "5. Data Communication",
+        "content": "Personal data may be communicated to:",
+        "list": [
+          "Payment service providers (Stripe) for payment processing",
+          "Couriers and shippers for product delivery",
+          "Tax consultants and accountants for legal compliance",
+          "Competent authorities when required by law"
+        ]
+      },
+      "dataRetention": {
+        "title": "6. Data Retention",
+        "content": "Personal data will be kept for the time strictly necessary for the purposes for which they were collected:",
+        "list": [
+          "Order data: 10 years for tax and accounting obligations",
+          "Marketing data: until consent is revoked",
+          "Navigation data: maximum 24 months"
+        ]
+      },
+      "userRights": {
+        "title": "7. Data Subject Rights",
+        "content": "In accordance with GDPR, you have the right to:",
+        "list": [
+          "Access your personal data and obtain a copy",
+          "Rectify or update inaccurate or incomplete data",
+          "Delete your data (right to be forgotten)",
+          "Limit data processing",
+          "Object to processing for marketing purposes",
+          "Request data portability",
+          "Withdraw consent at any time",
+          "Lodge a complaint with the Personal Data Protection Authority"
+        ]
+      },
+      "security": {
+        "title": "8. Data Security",
+        "content": "We adopt adequate technical and organizational security measures to protect personal data from unauthorized access, loss, destruction or accidental disclosure. Payments are managed through Stripe with SSL/TLS encryption."
+      },
+      "changes": {
+        "title": "9. Privacy Policy Changes",
+        "content": "We reserve the right to modify or update this Privacy Policy at any time. Changes will be published on this page indicating the date of last update."
+      },
+      "contact": {
+        "title": "10. Contact",
+        "content": "To exercise your rights or for any questions regarding the processing of personal data, you can contact us through the contact section of the site."
+      }
+    }
+  },
+  "cookiePolicy": {
+    "title": "Cookie Policy",
+    "subtitle": "Information on the use of cookies",
+    "lastUpdate": "Last updated: December 19, 2025",
+    "intro": "Our website uses cookies to ensure proper functioning of the site and improve browsing experience. This Cookie Policy explains what cookies are, how we use them and how you can manage them.",
+    "sections": {
+      "whatAreCookies": {
+        "title": "1. What are Cookies",
+        "content": "Cookies are small text files that are stored on your device when you visit a website. They allow the site to remember your actions and preferences (such as login, language, font size) for a certain period, so you don't have to re-enter them every time you return to the site."
+      },
+      "cookieTypes": {
+        "title": "2. Types of Cookies Used",
+        "technical": {
+          "title": "Technical Cookies (Necessary)",
+          "description": "These cookies are essential for the functioning of the site and cannot be disabled. They allow to:",
+          "list": [
+            "Maintain the shopping cart during navigation",
+            "Manage login session",
+            "Store language preferences (IT/EN)",
+            "Ensure security during navigation"
+          ],
+          "note": "They do not require user consent as they are strictly necessary."
+        },
+        "analytics": {
+          "title": "Analytics Cookies",
+          "description": "We use analytics cookies to collect anonymous information about how visitors use the site:",
+          "list": [
+            "Number of visitors and pages visited",
+            "Time spent on site",
+            "Traffic sources",
+            "Aggregated browsing behavior"
+          ],
+          "note": "This data helps us improve the site and user experience."
+        },
+        "thirdParty": {
+          "title": "Third-Party Cookies",
+          "description": "Our site uses third-party services that may install cookies:",
+          "list": [
+            "Stripe: to manage payments securely",
+            "Google Analytics (if present): for anonymous statistical analysis",
+            "Social media: if social sharing buttons are present"
+          ]
+        }
+      },
+      "cookieManagement": {
+        "title": "3. How to Manage Cookies",
+        "content": "You can control and/or delete cookies as you wish. You can delete all cookies already present on your device and set almost all browsers to block their installation.",
+        "browsers": {
+          "title": "Management through Browser:",
+          "list": [
+            "Chrome: Settings > Privacy and security > Cookies",
+            "Firefox: Settings > Privacy and security > Cookies and site data",
+            "Safari: Preferences > Privacy > Manage website data",
+            "Edge: Settings > Cookies and site permissions"
+          ]
+        },
+        "note": "Warning: disabling technical cookies may compromise some site functionalities, such as the shopping cart."
+      },
+      "cookieList": {
+        "title": "4. List of Cookies Used",
+        "description": "Below is the list of main cookies used on our site:",
+        "items": [
+          {
+            "name": "session_id",
+            "type": "Technical",
+            "purpose": "User session management",
+            "duration": "Session"
+          },
+          {
+            "name": "cart_data",
+            "type": "Technical",
+            "purpose": "Cart storage",
+            "duration": "7 days"
+          },
+          {
+            "name": "locale",
+            "type": "Technical",
+            "purpose": "Language preference (IT/EN)",
+            "duration": "1 year"
+          },
+          {
+            "name": "cookie_consent",
+            "type": "Technical",
+            "purpose": "Stores cookie consent",
+            "duration": "1 year"
+          }
+        ]
+      },
+      "consent": {
+        "title": "5. Cookie Consent",
+        "content": "The first time you visit our site, you will be shown an informative banner about cookies. You can choose to accept or refuse non-essential cookies. Necessary technical cookies will still be active to ensure site functionality."
+      },
+      "updates": {
+        "title": "6. Updates",
+        "content": "This Cookie Policy may be updated periodically. We recommend checking this page regularly to be informed of any changes."
+      },
+      "contact": {
+        "title": "7. Contact",
+        "content": "For any questions regarding the use of cookies, you can contact us through the contact section of the site."
+      }
+    }
+  },
+  "termsOfService": {
+    "title": "Terms and Conditions of Sale",
+    "subtitle": "General conditions of online sale",
+    "lastUpdate": "Last updated: December 19, 2025",
+    "intro": "These Terms and Conditions govern the online sale of products offered by OLIO GALIA. By placing an order on our site, you declare to fully accept these conditions.",
+    "sections": {
+      "companyInfo": {
+        "title": "1. Company Information",
+        "content": "OLIO GALIA is a company specialized in the selection and sale of high-quality Sicilian food products, with a particular focus on extra virgin olive oils."
+      },
+      "contractFormation": {
+        "title": "2. Contract Formation",
+        "content": "The sales contract is completed when you receive the order confirmation via email. The confirmation contains:",
+        "list": [
+          "Summary of ordered products",
+          "Prices (VAT included)",
+          "Shipping costs",
+          "Delivery address",
+          "Estimated delivery methods and times"
+        ]
+      },
+      "prices": {
+        "title": "3. Prices",
+        "content": "All prices shown on the site are in Euro (€) and inclusive of VAT. Prices may vary without notice, but the price applied will always be the one displayed at the time of order.",
+        "shipping": "Shipping costs are calculated based on weight, destination and will be clearly indicated before payment. We offer free shipping in Italy for orders over €50."
+      },
+      "payment": {
+        "title": "4. Payment Methods",
+        "content": "We accept the following secure payment methods through Stripe:",
+        "list": [
+          "Credit cards (Visa, Mastercard, American Express)",
+          "Debit cards",
+          "Other payment methods supported by Stripe"
+        ],
+        "security": "All payments are processed securely through Stripe. We do not store your credit card data on our servers."
+      },
+      "shipping": {
+        "title": "5. Shipping and Delivery",
+        "timeframes": {
+          "title": "Delivery Times:",
+          "list": [
+            "Italy: 3-5 working days",
+            "Europe: 5-7 working days",
+            "Rest of the world: 7-15 working days"
+          ]
+        },
+        "tracking": "You will receive an email with the tracking number as soon as the order is shipped.",
+        "issues": "In case of delays or delivery problems, we invite you to contact us immediately."
+      },
+      "withdrawal": {
+        "title": "6. Right of Withdrawal",
+        "content": "In accordance with the Consumer Code (Legislative Decree 206/2005), you have the right to withdraw from the contract within 14 days of receiving the products, without having to provide any reason.",
+        "procedure": {
+          "title": "How to exercise withdrawal:",
+          "list": [
+            "Send a clear communication via email or contact section",
+            "Return products intact and in original packaging",
+            "Return costs are at your expense",
+            "You will receive a refund within 14 days of receiving the return"
+          ]
+        },
+        "exclusions": {
+          "title": "Exclusions from right of withdrawal:",
+          "content": "The right of withdrawal does not apply to perishable or sealed food products that cannot be returned for hygienic or safety reasons, if opened after delivery."
+        }
+      },
+      "returns": {
+        "title": "7. Returns and Refunds",
+        "content": "Products can be returned if:",
+        "list": [
+          "They are defective or damaged upon delivery",
+          "They do not correspond to what was ordered",
+          "The right of withdrawal is exercised within 14 days"
+        ],
+        "procedure": "Contact us immediately in case of defective product. We will provide return instructions and, if necessary, provide replacement or full refund (including shipping costs)."
+      },
+      "warranty": {
+        "title": "8. Conformity Warranty",
+        "content": "All products sold are covered by the legal conformity warranty of 24 months, as provided by the Consumer Code. If a product has conformity defects, you have the right to repair, replacement, price reduction or contract resolution."
+      },
+      "liability": {
+        "title": "9. Liability Limitations",
+        "content": "OLIO GALIA will not be responsible for:",
+        "list": [
+          "Delivery delays caused by courier or force majeure events",
+          "Indirect or consequential damages arising from product use",
+          "Incorrect information provided by customer (shipping address, email, etc.)"
+        ]
+      },
+      "intellectualProperty": {
+        "title": "10. Intellectual Property",
+        "content": "All site content (texts, images, logos, graphics) is property of OLIO GALIA or respective owners and is protected by copyright laws. Unauthorized reproduction, distribution or use of any content is prohibited."
+      },
+      "privacy": {
+        "title": "11. Privacy and Data Protection",
+        "content": "The processing of personal data is governed by our Privacy Policy, available at this link. By placing an order, you consent to the processing of your data as indicated in the information notice."
+      },
+      "disputes": {
+        "title": "12. Dispute Resolution",
+        "content": "For any dispute relating to the interpretation, execution or validity of these Terms and Conditions, the Court of the consumer's place of residence will have jurisdiction (for consumers residing in Italy).",
+        "odr": "In accordance with EU Regulation 524/2013, we inform you that you can use the ODR (Online Dispute Resolution) platform for alternative dispute resolution, available at the following link: https://ec.europa.eu/consumers/odr"
+      },
+      "modifications": {
+        "title": "13. Changes to Terms and Conditions",
+        "content": "We reserve the right to modify these Terms and Conditions at any time. Changes will be published on this page indicating the date of last update. By continuing to use the site after changes, you accept the new terms."
+      },
+      "contact": {
+        "title": "14. Contact",
+        "content": "For any questions or clarifications regarding the Terms and Conditions, you can contact us through the contact section of the site."
+      }
+    }
   }
 }
