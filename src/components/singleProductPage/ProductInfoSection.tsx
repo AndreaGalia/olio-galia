@@ -86,7 +86,7 @@ export default function ProductInfoSection({
               €{product.originalPrice}
             </span>
           )}
-          <span className="text-4xl font-serif font-bold text-olive">
+          <span className="text-4xl font-bold text-olive">
             €{product.price}
           </span>
           <span className="text-lg text-nocciola mb-1">
