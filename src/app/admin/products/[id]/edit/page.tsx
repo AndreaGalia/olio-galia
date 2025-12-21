@@ -218,6 +218,7 @@ export default function EditProductPage() {
           color: product.color,
           images: product.images.filter(img => img && img.trim() !== ''),
           nutritionalInfo: product.nutritionalInfo,
+          customBadge: product.customBadge || undefined,
           translations: {
             it: {
               ...product.translations.it,
@@ -381,6 +382,23 @@ export default function EditProductPage() {
                   onChange={(e) => setProduct(prev => prev ? { ...prev, size: e.target.value } : null)}
                   className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Badge Personalizzato
+                  <span className="text-xs text-gray-500 ml-2 font-normal">(opzionale)</span>
+                </label>
+                <input
+                  type="text"
+                  value={product.customBadge || ''}
+                  onChange={(e) => setProduct(prev => prev ? { ...prev, customBadge: e.target.value } : null)}
+                  className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
+                  placeholder="Es: Campagna Olearia 2024, NOVITÀ, LIMITED"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Verrà mostrato come badge nell'angolo destro dell'immagine prodotto
+                </p>
               </div>
 
               <div>

@@ -30,7 +30,7 @@ export default function ContactPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige">
+    <div className="min-h-screen bg-homepage-bg">
       {/* Hero Section */}
       <section className="relative py-16 sm:py-20 lg:py-24 overflow-hidden">
         <ContactBackground />

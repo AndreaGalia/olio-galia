@@ -905,7 +905,8 @@
       "showing": "Showing {from}-{to} of {total} reviews"
     },
     "loading": "Loading reviews...",
-    "error": "Error loading reviews. Please try again later."
+    "error": "Error loading reviews. Please try again later.",
+    "viewAll": "View all"
   },
   "wasteDisposalPage": {
     "hero": {

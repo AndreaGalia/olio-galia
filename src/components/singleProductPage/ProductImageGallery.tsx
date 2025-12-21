@@ -6,10 +6,10 @@ interface ProductImageGalleryProps {
   isOutOfStock: boolean;
 }
 
-export default function ProductImageGallery({ 
-  images, 
-  productName, 
-  isOutOfStock 
+export default function ProductImageGallery({
+  images,
+  productName,
+  isOutOfStock
 }: ProductImageGalleryProps) {
   const [selectedImage, setSelectedImage] = useState(0);
 
@@ -19,7 +19,7 @@ export default function ProductImageGallery({
       <div className={`aspect-square bg-white rounded-2xl p-4 sm:p-8 shadow-lg border border-olive/10 relative ${
         isOutOfStock ? 'opacity-75 grayscale' : ''
       }`}>
-        <div className="w-full h-full bg-gradient-to-br from-sabbia/20 to-beige/30 rounded-xl flex items-center justify-center relative">
+        <div className="w-full h-full bg-beige/20 rounded-xl flex items-center justify-center relative">
           <img 
             src={images[selectedImage]} 
             alt={productName} 
@@ -38,9 +38,9 @@ export default function ProductImageGallery({
           )}
         </div>
         
-        {/* Badge SOLD OUT nell'angolo */}
+        {/* Badge SOLD OUT nell'angolo - sinistra */}
         {isOutOfStock && (
-          <div className="absolute top-3 sm:top-4 left-3 sm:left-4 bg-gradient-to-r from-red-600 to-red-700 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold z-10 shadow-lg animate-pulse">
+          <div className="absolute top-3 sm:top-4 left-3 sm:left-4 bg-red-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold z-10 shadow-lg animate-pulse">
             SOLD OUT
           </div>
         )}

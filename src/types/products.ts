@@ -34,6 +34,7 @@ export interface BaseProduct {
   color: string;
   images: string[];
   nutritionalInfo?: Record<string, string>;
+  customBadge?: string; // Badge personalizzato opzionale (es: "NOVITÀ", "BIO", "LIMITED")
 }
 
 // Prodotto come salvato in MongoDB (con tutte le traduzioni)

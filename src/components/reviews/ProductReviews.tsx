@@ -180,7 +180,7 @@ export default function ProductReviews({ productSlug }: ProductReviewsProps) {
   }
 
   return (
-    <div ref={reviewsRef} className="bg-gradient-to-br from-beige to-sabbia rounded-2xl p-6 sm:p-10 shadow-lg">
+    <div id="product-reviews-section" ref={reviewsRef} className="bg-beige/30 border border-olive/10 rounded-2xl p-6 sm:p-10">
       {/* Header con statistiche */}
       <div className="mb-8">
         <h2 className="text-2xl sm:text-3xl font-bold text-olive mb-6">

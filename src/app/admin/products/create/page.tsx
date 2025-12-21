@@ -15,6 +15,7 @@ interface ProductFormData {
   color: string;
   images: string[];
   nutritionalInfo: Record<string, string>;
+  customBadge?: string; // Badge personalizzato (es: "Campagna Olearia 2024")
   translations: {
     it: ProductTranslations;
     en: ProductTranslations;
@@ -52,6 +53,7 @@ export default function CreateProductPage() {
     color: '',
     images: [''],
     nutritionalInfo: {},
+    customBadge: '', // Badge personalizzato opzionale
     translations: {
       it: {
         name: '',
@@ -379,6 +381,23 @@ export default function CreateProductPage() {
                   className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
                   placeholder="500ml"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Badge Personalizzato
+                  <span className="text-xs text-gray-500 ml-2 font-normal">(opzionale)</span>
+                </label>
+                <input
+                  type="text"
+                  value={formData.customBadge}
+                  onChange={(e) => setFormData(prev => ({ ...prev, customBadge: e.target.value }))}
+                  className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
+                  placeholder="Es: Campagna Olearia 2024, NOVITÀ, LIMITED"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Verrà mostrato come badge nell'angolo destro dell'immagine prodotto
+                </p>
               </div>
 
               <div>

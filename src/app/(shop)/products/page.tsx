@@ -30,7 +30,7 @@ export default function ProductsPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige">
+      <div className="min-h-screen bg-homepage-bg">
         <ProductsHero />
         <CategoryFilter
           categories={allCategories}

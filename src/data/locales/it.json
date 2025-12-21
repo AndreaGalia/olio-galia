@@ -905,7 +905,8 @@
       "showing": "Mostrando {from}-{to} di {total} recensioni"
     },
     "loading": "Caricamento recensioni...",
-    "error": "Errore nel caricamento delle recensioni. Riprova più tardi."
+    "error": "Errore nel caricamento delle recensioni. Riprova più tardi.",
+    "viewAll": "Vedi tutte"
   },
   "wasteDisposalPage": {
     "hero": {

@@ -59,18 +59,17 @@ function ProductImage({ product, isOutOfStock }: ProductSubComponentProps) {
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
 
-        {/* Overlay gradiente per effetto depth - Filtro leggero */}
-        {!isOutOfStock && (
-          <>
-            <div className="absolute inset-0 bg-gradient-to-b from-olive/20 via-olive/10 to-olive/20 pointer-events-none" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(85,107,47,0.2)_100%)] pointer-events-none" />
-          </>
-        )}
-
-        {/* Sconto badge */}
+        {/* Sconto badge - sinistra */}
         {!isOutOfStock && product.originalPrice && product.originalPrice !== 'null' && (
           <div className="absolute top-3 left-3 bg-olive text-beige px-3 py-1 text-xs font-bold tracking-wider z-10">
             {t.productsPage.product.discount}
+          </div>
+        )}
+
+        {/* Custom badge - destra */}
+        {!isOutOfStock && product.customBadge && (
+          <div className="absolute top-3 right-3 bg-salvia text-beige px-3 py-1 text-xs font-bold tracking-wider z-10">
+            {product.customBadge}
           </div>
         )}
 

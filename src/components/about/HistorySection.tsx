@@ -41,7 +41,7 @@ function HistoryImage({ imageCaption, imageNote }: HistoryImageProps) {
 
   return (
     <div className="relative">
-      <div className="bg-gradient-to-br from-olive/10 to-salvia/10 rounded-2xl p-6 sm:p-8">
+      <div className="bg-beige/30 rounded-2xl p-6 sm:p-8">
         <div className="w-full h-80 sm:h-96 lg:h-[450px] relative rounded-xl overflow-hidden bg-olive/5">
           {historicImageUrl ? (
             <>
@@ -52,10 +52,6 @@ function HistoryImage({ imageCaption, imageNote }: HistoryImageProps) {
                 className="object-cover object-top"
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 600px"
               />
-              {/* Overlay gradiente per effetto vintage */}
-              <div className="absolute inset-0 bg-gradient-to-b from-olive/20 via-olive/10 to-olive/20 pointer-events-none" />
-              {/* Vignette effect per focus centrale */}
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(85,107,47,0.2)_100%)] pointer-events-none" />
             </>
           ) : (
             <div className="w-full h-full bg-olive/20 flex items-center justify-center">

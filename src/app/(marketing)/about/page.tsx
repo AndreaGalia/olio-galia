@@ -47,7 +47,7 @@ export default function AboutPage() {
   });
 
   return (
-    <div className={`min-h-screen ${styles.gradientBeigeViaSabbia}`}>
+    <div className="min-h-screen bg-homepage-bg">
       
       {/* Hero Section */}
       <section className="relative py-10 sm:py-12 lg:py-16 overflow-hidden">

@@ -52,7 +52,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
   ], 'it');
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige">
+    <div className="min-h-screen bg-homepage-bg">
       {/* Structured Data per SEO */}
       <StructuredData data={productSchema} />
       <StructuredData data={breadcrumbSchema} />
@@ -83,8 +83,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
 
           {/* Schede dettagliate */}
           <ProductDetailsCards
-            product={product}
-            isOutOfStock={isOutOfStock}
+            productSlug={slug}
           />
         </>
 

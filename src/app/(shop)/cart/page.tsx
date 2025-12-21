@@ -101,7 +101,7 @@ export default function CartPage() {
 
   // Contenuto principale del carrello
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige">
+    <div className="min-h-screen bg-homepage-bg">
       {/* Modal per errori di checkout */}
       <CheckoutErrorModal
         isVisible={showCheckoutError}

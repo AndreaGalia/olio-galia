@@ -49,6 +49,14 @@ export default function ProductInfoSection({
           }`}>
             {product.badge}
           </span>
+          {/* Custom Badge personalizzato */}
+          {product.customBadge && (
+            <span className={`bg-salvia text-beige px-2 sm:px-3 py-1 border border-salvia/20 text-xs sm:text-sm font-bold ${
+              isOutOfStock ? 'opacity-50' : ''
+            }`}>
+              {product.customBadge}
+            </span>
+          )}
           {/* Badge SOLD OUT prominente accanto ai badge esistenti */}
           {isOutOfStock && (
             <span className="bg-red-600 text-white px-3 sm:px-4 py-1 border border-red-700 text-xs sm:text-sm font-bold">
