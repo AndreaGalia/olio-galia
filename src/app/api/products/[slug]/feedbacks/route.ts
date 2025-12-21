@@ -40,14 +40,19 @@ export async function GET(
       );
     }
 
-    const productId = product.id; // ID Stripe del prodotto
+    // Costruisci array di possibili productId (locale e/o Stripe)
+    // I feedback potrebbero essere salvati con uno dei due ID
+    const possibleProductIds = [product.id]; // ID locale (local_xxx)
+    if (product.stripeProductId) {
+      possibleProductIds.push(product.stripeProductId); // ID Stripe (prod_xxx)
+    }
 
     const db = await getDatabase();
     const feedbackCollection = db.collection<FeedbackDocument>('feedbacks');
 
-    // Costruisci il filtro
+    // Costruisci il filtro - cerca feedback con uno qualsiasi degli ID
     const filter: any = {
-      productId: productId,
+      productId: { $in: possibleProductIds },
     };
 
     // Filtro per rating (se specificato)
@@ -73,7 +78,7 @@ export async function GET(
     ]);
 
     // Calcola statistiche (media e distribuzione stelle)
-    const allFeedbacks = await feedbackCollection.find({ productId: productId }).toArray();
+    const allFeedbacks = await feedbackCollection.find({ productId: { $in: possibleProductIds } }).toArray();
 
     const totalRatings = allFeedbacks.length;
     const averageRating = totalRatings > 0
