@@ -213,7 +213,7 @@ export default function CartPage() {
 
         {/* Sezione Scelta Consegna */}
         <div className="mt-8" id="shipping-section">
-          <div className="bg-beige/30 border border-olive/10 p-6 lg:p-8">
+          <div className="bg-white border border-olive/10 p-6 lg:p-8">
             {stripeCheckoutAvailable ? (
               <>
                 {/* Sistema zone per Stripe */}
