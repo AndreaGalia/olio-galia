@@ -11,6 +11,7 @@ interface ProductFormData {
   price: string;
   originalPrice?: string;
   size: string;
+  weight: number; // Peso in grammi (usato per calcolo spedizione)
   color: string;
   images: string[];
   nutritionalInfo: Record<string, string>;
@@ -47,6 +48,7 @@ export default function CreateProductPage() {
     price: '',
     originalPrice: '',
     size: '',
+    weight: 0, // Default: 0 grammi
     color: '',
     images: [''],
     nutritionalInfo: {},
@@ -377,6 +379,59 @@ export default function CreateProductPage() {
                   className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
                   placeholder="500ml"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Peso (grammi) *
+                  <span className="text-xs text-gray-500 ml-2 font-normal">
+                    (usato per calcolo spedizione)
+                  </span>
+                </label>
+                <input
+                  type="number"
+                  step="1"
+                  min="0"
+                  value={formData.weight}
+                  onChange={(e) => setFormData(prev => ({ ...prev, weight: parseInt(e.target.value) || 0 }))}
+                  className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
+                  placeholder="500"
+                  required
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Esempio: Bottiglia 500ml olio = 500g. Confezione regalo 2 bottiglie = 1000g.
+                </p>
+
+                {/* Conversione automatica kg → grammi */}
+                {formData.weight > 0 && (
+                  <p className="text-xs text-olive mt-1">
+                    = {(formData.weight / 1000).toFixed(2)} kg
+                  </p>
+                )}
+
+                {/* Pulsanti rapidi per pesi comuni */}
+                <div className="mt-3">
+                  <p className="text-xs text-gray-600 mb-2">Pesi comuni:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      { label: '250ml (250g)', grams: 250 },
+                      { label: '500ml (500g)', grams: 500 },
+                      { label: '750ml (750g)', grams: 750 },
+                      { label: '1L (1000g)', grams: 1000 },
+                      { label: 'Confezione 2x500ml', grams: 1000 },
+                      { label: 'Confezione 3x500ml', grams: 1500 },
+                    ].map((preset) => (
+                      <button
+                        key={preset.grams}
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, weight: preset.grams }))}
+                        className="px-3 py-1.5 text-xs rounded border bg-white text-olive border-olive/30 hover:bg-olive/5 transition-colors"
+                      >
+                        {preset.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               <div>

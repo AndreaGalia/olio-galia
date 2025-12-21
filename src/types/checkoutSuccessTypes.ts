@@ -1,4 +1,5 @@
 // types/checkoutSuccess.ts
+import { ShippingZone } from './shipping';
 
 // ===== ORDER ITEM =====
 export interface OrderItem {
@@ -27,6 +28,13 @@ export interface Shipping {
     country?: string;
     state?: string;
   };
+  // Nuovi campi per sistema zone
+  zone?: ShippingZone; // Zona di spedizione selezionata
+  selectedCity?: string; // Città selezionata dall'utente nel carrello
+  selectedCountry?: string; // Paese selezionato dall'utente
+  selectedCountryCode?: string; // Codice ISO paese
+  cost?: number; // Costo spedizione in centesimi
+  stripeShippingRateId?: string; // ID Shipping Rate Stripe (shr_xxx)
 }
 
 // ===== PRICING =====

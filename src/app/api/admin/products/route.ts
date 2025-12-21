@@ -67,6 +67,7 @@ export async function POST(request: NextRequest) {
       price,
       originalPrice,
       size,
+      weight,
       color,
       images,
       nutritionalInfo,
@@ -140,6 +141,7 @@ export async function POST(request: NextRequest) {
       stripeProductId: finalStripeProductId, // ID Stripe separato (opzionale)
       stripePriceId: finalStripePriceId, // Price ID Stripe separato (opzionale)
       size,
+      weight: weight || 0, // Peso in grammi (default 0 se non specificato)
       inStock: false, // Inizialmente non in stock
       stockQuantity: 0,
       color: color || '',

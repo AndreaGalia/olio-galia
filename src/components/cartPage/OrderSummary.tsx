@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useCart } from '@/contexts/CartContext';
 import { useT } from '@/hooks/useT';
+import { useLocale } from '@/contexts/LocaleContext';
+import { useShippingCost } from '@/hooks/useShippingCost';
+import { ShippingZone } from '@/types/shipping';
 import FreeShippingIndicator from './FreeShippingIndicator';
 
 interface ShopConfig {
@@ -22,6 +25,9 @@ interface OrderSummaryProps {
   setNeedsInvoice: (value: boolean) => void;
   checkoutLoading: boolean;
   stripeCheckoutDisabled?: boolean;
+  selectedShippingZone: ShippingZone | null;
+  totalGrams: number;
+  hasAllWeights: boolean;
 }
 
 export default function OrderSummary({
@@ -33,10 +39,28 @@ export default function OrderSummary({
   needsInvoice,
   setNeedsInvoice,
   checkoutLoading,
-  stripeCheckoutDisabled = false
+  stripeCheckoutDisabled = false,
+  selectedShippingZone,
+  totalGrams,
+  hasAllWeights
 }: OrderSummaryProps) {
   const { clearCart, cart } = useCart();
   const { t, translate } = useT();
+  const { locale } = useLocale();
+
+  // Calcola il costo di spedizione se una zona è stata selezionata
+  const shippingCost = useShippingCost(
+    selectedShippingZone,
+    totalGrams,
+    total,
+    hasAllWeights,
+    locale
+  );
+
+  // Calcola il totale finale includendo la spedizione
+  const finalTotal = selectedShippingZone
+    ? total + shippingCost.costEur
+    : total;
   
   const [shopConfig, setShopConfig] = useState<ShopConfig>({ 
     freeShippingThreshold: 100, 
@@ -57,48 +81,39 @@ export default function OrderSummary({
       });
   }, []);
 
-  const { freeShippingThreshold, shippingCosts } = shopConfig;
-  const displayShippingCost = total >= freeShippingThreshold ? 0 : shippingCosts.eu;
-  const finalTotal = total + displayShippingCost;
-
   return (
     <div className="bg-white border border-olive/10 p-6 sticky top-4">
       <h2 className="text-xl font-serif text-olive mb-6">{t.cartPage.summary.title}</h2>
-      
-      {/* Free shipping indicator */}
-      <FreeShippingIndicator 
-        total={total} 
-        freeShippingThreshold={freeShippingThreshold} 
-      />
-      
+
       <div className="space-y-4 mb-6">
         <div className="flex justify-between text-nocciola">
           <span>{translate('cartPage.summary.subtotal', { count: totalItems, itemLabel })}</span>
           <span>€{total.toFixed(2)}</span>
         </div>
-        
+
         {savings > 0 && (
           <div className="flex justify-between text-green-600 font-medium">
             <span>{t.cartPage.summary.totalSavings}</span>
             <span>-€{savings.toFixed(2)}</span>
           </div>
         )}
-        
-        <div className="flex justify-between text-nocciola">
-          <span>{t.cartPage.summary.shipping}</span>
-          <span className={displayShippingCost === 0 ? "text-green-600 font-medium" : "text-nocciola"}>
-            {displayShippingCost === 0 ? t.cartPage.summary.free : `€${displayShippingCost.toFixed(2)}*`}
-          </span>
-        </div>
-        
-        {displayShippingCost > 0 && (
-          <div className="text-xs text-nocciola/70 bg-blue-50 border border-blue-100 p-3">
-            {translate('cartPage.shippingNote', { worldPrice: shippingCosts.world.toFixed(2) })}
+
+        {/* Costo spedizione */}
+        {selectedShippingZone ? (
+          <div className="flex justify-between text-nocciola">
+            <span>{t.cartPage.summary.shipping}</span>
+            <span className={shippingCost.isFree ? "text-green-600 font-medium" : "text-nocciola"}>
+              {shippingCost.isFree ? t.cartPage.summary.free : `€${shippingCost.costEur.toFixed(2)}`}
+            </span>
+          </div>
+        ) : (
+          <div className="text-xs text-nocciola/70 bg-olive/5 border border-olive/10 p-3">
+            {t.cartPage.summary.shippingCalculatedLater}
           </div>
         )}
-        
+
         <hr className="border-olive/20" />
-        
+
         <div className="flex justify-between text-olive font-bold text-xl">
           <span>{t.cartPage.summary.total}</span>
           <span>€{finalTotal.toFixed(2)}</span>
@@ -172,21 +187,6 @@ export default function OrderSummary({
         >
           {t.cartPage.summary.clearCart}
         </button>
-      </div>
-
-      {/* Info spedizione */}
-      <div className="mt-6 p-4 bg-olive/5 border border-olive/10">
-        <div className="flex items-start gap-3">
-          <svg className="w-5 h-5 text-olive mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <div className="text-sm text-nocciola">
-            <p className="font-medium text-olive mb-1">
-              {displayShippingCost === 0 ? t.cartPage.shipping.free : t.cartPage.shipping.paid}
-            </p>
-            <p>{t.cartPage.shipping.delivery}</p>
-          </div>
-        </div>
       </div>
 
       {/* Sicurezza checkout */}

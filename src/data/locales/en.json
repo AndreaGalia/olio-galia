@@ -519,7 +519,8 @@
       "checkout": "Proceed to Checkout",
       "continueShopping": "Continue Shopping",
       "clearCart": "Clear Cart",
-      "processing": "Processing..."
+      "processing": "Processing...",
+      "shippingCalculatedLater": "Shipping cost will be calculated based on your selected destination zone."
     },
     "shipping": {
       "free": "Free shipping",
@@ -549,6 +550,49 @@
   "security": {
     "title": "Secure Checkout",
     "description": "Payments protected by Stripe. Your data is safe."
+  },
+  "shippingSelection": {
+    "zoneSelector": {
+      "title": "Select Shipping Zone",
+      "description": "Choose your destination zone to calculate shipping costs",
+      "deliveryTimeNote": "Delivery times are indicative and may vary based on specific destination."
+    },
+    "zones": {
+      "italia": {
+        "name": "Italy",
+        "description": "National shipping",
+        "deliveryTime": "2-4 days"
+      },
+      "europa": {
+        "name": "Europe",
+        "description": "European countries",
+        "deliveryTime": "3-7 days"
+      },
+      "america": {
+        "name": "Americas",
+        "description": "North America (USA, Canada), Central and South America",
+        "deliveryTime": "7-14 days"
+      },
+      "mondo": {
+        "name": "Rest of World",
+        "description": "International shipping",
+        "deliveryTime": "10-21 days"
+      }
+    },
+    "zoneSelected": "Shipping zone selected",
+    "zoneRequired": "Select shipping zone to proceed to checkout",
+    "goToShipping": "Go to zone selection ↓",
+    "summary": {
+      "edit": "Edit"
+    }
+  },
+  "shippingCost": {
+    "title": "Shipping Cost Preview",
+    "totalWeight": "Total weight",
+    "tier": "Weight tier",
+    "cost": "Shipping cost",
+    "free": "FREE",
+    "italyThreshold": "Add €{amount} for free shipping!"
   }
   },
   "contactPage": {

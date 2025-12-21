@@ -1,6 +1,7 @@
 // hooks/useCheckout.ts
 import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
+import { ShippingZone } from '@/types/shipping';
 
 interface CartItem {
   id: string;
@@ -11,7 +12,11 @@ export const useCheckout = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const startCheckout = async (items: CartItem[], needsInvoice: boolean = false) => {
+  const startCheckout = async (
+    items: CartItem[],
+    needsInvoice: boolean = false,
+    shippingZone?: ShippingZone
+  ) => {
     setLoading(true);
     setError(null);
 
@@ -24,7 +29,8 @@ export const useCheckout = () => {
         },
         body: JSON.stringify({
           items,
-          needsInvoice, // Passa il flag per la fattura
+          needsInvoice,
+          shippingZone, // Passa solo la zona
         }),
       });
 

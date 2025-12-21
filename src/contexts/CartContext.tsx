@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { ShippingZone } from "@/types/shipping";
 
 type CartItem = {
   id: string;
@@ -15,25 +16,38 @@ type CartContextType = {
   clearCart: () => void;
   getTotalItems: () => number;
   getItemQuantity: (id: string) => number;
+  selectedShippingZone: ShippingZone | null;
+  setSelectedShippingZone: (zone: ShippingZone | null) => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [selectedShippingZone, setSelectedShippingZone] = useState<ShippingZone | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Carica dal localStorage solo sul client
   useEffect(() => {
     const storedCart = localStorage.getItem("cart");
+    const storedZone = localStorage.getItem("selectedShippingZone");
+
     if (storedCart) {
       try {
         setCart(JSON.parse(storedCart));
       } catch (error) {
-        
         setCart([]);
       }
     }
+
+    if (storedZone) {
+      try {
+        setSelectedShippingZone(JSON.parse(storedZone));
+      } catch (error) {
+        setSelectedShippingZone(null);
+      }
+    }
+
     setIsLoaded(true);
   }, []);
 
@@ -43,6 +57,24 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.setItem("cart", JSON.stringify(cart));
     }
   }, [cart, isLoaded]);
+
+  // Salva sul localStorage quando la zona di spedizione cambia
+  useEffect(() => {
+    if (isLoaded) {
+      if (selectedShippingZone) {
+        localStorage.setItem("selectedShippingZone", JSON.stringify(selectedShippingZone));
+      } else {
+        localStorage.removeItem("selectedShippingZone");
+      }
+    }
+  }, [selectedShippingZone, isLoaded]);
+
+  // Reset zona di spedizione quando il carrello diventa vuoto
+  useEffect(() => {
+    if (cart.length === 0) {
+      setSelectedShippingZone(null);
+    }
+  }, [cart.length]);
 
   // Memoizza tutte le funzioni con useCallback
   const addToCart = useCallback((id: string, quantity: number) => {
@@ -88,14 +120,16 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [cart]);
 
   return (
-    <CartContext.Provider value={{ 
-      cart, 
-      addToCart, 
-      removeFromCart, 
+    <CartContext.Provider value={{
+      cart,
+      addToCart,
+      removeFromCart,
       updateQuantity,
-      clearCart, 
+      clearCart,
       getTotalItems,
-      getItemQuantity 
+      getItemQuantity,
+      selectedShippingZone,
+      setSelectedShippingZone
     }}>
       {children}
     </CartContext.Provider>

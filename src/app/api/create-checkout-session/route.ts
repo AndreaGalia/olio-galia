@@ -2,6 +2,12 @@
 import Stripe from 'stripe';
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
+import { ShippingZone } from '@/types/shipping';
+import {
+  getActiveShippingConfig,
+  getShippingCostForZoneAndWeight as getShippingCostForZoneAndWeightService,
+  getItalyShippingCost as getItalyShippingCostService,
+} from '@/lib/shipping/shippingConfigService';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -14,6 +20,7 @@ interface CartItem {
 interface RequestBody {
   items: CartItem[];
   needsInvoice?: boolean;
+  shippingZone?: ShippingZone; // Zona di spedizione selezionata
 }
 
 // Constants
@@ -45,6 +52,17 @@ const COUNTRIES = {
 const validateCartItems = (items: CartItem[]) => {
   if (!items || items.length === 0) {
     throw new Error('Carrello vuoto');
+  }
+};
+
+const validateShippingZone = (zone?: ShippingZone) => {
+  if (!zone) {
+    throw new Error('Seleziona una zona di spedizione');
+  }
+
+  const validZones: ShippingZone[] = ['italia', 'europa', 'america', 'mondo'];
+  if (!validZones.includes(zone)) {
+    throw new Error('Zona di spedizione non valida');
   }
 };
 
@@ -100,6 +118,27 @@ const mapLocalIdsToStripeIds = async (items: CartItem[]) => {
   return mappedItems;
 };
 
+// Calcola peso totale carrello in grammi (query MongoDB)
+const calculateCartWeight = async (items: CartItem[]): Promise<number> => {
+  const { db } = await connectToDatabase();
+  let totalGrams = 0;
+
+  for (const item of items) {
+    // Gestisce sia ID locali (local_xxx) che ID Stripe
+    const productId = item.id.startsWith('local_') ? item.id : item.id;
+
+    const product = await db.collection('products').findOne({
+      $or: [{ id: productId }, { stripeProductId: productId }]
+    });
+
+    if (product?.weight) {
+      totalGrams += product.weight * item.quantity;
+    }
+  }
+
+  return totalGrams;
+};
+
 const buildLineItems = (
   items: CartItem[],
   products: Stripe.Product[],
@@ -131,9 +170,10 @@ const buildLineItems = (
   return { lineItems, totalAmount };
 };
 
+// Vecchia funzione - mantenuta per compatibilità ma non più usata con nuovo sistema zone
 const createShippingOptions = (totalAmount: number) => {
   const { freeThreshold, euCost, worldCost } = SHIPPING_CONFIG;
-  
+
   if (totalAmount >= freeThreshold) {
     return [{
       shipping_rate_data: {
@@ -174,6 +214,50 @@ const createShippingOptions = (totalAmount: number) => {
   ];
 };
 
+// Calcola e restituisce le shipping options basate su zona e peso/totale carrello
+const getShippingOptionsForZone = async (
+  zone: ShippingZone,
+  items: CartItem[],
+  totalAmountCents: number
+): Promise<Stripe.Checkout.SessionCreateParams.ShippingOption[]> => {
+  // Recupera configurazione spedizioni da MongoDB
+  const config = await getActiveShippingConfig();
+
+  if (!config) {
+    throw new Error(
+      'Configurazione spedizioni non trovata. Configura le spedizioni dall\'Admin Panel: /admin/shipping-config'
+    );
+  }
+
+  // ===== ITALIA: basata su totale € (NON peso) =====
+  if (zone === 'italia') {
+    const totalEur = totalAmountCents / 100;
+    const italyConfig = getItalyShippingCostService(totalEur, config);
+
+    if (!italyConfig.stripeRateId) {
+      throw new Error(
+        'Configurazione spedizione Italia incompleta. Verifica la configurazione nell\'Admin Panel.'
+      );
+    }
+
+    return [{ shipping_rate: italyConfig.stripeRateId }];
+  }
+
+  // ===== EUROPA/AMERICA/MONDO: basata su peso =====
+  const totalGrams = await calculateCartWeight(items);
+
+  const shippingConfig = getShippingCostForZoneAndWeightService(zone, totalGrams, config);
+
+  if (!shippingConfig || !shippingConfig.stripeRateId) {
+    throw new Error(
+      `Impossibile calcolare spedizione per zona ${zone} con peso ${totalGrams}g. ` +
+      `Contattaci per un preventivo personalizzato.`
+    );
+  }
+
+  return [{ shipping_rate: shippingConfig.stripeRateId }];
+};
+
 const createInvoiceConfig = (needsInvoice: boolean) => {
   if (!needsInvoice) return {};
 
@@ -205,33 +289,49 @@ const createInvoiceConfig = (needsInvoice: boolean) => {
   };
 };
 
-const createSessionConfig = (
+const createSessionConfig = async (
   lineItems: Stripe.Checkout.SessionCreateParams.LineItem[],
-  shippingOptions: Stripe.Checkout.SessionCreateParams.ShippingOption[],
+  shippingZone: ShippingZone,
+  items: CartItem[],
+  totalAmount: number,
   needsInvoice: boolean
-): Stripe.Checkout.SessionCreateParams => ({
-  payment_method_types: ['card'],
-  line_items: lineItems,
-  mode: 'payment',
-  success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-  cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/cart`,
-  locale: 'it',
-  
-  shipping_address_collection: {
-    allowed_countries: COUNTRIES.ALL,
-  },
-  shipping_options: shippingOptions,
-  
-  ...createInvoiceConfig(needsInvoice),
-});
+): Promise<Stripe.Checkout.SessionCreateParams> => {
+  // Ottiene le shipping options basate su zona e peso/totale carrello
+  const shippingOptions = await getShippingOptionsForZone(shippingZone, items, totalAmount);
+
+  return {
+    payment_method_types: ['card'],
+    line_items: lineItems,
+    mode: 'payment',
+    success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/cart`,
+    locale: 'it',
+
+    shipping_address_collection: {
+      allowed_countries: COUNTRIES.ALL,
+    },
+
+    // Usa shipping_options con riferimento alle shipping rates già create
+    shipping_options: shippingOptions,
+
+    // Metadata per salvare la zona selezionata
+    metadata: {
+      shipping_zone: shippingZone,
+    },
+
+    ...createInvoiceConfig(needsInvoice),
+  };
+};
 
 // Main handler
 export async function POST(request: NextRequest) {
   try {
     const body: RequestBody = await request.json();
-    const { items, needsInvoice = false } = body;
+    const { items, needsInvoice = false, shippingZone } = body;
 
+    // Validazioni
     validateCartItems(items);
+    validateShippingZone(shippingZone);
 
     // Mappa gli ID locali agli ID Stripe (se necessario)
     const mappedItems = await mapLocalIdsToStripeIds(items);
@@ -251,20 +351,22 @@ export async function POST(request: NextRequest) {
       priceMap
     );
 
-    // Create shipping options based on total
-    const shippingOptions = createShippingOptions(totalAmount);
-    
-    // Create session configuration
-    const sessionConfig = createSessionConfig(lineItems, shippingOptions, needsInvoice);
-    
+    // Create session configuration con zona selezionata + calcolo shipping basato su peso/totale
+    const sessionConfig = await createSessionConfig(
+      lineItems,
+      shippingZone!,
+      items, // Passa items originali (con ID locali) per calcolo peso
+      totalAmount,
+      needsInvoice
+    );
+
     // Create Stripe session
     const session = await stripe.checkout.sessions.create(sessionConfig);
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       sessionId: session.id,
       totalAmount: totalAmount / 100,
-      freeShippingThreshold: SHIPPING_CONFIG.freeThreshold / 100,
-      qualifiesForFreeShipping: totalAmount >= SHIPPING_CONFIG.freeThreshold
+      shippingZone: shippingZone,
     });
 
   } catch (error) {

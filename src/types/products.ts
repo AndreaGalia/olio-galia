@@ -28,6 +28,7 @@ export interface BaseProduct {
   stripeProductId?: string; // Opzionale - può essere vuoto se non configurato con Stripe
   stripePriceId?: string;   // Opzionale - può essere vuoto se non configurato con Stripe
   size: string;
+  weight?: number; // Peso in grammi (opzionale) - usato per calcolo spedizione
   inStock: boolean;
   stockQuantity: number;
   color: string;

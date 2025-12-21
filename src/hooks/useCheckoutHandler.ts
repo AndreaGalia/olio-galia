@@ -2,20 +2,21 @@
 import { useState } from 'react';
 import { useCheckout } from '@/hooks/useCheckout';
 import { CartItem } from '@/types/cart';
+import { ShippingZone } from '@/types/shipping';
 
 export function useCheckoutHandler() {
   const { startCheckout, loading: checkoutLoading, error: checkoutError, clearError } = useCheckout();
   const [needsInvoice, setNeedsInvoice] = useState<boolean>(false);
   const [showCheckoutError, setShowCheckoutError] = useState<boolean>(false);
 
-  const handleCheckout = async (cart: CartItem[]) => {
+  const handleCheckout = async (cart: CartItem[], shippingZone?: ShippingZone) => {
     if (cart.length === 0) return;
-    
+
     clearError();
     setShowCheckoutError(false);
-    
+
     try {
-      await startCheckout(cart, needsInvoice);
+      await startCheckout(cart, needsInvoice, shippingZone);
     } catch (err) {
       setShowCheckoutError(true);
     }

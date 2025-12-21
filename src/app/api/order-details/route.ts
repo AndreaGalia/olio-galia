@@ -32,6 +32,13 @@ interface OrderDetails {
       country?: string;
       state?: string;
     };
+    // Nuovi campi per sistema zone
+    zone?: 'italia' | 'europa' | 'america' | 'mondo';
+    selectedCity?: string;
+    selectedCountry?: string;
+    selectedCountryCode?: string;
+    cost?: number;
+    stripeShippingRateId?: string;
   };
   items: OrderItem[];
   pricing: {
@@ -146,13 +153,25 @@ const buildOrderDetails = async (session: Stripe.Checkout.Session): Promise<Orde
     state: session.customer_details.address.state || undefined,
   } : undefined;
 
+  // Estrai dati shipping dai metadata (se presenti)
+  const shippingMetadata = session.metadata || {};
+
   return {
     id: session.id,
     customer,
     shipping: {
       address: formatShippingAddress(session.customer_details),
       method: shippingMethod,
-      addressDetails
+      addressDetails,
+      // Nuovi campi dal sistema zone
+      zone: shippingMetadata.shipping_zone as any,
+      selectedCity: shippingMetadata.shipping_city,
+      selectedCountry: shippingMetadata.shipping_country,
+      selectedCountryCode: shippingMetadata.shipping_country_code,
+      cost: pricing.shippingCost * 100, // Converti in centesimi
+      stripeShippingRateId: typeof session.shipping_cost?.shipping_rate === 'string'
+        ? session.shipping_cost.shipping_rate
+        : undefined,
     },
     items,
     pricing,

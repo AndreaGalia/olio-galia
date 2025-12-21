@@ -4,6 +4,7 @@ import Footer from '@/components/layout/Footer';
 import FloatingCart from '@/components/FloatingCart';
 import { CartProvider } from '@/contexts/CartContext';
 import { LocaleProvider } from '@/contexts/LocaleContext';
+import { ShippingConfigProvider } from '@/contexts/ShippingConfigContext';
 import { Roboto } from 'next/font/google';
 import localFont from 'next/font/local';
 import { Analytics } from "@vercel/analytics/next"
@@ -51,12 +52,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={`${roboto.variable}`}>
         <LocaleProvider>
-          <CartProvider>
-            <Navbar />
-            <main>{children}</main>
-            <Footer />
-            <FloatingCart />
-          </CartProvider>
+          <ShippingConfigProvider>
+            <CartProvider>
+              <Navbar />
+              <main>{children}</main>
+              <Footer />
+              <FloatingCart />
+            </CartProvider>
+          </ShippingConfigProvider>
         </LocaleProvider>
         <Analytics />
       </body>

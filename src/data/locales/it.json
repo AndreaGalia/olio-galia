@@ -519,7 +519,8 @@
       "checkout": "Procedi al Checkout",
       "continueShopping": "Continua Shopping",
       "clearCart": "Svuota Carrello",
-      "processing": "Elaborazione..."
+      "processing": "Elaborazione...",
+      "shippingCalculatedLater": "Il costo di spedizione verrà calcolato in base alla zona di destinazione selezionata."
     },
     "shipping": {
       "free": "Spedizione gratuita",
@@ -549,6 +550,49 @@
   "security": {
     "title": "Checkout Sicuro",
     "description": "Pagamenti protetti da Stripe. I tuoi dati sono al sicuro."
+  },
+  "shippingSelection": {
+    "zoneSelector": {
+      "title": "Seleziona Zona di Spedizione",
+      "description": "Scegli la zona di destinazione per calcolare i costi di spedizione",
+      "deliveryTimeNote": "I tempi di consegna sono indicativi e possono variare in base alla destinazione specifica."
+    },
+    "zones": {
+      "italia": {
+        "name": "Italia",
+        "description": "Spedizione nazionale",
+        "deliveryTime": "2-4 giorni"
+      },
+      "europa": {
+        "name": "Europa",
+        "description": "Paesi europei",
+        "deliveryTime": "3-7 giorni"
+      },
+      "america": {
+        "name": "America",
+        "description": "Nord America (USA, Canada), Centro e Sud America",
+        "deliveryTime": "7-14 giorni"
+      },
+      "mondo": {
+        "name": "Resto del Mondo",
+        "description": "Spedizione internazionale",
+        "deliveryTime": "10-21 giorni"
+      }
+    },
+    "zoneSelected": "Zona di spedizione selezionata",
+    "zoneRequired": "Seleziona la zona di spedizione per procedere al checkout",
+    "goToShipping": "Vai alla selezione zona ↓",
+    "summary": {
+      "edit": "Modifica"
+    }
+  },
+  "shippingCost": {
+    "title": "Anteprima Costo Spedizione",
+    "totalWeight": "Peso totale",
+    "tier": "Fascia peso",
+    "cost": "Costo spedizione",
+    "free": "GRATIS",
+    "italyThreshold": "Aggiungi €{amount} per spedizione gratuita!"
   }
   },
   "contactPage": {

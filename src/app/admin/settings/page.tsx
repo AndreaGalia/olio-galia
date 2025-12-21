@@ -300,6 +300,22 @@ export default function AdminSettingsPage() {
               </button>
             </div>
           </div>
+
+          {/* Link to Shipping Configuration */}
+          <div className="flex items-center justify-between p-4 border border-olive/10 rounded-lg bg-yellow-50/30">
+            <div>
+              <h3 className="font-medium text-gray-900">Configurazione Spedizioni</h3>
+              <p className="text-sm text-gray-600">
+                Gestisci fasce peso, costi spedizione e configurazione zone geografiche
+              </p>
+            </div>
+            <button
+              onClick={() => router.push('/admin/shipping-config')}
+              className="px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer text-sm whitespace-nowrap"
+            >
+              Configura →
+            </button>
+          </div>
         </div>
       </div>
 

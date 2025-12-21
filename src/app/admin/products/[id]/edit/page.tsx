@@ -214,6 +214,7 @@ export default function EditProductPage() {
           price: product.price,
           originalPrice: product.originalPrice,
           size: product.size,
+          weight: product.weight || 0,
           color: product.color,
           images: product.images.filter(img => img && img.trim() !== ''),
           nutritionalInfo: product.nutritionalInfo,
@@ -390,6 +391,57 @@ export default function EditProductPage() {
                   onChange={(e) => setProduct(prev => prev ? { ...prev, color: e.target.value } : null)}
                   className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
                 />
+              </div>
+            </div>
+
+            {/* Peso per spedizioni */}
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Peso (grammi)
+                <span className="text-xs text-gray-500 ml-2 font-normal">
+                  (usato per calcolo spedizione)
+                </span>
+              </label>
+              <input
+                type="number"
+                step="1"
+                min="0"
+                value={product.weight || 0}
+                onChange={(e) => setProduct(prev => prev ? { ...prev, weight: parseInt(e.target.value) || 0 } : null)}
+                className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
+                placeholder="500"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Esempio: Bottiglia 500ml olio = 500g. Confezione regalo 2 bottiglie = 1000g.
+              </p>
+              {product.weight && product.weight > 0 && (
+                <p className="text-xs text-olive mt-1">
+                  = {(product.weight / 1000).toFixed(2)} kg
+                </p>
+              )}
+
+              {/* Pulsanti peso rapido */}
+              <div className="mt-3">
+                <p className="text-xs text-gray-600 mb-2">Pesi comuni:</p>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { label: '250ml (250g)', grams: 250 },
+                    { label: '500ml (500g)', grams: 500 },
+                    { label: '750ml (750g)', grams: 750 },
+                    { label: '1L (1000g)', grams: 1000 },
+                    { label: 'Confezione 2x500ml', grams: 1000 },
+                    { label: 'Confezione 3x500ml', grams: 1500 },
+                  ].map((preset) => (
+                    <button
+                      key={preset.label}
+                      type="button"
+                      onClick={() => setProduct(prev => prev ? { ...prev, weight: preset.grams } : null)}
+                      className="px-3 py-1.5 text-xs rounded border bg-white text-olive border-olive/30 hover:bg-olive/5 transition-colors"
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </section>
