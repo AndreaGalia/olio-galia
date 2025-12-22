@@ -124,7 +124,7 @@ export class EmailService {
         logoUrl: LOGO_URL,
         customerName: shippingData.customerName,
         orderNumber: shippingData.orderNumber,
-        shippingTrackingId: shippingData.shippingTrackingId,
+        trackingUrl: shippingData.trackingUrl,
         shippingCarrier: shippingData.shippingCarrier || 'Corriere Espresso',
         expectedDelivery: shippingData.expectedDelivery || '',
       };
@@ -139,7 +139,7 @@ export class EmailService {
         html: htmlContent,
         headers: {
           'X-Entity-Ref-ID': shippingData.orderNumber,
-          'X-Shipping-Tracking-ID': shippingData.shippingTrackingId,
+          'X-Shipping-Tracking-URL': shippingData.trackingUrl,
         },
       });
 

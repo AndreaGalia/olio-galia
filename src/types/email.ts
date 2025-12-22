@@ -31,7 +31,7 @@ export interface ShippingNotificationData {
   customerName: string;
   customerEmail: string;
   orderNumber: string;
-  shippingTrackingId: string;
+  trackingUrl: string;  // URL completo per tracking (non più solo ID)
   shippingCarrier?: string;
   expectedDelivery?: string;
 }

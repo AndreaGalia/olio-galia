@@ -455,12 +455,12 @@ export const createOrderConfirmationHTML = (orderData: EmailOrderDataExtended): 
 };
 
 export const createShippingNotificationHTML = (shippingData: ShippingNotificationData): string => {
-  const { 
-    customerName, 
-    orderNumber, 
-    shippingTrackingId,
+  const {
+    customerName,
+    orderNumber,
+    trackingUrl,
     shippingCarrier = 'Corriere Espresso',
-    expectedDelivery 
+    expectedDelivery
   } = shippingData;
   
   return `
@@ -772,10 +772,17 @@ export const createShippingNotificationHTML = (shippingData: ShippingNotificatio
                     ` : ''}
                   </div>
                   
-                  <!-- Tracking ID -->
-                  <h3 class="items-title">ID di Tracciamento</h3>
-                  <div class="tracking-highlight">${shippingTrackingId}</div>
-                  
+                  <!-- Track Shipment Button -->
+                  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 30px 0;">
+                    <tr>
+                      <td align="center">
+                        <a href="${trackingUrl}" style="display: inline-block; background-color: #556B2F; color: #ffffff; text-decoration: none; padding: 15px 40px; border-radius: 4px; font-size: 16px; font-weight: bold; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+                          Traccia la Spedizione
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+
                   <!-- Status Timeline -->
                   <div class="total-box">
                     <div class="total-row clearfix">

@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "create-admin": "tsx src/scripts/create-admin.ts",
-    "seed-shipping": "tsx scripts/seed-shipping-config.ts"
+    "seed-shipping": "tsx scripts/seed-shipping-config.ts",
+    "reseed-templates": "tsx src/scripts/reseedEmailTemplatesCustom.ts"
   },
   "dependencies": {
     "@anthropic-ai/claude-code": "^2.0.55",

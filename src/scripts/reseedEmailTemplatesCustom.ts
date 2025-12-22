@@ -1,43 +1,64 @@
 /**
- * Script di seeding per popolare il database con i template email di sistema
+ * Script per eliminare e ricreare i template email di sistema
+ * con possibilità di specificare credenziali MongoDB custom
  *
- * Esegui con: npx tsx src/scripts/seedEmailTemplates.ts
+ * Esegui con:
+ * npm run reseed-templates
  *
- * Questo script crea i 6 template email di sistema nel database:
- * - order_confirmation
- * - shipping_notification
- * - delivery_notification
- * - quote_email
- * - review_request
- * - newsletter_welcome
+ * Oppure doppio click su reseed-templates.bat
+ *
+ * Questo script:
+ * 1. Elimina i vecchi template di sistema
+ * 2. Ricrea i 6 template email di sistema nel database:
+ *    - order_confirmation
+ *    - shipping_notification
+ *    - delivery_notification
+ *    - quote_email
+ *    - review_request
+ *    - newsletter_welcome
  */
 
-// Carica variabili d'ambiente
-import { config } from 'dotenv';
-import { resolve } from 'path';
-
-// Carica .env.local (se esiste) o .env
-config({ path: resolve(process.cwd(), '.env.local') });
-config({ path: resolve(process.cwd(), '.env') });
-
-import { getDatabase } from '../lib/mongodb';
+import { MongoClient, Db } from 'mongodb';
 import { EmailTemplateDocument, TEMPLATE_VARIABLES } from '../types/emailTemplate';
 
-async function seedEmailTemplates() {
-  console.log('🌱 Inizio seeding template email...\n');
+// ===================================================================
+// CONFIGURAZIONE - Modifica qui le tue credenziali
+// ===================================================================
+const mongoUri = process.env.MONGODB_URI || 'mongodb+srv://ancegalia_db_user:Maxinda7007@cluster0.1ujsktk.mongodb.net/';
+const dbName = process.env.MONGODB_DB_NAME || 'ecommerce';
+// ===================================================================
+
+let client: MongoClient;
+
+async function getDatabase(): Promise<Db> {
+  client = new MongoClient(mongoUri);
+  await client.connect();
+  console.log('✅ Connesso a MongoDB');
+  return client.db(dbName);
+}
+
+async function reseedEmailTemplates() {
+  console.log('🔄 Inizio re-seeding template email...\n');
+  console.log(`📍 Database: ${dbName}`);
+  console.log(`📍 URI: ${mongoUri.substring(0, 30)}...\n`);
 
   try {
     const db = await getDatabase();
     const collection = db.collection<EmailTemplateDocument>('email_templates');
 
-    // Verifica se esistono già template di sistema
+    // 1. Elimina i vecchi template di sistema
     const existingCount = await collection.countDocuments({ isSystem: true });
+
     if (existingCount > 0) {
-      console.log(`⚠️  Trovati ${existingCount} template di sistema esistenti.`);
-      console.log('❌ Seeding annullato per evitare duplicati.\n');
-      console.log('💡 Suggerimento: Se vuoi ricreare i template, elimina prima quelli esistenti dal database.\n');
-      process.exit(0);
+      console.log(`🗑️  Eliminazione di ${existingCount} template di sistema esistenti...`);
+      const deleteResult = await collection.deleteMany({ isSystem: true });
+      console.log(`✅ Eliminati ${deleteResult.deletedCount} template\n`);
+    } else {
+      console.log('ℹ️  Nessun template di sistema da eliminare\n');
     }
+
+    // 2. Crea i nuovi template
+    console.log('📝 Creazione nuovi template...\n');
 
     // Template di sistema da creare
     const systemTemplates: Omit<EmailTemplateDocument, '_id'>[] = [
@@ -996,7 +1017,7 @@ async function seedEmailTemplates() {
 
     const result = await collection.insertMany(systemTemplates);
 
-    console.log(`✅ Seeding completato con successo!`);
+    console.log(`✅ Re-seeding completato con successo!`);
     console.log(`📊 Creati ${result.insertedCount} template:\n`);
 
     systemTemplates.forEach((template, index) => {
@@ -1006,12 +1027,17 @@ async function seedEmailTemplates() {
     console.log('\n🎉 Database popolato con successo!');
     console.log('💡 Ora puoi accedere a /admin/email-templates per gestire i template.\n');
 
+    // Chiudi la connessione
+    await client.close();
     process.exit(0);
   } catch (error) {
-    console.error('❌ Errore durante il seeding:', error);
+    console.error('❌ Errore durante il re-seeding:', error);
+    if (client) {
+      await client.close();
+    }
     process.exit(1);
   }
 }
 
 // Esegui lo script
-seedEmailTemplates();
+reseedEmailTemplates();

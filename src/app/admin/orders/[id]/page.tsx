@@ -58,6 +58,7 @@ export default function AdminOrderDetailsPage({
   const [loading, setLoading] = useState(true);
   const [shippingForm, setShippingForm] = useState({
     trackingId: '',
+    carrier: 'DHL',
     status: 'shipping'
   });
   const [isSubmittingShipping, setIsSubmittingShipping] = useState(false);
@@ -216,6 +217,7 @@ export default function AdminOrderDetailsPage({
         },
         body: JSON.stringify({
           shippingTrackingId: shippingForm.status === 'shipped' ? shippingForm.trackingId.trim() : undefined,
+          shippingCarrier: shippingForm.status === 'shipped' ? shippingForm.carrier : undefined,
           shippingStatus: shippingForm.status,
         }),
       });
@@ -228,7 +230,7 @@ export default function AdminOrderDetailsPage({
 
       setOrderDetails(data.order);
       setShippingSuccess(true);
-      setShippingForm({ trackingId: '', status: 'shipping' });
+      setShippingForm({ trackingId: '', carrier: 'DHL', status: 'shipping' });
 
       // Nascondi il messaggio di successo dopo 3 secondi
       setTimeout(() => {
@@ -548,24 +550,49 @@ export default function AdminOrderDetailsPage({
                         </div>
                       </div>
 
-                      {/* ID Spedizione - Solo quando lo stato è "shipped" */}
+                      {/* Corriere e ID Spedizione - Solo quando lo stato è "shipped" */}
                       {shippingForm.status === 'shipped' && (
-                        <div className="bg-white rounded-xl p-4 border-2 border-nocciola/30">
-                          <label htmlFor="trackingId" className="block text-sm font-semibold text-olive mb-2">
-                            🔢 ID Spedizione *
-                          </label>
-                          <input
-                            type="text"
-                            id="trackingId"
-                            value={shippingForm.trackingId}
-                            onChange={(e) => setShippingForm(prev => ({ ...prev, trackingId: e.target.value }))}
-                            placeholder="es. 1234567890 o ABC123XYZ"
-                            className="w-full px-4 py-3 border-2 border-nocciola/30 rounded-xl focus:ring-2 focus:ring-olive focus:border-olive font-mono text-olive"
-                            disabled={isSubmittingShipping}
-                          />
-                          <p className="text-xs text-nocciola mt-2 font-medium">
-                            💡 Il cliente riceverà questo ID per tracciare la spedizione
-                          </p>
+                        <div className="bg-white rounded-xl p-4 border-2 border-nocciola/30 space-y-4">
+                          {/* Selezione Corriere */}
+                          <div>
+                            <label htmlFor="carrier" className="block text-sm font-semibold text-olive mb-2">
+                              🚚 Corriere *
+                            </label>
+                            <select
+                              id="carrier"
+                              value={shippingForm.carrier}
+                              onChange={(e) => setShippingForm(prev => ({ ...prev, carrier: e.target.value }))}
+                              className="w-full px-4 py-3 border-2 border-nocciola/30 rounded-xl focus:ring-2 focus:ring-olive focus:border-olive bg-white text-olive font-medium transition-all duration-200"
+                              disabled={isSubmittingShipping}
+                            >
+                              <option value="DHL">DHL Express</option>
+                              <option value="UPS">UPS</option>
+                              <option value="FEDEX">FedEx</option>
+                              <option value="POSTE ITALIANE">Poste Italiane</option>
+                              <option value="SDA">SDA Express Courier</option>
+                              <option value="BRT">BRT (Bartolini)</option>
+                              <option value="GLS">GLS</option>
+                            </select>
+                          </div>
+
+                          {/* ID Spedizione */}
+                          <div>
+                            <label htmlFor="trackingId" className="block text-sm font-semibold text-olive mb-2">
+                              🔢 Codice Tracciamento *
+                            </label>
+                            <input
+                              type="text"
+                              id="trackingId"
+                              value={shippingForm.trackingId}
+                              onChange={(e) => setShippingForm(prev => ({ ...prev, trackingId: e.target.value }))}
+                              placeholder="es. 1234567890 o ABC123XYZ"
+                              className="w-full px-4 py-3 border-2 border-nocciola/30 rounded-xl focus:ring-2 focus:ring-olive focus:border-olive font-mono text-olive"
+                              disabled={isSubmittingShipping}
+                            />
+                            <p className="text-xs text-nocciola mt-2 font-medium">
+                              🔗 Il cliente riceverà un link per tracciare automaticamente la spedizione con {shippingForm.carrier}
+                            </p>
+                          </div>
                         </div>
                       )}
                     </div>

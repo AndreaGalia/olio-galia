@@ -88,7 +88,7 @@ export const TEMPLATE_VARIABLES: Record<string, string[]> = {
     'logoUrl',
     'customerName',
     'orderNumber',
-    'shippingTrackingId',
+    'trackingUrl',
     'shippingCarrier',
     'expectedDelivery'
   ],
@@ -146,7 +146,7 @@ export const VARIABLE_DESCRIPTIONS: Record<string, string> = {
   shippingAddress: 'Indirizzo di spedizione completo',
   receiptUrl: 'URL ricevuta/fattura',
   hasInvoice: 'Se include fattura (Sì/No)',
-  shippingTrackingId: 'ID tracciamento spedizione',
+  trackingUrl: 'URL completo per tracciare la spedizione',
   shippingCarrier: 'Corriere (es. DHL)',
   expectedDelivery: 'Data consegna prevista',
   deliveryDate: 'Data consegna effettiva',
