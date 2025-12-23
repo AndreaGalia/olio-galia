@@ -8,7 +8,7 @@ export default function ProductsPageBanner() {
       {/* Image Background */}
       <div className="absolute inset-0 w-full h-full">
         <Image
-          src="/beautyoil.jpg"
+          src={process.env.NEXT_PUBLIC_BEAUTY_OIL_IMAGE_URL || "/beautyoil.jpg"}
           alt="Olio Galia Beauty"
           fill
           className="object-cover"

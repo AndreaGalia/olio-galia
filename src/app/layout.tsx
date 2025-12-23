@@ -37,9 +37,9 @@ export const metadata = {
   title: 'Olio Galia',
   description: '100% Olio Extravergine da Cassaro, Sicilia',
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
+    icon: process.env.NEXT_PUBLIC_FAVICON_URL || '/favicon.ico',
+    shortcut: process.env.NEXT_PUBLIC_FAVICON_URL || '/favicon.ico',
+    apple: process.env.NEXT_PUBLIC_APPLE_TOUCH_ICON_URL || '/apple-touch-icon.png',
   },
 };
 

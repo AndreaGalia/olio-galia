@@ -8,7 +8,7 @@ export function ProductsBanner() {
       {/* Image Background */}
       <div className="absolute inset-0 w-full h-full">
         <Image
-          src="/uliveto.JPG"
+          src={process.env.NEXT_PUBLIC_ULIVETO_IMAGE_URL || "/uliveto.JPG"}
           alt="Uliveto Olio Galia"
           fill
           className="object-cover"
