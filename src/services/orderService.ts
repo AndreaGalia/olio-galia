@@ -68,7 +68,7 @@ export class OrderService {
       const collection = db.collection(this.COLLECTION_NAME);
 
       const order = await collection.findOne({ id: sessionId });
-      
+
       if (!order) {
         return null;
       }
@@ -76,6 +76,47 @@ export class OrderService {
       return this.mongoToOrderDetails(order);
     } catch (error) {
       return null;
+    }
+  }
+
+  // Trova un ordine per session ID con controllo di accesso temporale
+  // Restituisce i dati completi solo se l'ordine è stato creato nelle ultime 2 ore
+  static async findOrderBySessionIdWithAccessControl(
+    sessionId: string,
+    maxAgeHours: number = 2
+  ): Promise<{ order: OrderDetails | null; expired: boolean; createdAt?: Date }> {
+    try {
+      const db = await getDatabase();
+      const collection = db.collection(this.COLLECTION_NAME);
+
+      const order = await collection.findOne({ id: sessionId });
+
+      if (!order) {
+        return { order: null, expired: false };
+      }
+
+      // Calcola la differenza di tempo
+      const createdAt = order.createdAt as Date;
+      const now = new Date();
+      const hoursDifference = (now.getTime() - createdAt.getTime()) / (1000 * 60 * 60);
+
+      // Se l'ordine è più vecchio del limite, restituisci solo info minime
+      if (hoursDifference > maxAgeHours) {
+        return {
+          order: null,
+          expired: true,
+          createdAt
+        };
+      }
+
+      // Ordine ancora valido, restituisci tutti i dati
+      return {
+        order: this.mongoToOrderDetails(order),
+        expired: false,
+        createdAt
+      };
+    } catch (error) {
+      return { order: null, expired: false };
     }
   }
 

@@ -14,13 +14,14 @@ import TimelineProcess from '@/components/checkoutSuccessPage/TimelineProcess';
 import CallToAction from '@/components/checkoutSuccessPage/CallToAction';
 import BackgroundDecorations from '@/components/checkoutSuccessPage/BackgroundDecorations';
 import OrderSummaryDisplay from '@/components/checkoutSuccessPage/OrderSummaryDisplay';
+import ExpiredAccessMessage from '@/components/checkoutSuccessPage/ExpiredAccessMessage';
 
 export default function CheckoutSuccessContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('session_id');
 
   // Polling per attendere che il webhook salvi l'ordine
-  const { order, loading, error } = useOrderPolling(sessionId);
+  const { order, loading, error, expired } = useOrderPolling(sessionId);
 
   // Status documenti
   const invoiceStatus = useInvoiceStatus(sessionId);
@@ -28,6 +29,11 @@ export default function CheckoutSuccessContent() {
 
   // Pulizia del carrello
   useCartCleanup(sessionId);
+
+  // Se l'accesso è scaduto, mostra il messaggio di scadenza
+  if (expired) {
+    return <ExpiredAccessMessage />;
+  }
 
   return (
     <div className="min-h-screen bg-homepage-bg">

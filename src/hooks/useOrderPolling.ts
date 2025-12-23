@@ -5,18 +5,20 @@ interface OrderPollingResult {
   order: OrderDetails | null;
   loading: boolean;
   error: string | null;
+  expired?: boolean; // Indica se l'accesso è scaduto
 }
 
 export function useOrderPolling(sessionId: string | null) {
   const [result, setResult] = useState<OrderPollingResult>({
     order: null,
     loading: true,
-    error: null
+    error: null,
+    expired: false
   });
 
   useEffect(() => {
     if (!sessionId) {
-      setResult({ order: null, loading: false, error: 'Session ID mancante' });
+      setResult({ order: null, loading: false, error: 'Session ID mancante', expired: false });
       return;
     }
 
@@ -31,9 +33,20 @@ export function useOrderPolling(sessionId: string | null) {
 
         if (!isMounted) return;
 
+        // Controlla se l'accesso è scaduto (status 403)
+        if (response.status === 403 && data.error === 'access_expired') {
+          setResult({
+            order: null,
+            loading: false,
+            error: null,
+            expired: true
+          });
+          return;
+        }
+
         if (response.ok && data.order) {
           // Ordine trovato in MongoDB
-          setResult({ order: data.order, loading: false, error: null });
+          setResult({ order: data.order, loading: false, error: null, expired: false });
         } else if (attempts < maxAttempts) {
           // Webhook non ha ancora salvato, riprova dopo 1 secondo
           attempts++;
@@ -43,7 +56,8 @@ export function useOrderPolling(sessionId: string | null) {
           setResult({
             order: null,
             loading: false,
-            error: 'Ordine in elaborazione. Riceverai una email di conferma a breve.'
+            error: 'Ordine in elaborazione. Riceverai una email di conferma a breve.',
+            expired: false
           });
         }
       } catch (error) {
@@ -51,7 +65,8 @@ export function useOrderPolling(sessionId: string | null) {
         setResult({
           order: null,
           loading: false,
-          error: 'Errore nel recupero ordine'
+          error: 'Errore nel recupero ordine',
+          expired: false
         });
       }
     };

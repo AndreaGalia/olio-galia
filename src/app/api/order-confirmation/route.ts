@@ -13,19 +13,33 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Cerca l'ordine salvato dal webhook usando OrderService
-    const order = await OrderService.findOrderBySessionId(sessionId);
+    // Cerca l'ordine con controllo di accesso temporale (2 ore)
+    const { order, expired, createdAt } = await OrderService.findOrderBySessionIdWithAccessControl(sessionId, 2);
+
+    // Se l'accesso è scaduto
+    if (expired) {
+      return NextResponse.json(
+        {
+          error: 'access_expired',
+          message: 'Per motivi di sicurezza, i dettagli completi dell\'ordine sono visibili solo per 2 ore. Controlla la tua email per i dettagli.',
+          order: null,
+          expired: true,
+          createdAt: createdAt?.toISOString()
+        },
+        { status: 403 } // Forbidden
+      );
+    }
 
     if (!order) {
       // Webhook non ha ancora salvato
       return NextResponse.json(
-        { message: 'Ordine in elaborazione', order: null },
+        { message: 'Ordine in elaborazione', order: null, expired: false },
         { status: 202 } // Accepted but not yet processed
       );
     }
 
-    // Ordine trovato
-    return NextResponse.json({ order });
+    // Ordine trovato e ancora accessibile
+    return NextResponse.json({ order, expired: false });
 
   } catch (error) {
     console.error('Errore recupero ordine:', error);

@@ -625,6 +625,15 @@
   "productAdded": "Product Added"
 },
 "checkoutSuccess": {
+    "expired": {
+      "title": "Access Expired",
+      "message": "For security reasons, full order details are visible only for 2 hours after purchase.",
+      "emailInfo": "Check your email for all order details, confirmation and shipping information.",
+      "security": "This security measure protects your personal data.",
+      "backToHome": "Back to Home",
+      "exploreProducts": "Explore Products",
+      "footer": "This page protects your personal data by limiting access to 2 hours."
+    },
     "hero": {
       "title": "Thank you!",
       "subtitle": "Your order has been confirmed",
@@ -680,6 +689,7 @@
       "backToHome": "Back to Home"
     },
     "loading": {
+      "text": "Loading...",
       "orderSummary": "Loading order summary...",
       "processing": "Processing..."
     },

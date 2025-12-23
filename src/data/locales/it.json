@@ -625,6 +625,15 @@
   "productAdded": "Prodotto Aggiunto"
 },
   "checkoutSuccess": {
+    "expired": {
+      "title": "Accesso Scaduto",
+      "message": "Per motivi di sicurezza, i dettagli completi dell'ordine sono visibili solo per 2 ore dall'acquisto.",
+      "emailInfo": "Controlla la tua email per tutti i dettagli dell'ordine, la conferma e le informazioni di spedizione.",
+      "security": "Questa misura di sicurezza protegge i tuoi dati personali.",
+      "backToHome": "Torna alla Home",
+      "exploreProducts": "Esplora i Prodotti",
+      "footer": "Questa pagina protegge i tuoi dati personali limitando l'accesso a 2 ore."
+    },
     "hero": {
       "title": "Grazie!",
       "subtitle": "Il tuo ordine è stato confermato",
@@ -680,6 +689,7 @@
       "backToHome": "Torna alla Home"
     },
     "loading": {
+      "text": "Caricamento...",
       "orderSummary": "Caricamento riepilogo ordine...",
       "processing": "Elaborazione..."
     },
