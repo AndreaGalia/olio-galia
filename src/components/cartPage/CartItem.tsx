@@ -108,9 +108,6 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
               <span className="text-nocciola/60 line-through text-lg">€{originalPrice.toFixed(2)}</span>
             )}
           </div>
-          <div className="text-xs text-nocciola/70 mt-1">
-            {translate('cartPage.product.stock', { count: product.stockQuantity })}
-          </div>
         </div>
 
         <div className="flex items-center gap-4">

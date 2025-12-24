@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useCart } from '@/contexts/CartContext';
 import { useProducts } from '@/hooks/useProducts';
 import { useT } from '@/hooks/useT';
@@ -30,8 +31,10 @@ import DeliveryZoneSelector from '@/components/cartPage/DeliveryZoneSelector';
 import DeliveryZoneDetails from '@/components/cartPage/DeliveryZoneDetails';
 import DeliveryZoneSummary from '@/components/cartPage/DeliveryZoneSummary';
 import ShippingSelectionFlow from '@/components/cartPage/ShippingSelectionFlow';
+import PaymentCanceledBanner from '@/components/cartPage/PaymentCanceledBanner';
 
 export default function CartPage() {
+  const searchParams = useSearchParams();
   const { cart, getTotalItems, selectedShippingZone, setSelectedShippingZone } = useCart();
   const { products, loading, error } = useProducts();
   const { settings } = useSettings();
@@ -40,12 +43,21 @@ export default function CartPage() {
   // State per la scelta della zona di consegna
   const [deliveryChoice, setDeliveryChoice] = useState<'torino' | 'italia' | null>(null);
 
+  // State per il banner di pagamento cancellato
+  const paymentCanceled = searchParams.get('payment_canceled') === 'true';
+  const [showCancelBanner, setShowCancelBanner] = useState(paymentCanceled);
+
   // Scroll automatico in alto quando il carrello diventa vuoto
   useEffect(() => {
     if (cart.length === 0) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [cart.length]);
+
+  // Reset banner quando cambia il query param
+  useEffect(() => {
+    setShowCancelBanner(paymentCanceled);
+  }, [paymentCanceled]);
 
   // Hook personalizzati
   const totalItems = getTotalItems();
@@ -112,6 +124,22 @@ export default function CartPage() {
 
       {/* Breadcrumb */}
       <CartBreadcrumb />
+
+      {/* Banner Pagamento Cancellato */}
+      <PaymentCanceledBanner
+        show={showCancelBanner && cart.length > 0}
+        onClose={() => setShowCancelBanner(false)}
+        onRetry={() => {
+          if (selectedShippingZone) {
+            handleCheckout(cart, selectedShippingZone);
+          } else {
+            const section = document.getElementById('shipping-section');
+            section?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }}
+        loading={checkoutLoading}
+        showRetryButton={stripeCheckoutAvailable}
+      />
 
       <div className="container mx-auto px-4 sm:px-6 max-w-6xl py-8 sm:py-12">
         <div className="flex items-center gap-3 mb-8">

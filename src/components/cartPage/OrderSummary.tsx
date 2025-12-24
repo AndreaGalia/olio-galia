@@ -149,10 +149,7 @@ export default function OrderSummary({
             className="w-full cursor-pointer bg-olive text-beige py-4 font-medium transition-all duration-300 text-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 border border-olive/20 uppercase tracking-wider"
           >
             {checkoutLoading ? (
-              <>
-                <div className="w-5 h-5 border-2 border-beige/30 border-t-beige animate-spin"></div>
-                {t.cartPage.summary.processing}
-              </>
+              t.cartPage.summary.processing
             ) : (
               <>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -304,7 +304,7 @@ const createSessionConfig = async (
     line_items: lineItems,
     mode: 'payment',
     success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/cart`,
+    cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/cart?payment_canceled=true`,
     locale: 'it',
 
     shipping_address_collection: {

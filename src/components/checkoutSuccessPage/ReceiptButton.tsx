@@ -27,15 +27,13 @@ export default function ReceiptButton({ receiptStatus, invoiceStatus }: ReceiptB
         className="cursor-pointer flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 bg-olive text-white border border-olive/20 transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-60 font-medium text-sm sm:text-base uppercase tracking-wider w-full sm:w-auto"
       >
         {/* Icona principale */}
-        <div className="flex-shrink-0">
-          {receiptStatus.checking ? (
-            <div className="w-5 h-5 sm:w-6 sm:h-6 border-2 border-white/30 border-t-white animate-spin"></div>
-          ) : (
+        {!receiptStatus.checking && (
+          <div className="flex-shrink-0">
             <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Contenuto testuale */}
         <div className="flex-1 text-left">

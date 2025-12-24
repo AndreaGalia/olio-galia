@@ -12,8 +12,7 @@ function CheckoutSuccessLoading() {
     <div className="min-h-screen bg-gradient-to-br from-sabbia via-beige to-sabbia/80">
       <div className="container mx-auto px-4 py-16">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-olive/20 border-t-olive rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-olive text-lg">{t.checkoutSuccess.loading.text}</p>
+          <p className="text-olive text-2xl font-serif">{t.checkoutSuccess.loading.text}</p>
         </div>
       </div>
     </div>

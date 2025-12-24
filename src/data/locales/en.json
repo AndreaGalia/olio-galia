@@ -230,7 +230,7 @@
       "description": "Since 1940, three generations of Sicilian passion in every drop. We continue the family tradition with dedication and love for excellence.",
       "badges": {
         "sicilian": "100% Sicilian",
-        "extraVirgin": "100% Extra Virgin"
+        "extraVirgin": "100% EVO"
       }
     },
     "products": {
@@ -593,6 +593,12 @@
     "cost": "Shipping cost",
     "free": "FREE",
     "italyThreshold": "Add €{amount} for free shipping!"
+  },
+  "paymentCanceled": {
+    "title": "Payment not completed",
+    "message": "Your order was not processed. The products are still in your cart and you can try again whenever you want.",
+    "retry": "Retry payment",
+    "retrying": "Loading..."
   }
   },
   "contactPage": {

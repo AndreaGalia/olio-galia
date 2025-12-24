@@ -9,8 +9,7 @@ export default function OrderSummaryDisplay({ orderDetails, loading }: OrderSumm
       <div className="max-w-3xl mx-auto mb-16">
         <div className="bg-white border border-olive/10 p-8">
           <div className="text-center">
-            <div className="w-8 h-8 border-2 border-olive/30 border-t-olive animate-spin mx-auto mb-4"></div>
-            <p className="text-nocciola">{t.checkoutSuccess.loading.orderSummary}</p>
+            <p className="text-olive text-xl font-serif">{t.checkoutSuccess.loading.orderSummary}</p>
           </div>
         </div>
       </div>
