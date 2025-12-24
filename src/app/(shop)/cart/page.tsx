@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useCart } from '@/contexts/CartContext';
 import { useProducts } from '@/hooks/useProducts';
@@ -33,7 +33,7 @@ import DeliveryZoneSummary from '@/components/cartPage/DeliveryZoneSummary';
 import ShippingSelectionFlow from '@/components/cartPage/ShippingSelectionFlow';
 import PaymentCanceledBanner from '@/components/cartPage/PaymentCanceledBanner';
 
-export default function CartPage() {
+function CartPageContent() {
   const searchParams = useSearchParams();
   const { cart, getTotalItems, selectedShippingZone, setSelectedShippingZone } = useCart();
   const { products, loading, error } = useProducts();
@@ -346,5 +346,25 @@ export default function CartPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function CartPageLoading() {
+  return (
+    <div className="min-h-screen bg-homepage-bg">
+      <div className="container mx-auto px-4 py-16">
+        <div className="text-center">
+          <p className="text-olive text-2xl font-serif">Caricamento...</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function CartPage() {
+  return (
+    <Suspense fallback={<CartPageLoading />}>
+      <CartPageContent />
+    </Suspense>
   );
 }
