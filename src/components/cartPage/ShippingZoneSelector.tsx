@@ -36,12 +36,12 @@ export default function ShippingZoneSelector({ selectedZone, onSelectZone }: Shi
               key={zoneId}
               onClick={() => onSelectZone(zoneId)}
               className={`
-                relative bg-beige/30 border transition-all duration-300
-                p-6 sm:p-5 text-left
+                relative bg-white border transition-all duration-300
+                p-6 sm:p-5 text-left cursor-pointer
                 min-h-[140px] sm:min-h-[160px]
                 ${isSelected
-                  ? 'border-olive bg-olive/10'
-                  : 'border-olive/10 hover:border-olive/30 active:bg-olive/5'
+                  ? 'border-olive border-2 bg-olive/5'
+                  : 'border-olive/10 hover:border-olive/30 hover:bg-olive/5'
                 }
               `}
               aria-pressed={isSelected}

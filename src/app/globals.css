@@ -184,3 +184,19 @@ h1, h2, h3, h4, h5, h6 {
   animation: fadeIn 0.4s ease-out;
 }
 
+/* Slide Up Animation - Per Sticky Bottom Bar */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.3s ease-out;
+}
+

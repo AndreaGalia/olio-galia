@@ -599,6 +599,19 @@
     "message": "Your order was not processed. The products are still in your cart and you can try again whenever you want.",
     "retry": "Retry payment",
     "retrying": "Loading..."
+  },
+  "fab": {
+    "selectShipping": "Select Shipping",
+    "checkout": "Checkout"
+  },
+  "wizard": {
+    "step1Title": "CART SUMMARY",
+    "step2Title": "SELECT SHIPPING",
+    "step3Title": "CONFIRM ORDER",
+    "continue": "CONTINUE",
+    "torinoTitle": "ARE YOU FROM TURIN?",
+    "torinoDescription": "Use quick checkout for pickup or delivery in Turin",
+    "or": "OR"
   }
   },
   "contactPage": {

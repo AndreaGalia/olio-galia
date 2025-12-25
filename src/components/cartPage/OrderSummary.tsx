@@ -87,7 +87,7 @@ export default function OrderSummary({
 
       <div className="space-y-4 mb-6">
         <div className="flex justify-between text-nocciola">
-          <span>{translate('cartPage.summary.subtotal', { count: totalItems, itemLabel })}</span>
+          <span>{t.cartPage.summary.subtotal?.replace('{count}', totalItems.toString()).replace('{itemLabel}', itemLabel) || `Subtotale (${totalItems} ${itemLabel})`}</span>
           <span>€{total.toFixed(2)}</span>
         </div>
 

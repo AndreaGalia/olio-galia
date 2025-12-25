@@ -599,6 +599,19 @@
     "message": "Il tuo ordine non è stato processato. I prodotti sono ancora nel carrello e puoi riprovare quando vuoi.",
     "retry": "Riprova il pagamento",
     "retrying": "Caricamento..."
+  },
+  "fab": {
+    "selectShipping": "Seleziona Spedizione",
+    "checkout": "Checkout"
+  },
+  "wizard": {
+    "step1Title": "RIEPILOGO CARRELLO",
+    "step2Title": "SELEZIONA SPEDIZIONE",
+    "step3Title": "CONFERMA ORDINE",
+    "continue": "CONTINUA",
+    "torinoTitle": "SEI DI TORINO?",
+    "torinoDescription": "Usa il checkout veloce per ritiro o consegna a Torino",
+    "or": "OPPURE"
   }
   },
   "contactPage": {
