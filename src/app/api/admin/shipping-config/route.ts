@@ -6,6 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { withAuth } from '@/lib/auth/middleware';
 import {
   getActiveShippingConfig,
   updateShippingConfig,
@@ -25,15 +26,6 @@ import {
  */
 export async function GET(request: NextRequest) {
   try {
-    // TODO: Aggiungere verifica autenticazione admin
-    // const session = await getServerSession(authOptions);
-    // if (!session || session.user.role !== 'admin') {
-    //   return NextResponse.json(
-    //     { success: false, config: null, error: 'Unauthorized' },
-    //     { status: 401 }
-    //   );
-    // }
-
     const config = await getActiveShippingConfig();
 
     const response: GetShippingConfigResponse = {
@@ -70,17 +62,8 @@ export async function GET(request: NextRequest) {
  *
  * @returns UpdateShippingConfigResponse con configurazione aggiornata
  */
-export async function PUT(request: NextRequest) {
+export const PUT = withAuth(async (request: NextRequest) => {
   try {
-    // TODO: Aggiungere verifica autenticazione admin
-    // const session = await getServerSession(authOptions);
-    // if (!session || session.user.role !== 'admin') {
-    //   return NextResponse.json(
-    //     { success: false, message: 'Unauthorized' },
-    //     { status: 401 }
-    //   );
-    // }
-
     const body: UpdateShippingConfigRequest = await request.json();
 
     // Validazione base body
@@ -113,4 +96,4 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json(response, { status: 500 });
   }
-}
+});
