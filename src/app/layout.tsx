@@ -8,6 +8,7 @@ import { ShippingConfigProvider } from '@/contexts/ShippingConfigContext';
 import { Roboto } from 'next/font/google';
 import localFont from 'next/font/local';
 import { Analytics } from "@vercel/analytics/next"
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -62,6 +63,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </ShippingConfigProvider>
         </LocaleProvider>
         <Analytics />
+        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+        )}
       </body>
     </html>
   );

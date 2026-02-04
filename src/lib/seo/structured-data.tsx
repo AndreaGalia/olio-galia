@@ -91,7 +91,7 @@ export function generateProductSchema(
     },
     offers: {
       '@type': 'Offer',
-      url: `${BASE_URL}/${locale}/products/${slug}`,
+      url: `${BASE_URL}/products/${slug}`,
       priceCurrency: 'EUR',
       price: price.toFixed(2),
       availability: inStock

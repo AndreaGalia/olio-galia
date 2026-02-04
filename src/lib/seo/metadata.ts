@@ -41,10 +41,6 @@ export function generateBaseMetadata(locale: 'it' | 'en' = DEFAULT_LOCALE): Meta
     metadataBase: new URL(BASE_URL),
     alternates: {
       canonical: '/',
-      languages: {
-        'it': '/it',
-        'en': '/en'
-      }
     },
     openGraph: {
       type: 'website',
@@ -80,10 +76,7 @@ export function generateBaseMetadata(locale: 'it' | 'en' = DEFAULT_LOCALE): Meta
       }
     },
     verification: {
-      // Aggiungi qui i codici di verifica quando disponibili
-      // google: 'your-google-verification-code',
-      // yandex: 'your-yandex-verification-code',
-      // bing: 'your-bing-verification-code'
+      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
     }
   };
 }
@@ -122,7 +115,7 @@ export function generateProductMetadata(
   ].filter(Boolean);
 
   // URL prodotto
-  const productUrl = `${BASE_URL}/${locale}/products/${slug}`;
+  const productUrl = `${BASE_URL}/products/${slug}`;
 
   // Immagine prodotto (prima immagine disponibile)
   const images = 'images' in product ? product.images : [];
@@ -137,10 +130,6 @@ export function generateProductMetadata(
     publisher: SITE_NAME,
     alternates: {
       canonical: productUrl,
-      languages: {
-        'it': `${BASE_URL}/it/products/${'slug' in product && typeof product.slug === 'object' ? product.slug.it : slug}`,
-        'en': `${BASE_URL}/en/products/${'slug' in product && typeof product.slug === 'object' ? product.slug.en : slug}`
-      }
     },
     openGraph: {
       type: 'website',
@@ -202,10 +191,6 @@ export function generatePageMetadata(
     publisher: SITE_NAME,
     alternates: {
       canonical: pageUrl,
-      languages: {
-        'it': `${BASE_URL}/it${path}`,
-        'en': `${BASE_URL}/en${path}`
-      }
     },
     openGraph: {
       type: 'website',
