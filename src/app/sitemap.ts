@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 import { getDatabase } from '@/lib/mongodb';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://oliogalia.it';
+const BASE_URL = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://oliogalia.com').replace(/\/$/, '');
 
 interface ProductSlug {
   slug: {

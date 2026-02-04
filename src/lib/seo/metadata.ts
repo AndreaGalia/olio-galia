@@ -3,7 +3,7 @@ import { Product, ProductDocument } from '@/types/products';
 
 const SITE_NAME = 'Olio Galia';
 const DEFAULT_LOCALE = 'it';
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://oliogalia.it';
+const BASE_URL = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://oliogalia.com').replace(/\/$/, '');
 
 interface LocalizedContent {
   it: {

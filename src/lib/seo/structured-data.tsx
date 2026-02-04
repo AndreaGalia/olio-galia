@@ -2,7 +2,7 @@ import Script from 'next/script';
 import { Product, ProductDocument } from '@/types/products';
 
 const SITE_NAME = 'Olio Galia';
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://oliogalia.it';
+const BASE_URL = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://oliogalia.com').replace(/\/$/, '');
 
 /**
  * Genera structured data JSON-LD per Organization
