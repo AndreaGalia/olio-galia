@@ -20,7 +20,7 @@ export default function WasteDisposalPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-beige to-sabbia">
+    <div className="min-h-screen bg-homepage-bg">
 
       {/* Hero Section */}
       <section className="relative py-12 sm:py-16 lg:py-20 overflow-hidden">

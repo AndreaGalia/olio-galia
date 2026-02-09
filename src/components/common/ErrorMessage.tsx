@@ -6,7 +6,7 @@ interface ErrorMessageProps {
 
 export default function ErrorMessage({ error, onRetry, retryText = "Riprova" }: ErrorMessageProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige flex items-center justify-center">
+    <div className="min-h-screen bg-homepage-bg flex items-center justify-center">
       <div className="text-center">
         <p className="text-red-600 text-lg mb-4">{error}</p>
         {onRetry && (

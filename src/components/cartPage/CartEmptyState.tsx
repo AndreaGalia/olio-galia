@@ -6,7 +6,7 @@ export default function CartEmptyState() {
   const { t } = useT();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige">
+    <div className="min-h-screen bg-homepage-bg">
       <CartBreadcrumb />
 
       <div className="container mx-auto px-4 sm:px-6 max-w-4xl py-12 sm:py-20">

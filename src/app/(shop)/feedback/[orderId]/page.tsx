@@ -241,7 +241,7 @@ export default function FeedbackPage() {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige flex items-center justify-center">
+      <div className="min-h-screen bg-homepage-bg flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-olive mx-auto mb-4"></div>
           <p className="text-olive font-serif text-xl">{translate('feedback.loading')}</p>
@@ -253,7 +253,7 @@ export default function FeedbackPage() {
   // Error state
   if (error && !orderInfo) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige flex items-center justify-center px-4">
+      <div className="min-h-screen bg-homepage-bg flex items-center justify-center px-4">
         <div className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full text-center">
           <div className="flex justify-center mb-4">
             <svg className="w-16 h-16 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -276,7 +276,7 @@ export default function FeedbackPage() {
   // Feedback già inviato
   if (existingFeedback?.exists) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige flex items-center justify-center px-4">
+      <div className="min-h-screen bg-homepage-bg flex items-center justify-center px-4">
         <div className="bg-white rounded-lg shadow-xl p-8 max-w-2xl w-full">
           <div className="text-center mb-6">
             <div className="flex justify-center mb-4">
@@ -321,7 +321,7 @@ export default function FeedbackPage() {
   // Success state
   if (success) {
     return (
-      <div ref={successDivRef} className="min-h-screen bg-gradient-to-br from-sabbia to-beige flex items-center justify-center px-4">
+      <div ref={successDivRef} className="min-h-screen bg-homepage-bg flex items-center justify-center px-4">
         <div className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full text-center">
           <div className="flex justify-center mb-4">
             <svg className="w-16 h-16 text-olive" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -351,7 +351,7 @@ export default function FeedbackPage() {
 
   // Form feedback per ogni prodotto
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige py-6 sm:py-12 px-3 sm:px-4">
+    <div className="min-h-screen bg-homepage-bg py-6 sm:py-12 px-3 sm:px-4">
       <div className="container mx-auto max-w-3xl">
         <div className="bg-white rounded-lg shadow-xl overflow-hidden">
           {/* Header */}

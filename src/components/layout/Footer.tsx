@@ -19,7 +19,7 @@ export default function Footer() {
 
   return (
     <>
-      <footer className="relative bg-gradient-to-br from-olive to-salvia text-beige overflow-hidden">
+      <footer className="relative bg-olive text-beige overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10">
           
           {/* Sezione principale del footer */}

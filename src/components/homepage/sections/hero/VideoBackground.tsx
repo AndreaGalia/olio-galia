@@ -25,10 +25,10 @@ export function VideoBackground({ videoUrl }: VideoBackgroundProps) {
       )}
 
       {/* Overlay gradiente per leggibilità testo */}
-      <div className="absolute inset-0 bg-gradient-to-b from-olive/80 via-olive/60 to-olive/80" />
+      <div className="absolute inset-0 bg-gradient-to-b from-olive/55 via-olive/35 to-olive/55" />
 
       {/* Vignette effect per focus centrale */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(85,107,47,0.4)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(85,107,47,0.25)_100%)]" />
     </div>
   );
 }

@@ -5,7 +5,7 @@ export default function NotFoundState() {
   const { t } = useT();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sabbia to-beige flex items-center justify-center">
+    <div className="min-h-screen bg-homepage-bg flex items-center justify-center">
       <div className="text-center">
         <h1 className="text-2xl font-serif text-olive mb-4">{t.productDetailPage.notFound.title}</h1>
         <Link 

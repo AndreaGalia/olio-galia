@@ -8,7 +8,7 @@ export default function ExpiredAccessMessage() {
   const { t } = useT();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sabbia via-beige to-sabbia/80 flex items-center justify-center px-4 py-16">
+    <div className="min-h-screen bg-homepage-bg flex items-center justify-center px-4 py-16">
       <div className="max-w-2xl w-full">
         {/* Card principale */}
         <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 border border-olive/10">
