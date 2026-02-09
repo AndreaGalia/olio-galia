@@ -29,7 +29,7 @@ export default function Footer() {
               {/* Brand e descrizione */}
               <div className="lg:col-span-1 space-y-6">
                 <div className="space-y-4">
-                  <h3 className="text-2xl sm:text-3xl font-serif">Olio Galia</h3>
+                  <h3 className="text-2xl sm:text-3xl font-serif notranslate" translate="no">{t.navbar.logo}</h3>
                   <p className="text-beige/80 leading-relaxed text-sm sm:text-base">
                     {t.footer.brand.description}
                   </p>

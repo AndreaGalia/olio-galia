@@ -34,15 +34,15 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="relative bg-[#D6C7A1] px-4 sm:px-6 py-4 sm:py-6">
+      <nav className="sticky top-0 z-30 bg-[#D6C7A1] px-4 sm:px-6 py-4 sm:py-6">
         <div className="container mx-auto max-w-7xl">
           <div className="flex justify-between items-center">
             
             {/* Logo */}
             <div className="flex-1 flex justify-start">
               <Link href="/" className="hover:opacity-80 transition-opacity duration-200">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif text-olive tracking-widest">
-                  OLIO GALIA
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif text-olive tracking-widest notranslate" translate="no">
+                  {t.navbar.logo}
                 </h1>
               </Link>
             </div>

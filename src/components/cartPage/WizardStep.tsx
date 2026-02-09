@@ -38,7 +38,7 @@ const WizardStep = forwardRef<HTMLDivElement, WizardStepProps>(({
   `.trim();
 
   return (
-    <div ref={ref} className={containerClasses}>
+    <div ref={ref} className={`${containerClasses} scroll-mt-24`}>
       {/* Header - sempre visibile */}
       <div
         className={headerClasses}
