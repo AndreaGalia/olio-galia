@@ -63,8 +63,11 @@ export async function POST(request: NextRequest) {
         }
       );
 
-      // Cancellazione programmata (cancel at period end)
-      if (subscription.status === 'active' && subscription.cancel_at_period_end) {
+      // Cancellazione programmata (cancel at period end) — solo se cancel_at_period_end è appena cambiato
+      const previousAttributes = (event.data as unknown as { previous_attributes?: Record<string, unknown> }).previous_attributes;
+      const cancelJustScheduled = subscription.cancel_at_period_end && previousAttributes?.cancel_at_period_end === false;
+
+      if (subscription.status === 'active' && cancelJustScheduled) {
         try {
           const dbSub = await SubscriptionService.findByStripeSubscriptionId(subscription.id);
           if (dbSub) {
