@@ -4,12 +4,14 @@ import { headers } from 'next/headers';
 import Stripe from 'stripe';
 import { OrderService } from '@/services/orderService';
 import { CustomerService } from '@/services/customerService';
+import { SubscriptionService } from '@/services/subscriptionService';
 import { OrderDetails } from '@/types/checkoutSuccessTypes';
 import { EmailOrderDataExtended } from '@/types/email';
 import { EmailService } from '@/lib/email/resend';
 import { TelegramService } from '@/lib/telegram/telegram';
 import { WahaService } from '@/services/wahaService';
 import { WhatsAppTemplates } from '@/lib/whatsapp/templates';
+import { SubscriptionInterval, ShippingZone, SubscriptionEmailData } from '@/types/subscription';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-08-27.basil',
@@ -46,11 +48,330 @@ export async function POST(request: NextRequest) {
 
     console.log(`✅ Webhook received: ${event.type}`);
 
-    // Gestisci solo l'evento checkout.session.completed
+    // Gestisci eventi subscription
+    if (event.type === 'customer.subscription.updated') {
+      const subscription = event.data.object as Stripe.Subscription;
+      console.log(`🔄 Subscription updated: ${subscription.id} → ${subscription.status}`);
+      const periodStart = new Date((subscription as unknown as { current_period_start: number }).current_period_start * 1000);
+      const periodEnd = new Date((subscription as unknown as { current_period_end: number }).current_period_end * 1000);
+      await SubscriptionService.updateSubscriptionStatus(
+        subscription.id,
+        subscription.status as 'active' | 'canceled' | 'past_due' | 'unpaid' | 'paused' | 'incomplete',
+        {
+          currentPeriodStart: periodStart,
+          currentPeriodEnd: periodEnd,
+        }
+      );
+
+      // Send renewal email if subscription is active and period updated
+      if (subscription.status === 'active') {
+        try {
+          const dbSub = await SubscriptionService.findByStripeSubscriptionId(subscription.id);
+          if (dbSub) {
+            const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || '').replace(/\/$/, '');
+            const portalLink = `${baseUrl}/manage-subscription/access?token=${dbSub.portalAccessToken}`;
+            const emailData: SubscriptionEmailData = {
+              customerName: dbSub.customerName,
+              customerEmail: dbSub.customerEmail,
+              productName: dbSub.productName,
+              interval: dbSub.interval,
+              shippingZone: dbSub.shippingZone,
+              portalLink,
+              nextBillingDate: periodEnd.toLocaleDateString('it-IT', { year: 'numeric', month: 'long', day: 'numeric' }),
+            };
+            await EmailService.sendSubscriptionRenewal(emailData);
+            console.log(`✅ Subscription renewal email sent to: ${dbSub.customerEmail}`);
+          }
+        } catch (emailError) {
+          console.error('⚠️ Error sending subscription renewal email:', emailError);
+        }
+      }
+
+      return NextResponse.json({ received: true });
+    }
+
+    if (event.type === 'customer.subscription.deleted') {
+      const subscription = event.data.object as Stripe.Subscription;
+      console.log(`❌ Subscription canceled: ${subscription.id}`);
+      await SubscriptionService.updateSubscriptionStatus(subscription.id, 'canceled');
+
+      try {
+        const dbSub = await SubscriptionService.findByStripeSubscriptionId(subscription.id);
+        if (dbSub) {
+          const emailData: SubscriptionEmailData = {
+            customerName: dbSub.customerName,
+            customerEmail: dbSub.customerEmail,
+            productName: dbSub.productName,
+            interval: dbSub.interval,
+            shippingZone: dbSub.shippingZone,
+            portalLink: '',
+          };
+          await EmailService.sendSubscriptionCanceled(emailData);
+          console.log(`✅ Subscription canceled email sent to: ${dbSub.customerEmail}`);
+        }
+      } catch (emailError) {
+        console.error('⚠️ Error sending subscription canceled email:', emailError);
+      }
+
+      return NextResponse.json({ received: true });
+    }
+
+    if (event.type === 'invoice.payment_failed') {
+      const invoice = event.data.object as unknown as { subscription?: string | { id: string } };
+      const subId = typeof invoice.subscription === 'string'
+        ? invoice.subscription
+        : invoice.subscription?.id;
+      if (subId) {
+        console.log(`⚠️ Invoice payment failed for subscription: ${subId}`);
+        await SubscriptionService.updateSubscriptionStatus(subId, 'past_due');
+
+        try {
+          const dbSub = await SubscriptionService.findByStripeSubscriptionId(subId);
+          if (dbSub) {
+            const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || '').replace(/\/$/, '');
+            const portalLink = `${baseUrl}/manage-subscription/access?token=${dbSub.portalAccessToken}`;
+            const emailData: SubscriptionEmailData = {
+              customerName: dbSub.customerName,
+              customerEmail: dbSub.customerEmail,
+              productName: dbSub.productName,
+              interval: dbSub.interval,
+              shippingZone: dbSub.shippingZone,
+              portalLink,
+            };
+            await EmailService.sendSubscriptionPaymentFailed(emailData);
+            console.log(`✅ Payment failed email sent to: ${dbSub.customerEmail}`);
+          }
+        } catch (emailError) {
+          console.error('⚠️ Error sending payment failed email:', emailError);
+        }
+      }
+      return NextResponse.json({ received: true });
+    }
+
+    if (event.type === 'customer.subscription.paused') {
+      const subscription = event.data.object as Stripe.Subscription;
+      console.log(`⏸️ Subscription paused: ${subscription.id}`);
+      await SubscriptionService.updateSubscriptionStatus(subscription.id, 'paused');
+
+      try {
+        const dbSub = await SubscriptionService.findByStripeSubscriptionId(subscription.id);
+        if (dbSub) {
+          const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || '').replace(/\/$/, '');
+          const portalLink = `${baseUrl}/manage-subscription/access?token=${dbSub.portalAccessToken}`;
+          const emailData: SubscriptionEmailData = {
+            customerName: dbSub.customerName,
+            customerEmail: dbSub.customerEmail,
+            productName: dbSub.productName,
+            interval: dbSub.interval,
+            shippingZone: dbSub.shippingZone,
+            portalLink,
+          };
+          await EmailService.sendSubscriptionPaused(emailData);
+          console.log(`✅ Subscription paused email sent to: ${dbSub.customerEmail}`);
+          await TelegramService.sendSubscriptionPausedNotification(emailData);
+        }
+      } catch (emailError) {
+        console.error('⚠️ Error sending subscription paused email:', emailError);
+      }
+
+      return NextResponse.json({ received: true });
+    }
+
+    if (event.type === 'customer.subscription.resumed') {
+      const subscription = event.data.object as Stripe.Subscription;
+      console.log(`▶️ Subscription resumed: ${subscription.id}`);
+
+      const periodStart = new Date((subscription as unknown as { current_period_start: number }).current_period_start * 1000);
+      const periodEnd = new Date((subscription as unknown as { current_period_end: number }).current_period_end * 1000);
+
+      await SubscriptionService.updateSubscriptionStatus(subscription.id, 'active', {
+        currentPeriodStart: periodStart,
+        currentPeriodEnd: periodEnd,
+      });
+
+      try {
+        const dbSub = await SubscriptionService.findByStripeSubscriptionId(subscription.id);
+        if (dbSub) {
+          const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || '').replace(/\/$/, '');
+          const portalLink = `${baseUrl}/manage-subscription/access?token=${dbSub.portalAccessToken}`;
+          const emailData: SubscriptionEmailData = {
+            customerName: dbSub.customerName,
+            customerEmail: dbSub.customerEmail,
+            productName: dbSub.productName,
+            interval: dbSub.interval,
+            shippingZone: dbSub.shippingZone,
+            portalLink,
+            nextBillingDate: periodEnd.toLocaleDateString('it-IT', { year: 'numeric', month: 'long', day: 'numeric' }),
+          };
+          await EmailService.sendSubscriptionResumed(emailData);
+          console.log(`✅ Subscription resumed email sent to: ${dbSub.customerEmail}`);
+          await TelegramService.sendSubscriptionResumedNotification(emailData);
+        }
+      } catch (emailError) {
+        console.error('⚠️ Error sending subscription resumed email:', emailError);
+      }
+
+      return NextResponse.json({ received: true });
+    }
+
+    if (event.type === 'invoice.payment_succeeded') {
+      const invoice = event.data.object as unknown as {
+        billing_reason?: string;
+        subscription?: string | { id: string };
+      };
+
+      // Skip prima invoice (già gestita da checkout.session.completed)
+      if (invoice.billing_reason === 'subscription_create') {
+        return NextResponse.json({ received: true });
+      }
+
+      const subId = typeof invoice.subscription === 'string'
+        ? invoice.subscription
+        : invoice.subscription?.id;
+
+      if (subId) {
+        console.log(`💰 Invoice payment succeeded for subscription: ${subId}`);
+        // Ripristina ad active se era past_due
+        await SubscriptionService.updateSubscriptionStatus(subId, 'active');
+      }
+
+      return NextResponse.json({ received: true });
+    }
+
+    if (event.type === 'invoice.upcoming') {
+      const invoice = event.data.object as unknown as {
+        subscription?: string | { id: string };
+        amount_due?: number;
+        next_payment_attempt?: number;
+      };
+
+      const subId = typeof invoice.subscription === 'string'
+        ? invoice.subscription
+        : invoice.subscription?.id;
+
+      if (subId) {
+        console.log(`📅 Upcoming invoice for subscription: ${subId}`);
+
+        try {
+          const dbSub = await SubscriptionService.findByStripeSubscriptionId(subId);
+          if (dbSub) {
+            const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || '').replace(/\/$/, '');
+            const portalLink = `${baseUrl}/manage-subscription/access?token=${dbSub.portalAccessToken}`;
+            const amount = invoice.amount_due ? (invoice.amount_due / 100).toFixed(2) : undefined;
+            const nextBillingDate = invoice.next_payment_attempt
+              ? new Date(invoice.next_payment_attempt * 1000).toLocaleDateString('it-IT', { year: 'numeric', month: 'long', day: 'numeric' })
+              : undefined;
+
+            const emailData: SubscriptionEmailData = {
+              customerName: dbSub.customerName,
+              customerEmail: dbSub.customerEmail,
+              productName: dbSub.productName,
+              interval: dbSub.interval,
+              shippingZone: dbSub.shippingZone,
+              portalLink,
+              amount,
+              nextBillingDate,
+            };
+            await EmailService.sendSubscriptionUpcomingRenewal(emailData);
+            console.log(`✅ Upcoming renewal email sent to: ${dbSub.customerEmail}`);
+            await TelegramService.sendSubscriptionUpcomingRenewalNotification(emailData);
+          }
+        } catch (emailError) {
+          console.error('⚠️ Error sending upcoming renewal email:', emailError);
+        }
+      }
+
+      return NextResponse.json({ received: true });
+    }
+
+    // Gestisci l'evento checkout.session.completed
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as Stripe.Checkout.Session;
       const sessionId = session.id;
 
+      // ===== SUBSCRIPTION MODE =====
+      if (session.mode === 'subscription') {
+        console.log(`📦 Processing subscription for session: ${sessionId}`);
+
+        const stripeSubscriptionId = typeof session.subscription === 'string'
+          ? session.subscription
+          : (session.subscription as Stripe.Subscription)?.id || '';
+
+        // Idempotenza
+        const exists = await SubscriptionService.subscriptionExists(stripeSubscriptionId);
+        if (exists) {
+          console.log(`ℹ️ Subscription already exists: ${stripeSubscriptionId}`);
+          return NextResponse.json({ received: true, duplicate: true });
+        }
+
+        try {
+          const metadata = session.metadata || {};
+
+          await SubscriptionService.createSubscription({
+            stripeSubscriptionId,
+            stripeCustomerId: typeof session.customer === 'string' ? session.customer : session.customer?.id || '',
+            stripePriceId: metadata.stripePriceId || '',
+            productId: metadata.productId || '',
+            productName: metadata.productName || '',
+            customerEmail: session.customer_details?.email || '',
+            customerName: session.customer_details?.name || '',
+            shippingZone: (metadata.shippingZone || 'italia') as ShippingZone,
+            interval: (metadata.interval || 'month') as SubscriptionInterval,
+            status: 'active',
+            shippingAddress: (() => {
+              const sd = (session as unknown as Record<string, unknown>).shipping_details as { address?: Record<string, string> } | undefined;
+              if (!sd?.address) return undefined;
+              const addr = sd.address;
+              return {
+                line1: addr.line1 || undefined,
+                line2: addr.line2 || undefined,
+                city: addr.city || undefined,
+                state: addr.state || undefined,
+                postalCode: addr.postal_code || undefined,
+                country: addr.country || undefined,
+              };
+            })(),
+          });
+
+          console.log(`✅ Subscription saved: ${stripeSubscriptionId}`);
+
+          // Send confirmation email and Telegram notification
+          try {
+            const dbSub = await SubscriptionService.findByStripeSubscriptionId(stripeSubscriptionId);
+            if (dbSub) {
+              const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || '').replace(/\/$/, '');
+              const portalLink = `${baseUrl}/manage-subscription/access?token=${dbSub.portalAccessToken}`;
+              const emailData: SubscriptionEmailData = {
+                customerName: dbSub.customerName,
+                customerEmail: dbSub.customerEmail,
+                productName: dbSub.productName,
+                interval: dbSub.interval,
+                shippingZone: dbSub.shippingZone,
+                portalLink,
+              };
+
+              const emailSent = await EmailService.sendSubscriptionConfirmation(emailData);
+              if (emailSent) {
+                console.log(`✅ Subscription confirmation email sent to: ${dbSub.customerEmail}`);
+              }
+
+              const telegramSent = await TelegramService.sendSubscriptionNotification(emailData);
+              if (telegramSent) {
+                console.log(`✅ Subscription Telegram notification sent`);
+              }
+            }
+          } catch (notifError) {
+            console.error('⚠️ Error sending subscription notifications:', notifError);
+          }
+        } catch (subError) {
+          console.error('❌ Error processing subscription:', subError);
+          return NextResponse.json({ error: 'Error processing subscription' }, { status: 500 });
+        }
+
+        return NextResponse.json({ received: true });
+      }
+
+      // ===== PAYMENT MODE (ordine singolo esistente) =====
       console.log(`📦 Processing order for session: ${sessionId}`);
 
       // Verifica se l'ordine esiste già (idempotenza)

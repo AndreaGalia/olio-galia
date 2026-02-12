@@ -239,7 +239,10 @@ export default function EditProductPage() {
           metadata: product.metadata,
           // Includi i campi Stripe se presenti
           stripeProductId: product.stripeProductId || undefined,
-          stripePriceId: product.stripePriceId || undefined
+          stripePriceId: product.stripePriceId || undefined,
+          // Subscription
+          isSubscribable: (product as any).isSubscribable || false,
+          stripeRecurringPriceIds: (product as any).isSubscribable ? (product as any).stripeRecurringPriceIds : undefined
         })
       });
 
@@ -555,6 +558,72 @@ export default function EditProductPage() {
                 </p>
               </div>
             </div>
+          </section>
+
+          {/* Configurazione Abbonamento */}
+          <section>
+            <h3 className="text-lg font-semibold text-olive mb-4">Configurazione Abbonamento</h3>
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+              <div className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  id="isSubscribable"
+                  checked={(product as any).isSubscribable || false}
+                  onChange={(e) => setProduct(prev => prev ? { ...prev, isSubscribable: e.target.checked } as any : null)}
+                  className="mt-1 h-4 w-4 text-green-600 focus:ring-green-500 border-green-300 rounded"
+                />
+                <div className="flex-1">
+                  <label htmlFor="isSubscribable" className="font-medium text-gray-900 cursor-pointer">
+                    Abilita Abbonamento
+                  </label>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Attiva per permettere ai clienti di abbonarsi a questo prodotto.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {(product as any).isSubscribable && (
+              <div className="space-y-4">
+                <p className="text-sm text-gray-600">
+                  Inserisci i Price ID ricorrenti di Stripe per ogni combinazione zona/intervallo.
+                </p>
+                {(['italia', 'europa', 'america', 'mondo'] as const).map(zone => (
+                  <div key={zone} className="border border-green-200 rounded-lg p-4">
+                    <h4 className="font-medium text-olive mb-3 capitalize">{zone}</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                      {(['month', 'bimonth', 'quarter', 'semester'] as const).map(interval => (
+                        <div key={interval}>
+                          <label className="block text-xs font-medium text-gray-600 mb-1">
+                            {interval === 'month' ? 'Mensile' : interval === 'bimonth' ? 'Bimestrale' : interval === 'quarter' ? 'Trimestrale' : 'Semestrale'}
+                          </label>
+                          <input
+                            type="text"
+                            value={(product as any).stripeRecurringPriceIds?.[zone]?.[interval] || ''}
+                            onChange={(e) => setProduct(prev => {
+                              if (!prev) return null;
+                              const p = prev as any;
+                              return {
+                                ...prev,
+                                stripeRecurringPriceIds: {
+                                  ...p.stripeRecurringPriceIds,
+                                  [zone]: {
+                                    ...p.stripeRecurringPriceIds?.[zone],
+                                    [interval]: e.target.value
+                                  }
+                                }
+                              } as any;
+                            })}
+                            className="w-full px-2 py-1.5 border border-olive/30 rounded text-xs font-mono focus:ring-2 focus:ring-green-200 focus:border-green-500"
+                            placeholder="price_xxx"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </section>
 
           {/* Immagini */}

@@ -75,7 +75,9 @@ export async function PUT(
       slug,
       stripeProductId: newStripeProductId,
       stripePriceId: newStripePriceId,
-      metadata
+      metadata,
+      isSubscribable,
+      stripeRecurringPriceIds
     } = data;
 
     // Ottieni prodotto esistente da MongoDB
@@ -197,6 +199,8 @@ export async function PUT(
               images: images || [],
               nutritionalInfo: nutritionalInfo || {},
               customBadge: customBadge || undefined,
+              isSubscribable: isSubscribable || false,
+              stripeRecurringPriceIds: stripeRecurringPriceIds || undefined,
               translations,
               slug,
               'metadata.updatedAt': new Date(),
@@ -223,6 +227,8 @@ export async function PUT(
               images: images || [],
               nutritionalInfo: nutritionalInfo || {},
               customBadge: customBadge || undefined,
+              isSubscribable: isSubscribable || false,
+              stripeRecurringPriceIds: stripeRecurringPriceIds || undefined,
               translations,
               slug,
               'metadata.updatedAt': new Date(),

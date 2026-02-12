@@ -62,6 +62,14 @@ export const SYSTEM_TEMPLATE_KEYS = [
   'quote_email',
   'review_request',
   'newsletter_welcome',
+  'subscription_confirmation',
+  'subscription_renewal',
+  'subscription_payment_failed',
+  'subscription_canceled',
+  'subscription_paused',
+  'subscription_resumed',
+  'subscription_upcoming_renewal',
+  'portal_access_magic_link',
 ] as const;
 
 export type SystemTemplateKey = typeof SYSTEM_TEMPLATE_KEYS[number];
@@ -129,6 +137,65 @@ export const TEMPLATE_VARIABLES: Record<string, string[]> = {
     'email',
     'siteUrl'
   ],
+  subscription_confirmation: [
+    'logoUrl',
+    'customerName',
+    'productName',
+    'interval',
+    'shippingZone',
+    'portalLink',
+    'amount',
+  ],
+  subscription_renewal: [
+    'logoUrl',
+    'customerName',
+    'productName',
+    'interval',
+    'nextBillingDate',
+    'portalLink',
+    'amount',
+  ],
+  subscription_payment_failed: [
+    'logoUrl',
+    'customerName',
+    'productName',
+    'portalLink',
+  ],
+  subscription_canceled: [
+    'logoUrl',
+    'customerName',
+    'productName',
+    'siteUrl',
+  ],
+  subscription_paused: [
+    'logoUrl',
+    'customerName',
+    'productName',
+    'interval',
+    'portalLink',
+  ],
+  subscription_resumed: [
+    'logoUrl',
+    'customerName',
+    'productName',
+    'interval',
+    'nextBillingDate',
+    'portalLink',
+  ],
+  subscription_upcoming_renewal: [
+    'logoUrl',
+    'customerName',
+    'productName',
+    'interval',
+    'amount',
+    'nextBillingDate',
+    'portalLink',
+  ],
+  portal_access_magic_link: [
+    'logoUrl',
+    'magicLink',
+    'expirationMinutes',
+  ],
 };
 
 /**
@@ -163,6 +230,14 @@ export const VARIABLE_DESCRIPTIONS: Record<string, string> = {
   beneficiary: 'Intestatario conto bancario',
   supportEmail: 'Email assistenza/contatto aziendale',
   supportPhone: 'Telefono assistenza/contatto aziendale',
+  productName: 'Nome del prodotto in abbonamento',
+  interval: 'Frequenza abbonamento (es. Ogni mese)',
+  shippingZone: 'Zona di spedizione',
+  portalLink: 'Link al portale gestione abbonamento',
+  nextBillingDate: 'Data prossimo rinnovo',
+  amount: 'Importo abbonamento',
+  magicLink: 'Link magico per accesso portale',
+  expirationMinutes: 'Minuti di validità del link',
 };
 
 /**
@@ -175,4 +250,12 @@ export const TEMPLATE_NAMES: Record<SystemTemplateKey, string> = {
   quote_email: 'Email Preventivo',
   review_request: 'Richiesta Recensione',
   newsletter_welcome: 'Benvenuto Newsletter',
+  subscription_confirmation: 'Conferma Abbonamento',
+  subscription_renewal: 'Rinnovo Abbonamento',
+  subscription_payment_failed: 'Pagamento Abbonamento Fallito',
+  subscription_canceled: 'Abbonamento Cancellato',
+  subscription_paused: 'Abbonamento in Pausa',
+  subscription_resumed: 'Abbonamento Riattivato',
+  subscription_upcoming_renewal: 'Prossimo Rinnovo Abbonamento',
+  portal_access_magic_link: 'Link Accesso Portale',
 };

@@ -1,6 +1,7 @@
 // lib/telegram/telegram.ts
 import { OrderDetails } from '@/types/checkoutSuccessTypes';
 import { GoalService } from '@/services/goalService';
+import { SubscriptionEmailData } from '@/types/subscription';
 
 interface TelegramConfig {
   botToken: string;
@@ -290,6 +291,77 @@ ${quoteUrl ? `🔗 <a href="${quoteUrl}">Visualizza preventivo nel pannello admi
     mongoId?: string
   ): Promise<string> {
     return this.formatQuoteMessage(formData, productsInfo, mongoId, '✅', 'PREVENTIVO CONFERMATO!', 'Data conferma');
+  }
+
+  /**
+   * Invia una notifica Telegram per un nuovo abbonamento
+   */
+  static async sendSubscriptionNotification(data: SubscriptionEmailData): Promise<boolean> {
+    const INTERVAL_LABELS: Record<string, string> = {
+      month: 'Ogni mese',
+      bimonth: 'Ogni 2 mesi',
+      quarter: 'Ogni 3 mesi',
+      semester: 'Ogni 6 mesi',
+    };
+    const ZONE_LABELS: Record<string, string> = {
+      italia: 'Italia',
+      europa: 'Europa',
+      america: 'America',
+      mondo: 'Resto del Mondo',
+    };
+
+    const message = `
+🔄 <b>NUOVO ABBONAMENTO!</b>
+
+📋 <b>Cliente:</b> ${data.customerName} (${data.customerEmail})
+📦 <b>Prodotto:</b> ${data.productName}
+🗺️ <b>Zona:</b> ${ZONE_LABELS[data.shippingZone] || data.shippingZone}
+📅 <b>Frequenza:</b> ${INTERVAL_LABELS[data.interval] || data.interval}${data.amount ? `\n💰 <b>Importo:</b> €${data.amount}` : ''}
+`.trim();
+
+    return this.sendMessageToAllChats(message, 'abbonamento');
+  }
+
+  /**
+   * Invia una notifica Telegram per abbonamento in pausa
+   */
+  static async sendSubscriptionPausedNotification(data: SubscriptionEmailData): Promise<boolean> {
+    const message = `
+⏸️ <b>ABBONAMENTO IN PAUSA</b>
+
+📋 <b>Cliente:</b> ${data.customerName} (${data.customerEmail})
+📦 <b>Prodotto:</b> ${data.productName}
+`.trim();
+
+    return this.sendMessageToAllChats(message, 'abbonamento pausa');
+  }
+
+  /**
+   * Invia una notifica Telegram per abbonamento riattivato
+   */
+  static async sendSubscriptionResumedNotification(data: SubscriptionEmailData): Promise<boolean> {
+    const message = `
+▶️ <b>ABBONAMENTO RIATTIVATO</b>
+
+📋 <b>Cliente:</b> ${data.customerName} (${data.customerEmail})
+📦 <b>Prodotto:</b> ${data.productName}${data.nextBillingDate ? `\n📅 <b>Prossimo rinnovo:</b> ${data.nextBillingDate}` : ''}
+`.trim();
+
+    return this.sendMessageToAllChats(message, 'abbonamento riattivato');
+  }
+
+  /**
+   * Invia una notifica Telegram per rinnovo imminente
+   */
+  static async sendSubscriptionUpcomingRenewalNotification(data: SubscriptionEmailData): Promise<boolean> {
+    const message = `
+📅 <b>RINNOVO ABBONAMENTO IMMINENTE</b>
+
+📋 <b>Cliente:</b> ${data.customerName} (${data.customerEmail})
+📦 <b>Prodotto:</b> ${data.productName}${data.amount ? `\n💰 <b>Importo:</b> €${data.amount}` : ''}${data.nextBillingDate ? `\n📅 <b>Data rinnovo:</b> ${data.nextBillingDate}` : ''}
+`.trim();
+
+    return this.sendMessageToAllChats(message, 'rinnovo imminente');
   }
 
   /**

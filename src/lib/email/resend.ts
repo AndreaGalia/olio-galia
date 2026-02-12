@@ -6,7 +6,18 @@ import { createDeliveryNotificationHTML } from './delivery-template';
 import { createNewsletterWelcomeHTML } from './newsletter-template';
 import { createReviewRequestHTML } from './review-request-template';
 import { createQuoteEmailHTML } from './quote-template';
+import {
+  createSubscriptionConfirmationHTML,
+  createSubscriptionRenewalHTML,
+  createSubscriptionPaymentFailedHTML,
+  createSubscriptionCanceledHTML,
+  createSubscriptionPausedHTML,
+  createSubscriptionResumedHTML,
+  createSubscriptionUpcomingRenewalHTML,
+  createPortalAccessMagicLinkHTML,
+} from './subscription-templates';
 import { EmailTemplateService } from '@/services/emailTemplateService';
+import { SubscriptionEmailData } from '@/types/subscription';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM_EMAIL = process.env.FROM_EMAIL || 'Olio Galia <onboarding@resend.dev>';
@@ -347,6 +358,274 @@ export class EmailService {
       return true;
     } catch (error) {
       console.error('Error sending quote email:', error);
+      return false;
+    }
+  }
+
+  static async sendSubscriptionConfirmation(data: SubscriptionEmailData): Promise<boolean> {
+    try {
+      const locale = 'it';
+      const template = await this.getTemplate(
+        'subscription_confirmation',
+        locale,
+        createSubscriptionConfirmationHTML(data),
+        `Abbonamento Attivato - ${data.productName} - Olio Galia`
+      );
+      const templateData = {
+        logoUrl: LOGO_URL,
+        customerName: data.customerName,
+        productName: data.productName,
+        interval: data.interval,
+        shippingZone: data.shippingZone,
+        portalLink: data.portalLink,
+        amount: data.amount || '',
+      };
+      const htmlContent = this.replaceVariables(template.htmlBody, templateData);
+      const subject = this.replaceVariables(template.subject, templateData);
+      const result = await resend.emails.send({
+        from: FROM_EMAIL,
+        to: [data.customerEmail],
+        subject,
+        html: htmlContent,
+        headers: { 'X-Email-Type': 'subscription-confirmation' },
+      });
+      if (result.error) return false;
+      return true;
+    } catch (error) {
+      console.error('Error sending subscription confirmation:', error);
+      return false;
+    }
+  }
+
+  static async sendSubscriptionRenewal(data: SubscriptionEmailData): Promise<boolean> {
+    try {
+      const locale = 'it';
+      const template = await this.getTemplate(
+        'subscription_renewal',
+        locale,
+        createSubscriptionRenewalHTML(data),
+        `Abbonamento Rinnovato - ${data.productName} - Olio Galia`
+      );
+      const templateData = {
+        logoUrl: LOGO_URL,
+        customerName: data.customerName,
+        productName: data.productName,
+        interval: data.interval,
+        nextBillingDate: data.nextBillingDate || '',
+        portalLink: data.portalLink,
+        amount: data.amount || '',
+      };
+      const htmlContent = this.replaceVariables(template.htmlBody, templateData);
+      const subject = this.replaceVariables(template.subject, templateData);
+      const result = await resend.emails.send({
+        from: FROM_EMAIL,
+        to: [data.customerEmail],
+        subject,
+        html: htmlContent,
+        headers: { 'X-Email-Type': 'subscription-renewal' },
+      });
+      if (result.error) return false;
+      return true;
+    } catch (error) {
+      console.error('Error sending subscription renewal:', error);
+      return false;
+    }
+  }
+
+  static async sendSubscriptionPaymentFailed(data: SubscriptionEmailData): Promise<boolean> {
+    try {
+      const locale = 'it';
+      const template = await this.getTemplate(
+        'subscription_payment_failed',
+        locale,
+        createSubscriptionPaymentFailedHTML(data),
+        `Problema con il pagamento dell'abbonamento - Olio Galia`
+      );
+      const templateData = {
+        logoUrl: LOGO_URL,
+        customerName: data.customerName,
+        productName: data.productName,
+        portalLink: data.portalLink,
+      };
+      const htmlContent = this.replaceVariables(template.htmlBody, templateData);
+      const subject = this.replaceVariables(template.subject, templateData);
+      const result = await resend.emails.send({
+        from: FROM_EMAIL,
+        to: [data.customerEmail],
+        subject,
+        html: htmlContent,
+        headers: { 'X-Email-Type': 'subscription-payment-failed' },
+      });
+      if (result.error) return false;
+      return true;
+    } catch (error) {
+      console.error('Error sending subscription payment failed:', error);
+      return false;
+    }
+  }
+
+  static async sendSubscriptionCanceled(data: SubscriptionEmailData): Promise<boolean> {
+    try {
+      const locale = 'it';
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://oliogalia.com';
+      const template = await this.getTemplate(
+        'subscription_canceled',
+        locale,
+        createSubscriptionCanceledHTML(data),
+        `Abbonamento Cancellato - ${data.productName} - Olio Galia`
+      );
+      const templateData = {
+        logoUrl: LOGO_URL,
+        customerName: data.customerName,
+        productName: data.productName,
+        siteUrl,
+      };
+      const htmlContent = this.replaceVariables(template.htmlBody, templateData);
+      const subject = this.replaceVariables(template.subject, templateData);
+      const result = await resend.emails.send({
+        from: FROM_EMAIL,
+        to: [data.customerEmail],
+        subject,
+        html: htmlContent,
+        headers: { 'X-Email-Type': 'subscription-canceled' },
+      });
+      if (result.error) return false;
+      return true;
+    } catch (error) {
+      console.error('Error sending subscription canceled:', error);
+      return false;
+    }
+  }
+
+  static async sendSubscriptionPaused(data: SubscriptionEmailData): Promise<boolean> {
+    try {
+      const locale = 'it';
+      const template = await this.getTemplate(
+        'subscription_paused',
+        locale,
+        createSubscriptionPausedHTML(data),
+        `Abbonamento in Pausa - ${data.productName} - Olio Galia`
+      );
+      const templateData = {
+        logoUrl: LOGO_URL,
+        customerName: data.customerName,
+        productName: data.productName,
+        interval: data.interval,
+        portalLink: data.portalLink,
+      };
+      const htmlContent = this.replaceVariables(template.htmlBody, templateData);
+      const subject = this.replaceVariables(template.subject, templateData);
+      const result = await resend.emails.send({
+        from: FROM_EMAIL,
+        to: [data.customerEmail],
+        subject,
+        html: htmlContent,
+        headers: { 'X-Email-Type': 'subscription-paused' },
+      });
+      if (result.error) return false;
+      return true;
+    } catch (error) {
+      console.error('Error sending subscription paused:', error);
+      return false;
+    }
+  }
+
+  static async sendSubscriptionResumed(data: SubscriptionEmailData): Promise<boolean> {
+    try {
+      const locale = 'it';
+      const template = await this.getTemplate(
+        'subscription_resumed',
+        locale,
+        createSubscriptionResumedHTML(data),
+        `Abbonamento Riattivato - ${data.productName} - Olio Galia`
+      );
+      const templateData = {
+        logoUrl: LOGO_URL,
+        customerName: data.customerName,
+        productName: data.productName,
+        interval: data.interval,
+        nextBillingDate: data.nextBillingDate || '',
+        portalLink: data.portalLink,
+      };
+      const htmlContent = this.replaceVariables(template.htmlBody, templateData);
+      const subject = this.replaceVariables(template.subject, templateData);
+      const result = await resend.emails.send({
+        from: FROM_EMAIL,
+        to: [data.customerEmail],
+        subject,
+        html: htmlContent,
+        headers: { 'X-Email-Type': 'subscription-resumed' },
+      });
+      if (result.error) return false;
+      return true;
+    } catch (error) {
+      console.error('Error sending subscription resumed:', error);
+      return false;
+    }
+  }
+
+  static async sendSubscriptionUpcomingRenewal(data: SubscriptionEmailData): Promise<boolean> {
+    try {
+      const locale = 'it';
+      const template = await this.getTemplate(
+        'subscription_upcoming_renewal',
+        locale,
+        createSubscriptionUpcomingRenewalHTML(data),
+        `Prossimo Rinnovo Abbonamento - ${data.productName} - Olio Galia`
+      );
+      const templateData = {
+        logoUrl: LOGO_URL,
+        customerName: data.customerName,
+        productName: data.productName,
+        interval: data.interval,
+        amount: data.amount || '',
+        nextBillingDate: data.nextBillingDate || '',
+        portalLink: data.portalLink,
+      };
+      const htmlContent = this.replaceVariables(template.htmlBody, templateData);
+      const subject = this.replaceVariables(template.subject, templateData);
+      const result = await resend.emails.send({
+        from: FROM_EMAIL,
+        to: [data.customerEmail],
+        subject,
+        html: htmlContent,
+        headers: { 'X-Email-Type': 'subscription-upcoming-renewal' },
+      });
+      if (result.error) return false;
+      return true;
+    } catch (error) {
+      console.error('Error sending subscription upcoming renewal:', error);
+      return false;
+    }
+  }
+
+  static async sendPortalAccessMagicLink(email: string, link: string): Promise<boolean> {
+    try {
+      const locale = 'it';
+      const template = await this.getTemplate(
+        'portal_access_magic_link',
+        locale,
+        createPortalAccessMagicLinkHTML(link),
+        `Accesso al Portale Abbonamento - Olio Galia`
+      );
+      const templateData = {
+        logoUrl: LOGO_URL,
+        magicLink: link,
+        expirationMinutes: '15',
+      };
+      const htmlContent = this.replaceVariables(template.htmlBody, templateData);
+      const subject = this.replaceVariables(template.subject, templateData);
+      const result = await resend.emails.send({
+        from: FROM_EMAIL,
+        to: [email],
+        subject,
+        html: htmlContent,
+        headers: { 'X-Email-Type': 'portal-magic-link' },
+      });
+      if (result.error) return false;
+      return true;
+    } catch (error) {
+      console.error('Error sending portal access magic link:', error);
       return false;
     }
   }

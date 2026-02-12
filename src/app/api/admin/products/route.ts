@@ -76,7 +76,9 @@ export async function POST(request: NextRequest) {
       isStripeProduct,
       stripeProductId,
       stripePriceId,
-      featured
+      featured,
+      isSubscribable,
+      stripeRecurringPriceIds
     } = data;
 
     // Validazione dei dati richiesti
@@ -147,6 +149,8 @@ export async function POST(request: NextRequest) {
       color: color || '',
       images: images || [],
       nutritionalInfo: nutritionalInfo || {},
+      isSubscribable: isSubscribable || false,
+      stripeRecurringPriceIds: stripeRecurringPriceIds || undefined,
       slug,
       translations,
       metadata: {

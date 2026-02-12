@@ -30,6 +30,9 @@ interface ProductFormData {
   stripePriceId?: string;
   // Visibilità Homepage
   featured: boolean;
+  // Subscription
+  isSubscribable: boolean;
+  stripeRecurringPriceIds?: Record<string, Record<string, string>>;
 }
 
 interface Category {
@@ -103,7 +106,15 @@ export default function CreateProductPage() {
     stripeProductId: '',
     stripePriceId: '',
     // Default: non in evidenza
-    featured: false
+    featured: false,
+    // Subscription
+    isSubscribable: false,
+    stripeRecurringPriceIds: {
+      italia: { month: '', bimonth: '', quarter: '', semester: '' },
+      europa: { month: '', bimonth: '', quarter: '', semester: '' },
+      america: { month: '', bimonth: '', quarter: '', semester: '' },
+      mondo: { month: '', bimonth: '', quarter: '', semester: '' },
+    }
   });
 
   // Carica le categorie da MongoDB
@@ -271,6 +282,9 @@ export default function CreateProductPage() {
           }
         },
         images: formData.images.filter(img => img.trim()),
+        // Subscription
+        isSubscribable: formData.isSubscribable,
+        stripeRecurringPriceIds: formData.isSubscribable ? formData.stripeRecurringPriceIds : undefined,
         // Includi i campi Stripe solo se configurati
         ...(formData.isStripeProduct ? {
           stripeProductId: formData.stripeProductId,
@@ -550,6 +564,69 @@ export default function CreateProductPage() {
                     Inserisci l'ID del prezzo dalla dashboard Stripe (inizia con "price_")
                   </p>
                 </div>
+              </div>
+            )}
+          </section>
+
+          {/* Configurazione Abbonamento */}
+          <section>
+            <h3 className="text-lg font-semibold text-olive mb-4">Configurazione Abbonamento</h3>
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+              <div className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  id="isSubscribable"
+                  checked={formData.isSubscribable}
+                  onChange={(e) => setFormData(prev => ({ ...prev, isSubscribable: e.target.checked }))}
+                  className="mt-1 h-4 w-4 text-green-600 focus:ring-green-500 border-green-300 rounded"
+                />
+                <div className="flex-1">
+                  <label htmlFor="isSubscribable" className="font-medium text-gray-900 cursor-pointer">
+                    Abilita Abbonamento
+                  </label>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Attiva per permettere ai clienti di abbonarsi a questo prodotto. Devi configurare i Price ID ricorrenti su Stripe.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {formData.isSubscribable && (
+              <div className="space-y-4">
+                <p className="text-sm text-gray-600">
+                  Inserisci i Price ID ricorrenti di Stripe per ogni combinazione zona/intervallo.
+                  Il prezzo deve includere la spedizione. Lascia vuoto le combinazioni non disponibili.
+                </p>
+                {(['italia', 'europa', 'america', 'mondo'] as const).map(zone => (
+                  <div key={zone} className="border border-green-200 rounded-lg p-4">
+                    <h4 className="font-medium text-olive mb-3 capitalize">{zone}</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                      {(['month', 'bimonth', 'quarter', 'semester'] as const).map(interval => (
+                        <div key={interval}>
+                          <label className="block text-xs font-medium text-gray-600 mb-1">
+                            {interval === 'month' ? 'Mensile' : interval === 'bimonth' ? 'Bimestrale' : interval === 'quarter' ? 'Trimestrale' : 'Semestrale'}
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.stripeRecurringPriceIds?.[zone]?.[interval] || ''}
+                            onChange={(e) => setFormData(prev => ({
+                              ...prev,
+                              stripeRecurringPriceIds: {
+                                ...prev.stripeRecurringPriceIds,
+                                [zone]: {
+                                  ...prev.stripeRecurringPriceIds?.[zone],
+                                  [interval]: e.target.value
+                                }
+                              }
+                            }))}
+                            className="w-full px-2 py-1.5 border border-olive/30 rounded text-xs font-mono focus:ring-2 focus:ring-green-200 focus:border-green-500"
+                            placeholder="price_xxx"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </section>

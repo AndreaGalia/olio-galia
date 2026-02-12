@@ -6,6 +6,7 @@ import { useCart } from '@/contexts/CartContext';
 import AddToCartButton from '@/components/AddToCartButton';
 import { useT } from '@/hooks/useT';
 import type { Product } from '@/types/products';
+import type { RecurringPriceMap } from '@/types/subscription';
 
 interface ProductInfoSectionProps {
   product: Product;
@@ -158,6 +159,33 @@ export default function ProductInfoSection({
 
       {/* Bulk proposal section */}
       <BulkProposalSection productName={product.name} />
+
+      {/* Subscription CTA Banner */}
+      {(product as Product & { isSubscribable?: boolean; stripeRecurringPriceIds?: RecurringPriceMap }).isSubscribable && (
+        <div className="bg-white border-l-4 border-olive p-4 sm:p-6 animate-fadeIn">
+          <div className="flex items-start gap-3 sm:gap-4">
+            <div className="flex-shrink-0 w-10 h-10 bg-olive/10 flex items-center justify-center">
+              <svg className="w-5 h-5 text-olive" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-base sm:text-lg font-bold text-olive mb-1">
+                {t.subscription?.ctaBanner || 'Abbonati e Risparmia'}
+              </h3>
+              <p className="text-sm text-nocciola mb-3">
+                {t.subscription?.ctaBannerDesc || 'Ricevi questo prodotto a casa tua con regolarità. Spedizione inclusa!'}
+              </p>
+              <Link
+                href={`/products/${product.slug}/subscribe`}
+                className="inline-block px-6 py-3 bg-olive text-beige font-medium hover:bg-salvia transition-all duration-300 border border-olive/20 text-sm uppercase tracking-wider"
+              >
+                {t.subscription?.ctaButton || "Scopri l'Abbonamento"}
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
