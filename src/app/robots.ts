@@ -14,19 +14,7 @@ export default function robots(): MetadataRoute.Robots {
           '/_next/',
           '/static/',
         ],
-      },
-      {
-        userAgent: 'GPTBot', // OpenAI web crawler
-        disallow: '/',
-      },
-      {
-        userAgent: 'CCBot', // Common Crawl bot
-        disallow: '/',
-      },
-      {
-        userAgent: 'Google-Extended', // Google AI training bot
-        disallow: '/',
-      },
+      }
     ],
     sitemap: `${BASE_URL}/sitemap.xml`,
   };
