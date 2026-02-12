@@ -10,6 +10,7 @@ import {
   createSubscriptionConfirmationHTML,
   createSubscriptionRenewalHTML,
   createSubscriptionPaymentFailedHTML,
+  createSubscriptionCancelScheduledHTML,
   createSubscriptionCanceledHTML,
   createSubscriptionPausedHTML,
   createSubscriptionResumedHTML,
@@ -464,6 +465,40 @@ export class EmailService {
     }
   }
 
+  static async sendSubscriptionCancelScheduled(data: SubscriptionEmailData): Promise<boolean> {
+    try {
+      const locale = 'it';
+      const template = await this.getTemplate(
+        'subscription_cancel_scheduled',
+        locale,
+        createSubscriptionCancelScheduledHTML(data),
+        `Abbonamento Cancellato - ${data.productName} - Olio Galia`
+      );
+      const templateData = {
+        logoUrl: LOGO_URL,
+        customerName: data.customerName,
+        productName: data.productName,
+        interval: data.interval,
+        nextBillingDate: data.nextBillingDate || '',
+        portalLink: data.portalLink,
+      };
+      const htmlContent = this.replaceVariables(template.htmlBody, templateData);
+      const subject = this.replaceVariables(template.subject, templateData);
+      const result = await resend.emails.send({
+        from: FROM_EMAIL,
+        to: [data.customerEmail],
+        subject,
+        html: htmlContent,
+        headers: { 'X-Email-Type': 'subscription-cancel-scheduled' },
+      });
+      if (result.error) return false;
+      return true;
+    } catch (error) {
+      console.error('Error sending subscription cancel scheduled:', error);
+      return false;
+    }
+  }
+
   static async sendSubscriptionCanceled(data: SubscriptionEmailData): Promise<boolean> {
     try {
       const locale = 'it';
@@ -472,7 +507,7 @@ export class EmailService {
         'subscription_canceled',
         locale,
         createSubscriptionCanceledHTML(data),
-        `Abbonamento Cancellato - ${data.productName} - Olio Galia`
+        `Ci manchi! Torna a gustare il nostro olio - Olio Galia`
       );
       const templateData = {
         logoUrl: LOGO_URL,

@@ -152,22 +152,40 @@ export const createSubscriptionPaymentFailedHTML = (data: SubscriptionEmailData)
   return emailWrapper('Problema con il pagamento dell\'abbonamento', content);
 };
 
+export const createSubscriptionCancelScheduledHTML = (data: SubscriptionEmailData): string => {
+  const content = `
+    <h2 style="color: #556B2F; font-size: 22px; font-weight: bold; margin: 0 0 20px 0; font-family: Georgia, 'Times New Roman', Times, serif;" class="greeting-text">Gentile ${data.customerName},</h2>
+    <p style="color: #333333; font-size: 16px; line-height: 24px; margin: 0 0 30px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+      Confermiamo che il suo abbonamento per <strong>${data.productName}</strong> &egrave; stato cancellato. Non ricever&agrave; ulteriori spedizioni e non verranno effettuati ulteriori addebiti.
+    </p>
+    ${infoBox('Dettagli',
+      detailRow('Prodotto:', data.productName) +
+      detailRow('Stato:', 'Cancellazione programmata') +
+      (data.nextBillingDate ? detailRow('Attivo fino al:', data.nextBillingDate) : '')
+    )}
+    <p style="color: #333333; font-size: 16px; line-height: 24px; margin: 20px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+      Se cambia idea, pu&ograve; riattivare il suo abbonamento prima della scadenza dal portale dedicato:
+    </p>
+    ${ctaButton(data.portalLink, 'Riattiva Abbonamento')}`;
+  return emailWrapper('Abbonamento cancellato', content);
+};
+
 export const createSubscriptionCanceledHTML = (data: SubscriptionEmailData): string => {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://oliogalia.com';
   const content = `
     <h2 style="color: #556B2F; font-size: 22px; font-weight: bold; margin: 0 0 20px 0; font-family: Georgia, 'Times New Roman', Times, serif;" class="greeting-text">Gentile ${data.customerName},</h2>
     <p style="color: #333333; font-size: 16px; line-height: 24px; margin: 0 0 30px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
-      Confermiamo che il suo abbonamento per <strong>${data.productName}</strong> &egrave; stato cancellato. Non verranno effettuati ulteriori addebiti.
+      Il suo abbonamento per <strong>${data.productName}</strong> &egrave; ufficialmente terminato. Le manca gi&agrave; il nostro olio?
     </p>
     ${infoBox('Riepilogo',
       detailRow('Prodotto:', data.productName) +
-      detailRow('Stato:', 'Cancellato')
+      detailRow('Stato:', 'Terminato')
     )}
     <p style="color: #333333; font-size: 16px; line-height: 24px; margin: 20px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
-      Ci dispiace vederla andare via. Se in futuro desiderasse riattivarsi, sar&agrave; sempre il benvenuto!
+      Pu&ograve; riattivare il suo abbonamento o esplorare i nostri prodotti in qualsiasi momento. Sar&agrave; sempre il benvenuto!
     </p>
-    ${ctaButton(siteUrl + '/products', 'Visita lo Shop')}`;
-  return emailWrapper('Abbonamento cancellato', content);
+    ${ctaButton(siteUrl + '/products', 'Scopri i Nostri Abbonamenti')}`;
+  return emailWrapper('Ci manchi! Torna a gustare il nostro olio', content);
 };
 
 export const createSubscriptionPausedHTML = (data: SubscriptionEmailData): string => {

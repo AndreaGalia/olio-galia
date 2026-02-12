@@ -323,6 +323,34 @@ ${quoteUrl ? `🔗 <a href="${quoteUrl}">Visualizza preventivo nel pannello admi
   }
 
   /**
+   * Invia una notifica Telegram per cancellazione programmata
+   */
+  static async sendSubscriptionCancelScheduledNotification(data: SubscriptionEmailData): Promise<boolean> {
+    const message = `
+🔔 <b>CANCELLAZIONE ABBONAMENTO PROGRAMMATA</b>
+
+📋 <b>Cliente:</b> ${data.customerName} (${data.customerEmail})
+📦 <b>Prodotto:</b> ${data.productName}${data.nextBillingDate ? `\n📅 <b>Attivo fino al:</b> ${data.nextBillingDate}` : ''}
+`.trim();
+
+    return this.sendMessageToAllChats(message, 'cancellazione programmata');
+  }
+
+  /**
+   * Invia una notifica Telegram per abbonamento terminato definitivamente
+   */
+  static async sendSubscriptionCanceledNotification(data: SubscriptionEmailData): Promise<boolean> {
+    const message = `
+❌ <b>ABBONAMENTO TERMINATO</b>
+
+📋 <b>Cliente:</b> ${data.customerName} (${data.customerEmail})
+📦 <b>Prodotto:</b> ${data.productName}
+`.trim();
+
+    return this.sendMessageToAllChats(message, 'abbonamento terminato');
+  }
+
+  /**
    * Invia una notifica Telegram per abbonamento in pausa
    */
   static async sendSubscriptionPausedNotification(data: SubscriptionEmailData): Promise<boolean> {

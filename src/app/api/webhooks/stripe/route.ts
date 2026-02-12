@@ -63,8 +63,33 @@ export async function POST(request: NextRequest) {
         }
       );
 
-      // Send renewal email if subscription is active and period updated
-      if (subscription.status === 'active') {
+      // Cancellazione programmata (cancel at period end)
+      if (subscription.status === 'active' && subscription.cancel_at_period_end) {
+        try {
+          const dbSub = await SubscriptionService.findByStripeSubscriptionId(subscription.id);
+          if (dbSub) {
+            const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || '').replace(/\/$/, '');
+            const portalLink = `${baseUrl}/manage-subscription/access?token=${dbSub.portalAccessToken}`;
+            const emailData: SubscriptionEmailData = {
+              customerName: dbSub.customerName,
+              customerEmail: dbSub.customerEmail,
+              productName: dbSub.productName,
+              interval: dbSub.interval,
+              shippingZone: dbSub.shippingZone,
+              portalLink,
+              nextBillingDate: periodEnd.toLocaleDateString('it-IT', { year: 'numeric', month: 'long', day: 'numeric' }),
+            };
+            await EmailService.sendSubscriptionCancelScheduled(emailData);
+            console.log(`✅ Subscription cancel scheduled email sent to: ${dbSub.customerEmail}`);
+            await TelegramService.sendSubscriptionCancelScheduledNotification(emailData);
+          }
+        } catch (emailError) {
+          console.error('⚠️ Error sending subscription cancel scheduled email:', emailError);
+        }
+      }
+
+      // Renewal email (solo se attivo e NON in cancellazione)
+      if (subscription.status === 'active' && !subscription.cancel_at_period_end) {
         try {
           const dbSub = await SubscriptionService.findByStripeSubscriptionId(subscription.id);
           if (dbSub) {
@@ -107,7 +132,8 @@ export async function POST(request: NextRequest) {
             portalLink: '',
           };
           await EmailService.sendSubscriptionCanceled(emailData);
-          console.log(`✅ Subscription canceled email sent to: ${dbSub.customerEmail}`);
+          console.log(`✅ Subscription canceled (win-back) email sent to: ${dbSub.customerEmail}`);
+          await TelegramService.sendSubscriptionCanceledNotification(emailData);
         }
       } catch (emailError) {
         console.error('⚠️ Error sending subscription canceled email:', emailError);
