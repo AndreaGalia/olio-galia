@@ -1244,6 +1244,10 @@
     "accessErrorDesc": "Questo link non è più valido. Richiedi un nuovo link di accesso.",
     "requestNewLink": "Richiedi nuovo link",
     "rateLimitError": "Troppe richieste. Riprova tra qualche minuto.",
+    "quantityTitle": "Quantità",
+    "qty1": "1 pz",
+    "qty2": "2 pz",
+    "qty3": "3 pz",
     "ctaBanner": "Abbonati e Risparmia",
     "ctaBannerDesc": "Ricevi questo prodotto a casa tua con regolarità. Spedizione inclusa!",
     "ctaButton": "Scopri l'Abbonamento"

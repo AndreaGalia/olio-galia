@@ -1244,6 +1244,10 @@
     "accessErrorDesc": "This link is no longer valid. Request a new access link.",
     "requestNewLink": "Request new link",
     "rateLimitError": "Too many requests. Please try again in a few minutes.",
+    "quantityTitle": "Quantity",
+    "qty1": "1 pc",
+    "qty2": "2 pcs",
+    "qty3": "3 pcs",
     "ctaBanner": "Subscribe & Save",
     "ctaBannerDesc": "Receive this product at home regularly. Shipping included!",
     "ctaButton": "Discover Subscription"

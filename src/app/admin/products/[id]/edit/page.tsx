@@ -28,6 +28,7 @@ export default function EditProductPage() {
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [activeQtyTab, setActiveQtyTab] = useState<number>(1);
   const [error, setError] = useState<string | null>(null);
   const [product, setProduct] = useState<ProductWithStripe | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -242,7 +243,8 @@ export default function EditProductPage() {
           stripePriceId: product.stripePriceId || undefined,
           // Subscription
           isSubscribable: (product as any).isSubscribable || false,
-          stripeRecurringPriceIds: (product as any).isSubscribable ? (product as any).stripeRecurringPriceIds : undefined
+          stripeRecurringPriceIds: (product as any).isSubscribable ? (product as any).stripeRecurringPriceIds : undefined,
+          subscriptionPrices: (product as any).isSubscribable ? (product as any).subscriptionPrices : undefined
         })
       });
 
@@ -583,47 +585,137 @@ export default function EditProductPage() {
               </div>
             </div>
 
-            {(product as any).isSubscribable && (
-              <div className="space-y-4">
-                <p className="text-sm text-gray-600">
-                  Inserisci i Price ID ricorrenti di Stripe per ogni combinazione zona/intervallo.
-                </p>
-                {(['italia', 'europa', 'america', 'mondo'] as const).map(zone => (
-                  <div key={zone} className="border border-green-200 rounded-lg p-4">
-                    <h4 className="font-medium text-olive mb-3 capitalize">{zone}</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-                      {(['month', 'bimonth', 'quarter', 'semester'] as const).map(interval => (
-                        <div key={interval}>
-                          <label className="block text-xs font-medium text-gray-600 mb-1">
-                            {interval === 'month' ? 'Mensile' : interval === 'bimonth' ? 'Bimestrale' : interval === 'quarter' ? 'Trimestrale' : 'Semestrale'}
-                          </label>
-                          <input
-                            type="text"
-                            value={(product as any).stripeRecurringPriceIds?.[zone]?.[interval] || ''}
-                            onChange={(e) => setProduct(prev => {
-                              if (!prev) return null;
-                              const p = prev as any;
-                              return {
-                                ...prev,
-                                stripeRecurringPriceIds: {
-                                  ...p.stripeRecurringPriceIds,
-                                  [zone]: {
-                                    ...p.stripeRecurringPriceIds?.[zone],
-                                    [interval]: e.target.value
-                                  }
-                                }
-                              } as any;
-                            })}
-                            className="w-full px-2 py-1.5 border border-olive/30 rounded text-xs font-mono focus:ring-2 focus:ring-green-200 focus:border-green-500"
-                            placeholder="price_xxx"
-                          />
-                        </div>
-                      ))}
-                    </div>
+            {(product as any).isSubscribable && (() => {
+              const p = product as any;
+              const qtyTabs: number[] = p.subscriptionPrices
+                ? Object.keys(p.subscriptionPrices).map(Number).filter(n => !isNaN(n)).sort((a, b) => a - b)
+                : [];
+              // Se non ci sono tab, mostra comunque il tab 1
+              if (qtyTabs.length === 0) qtyTabs.push(1);
+              const nextQty = qtyTabs.length > 0 ? Math.max(...qtyTabs) + 1 : 1;
+
+              return (
+                <div className="space-y-4">
+                  <p className="text-sm text-gray-600">
+                    Inserisci i Price ID ricorrenti di Stripe per ogni combinazione quantità/zona/intervallo.
+                    Il prezzo deve includere la spedizione. L&apos;importo verrà verificato su Stripe al salvataggio.
+                  </p>
+
+                  {/* Tab Quantità dinamici */}
+                  <div className="flex items-center border-b border-green-200">
+                    {qtyTabs.map(qty => (
+                      <div key={qty} className="relative flex items-center">
+                        <button
+                          type="button"
+                          onClick={() => setActiveQtyTab(qty)}
+                          className={`px-4 py-2 text-sm font-medium transition-colors ${
+                            activeQtyTab === qty
+                              ? 'border-b-2 border-green-600 text-green-700 bg-green-50'
+                              : 'text-gray-500 hover:text-gray-700'
+                          }`}
+                        >
+                          {qty} {qty === 1 ? 'Bottiglia' : 'Bottiglie'}
+                        </button>
+                        {qtyTabs.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setProduct(prev => {
+                                if (!prev) return null;
+                                const p = prev as any;
+                                const newPrices = { ...p.subscriptionPrices };
+                                delete newPrices[String(qty)];
+                                return { ...prev, subscriptionPrices: newPrices } as any;
+                              });
+                              if (activeQtyTab === qty) {
+                                setActiveQtyTab(qtyTabs.find(q => q !== qty) || 1);
+                              }
+                            }}
+                            className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full text-xs flex items-center justify-center hover:bg-red-600"
+                            title={`Rimuovi ${qty} ${qty === 1 ? 'bottiglia' : 'bottiglie'}`}
+                          >
+                            ×
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProduct(prev => {
+                          if (!prev) return null;
+                          const p = prev as any;
+                          return {
+                            ...prev,
+                            subscriptionPrices: {
+                              ...p.subscriptionPrices,
+                              [String(nextQty)]: {
+                                italia: { month: '', bimonth: '', quarter: '', semester: '' },
+                                europa: { month: '', bimonth: '', quarter: '', semester: '' },
+                                america: { month: '', bimonth: '', quarter: '', semester: '' },
+                                mondo: { month: '', bimonth: '', quarter: '', semester: '' },
+                              }
+                            }
+                          } as any;
+                        });
+                        setActiveQtyTab(nextQty);
+                      }}
+                      className="ml-2 px-3 py-1.5 text-sm font-medium text-green-700 hover:bg-green-50 border border-green-300 rounded transition-colors"
+                      title="Aggiungi quantità"
+                    >
+                      + Aggiungi
+                    </button>
                   </div>
-                ))}
-              </div>
-            )}
+
+                  {/* Griglia per la quantità selezionata */}
+                  {qtyTabs.includes(activeQtyTab) && (['italia', 'europa', 'america', 'mondo'] as const).map(zone => (
+                    <div key={zone} className="border border-green-200 rounded-lg p-4">
+                      <h4 className="font-medium text-olive mb-3 capitalize">{zone}</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                        {(['month', 'bimonth', 'quarter', 'semester'] as const).map(interval => {
+                          const entry = p.subscriptionPrices?.[String(activeQtyTab)]?.[zone]?.[interval];
+                          const currentValue = typeof entry === 'object' && entry?.priceId ? entry.priceId : (typeof entry === 'string' ? entry : '');
+                          const savedAmount = typeof entry === 'object' && entry?.amount ? entry.amount : null;
+                          return (
+                            <div key={interval}>
+                              <label className="block text-xs font-medium text-gray-600 mb-1">
+                                {interval === 'month' ? 'Mensile' : interval === 'bimonth' ? 'Bimestrale' : interval === 'quarter' ? 'Trimestrale' : 'Semestrale'}
+                              </label>
+                              <input
+                                type="text"
+                                value={currentValue}
+                                onChange={(e) => setProduct(prev => {
+                                  if (!prev) return null;
+                                  const p = prev as any;
+                                  return {
+                                    ...prev,
+                                    subscriptionPrices: {
+                                      ...p.subscriptionPrices,
+                                      [String(activeQtyTab)]: {
+                                        ...p.subscriptionPrices?.[String(activeQtyTab)],
+                                        [zone]: {
+                                          ...p.subscriptionPrices?.[String(activeQtyTab)]?.[zone],
+                                          [interval]: e.target.value
+                                        }
+                                      }
+                                    }
+                                  } as any;
+                                })}
+                                className="w-full px-2 py-1.5 border border-olive/30 rounded text-xs font-mono focus:ring-2 focus:ring-green-200 focus:border-green-500"
+                                placeholder="price_xxx"
+                              />
+                              {savedAmount && (
+                                <p className="text-xs text-green-600 mt-0.5">€{savedAmount.toFixed(2)}</p>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
           </section>
 
           {/* Immagini */}

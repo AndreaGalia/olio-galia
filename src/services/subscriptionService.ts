@@ -19,6 +19,7 @@ export class SubscriptionService {
       productName: data.productName || '',
       customerEmail: data.customerEmail || '',
       customerName: data.customerName || '',
+      quantity: data.quantity || 1,
       shippingZone: data.shippingZone || 'italia',
       interval: data.interval || 'month',
       status: data.status || 'active',

@@ -107,6 +107,7 @@ export const createSubscriptionConfirmationHTML = (data: SubscriptionEmailData):
     </p>
     ${infoBox('Dettagli Abbonamento',
       detailRow('Prodotto:', data.productName) +
+      ((data.quantity && data.quantity > 1) ? detailRow('Quantit&agrave;:', `${data.quantity} bottiglie`) : '') +
       detailRow('Frequenza:', INTERVAL_LABELS[data.interval] || data.interval) +
       detailRow('Zona:', ZONE_LABELS[data.shippingZone] || data.shippingZone) +
       (data.amount ? detailRow('Importo:', `&euro;${data.amount}`) : '')
@@ -129,6 +130,7 @@ export const createSubscriptionRenewalHTML = (data: SubscriptionEmailData): stri
     </p>
     ${infoBox('Dettagli Rinnovo',
       detailRow('Prodotto:', data.productName) +
+      ((data.quantity && data.quantity > 1) ? detailRow('Quantit&agrave;:', `${data.quantity} bottiglie`) : '') +
       detailRow('Frequenza:', INTERVAL_LABELS[data.interval] || data.interval) +
       (data.amount ? detailRow('Importo:', `&euro;${data.amount}`) : '') +
       (data.nextBillingDate ? detailRow('Prossimo rinnovo:', data.nextBillingDate) : '')
@@ -160,6 +162,7 @@ export const createSubscriptionCancelScheduledHTML = (data: SubscriptionEmailDat
     </p>
     ${infoBox('Dettagli',
       detailRow('Prodotto:', data.productName) +
+      ((data.quantity && data.quantity > 1) ? detailRow('Quantit&agrave;:', `${data.quantity} bottiglie`) : '') +
       detailRow('Stato:', 'Cancellazione programmata') +
       (data.nextBillingDate ? detailRow('Attivo fino al:', data.nextBillingDate) : '')
     )}
@@ -179,6 +182,7 @@ export const createSubscriptionCanceledHTML = (data: SubscriptionEmailData): str
     </p>
     ${infoBox('Riepilogo',
       detailRow('Prodotto:', data.productName) +
+      ((data.quantity && data.quantity > 1) ? detailRow('Quantit&agrave;:', `${data.quantity} bottiglie`) : '') +
       detailRow('Stato:', 'Terminato')
     )}
     <p style="color: #333333; font-size: 16px; line-height: 24px; margin: 20px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
@@ -196,6 +200,7 @@ export const createSubscriptionPausedHTML = (data: SubscriptionEmailData): strin
     </p>
     ${infoBox('Dettagli Abbonamento',
       detailRow('Prodotto:', data.productName) +
+      ((data.quantity && data.quantity > 1) ? detailRow('Quantit&agrave;:', `${data.quantity} bottiglie`) : '') +
       detailRow('Frequenza:', INTERVAL_LABELS[data.interval] || data.interval) +
       detailRow('Stato:', 'In pausa')
     )}
@@ -214,6 +219,7 @@ export const createSubscriptionResumedHTML = (data: SubscriptionEmailData): stri
     </p>
     ${infoBox('Dettagli Abbonamento',
       detailRow('Prodotto:', data.productName) +
+      ((data.quantity && data.quantity > 1) ? detailRow('Quantit&agrave;:', `${data.quantity} bottiglie`) : '') +
       detailRow('Frequenza:', INTERVAL_LABELS[data.interval] || data.interval) +
       detailRow('Stato:', 'Attivo') +
       (data.nextBillingDate ? detailRow('Prossimo rinnovo:', data.nextBillingDate) : '')
@@ -230,6 +236,7 @@ export const createSubscriptionUpcomingRenewalHTML = (data: SubscriptionEmailDat
     </p>
     ${infoBox('Dettagli Rinnovo',
       detailRow('Prodotto:', data.productName) +
+      ((data.quantity && data.quantity > 1) ? detailRow('Quantit&agrave;:', `${data.quantity} bottiglie`) : '') +
       detailRow('Frequenza:', INTERVAL_LABELS[data.interval] || data.interval) +
       (data.amount ? detailRow('Importo:', `&euro;${data.amount}`) : '') +
       (data.nextBillingDate ? detailRow('Data rinnovo:', data.nextBillingDate) : '')

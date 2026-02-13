@@ -4,11 +4,26 @@ export type SubscriptionInterval = 'month' | 'bimonth' | 'quarter' | 'semester';
 
 export type ShippingZone = 'italia' | 'europa' | 'america' | 'mondo';
 
+export type SubscriptionQuantity = number;
+
 export type RecurringPriceMap = {
   [zone in ShippingZone]?: {
     [interval in SubscriptionInterval]?: string;
   };
 };
+
+export type SubscriptionPriceEntry = {
+  priceId: string;
+  amount: number; // in EUR, es. 29.90
+};
+
+export type RecurringPriceMapWithAmount = {
+  [zone in ShippingZone]?: {
+    [interval in SubscriptionInterval]?: SubscriptionPriceEntry;
+  };
+};
+
+export type QuantityPriceMap = Record<number, RecurringPriceMapWithAmount>;
 
 export type SubscriptionStatus = 'active' | 'canceled' | 'past_due' | 'unpaid' | 'paused' | 'incomplete';
 
@@ -21,6 +36,7 @@ export interface SubscriptionDocument {
   productName: string;
   customerEmail: string;
   customerName: string;
+  quantity: number;
   shippingZone: ShippingZone;
   interval: SubscriptionInterval;
   status: SubscriptionStatus;
@@ -54,6 +70,7 @@ export interface SubscriptionEmailData {
   customerName: string;
   customerEmail: string;
   productName: string;
+  quantity?: number;
   interval: SubscriptionInterval;
   shippingZone: ShippingZone;
   portalLink: string;

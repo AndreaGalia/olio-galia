@@ -5,6 +5,47 @@ import { ProductDocument } from '@/types/products';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
+// Valida e arricchisce subscriptionPrices con amount da Stripe
+// Accetta sia stringhe "price_xxx" che oggetti { priceId: "price_xxx", amount: ... }
+async function validateAndEnrichSubscriptionPrices(
+  rawPrices: Record<string, Record<string, Record<string, unknown>>>
+): Promise<Record<string, Record<string, Record<string, { priceId: string; amount: number }>>>> {
+  const enriched: Record<string, Record<string, Record<string, { priceId: string; amount: number }>>> = {};
+
+  for (const [qty, zones] of Object.entries(rawPrices)) {
+    if (!zones || typeof zones !== 'object') continue;
+    enriched[qty] = {};
+    for (const [zone, intervals] of Object.entries(zones)) {
+      if (!intervals || typeof intervals !== 'object') continue;
+      enriched[qty][zone] = {};
+      for (const [interval, entry] of Object.entries(intervals)) {
+        // Estrai il priceId sia da stringa che da oggetto
+        let id: string | undefined;
+        if (typeof entry === 'string' && entry.trim()) {
+          id = entry.trim();
+        } else if (entry && typeof entry === 'object' && 'priceId' in entry && typeof (entry as any).priceId === 'string') {
+          id = (entry as any).priceId.trim();
+        }
+        if (!id) continue;
+
+        if (!id.startsWith('price_')) {
+          throw new Error(`Price ID non valido per qty=${qty}, ${zone}/${interval}: "${id}" (deve iniziare con "price_")`);
+        }
+        const stripePrice = await stripe.prices.retrieve(id);
+        if (!stripePrice.unit_amount) {
+          throw new Error(`Prezzo non trovato su Stripe per ${id}`);
+        }
+        enriched[qty][zone][interval] = {
+          priceId: id,
+          amount: stripePrice.unit_amount / 100,
+        };
+      }
+    }
+  }
+
+  return enriched;
+}
+
 // GET - Ottieni singolo prodotto
 export async function GET(
   request: NextRequest,
@@ -77,7 +118,8 @@ export async function PUT(
       stripePriceId: newStripePriceId,
       metadata,
       isSubscribable,
-      stripeRecurringPriceIds
+      stripeRecurringPriceIds,
+      subscriptionPrices: rawSubscriptionPrices
     } = data;
 
     // Ottieni prodotto esistente da MongoDB
@@ -119,6 +161,19 @@ export async function PUT(
       } catch (err) {
         return NextResponse.json(
           { error: 'ID Stripe non trovati. Verifica di aver inserito gli ID corretti dalla dashboard Stripe.' },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Valida e arricchisci subscriptionPrices se presente
+    let validatedSubscriptionPrices: Record<string, Record<string, Record<string, { priceId: string; amount: number }>>> | undefined;
+    if (isSubscribable && rawSubscriptionPrices) {
+      try {
+        validatedSubscriptionPrices = await validateAndEnrichSubscriptionPrices(rawSubscriptionPrices);
+      } catch (err) {
+        return NextResponse.json(
+          { error: err instanceof Error ? err.message : 'Errore validazione prezzi abbonamento' },
           { status: 400 }
         );
       }
@@ -201,6 +256,7 @@ export async function PUT(
               customBadge: customBadge || undefined,
               isSubscribable: isSubscribable || false,
               stripeRecurringPriceIds: stripeRecurringPriceIds || undefined,
+              subscriptionPrices: validatedSubscriptionPrices || undefined,
               translations,
               slug,
               'metadata.updatedAt': new Date(),
@@ -229,6 +285,7 @@ export async function PUT(
               customBadge: customBadge || undefined,
               isSubscribable: isSubscribable || false,
               stripeRecurringPriceIds: stripeRecurringPriceIds || undefined,
+              subscriptionPrices: validatedSubscriptionPrices || undefined,
               translations,
               slug,
               'metadata.updatedAt': new Date(),
@@ -256,6 +313,9 @@ export async function PUT(
             images: images || [],
             nutritionalInfo: nutritionalInfo || {},
             customBadge: customBadge || undefined,
+            isSubscribable: isSubscribable || false,
+            stripeRecurringPriceIds: stripeRecurringPriceIds || undefined,
+            subscriptionPrices: validatedSubscriptionPrices || undefined,
             translations,
             slug,
             'metadata.updatedAt': new Date(),
@@ -282,6 +342,9 @@ export async function PUT(
             images: images || [],
             nutritionalInfo: nutritionalInfo || {},
             customBadge: customBadge || undefined,
+            isSubscribable: isSubscribable || false,
+            stripeRecurringPriceIds: stripeRecurringPriceIds || undefined,
+            subscriptionPrices: validatedSubscriptionPrices || undefined,
             translations,
             slug,
             'metadata.updatedAt': new Date(),

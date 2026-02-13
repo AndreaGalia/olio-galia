@@ -314,7 +314,7 @@ ${quoteUrl ? `🔗 <a href="${quoteUrl}">Visualizza preventivo nel pannello admi
 🔄 <b>NUOVO ABBONAMENTO!</b>
 
 📋 <b>Cliente:</b> ${data.customerName} (${data.customerEmail})
-📦 <b>Prodotto:</b> ${data.productName}
+📦 <b>Prodotto:</b> ${data.productName}${(data.quantity && data.quantity > 1) ? `\n🔢 <b>Quantità:</b> ${data.quantity} bottiglie` : ''}
 🗺️ <b>Zona:</b> ${ZONE_LABELS[data.shippingZone] || data.shippingZone}
 📅 <b>Frequenza:</b> ${INTERVAL_LABELS[data.interval] || data.interval}${data.amount ? `\n💰 <b>Importo:</b> €${data.amount}` : ''}
 `.trim();
@@ -330,7 +330,7 @@ ${quoteUrl ? `🔗 <a href="${quoteUrl}">Visualizza preventivo nel pannello admi
 🔔 <b>CANCELLAZIONE ABBONAMENTO PROGRAMMATA</b>
 
 📋 <b>Cliente:</b> ${data.customerName} (${data.customerEmail})
-📦 <b>Prodotto:</b> ${data.productName}${data.nextBillingDate ? `\n📅 <b>Attivo fino al:</b> ${data.nextBillingDate}` : ''}
+📦 <b>Prodotto:</b> ${data.productName}${(data.quantity && data.quantity > 1) ? `\n🔢 <b>Quantità:</b> ${data.quantity} bottiglie` : ''}${data.nextBillingDate ? `\n📅 <b>Attivo fino al:</b> ${data.nextBillingDate}` : ''}
 `.trim();
 
     return this.sendMessageToAllChats(message, 'cancellazione programmata');
@@ -344,7 +344,7 @@ ${quoteUrl ? `🔗 <a href="${quoteUrl}">Visualizza preventivo nel pannello admi
 ❌ <b>ABBONAMENTO TERMINATO</b>
 
 📋 <b>Cliente:</b> ${data.customerName} (${data.customerEmail})
-📦 <b>Prodotto:</b> ${data.productName}
+📦 <b>Prodotto:</b> ${data.productName}${(data.quantity && data.quantity > 1) ? `\n🔢 <b>Quantità:</b> ${data.quantity} bottiglie` : ''}
 `.trim();
 
     return this.sendMessageToAllChats(message, 'abbonamento terminato');
@@ -358,7 +358,7 @@ ${quoteUrl ? `🔗 <a href="${quoteUrl}">Visualizza preventivo nel pannello admi
 ⏸️ <b>ABBONAMENTO IN PAUSA</b>
 
 📋 <b>Cliente:</b> ${data.customerName} (${data.customerEmail})
-📦 <b>Prodotto:</b> ${data.productName}
+📦 <b>Prodotto:</b> ${data.productName}${(data.quantity && data.quantity > 1) ? `\n🔢 <b>Quantità:</b> ${data.quantity} bottiglie` : ''}
 `.trim();
 
     return this.sendMessageToAllChats(message, 'abbonamento pausa');
@@ -372,7 +372,7 @@ ${quoteUrl ? `🔗 <a href="${quoteUrl}">Visualizza preventivo nel pannello admi
 ▶️ <b>ABBONAMENTO RIATTIVATO</b>
 
 📋 <b>Cliente:</b> ${data.customerName} (${data.customerEmail})
-📦 <b>Prodotto:</b> ${data.productName}${data.nextBillingDate ? `\n📅 <b>Prossimo rinnovo:</b> ${data.nextBillingDate}` : ''}
+📦 <b>Prodotto:</b> ${data.productName}${(data.quantity && data.quantity > 1) ? `\n🔢 <b>Quantità:</b> ${data.quantity} bottiglie` : ''}${data.nextBillingDate ? `\n📅 <b>Prossimo rinnovo:</b> ${data.nextBillingDate}` : ''}
 `.trim();
 
     return this.sendMessageToAllChats(message, 'abbonamento riattivato');
@@ -386,7 +386,7 @@ ${quoteUrl ? `🔗 <a href="${quoteUrl}">Visualizza preventivo nel pannello admi
 📅 <b>RINNOVO ABBONAMENTO IMMINENTE</b>
 
 📋 <b>Cliente:</b> ${data.customerName} (${data.customerEmail})
-📦 <b>Prodotto:</b> ${data.productName}${data.amount ? `\n💰 <b>Importo:</b> €${data.amount}` : ''}${data.nextBillingDate ? `\n📅 <b>Data rinnovo:</b> ${data.nextBillingDate}` : ''}
+📦 <b>Prodotto:</b> ${data.productName}${(data.quantity && data.quantity > 1) ? `\n🔢 <b>Quantità:</b> ${data.quantity} bottiglie` : ''}${data.amount ? `\n💰 <b>Importo:</b> €${data.amount}` : ''}${data.nextBillingDate ? `\n📅 <b>Data rinnovo:</b> ${data.nextBillingDate}` : ''}
 `.trim();
 
     return this.sendMessageToAllChats(message, 'rinnovo imminente');

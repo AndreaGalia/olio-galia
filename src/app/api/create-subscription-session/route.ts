@@ -10,6 +10,7 @@ interface RequestBody {
   productId: string;
   shippingZone: ShippingZone;
   interval: SubscriptionInterval;
+  quantity?: number;
 }
 
 const ALLOWED_COUNTRIES: Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[] = [
@@ -22,11 +23,10 @@ const ALLOWED_COUNTRIES: Stripe.Checkout.SessionCreateParams.ShippingAddressColl
 
 const VALID_ZONES: ShippingZone[] = ['italia', 'europa', 'america', 'mondo'];
 const VALID_INTERVALS: SubscriptionInterval[] = ['month', 'bimonth', 'quarter', 'semester'];
-
 export async function POST(request: NextRequest) {
   try {
     const body: RequestBody = await request.json();
-    const { productId, shippingZone, interval } = body;
+    const { productId, shippingZone, interval, quantity = 1 } = body;
 
     // Validazioni
     if (!productId) {
@@ -37,6 +37,9 @@ export async function POST(request: NextRequest) {
     }
     if (!interval || !VALID_INTERVALS.includes(interval)) {
       return NextResponse.json({ error: 'Intervallo non valido' }, { status: 400 });
+    }
+    if (!quantity || quantity < 1 || !Number.isInteger(quantity)) {
+      return NextResponse.json({ error: 'Quantità non valida' }, { status: 400 });
     }
 
     // Cerca prodotto in MongoDB
@@ -51,12 +54,22 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Prodotto non disponibile per abbonamento' }, { status: 400 });
     }
 
-    // Prendi il Price ID ricorrente per zona×intervallo
-    const priceId = product.stripeRecurringPriceIds?.[shippingZone]?.[interval];
+    // Prendi il Price ID: prima prova nuovo formato (subscriptionPrices), poi fallback al vecchio
+    let priceId: string | undefined;
+
+    if (product.subscriptionPrices?.[String(quantity)]?.[shippingZone]?.[interval]) {
+      const entry = product.subscriptionPrices[String(quantity)][shippingZone][interval];
+      priceId = typeof entry === 'object' && entry.priceId ? entry.priceId : undefined;
+    }
+
+    // Fallback per vecchio formato (solo qty=1)
+    if (!priceId && quantity === 1 && product.stripeRecurringPriceIds?.[shippingZone]?.[interval]) {
+      priceId = product.stripeRecurringPriceIds[shippingZone][interval];
+    }
 
     if (!priceId) {
       return NextResponse.json(
-        { error: 'Combinazione zona/intervallo non disponibile per questo prodotto' },
+        { error: 'Combinazione quantità/zona/intervallo non disponibile per questo prodotto' },
         { status: 400 }
       );
     }
@@ -67,7 +80,7 @@ export async function POST(request: NextRequest) {
       line_items: [
         {
           price: priceId,
-          quantity: 1,
+          quantity: 1, // Il prezzo include già tutto (prodotto + spedizione per la quantità)
         },
       ],
       mode: 'subscription',
@@ -83,6 +96,7 @@ export async function POST(request: NextRequest) {
         productName: product.translations?.it?.name || '',
         shippingZone,
         interval,
+        quantity: String(quantity),
       },
     });
 

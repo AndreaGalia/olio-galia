@@ -1,15 +1,17 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import { useSubscriptionCheckout } from '@/hooks/useSubscriptionCheckout';
 import { useT } from '@/hooks/useT';
 import { useLocale } from '@/contexts/LocaleContext';
 import {
   SubscriptionInterval,
   ShippingZone,
+  SubscriptionQuantity,
   SUBSCRIPTION_INTERVALS,
   SHIPPING_ZONES,
   RecurringPriceMap,
+  QuantityPriceMap,
 } from '@/types/subscription';
 import type { Product } from '@/types/products';
 
@@ -18,123 +20,144 @@ interface SubscriptionFormProps {
 }
 
 export default function SubscriptionForm({ product }: SubscriptionFormProps) {
+  const [selectedQuantity, setSelectedQuantity] = useState<SubscriptionQuantity>(1);
   const [selectedZone, setSelectedZone] = useState<ShippingZone | null>(null);
   const [selectedInterval, setSelectedInterval] = useState<SubscriptionInterval | null>(null);
-  const [stripePrices, setStripePrices] = useState<Record<string, number>>({});
-  const [pricesLoading, setPricesLoading] = useState(true);
   const { startSubscription, loading, error, clearError } = useSubscriptionCheckout();
   const { t } = useT();
   const { locale } = useLocale();
   const label = (item: { labelIt: string; labelEn: string }) => locale === 'en' ? item.labelEn : item.labelIt;
 
-  const priceMap = (product as Product & { stripeRecurringPriceIds?: RecurringPriceMap }).stripeRecurringPriceIds;
-
-  // Raccogli tutti i price ID dal prodotto
-  const allPriceIds = useCallback(() => {
-    const ids: string[] = [];
-    if (!priceMap) return ids;
-    for (const zone of Object.values(priceMap)) {
-      if (!zone) continue;
-      for (const priceId of Object.values(zone)) {
-        if (priceId && priceId.trim()) ids.push(priceId);
-      }
-    }
-    return ids;
-  }, [priceMap]);
-
-  // Fetch prezzi da Stripe al mount
-  useEffect(() => {
-    const ids = allPriceIds();
-    if (ids.length === 0) {
-      setPricesLoading(false);
-      return;
-    }
-
-    const fetchPrices = async () => {
-      try {
-        const res = await fetch('/api/subscription-prices', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ priceIds: ids }),
-        });
-        if (res.ok) {
-          const data = await res.json();
-          const mapped: Record<string, number> = {};
-          for (const [id, info] of Object.entries(data.prices)) {
-            mapped[id] = (info as { amount: number }).amount;
-          }
-          setStripePrices(mapped);
-        }
-      } catch {
-        // fallback silenzioso
-      } finally {
-        setPricesLoading(false);
-      }
-    };
-
-    fetchPrices();
-  }, [allPriceIds]);
-
-  // Helper: prezzo per una coppia zona/intervallo
-  const getPrice = (zone: ShippingZone, interval: SubscriptionInterval): number | null => {
-    const priceId = priceMap?.[zone]?.[interval];
-    if (!priceId) return null;
-    return stripePrices[priceId] ?? null;
+  const productAny = product as Product & {
+    stripeRecurringPriceIds?: RecurringPriceMap;
+    subscriptionPrices?: QuantityPriceMap;
   };
 
-  // Prezzo minimo globale
+  const hasNewFormat = !!productAny.subscriptionPrices;
+  const legacyPriceMap = productAny.stripeRecurringPriceIds;
+
+  // Helper: ottieni il prezzo per una combinazione qty/zona/intervallo
+  const getPrice = (qty: SubscriptionQuantity, zone: ShippingZone, interval: SubscriptionInterval): number | null => {
+    if (hasNewFormat) {
+      const entry = productAny.subscriptionPrices?.[qty]?.[zone]?.[interval];
+      if (entry && typeof entry === 'object' && entry.amount) {
+        return entry.amount;
+      }
+      return null;
+    }
+    // Vecchio formato: nessun amount salvato
+    return null;
+  };
+
+  // Verifica se una combinazione è disponibile
+  const isAvailable = (qty: SubscriptionQuantity, zone: ShippingZone, interval: SubscriptionInterval): boolean => {
+    if (hasNewFormat) {
+      const entry = productAny.subscriptionPrices?.[qty]?.[zone]?.[interval];
+      if (entry && typeof entry === 'object' && entry.priceId) return true;
+    }
+    // Fallback legacy per qty=1
+    if (qty === 1 && legacyPriceMap) {
+      const priceId = legacyPriceMap[zone]?.[interval];
+      if (priceId && priceId.trim()) return true;
+    }
+    return false;
+  };
+
+  // Qty=1 è disponibile tramite legacy?
+  const hasLegacyPrices = !!legacyPriceMap && Object.values(legacyPriceMap).some(zone => {
+    if (!zone) return false;
+    return Object.values(zone).some(id => id && id.trim());
+  });
+
+  // Qty disponibile nel nuovo formato?
+  const hasNewFormatQty = (qty: SubscriptionQuantity): boolean => {
+    const qtyMap = productAny.subscriptionPrices?.[qty];
+    if (!qtyMap) return false;
+    return Object.values(qtyMap).some(zones => {
+      if (!zones) return false;
+      return Object.values(zones).some(entry => entry && typeof entry === 'object' && entry.priceId);
+    });
+  };
+
+  // Auto-detect quantità disponibili dal dato
+  const availableQuantities: number[] = (() => {
+    const qtys: number[] = [];
+    if (hasNewFormat && productAny.subscriptionPrices) {
+      for (const key of Object.keys(productAny.subscriptionPrices)) {
+        const n = Number(key);
+        if (!isNaN(n) && hasNewFormatQty(n)) qtys.push(n);
+      }
+    }
+    // Fallback legacy: aggiungi qty=1 se ha prezzi legacy e non è già presente
+    if (hasLegacyPrices && !qtys.includes(1)) qtys.push(1);
+    return qtys.sort((a, b) => a - b);
+  })();
+
+  // Zone disponibili per la quantità selezionata
+  const availableZones = SHIPPING_ZONES.filter(zone => {
+    // Cerca nel nuovo formato
+    if (hasNewFormat) {
+      const zoneMap = productAny.subscriptionPrices?.[selectedQuantity]?.[zone.value];
+      if (zoneMap && Object.values(zoneMap).some(entry => entry && typeof entry === 'object' && entry.priceId)) {
+        return true;
+      }
+    }
+    // Fallback legacy per qty=1
+    if (selectedQuantity === 1 && legacyPriceMap) {
+      const zoneMap = legacyPriceMap[zone.value];
+      if (zoneMap && Object.values(zoneMap).some(id => id && id.trim())) return true;
+    }
+    return false;
+  });
+
+  // Intervalli disponibili per la zona selezionata
+  const availableIntervals = SUBSCRIPTION_INTERVALS.filter(interval => {
+    if (!selectedZone) return false;
+    return isAvailable(selectedQuantity, selectedZone, interval.value);
+  });
+
+  // Prezzo selezionato
+  const selectedPrice = selectedZone && selectedInterval
+    ? getPrice(selectedQuantity, selectedZone, selectedInterval)
+    : null;
+
+  // Prezzo minimo per la quantità corrente
   const minPrice = (() => {
     let min: number | null = null;
-    if (!priceMap) return null;
-    for (const zoneKey of Object.keys(priceMap) as ShippingZone[]) {
-      const zoneMap = priceMap[zoneKey];
-      if (!zoneMap) continue;
-      for (const intervalKey of Object.keys(zoneMap) as SubscriptionInterval[]) {
-        const priceId = zoneMap[intervalKey];
-        if (!priceId) continue;
-        const amount = stripePrices[priceId];
-        if (amount !== undefined && (min === null || amount < min)) {
-          min = amount;
+    for (const zone of availableZones) {
+      for (const interval of SUBSCRIPTION_INTERVALS) {
+        const price = getPrice(selectedQuantity, zone.value, interval.value);
+        if (price !== null && (min === null || price < min)) {
+          min = price;
         }
       }
     }
     return min;
   })();
 
-  // Prezzo selezionato
-  const selectedPrice = selectedZone && selectedInterval ? getPrice(selectedZone, selectedInterval) : null;
-
-  // Filtra solo zone con almeno un Price ID configurato
-  const availableZones = SHIPPING_ZONES.filter(zone => {
-    const zoneMap = priceMap?.[zone.value];
-    return zoneMap && Object.values(zoneMap).some(id => id && id.trim());
-  });
-
-  // Filtra solo intervalli disponibili per la zona selezionata
-  const availableIntervals = SUBSCRIPTION_INTERVALS.filter(interval => {
-    if (!selectedZone) return false;
-    const priceId = priceMap?.[selectedZone]?.[interval.value];
-    return priceId && priceId.trim();
-  });
-
   const handleSubmit = async () => {
     if (!selectedZone || !selectedInterval) return;
     clearError();
     try {
-      await startSubscription(product.id, selectedZone, selectedInterval);
+      await startSubscription(product.id, selectedZone, selectedInterval, selectedQuantity);
     } catch {
       // errore gestito dal hook
     }
   };
 
   const sub = t.subscription;
+  const formatPrice = (amount: number) => `\u20AC${amount.toFixed(2).replace('.00', '')}`;
 
-  const formatPrice = (amount: number) => `€${amount.toFixed(2).replace('.00', '')}`;
+  const showQuantityStep = availableQuantities.length >= 1;
+
+  // Step numbering
+  const zoneStepNum = showQuantityStep ? 2 : 1;
+  const intervalStepNum = showQuantityStep ? 3 : 2;
 
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Prezzo in evidenza */}
-      {!pricesLoading && minPrice !== null && (
+      {minPrice !== null && (
         <div className="bg-white border border-olive/10 p-4 sm:p-5 text-center animate-fadeIn">
           {selectedPrice !== null ? (
             <>
@@ -152,7 +175,51 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
         </div>
       )}
 
-      {/* Step 1 - Zona spedizione */}
+      {/* Step Quantità (solo se più di 1 quantità disponibile) */}
+      {showQuantityStep && (
+        <div className="border border-olive/20 bg-beige transition-all duration-300">
+          <div className="p-4 sm:p-5">
+            <div className="flex items-center gap-3 mb-3 sm:mb-4">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center flex-shrink-0 bg-olive">
+                <svg className="w-4 h-4 text-beige" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h3 className="text-base sm:text-lg font-serif text-olive uppercase">
+                {sub?.quantityTitle || 'Quantità'}
+              </h3>
+            </div>
+
+            <div className="flex gap-0 rounded-lg overflow-hidden border border-olive/30">
+              {availableQuantities.map((qty, idx) => (
+                <button
+                  key={qty}
+                  type="button"
+                  onClick={() => {
+                    setSelectedQuantity(qty);
+                    setSelectedZone(null);
+                    setSelectedInterval(null);
+                  }}
+                  className={`flex-1 py-3 sm:py-4 transition-all duration-200 cursor-pointer text-center relative ${
+                    selectedQuantity === qty
+                      ? 'bg-olive text-beige font-bold shadow-inner'
+                      : 'bg-white text-olive hover:bg-olive/5 font-medium'
+                  } ${idx > 0 ? 'border-l border-olive/30' : ''}`}
+                >
+                  <span className="text-lg sm:text-xl block leading-none">{qty}</span>
+                  <span className={`text-xs mt-0.5 block ${
+                    selectedQuantity === qty ? 'text-beige/80' : 'text-nocciola'
+                  }`}>
+                    {qty === 1 ? (sub?.qty1 || '1 pz') : `${qty} ${locale === 'en' ? 'pcs' : 'pz'}`}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Step Zona spedizione */}
       <div className={`border transition-all duration-300 ${
         selectedZone ? 'bg-beige border-olive/20' : 'bg-olive/5 border-olive border-2'
       }`}>
@@ -166,7 +233,7 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               ) : (
-                <span className="text-olive text-xs sm:text-sm font-bold">1</span>
+                <span className="text-olive text-xs sm:text-sm font-bold">{zoneStepNum}</span>
               )}
             </div>
             <h3 className="text-base sm:text-lg font-serif text-olive uppercase">
@@ -208,7 +275,7 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
         </div>
       </div>
 
-      {/* Step 2 - Intervallo */}
+      {/* Step Intervallo */}
       <div className={`border transition-all duration-300 ${
         !selectedZone
           ? 'bg-white border-olive/10 opacity-50'
@@ -226,7 +293,7 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               ) : (
-                <span className={`text-xs sm:text-sm font-bold ${selectedZone ? 'text-olive' : 'text-olive/40'}`}>2</span>
+                <span className={`text-xs sm:text-sm font-bold ${selectedZone ? 'text-olive' : 'text-olive/40'}`}>{intervalStepNum}</span>
               )}
             </div>
             <h3 className={`text-base sm:text-lg font-serif uppercase ${selectedZone ? 'text-olive' : 'text-olive/40'}`}>
@@ -242,7 +309,7 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
           {selectedZone && (
             <div className="grid grid-cols-2 gap-2 sm:gap-3 animate-fadeIn">
               {availableIntervals.map(interval => {
-                const price = getPrice(selectedZone, interval.value);
+                const price = getPrice(selectedQuantity, selectedZone, interval.value);
                 return (
                   <button
                     key={interval.value}

@@ -10,6 +10,7 @@ interface Subscription {
   customerEmail: string;
   customerName: string;
   productName: string;
+  quantity?: number;
   shippingZone: string;
   interval: string;
   status: string;
@@ -152,6 +153,7 @@ export default function AdminSubscriptionsPage() {
                 <tr>
                   <th className="px-4 py-3 text-left font-medium text-olive">Email</th>
                   <th className="px-4 py-3 text-left font-medium text-olive">Prodotto</th>
+                  <th className="px-4 py-3 text-left font-medium text-olive">Qty</th>
                   <th className="px-4 py-3 text-left font-medium text-olive">Zona</th>
                   <th className="px-4 py-3 text-left font-medium text-olive">Intervallo</th>
                   <th className="px-4 py-3 text-left font-medium text-olive">Stato</th>
@@ -168,6 +170,7 @@ export default function AdminSubscriptionsPage() {
                       </div>
                     </td>
                     <td className="px-4 py-3 text-nocciola">{sub.productName}</td>
+                    <td className="px-4 py-3 text-nocciola">{sub.quantity || 1}</td>
                     <td className="px-4 py-3 text-nocciola capitalize">{sub.shippingZone}</td>
                     <td className="px-4 py-3 text-nocciola">{INTERVAL_LABELS[sub.interval] || sub.interval}</td>
                     <td className="px-4 py-3">

@@ -20,7 +20,7 @@ export interface ProductTranslations {
   focusKeyphrase?: string; // Parola chiave principale per SEO
 }
 
-import { RecurringPriceMap } from './subscription';
+import { RecurringPriceMap, QuantityPriceMap } from './subscription';
 
 export interface BaseProduct {
   id: string;
@@ -38,7 +38,8 @@ export interface BaseProduct {
   nutritionalInfo?: Record<string, string>;
   customBadge?: string; // Badge personalizzato opzionale (es: "NOVITÀ", "BIO", "LIMITED")
   isSubscribable?: boolean; // Abilita abbonamento ricorrente
-  stripeRecurringPriceIds?: RecurringPriceMap; // Price ID ricorrenti per zona × intervallo
+  stripeRecurringPriceIds?: RecurringPriceMap; // Price ID ricorrenti per zona × intervallo (legacy)
+  subscriptionPrices?: QuantityPriceMap; // Prezzi abbonamento per quantità × zona × intervallo (nuovo)
 }
 
 // Prodotto come salvato in MongoDB (con tutte le traduzioni)

@@ -1,7 +1,7 @@
 // hooks/useSubscriptionCheckout.ts
 import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-import { SubscriptionInterval, ShippingZone } from '@/types/subscription';
+import { SubscriptionInterval, ShippingZone, SubscriptionQuantity } from '@/types/subscription';
 
 export const useSubscriptionCheckout = () => {
   const [loading, setLoading] = useState(false);
@@ -10,7 +10,8 @@ export const useSubscriptionCheckout = () => {
   const startSubscription = async (
     productId: string,
     shippingZone: ShippingZone,
-    interval: SubscriptionInterval
+    interval: SubscriptionInterval,
+    quantity: SubscriptionQuantity = 1
   ) => {
     setLoading(true);
     setError(null);
@@ -19,7 +20,7 @@ export const useSubscriptionCheckout = () => {
       const response = await fetch('/api/create-subscription-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productId, shippingZone, interval }),
+        body: JSON.stringify({ productId, shippingZone, interval, quantity }),
       });
 
       const data = await response.json();
