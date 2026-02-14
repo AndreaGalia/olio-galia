@@ -120,7 +120,10 @@ export async function POST(request: NextRequest) {
       featured,
       isSubscribable,
       stripeRecurringPriceIds,
-      subscriptionPrices: rawSubscriptionPrices
+      subscriptionPrices: rawSubscriptionPrices,
+      hasVariants,
+      variants,
+      variantLabel,
     } = data;
 
     // Validazione dei dati richiesti
@@ -129,6 +132,48 @@ export async function POST(request: NextRequest) {
         { error: 'Dati mancanti per la creazione del prodotto' },
         { status: 400 }
       );
+    }
+
+    // Validazione varianti se presenti
+    if (hasVariants && variants) {
+      if (!Array.isArray(variants) || variants.length === 0) {
+        return NextResponse.json(
+          { error: 'Aggiungi almeno una variante' },
+          { status: 400 }
+        );
+      }
+      for (const v of variants) {
+        if (!v.variantId || !v.translations?.it?.name || !v.translations?.en?.name) {
+          return NextResponse.json(
+            { error: 'Ogni variante deve avere un ID e un nome IT/EN' },
+            { status: 400 }
+          );
+        }
+        if (!v.stripeProductId?.startsWith('prod_')) {
+          return NextResponse.json(
+            { error: `Variante "${v.translations.it.name}": Stripe Product ID non valido` },
+            { status: 400 }
+          );
+        }
+        if (!v.stripePriceId?.startsWith('price_')) {
+          return NextResponse.json(
+            { error: `Variante "${v.translations.it.name}": Stripe Price ID non valido` },
+            { status: 400 }
+          );
+        }
+        if (!v.price || parseFloat(v.price) <= 0) {
+          return NextResponse.json(
+            { error: `Variante "${v.translations.it.name}": prezzo non valido` },
+            { status: 400 }
+          );
+        }
+        if (!v.images || v.images.length === 0) {
+          return NextResponse.json(
+            { error: `Variante "${v.translations.it.name}": aggiungi almeno un'immagine` },
+            { status: 400 }
+          );
+        }
+      }
     }
 
     // IMPORTANTE: L'ID locale è sempre permanente e non cambia mai
@@ -209,6 +254,10 @@ export async function POST(request: NextRequest) {
       subscriptionPrices: validatedSubscriptionPrices || undefined,
       slug,
       translations,
+      ...(hasVariants && variants ? {
+        variants: variants,
+        variantLabel: variantLabel || undefined,
+      } : {}),
       metadata: {
         createdAt: new Date(),
         updatedAt: new Date(),

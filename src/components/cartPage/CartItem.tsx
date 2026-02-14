@@ -1,6 +1,8 @@
 import { useCart } from '@/contexts/CartContext';
 import { useT } from '@/hooks/useT';
+import { useLocale } from '@/contexts/LocaleContext';
 import { Product } from '@/types/products';
+import { parseCartItemId, getVariantOrProduct } from '@/utils/variantHelpers';
 
 interface CartItemData {
   id: string;
@@ -15,16 +17,37 @@ interface CartItemProps {
 export default function CartItem({ cartItem, product }: CartItemProps) {
   const { removeFromCart, updateQuantity } = useCart();
   const { t, translate } = useT();
+  const { locale } = useLocale();
 
-  const price = parseFloat(product.price);
-  const originalPrice = product.originalPrice && product.originalPrice !== 'null' 
-    ? parseFloat(product.originalPrice) 
+  const { variantId } = parseCartItemId(cartItem.id);
+  const resolved = getVariantOrProduct(product, variantId);
+
+  const price = parseFloat(resolved.price);
+  const originalPrice = resolved.originalPrice && resolved.originalPrice !== 'null'
+    ? parseFloat(resolved.originalPrice)
     : null;
-  
+
   const itemTotal = price * cartItem.quantity;
-  const itemSavings = originalPrice 
-    ? (originalPrice - price) * cartItem.quantity 
+  const itemSavings = originalPrice
+    ? (originalPrice - price) * cartItem.quantity
     : 0;
+
+  // Get variant display name
+  const variant = variantId && product.variants
+    ? product.variants.find(v => v.variantId === variantId)
+    : null;
+
+  const variantDisplayName = variant
+    ? variant.translations[locale]?.name || variant.translations.it?.name
+    : null;
+
+  const variantLabelText = product.variantLabel?.[locale] || product.variantLabel?.it;
+
+  const variantLine = variantDisplayName && variantLabelText
+    ? translate('cartPage.product.variant', { label: variantLabelText, name: variantDisplayName })
+    : variantDisplayName;
+
+  const displayImage = resolved.images[0] || product.images[0];
 
   return (
     <div className="bg-white border border-olive/10 p-4 sm:p-6 transition-all duration-300">
@@ -33,13 +56,16 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
         <div className="flex gap-4 mb-4">
           <div className="w-20 h-24 bg-beige/50 border border-olive/10 p-2 flex-shrink-0">
             <img
-              src={product.images[0]}
+              src={displayImage}
               alt={product.name}
               className="w-full h-full object-contain"
             />
           </div>
           <div className="flex-1">
             <h3 className="font-serif text-olive text-lg font-medium mb-1">{product.name}</h3>
+            {variantLine && (
+              <p className="text-nocciola text-xs mb-1">{variantLine}</p>
+            )}
             <p className="text-nocciola text-sm mb-2">{product.size}</p>
             <div className="flex items-end gap-2">
               <span className="text-olive font-bold text-xl">€{price.toFixed(2)}</span>
@@ -49,7 +75,7 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
             </div>
           </div>
         </div>
-        
+
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
@@ -62,12 +88,12 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
             <button
               onClick={() => updateQuantity(cartItem.id, cartItem.quantity + 1)}
               className="w-10 h-10 border border-olive/20 flex items-center justify-center hover:bg-olive hover:text-beige transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={cartItem.quantity >= product.stockQuantity}
+              disabled={cartItem.quantity >= resolved.stockQuantity}
             >
               +
             </button>
           </div>
-          
+
           <div className="text-right">
             <div className="text-olive font-bold text-xl">€{itemTotal.toFixed(2)}</div>
             {itemSavings > 0 && (
@@ -76,8 +102,8 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
               </div>
             )}
           </div>
-          
-          <button 
+
+          <button
             onClick={() => removeFromCart(cartItem.id)}
             className="text-red-500 hover:text-red-700 p-2 ml-2"
             aria-label={t.cartPage.product.remove}
@@ -93,7 +119,7 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
       <div className="hidden sm:flex items-center gap-6">
         <div className="w-20 h-24 bg-beige/50 border border-olive/10 p-2 flex-shrink-0">
           <img
-            src={product.images[0]}
+            src={displayImage}
             alt={product.name}
             className="w-full h-full object-contain"
           />
@@ -101,6 +127,9 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
 
         <div className="flex-1">
           <h3 className="font-serif text-olive text-xl font-medium mb-1">{product.name}</h3>
+          {variantLine && (
+            <p className="text-nocciola text-xs mb-1">{variantLine}</p>
+          )}
           <p className="text-nocciola text-sm mb-2">{product.size}</p>
           <div className="flex items-end gap-3">
             <span className="text-olive font-bold text-2xl">€{price.toFixed(2)}</span>
@@ -121,7 +150,7 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
           <button
             onClick={() => updateQuantity(cartItem.id, cartItem.quantity + 1)}
             className="w-12 h-12 border border-olive/20 flex items-center justify-center hover:bg-olive hover:text-beige transition-colors text-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={cartItem.quantity >= product.stockQuantity}
+            disabled={cartItem.quantity >= resolved.stockQuantity}
           >
             +
           </button>

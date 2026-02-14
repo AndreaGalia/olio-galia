@@ -12,6 +12,7 @@ import WizardStep from './WizardStep';
 import CartItem from './CartItem';
 import ShippingSelectionFlow from './ShippingSelectionFlow';
 import CheckoutTorinoButton from './CheckoutTorinoButton';
+import { parseCartItemId } from '@/utils/variantHelpers';
 
 interface CheckoutWizardProps {
   cart: CartItemType[];
@@ -117,12 +118,13 @@ export default function CheckoutWizard({
         {/* Lista prodotti */}
         <div className="space-y-3 mb-6">
           {cart.map((cartItem) => {
-            const product = products.find((p: Product) => p.id === cartItem.id);
+            const { productId } = parseCartItemId(cartItem.id);
+            const product = products.find((p: Product) => p.id === productId);
             if (!product) return null;
 
             return (
               <CartItem
-                key={product.stripeProductId || product.id}
+                key={cartItem.id}
                 cartItem={cartItem}
                 product={product}
               />

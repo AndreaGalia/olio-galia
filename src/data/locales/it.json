@@ -408,7 +408,8 @@
       "available": "✓ Disponibile",
       "outOfStock": "✗ Esaurito",
       "details": "Dettagli",
-      "addToCart": "Aggiungi al Carrello"
+      "addToCart": "Aggiungi al Carrello",
+      "from": "da"
     },
     "benefits": {
       "title": "Perché Scegliere Galia",
@@ -454,7 +455,12 @@
       "relatedProducts": "Potrebbe interessarti anche"
     },
     "stockAvaible": "DISPONIBILE",
-    "stockNotAvaible": "NON DISPONIBILE"
+    "stockNotAvaible": "NON DISPONIBILE",
+    "variants": {
+      "label": "Variante",
+      "select": "Seleziona {label}",
+      "outOfStock": "Esaurito"
+    }
   },
   "bulkProposal": {
     "section": {
@@ -508,7 +514,8 @@
     "product": {
       "stock": "Stock: {count} disponibili",
       "savings": "Risparmi €{amount}",
-      "remove": "Rimuovi prodotto"
+      "remove": "Rimuovi prodotto",
+      "variant": "{label}: {name}"
     },
     "summary": {
       "title": "Riepilogo Ordine",

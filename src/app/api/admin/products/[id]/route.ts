@@ -119,7 +119,10 @@ export async function PUT(
       metadata,
       isSubscribable,
       stripeRecurringPriceIds,
-      subscriptionPrices: rawSubscriptionPrices
+      subscriptionPrices: rawSubscriptionPrices,
+      hasVariants,
+      variants,
+      variantLabel,
     } = data;
 
     // Ottieni prodotto esistente da MongoDB
@@ -257,6 +260,8 @@ export async function PUT(
               isSubscribable: isSubscribable || false,
               stripeRecurringPriceIds: stripeRecurringPriceIds || undefined,
               subscriptionPrices: validatedSubscriptionPrices || undefined,
+              variants: hasVariants && variants ? variants : undefined,
+              variantLabel: hasVariants && variantLabel ? variantLabel : undefined,
               translations,
               slug,
               'metadata.updatedAt': new Date(),
@@ -286,6 +291,8 @@ export async function PUT(
               isSubscribable: isSubscribable || false,
               stripeRecurringPriceIds: stripeRecurringPriceIds || undefined,
               subscriptionPrices: validatedSubscriptionPrices || undefined,
+              variants: hasVariants && variants ? variants : undefined,
+              variantLabel: hasVariants && variantLabel ? variantLabel : undefined,
               translations,
               slug,
               'metadata.updatedAt': new Date(),

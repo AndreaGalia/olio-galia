@@ -3,6 +3,7 @@ import Link from 'next/link';
 import AddToCartButton from '@/components/AddToCartButton';
 import { Product } from '@/types/products';
 import { useT } from '@/hooks/useT';
+import { getPriceRange, buildCartItemId } from '@/utils/variantHelpers';
 import styles from '../../styles/ProductsPage.module.css';
 
 interface ProductCardProps {
@@ -13,7 +14,10 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, index, onAddToCart }: ProductCardProps) {
   const { t, translate } = useT();
-  const isOutOfStock = !product.inStock || product.stockQuantity === 0;
+  const hasVariants = product.variants && product.variants.length > 0;
+  const isOutOfStock = hasVariants
+    ? !product.variants!.some(v => v.inStock && v.stockQuantity > 0)
+    : !product.inStock || product.stockQuantity === 0;
 
   return (
     <div
@@ -33,7 +37,11 @@ export default function ProductCard({ product, index, onAddToCart }: ProductCard
         <ProductActions
           product={product}
           isOutOfStock={isOutOfStock}
-          onAddToCart={() => onAddToCart(product.id)}
+          onAddToCart={() => {
+            const defaultVariant = product.variants?.find(v => v.inStock) || product.variants?.[0];
+            const cartId = buildCartItemId(product.id, defaultVariant?.variantId);
+            onAddToCart(cartId);
+          }}
         />
       </div>
     </div>
@@ -104,17 +112,33 @@ function ProductInfo({ product, isOutOfStock }: ProductSubComponentProps) {
 }
 
 function ProductPrice({ product, isOutOfStock }: ProductSubComponentProps) {
+  const { t } = useT();
+  const priceRange = getPriceRange(product);
+
   return (
     <div className="flex items-baseline gap-2 border-t border-olive/10 pt-3">
-      <div className={`text-2xl sm:text-3xl font-bold text-olive ${
-        isOutOfStock ? 'opacity-50' : ''
-      }`}>
-        €{product.price}
-      </div>
-      {!isOutOfStock && product.originalPrice && product.originalPrice !== 'null' && (
-        <div className="text-sm sm:text-base text-olive/60 line-through">
-          €{product.originalPrice}
+      {priceRange.hasRange ? (
+        <div className={`text-2xl sm:text-3xl font-bold text-olive ${
+          isOutOfStock ? 'opacity-50' : ''
+        }`}>
+          <span className="text-sm sm:text-base font-normal text-nocciola mr-1">
+            {t.productsPage.product.from}
+          </span>
+          €{priceRange.min.toFixed(2)}
         </div>
+      ) : (
+        <>
+          <div className={`text-2xl sm:text-3xl font-bold text-olive ${
+            isOutOfStock ? 'opacity-50' : ''
+          }`}>
+            €{product.price}
+          </div>
+          {!isOutOfStock && product.originalPrice && product.originalPrice !== 'null' && (
+            <div className="text-sm sm:text-base text-olive/60 line-through">
+              €{product.originalPrice}
+            </div>
+          )}
+        </>
       )}
     </div>
   );

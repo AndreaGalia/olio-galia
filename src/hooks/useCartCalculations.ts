@@ -2,23 +2,30 @@
 import { useMemo } from 'react';
 import { CartItem } from '@/types/cart';
 import { Product } from '@/types/products';
+import { parseCartItemId, getVariantOrProduct } from '@/utils/variantHelpers';
 
 export function useCartCalculations(cart: CartItem[], products: Product[]) {
   return useMemo(() => {
     const total = cart.reduce((total, cartItem) => {
-      const product = products.find((p: Product) => p.id === cartItem.id);
+      const { productId, variantId } = parseCartItemId(cartItem.id);
+      const product = products.find((p: Product) => p.id === productId);
       if (product) {
-        return total + (parseFloat(product.price) * cartItem.quantity);
+        const resolved = getVariantOrProduct(product, variantId);
+        return total + (parseFloat(resolved.price) * cartItem.quantity);
       }
       return total;
     }, 0);
 
     const savings = cart.reduce((savings, cartItem) => {
-      const product = products.find((p: Product) => p.id === cartItem.id);
-      if (product && product.originalPrice && product.originalPrice !== 'null') {
-        const currentPrice = parseFloat(product.price);
-        const originalPrice = parseFloat(product.originalPrice);
-        return savings + ((originalPrice - currentPrice) * cartItem.quantity);
+      const { productId, variantId } = parseCartItemId(cartItem.id);
+      const product = products.find((p: Product) => p.id === productId);
+      if (product) {
+        const resolved = getVariantOrProduct(product, variantId);
+        if (resolved.originalPrice && resolved.originalPrice !== 'null') {
+          const currentPrice = parseFloat(resolved.price);
+          const originalPrice = parseFloat(resolved.originalPrice);
+          return savings + ((originalPrice - currentPrice) * cartItem.quantity);
+        }
       }
       return savings;
     }, 0);

@@ -3,6 +3,7 @@
 
 import { useCart } from "@/contexts/CartContext";
 import { Product } from "@/types/products";
+import { parseCartItemId, getVariantOrProduct } from "@/utils/variantHelpers";
 
 interface UseAddToCartProps {
   products: Product[];
@@ -11,20 +12,20 @@ interface UseAddToCartProps {
 export const useAddToCart = ({ products }: UseAddToCartProps) => {
   const { addToCart } = useCart();
 
-  const handleAddToCart = (productId: string, quantity: number = 1) => {
+  const handleAddToCart = (cartItemId: string, quantity: number = 1) => {
+    const { productId, variantId } = parseCartItemId(cartItemId);
     const product = products.find(p => p.id === productId);
-    
+
     if (!product) {
-      
       return false;
     }
-    
-    if (!product.inStock || product.stockQuantity < quantity) {
-      
+
+    const resolved = getVariantOrProduct(product, variantId);
+    if (!resolved.inStock || resolved.stockQuantity < quantity) {
       return false;
     }
-    
-    addToCart(productId, quantity);
+
+    addToCart(cartItemId, quantity);
     return true;
   };
 

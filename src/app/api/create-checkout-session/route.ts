@@ -85,32 +85,78 @@ const validateProductAvailability = (product: Stripe.Product, requestedQuantity:
   }
 };
 
-// Mappa gli ID locali agli ID Stripe
+// Parse variant separator from cart item ID
+const parseCartItemId = (id: string): { productId: string; variantId?: string } => {
+  const parts = id.split('::');
+  return {
+    productId: parts[0],
+    variantId: parts.length > 1 ? parts[1] : undefined,
+  };
+};
+
+// Mappa gli ID locali agli ID Stripe (supporta varianti con separatore ::)
 const mapLocalIdsToStripeIds = async (items: CartItem[]) => {
   const { db } = await connectToDatabase();
   const mappedItems: CartItem[] = [];
 
   for (const item of items) {
+    const { productId, variantId } = parseCartItemId(item.id);
+
     // Se l'ID inizia con "local_", è un ID locale MongoDB
-    if (item.id.startsWith('local_')) {
+    if (productId.startsWith('local_')) {
       // Cerca il prodotto in MongoDB per ottenere lo stripeProductId
-      const mongoProduct = await db.collection('products').findOne({ id: item.id });
+      const mongoProduct = await db.collection('products').findOne({ id: productId });
 
       if (!mongoProduct) {
-        throw new Error(`Prodotto non trovato: ${item.id}`);
+        throw new Error(`Prodotto non trovato: ${productId}`);
       }
 
-      if (!mongoProduct.stripeProductId) {
-        throw new Error(`Il prodotto "${mongoProduct.translations?.it?.name || item.id}" non è disponibile per il checkout online. Richiedi un preventivo invece.`);
+      // Se ha una variante, cerca lo stripeProductId della variante
+      if (variantId && mongoProduct.variants) {
+        const variant = mongoProduct.variants.find((v: any) => v.variantId === variantId);
+        if (!variant) {
+          throw new Error(`Variante non trovata: ${variantId}`);
+        }
+        if (!variant.stripeProductId) {
+          throw new Error(`La variante "${variant.translations?.it?.name || variantId}" non è disponibile per il checkout online.`);
+        }
+        mappedItems.push({
+          ...item,
+          id: variant.stripeProductId
+        });
+      } else {
+        // Prodotto senza variante
+        if (!mongoProduct.stripeProductId) {
+          throw new Error(`Il prodotto "${mongoProduct.translations?.it?.name || productId}" non è disponibile per il checkout online. Richiedi un preventivo invece.`);
+        }
+        mappedItems.push({
+          ...item,
+          id: mongoProduct.stripeProductId
+        });
+      }
+    } else if (variantId) {
+      // ID Stripe con variante — cerca la variante in MongoDB per ottenere il suo stripeProductId
+      const mongoProduct = await db.collection('products').findOne({
+        $or: [{ id: productId }, { stripeProductId: productId }]
+      });
+
+      if (!mongoProduct) {
+        throw new Error(`Prodotto non trovato: ${productId}`);
       }
 
-      // Usa lo stripeProductId invece dell'ID locale
+      const variant = mongoProduct.variants?.find((v: any) => v.variantId === variantId);
+      if (!variant) {
+        throw new Error(`Variante non trovata: ${variantId}`);
+      }
+      if (!variant.stripeProductId) {
+        throw new Error(`La variante "${variant.translations?.it?.name || variantId}" non è disponibile per il checkout online.`);
+      }
       mappedItems.push({
         ...item,
-        id: mongoProduct.stripeProductId
+        id: variant.stripeProductId
       });
     } else {
-      // È già un ID Stripe, usa così com'è
+      // È già un ID Stripe senza variante, usa così com'è
       mappedItems.push(item);
     }
   }
@@ -119,13 +165,13 @@ const mapLocalIdsToStripeIds = async (items: CartItem[]) => {
 };
 
 // Calcola peso totale carrello in grammi (query MongoDB)
+// Il peso è sempre del prodotto padre (condiviso tra varianti)
 const calculateCartWeight = async (items: CartItem[]): Promise<number> => {
   const { db } = await connectToDatabase();
   let totalGrams = 0;
 
   for (const item of items) {
-    // Gestisce sia ID locali (local_xxx) che ID Stripe
-    const productId = item.id.startsWith('local_') ? item.id : item.id;
+    const { productId } = parseCartItemId(item.id);
 
     const product = await db.collection('products').findOne({
       $or: [{ id: productId }, { stripeProductId: productId }]

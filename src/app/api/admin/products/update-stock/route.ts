@@ -6,7 +6,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(request: NextRequest) {
   try {
-    const { productId, mongoId, quantity, hasStripe } = await request.json();
+    const { productId, mongoId, quantity, hasStripe, variantId } = await request.json();
 
     if ((!productId && !mongoId) || quantity === undefined) {
       return NextResponse.json(
@@ -20,8 +20,49 @@ export async function POST(request: NextRequest) {
 
     let productName = '';
 
-    // Se il prodotto ha Stripe IDs, aggiorna anche Stripe
-    if (hasStripe && productId) {
+    // === AGGIORNAMENTO STOCK VARIANTE ===
+    if (variantId && mongoId) {
+      // Aggiorna Stripe metadata della variante (se ha stripeProductId)
+      if (hasStripe && productId) {
+        try {
+          const stripeProduct = await stripe.products.retrieve(productId);
+          await stripe.products.update(productId, {
+            metadata: {
+              ...stripeProduct.metadata,
+              available_quantity: newQuantity.toString(),
+              last_updated: new Date().toISOString()
+            }
+          });
+          productName = stripeProduct.name;
+        } catch (stripeError) {
+          console.error('Errore Stripe variante:', stripeError);
+          throw new Error('Errore nell\'aggiornamento su Stripe per la variante');
+        }
+      }
+
+      // Aggiorna MongoDB: variants.$.stockQuantity e variants.$.inStock
+      const result = await db.collection('products').updateOne(
+        { id: mongoId, 'variants.variantId': variantId },
+        {
+          $set: {
+            'variants.$.stockQuantity': newQuantity,
+            'variants.$.inStock': newQuantity > 0,
+            'metadata.updatedAt': new Date()
+          }
+        }
+      );
+
+      if (result.matchedCount === 0) {
+        return NextResponse.json(
+          { error: 'Prodotto o variante non trovata' },
+          { status: 404 }
+        );
+      }
+
+      productName = productName || variantId;
+    }
+    // === AGGIORNAMENTO STOCK PRODOTTO BASE ===
+    else if (hasStripe && productId) {
       try {
         const stripeProduct = await stripe.products.retrieve(productId);
         await stripe.products.update(productId, {

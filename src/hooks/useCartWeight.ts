@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { Product } from '@/types/products';
+import { parseCartItemId } from '@/utils/variantHelpers';
 
 interface CartItem {
   id: string;
@@ -41,7 +42,8 @@ export function useCartWeight(
     const productsWithoutWeight: string[] = [];
 
     for (const cartItem of cart) {
-      const product = products.find(p => p.id === cartItem.id);
+      const { productId } = parseCartItemId(cartItem.id);
+      const product = products.find(p => p.id === productId);
 
       if (!product) {
         // Prodotto non trovato (unlikely, ma gestiamo il caso)

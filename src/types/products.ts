@@ -22,6 +22,27 @@ export interface ProductTranslations {
 
 import { RecurringPriceMap, QuantityPriceMap } from './subscription';
 
+export interface ProductVariantTranslations {
+  name: string;
+  description?: string;
+}
+
+export interface ProductVariant {
+  variantId: string;
+  translations: {
+    it: ProductVariantTranslations;
+    en: ProductVariantTranslations;
+  };
+  stripeProductId: string;
+  stripePriceId: string;
+  price: string;
+  originalPrice?: string;
+  inStock: boolean;
+  stockQuantity: number;
+  images: string[];
+  color?: string;
+}
+
 export interface BaseProduct {
   id: string;
   category: string;
@@ -40,6 +61,8 @@ export interface BaseProduct {
   isSubscribable?: boolean; // Abilita abbonamento ricorrente
   stripeRecurringPriceIds?: RecurringPriceMap; // Price ID ricorrenti per zona × intervallo (legacy)
   subscriptionPrices?: QuantityPriceMap; // Prezzi abbonamento per quantità × zona × intervallo (nuovo)
+  variants?: ProductVariant[]; // Varianti del prodotto (es: fragranze diverse)
+  variantLabel?: { it: string; en: string }; // Label per il selettore varianti (es: "Fragranza")
 }
 
 // Prodotto come salvato in MongoDB (con tutte le traduzioni)

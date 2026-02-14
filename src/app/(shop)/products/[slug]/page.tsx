@@ -1,5 +1,5 @@
 "use client";
-import { use } from "react";
+import { use, useState, useCallback } from "react";
 import { useProducts } from '@/hooks/useProducts';
 import { useProductBySlug } from '@/hooks/useProductBySlug';
 import LoadingSpinner from "@/components/common/LoadingSpinner";
@@ -14,6 +14,7 @@ import RelatedProductsSection from "@/components/singleProductPage/RelatedProduc
 import CustomHTMLRenderer from "@/components/singleProductPage/CustomHTMLRenderer";
 import ProductReviews from "@/components/reviews/ProductReviews";
 import { StructuredData, generateProductSchema, generateBreadcrumbSchema } from '@/lib/seo/structured-data';
+import type { ProductVariant } from '@/types/products';
 
 
 interface ProductDetailPageProps {
@@ -22,12 +23,23 @@ interface ProductDetailPageProps {
 
 export default function ProductDetailPage({ params }: ProductDetailPageProps) {
   const { slug } = use(params);
-  
+
   // Hooks per i dati
   const { product, loading, error, notFound } = useProductBySlug(slug);
   const { products: allProducts } = useProducts();
   const { t } = useT();
-  
+
+  // State per le immagini della variante selezionata
+  const [selectedVariantImages, setSelectedVariantImages] = useState<string[] | null>(null);
+
+  const handleVariantChange = useCallback((variant: ProductVariant | null) => {
+    if (variant && variant.images && variant.images.length > 0) {
+      setSelectedVariantImages(variant.images);
+    } else {
+      setSelectedVariantImages(null);
+    }
+  }, []);
+
   // Prodotti correlati (escluso il prodotto corrente)
   const relatedProducts = allProducts.filter((p) => p.slug !== slug);
 
@@ -51,6 +63,9 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
     { name: product.name, url: `/products/${slug}` }
   ], 'it');
 
+  // Immagini da mostrare: variante selezionata o immagini prodotto base
+  const displayImages = selectedVariantImages || product.images;
+
   return (
     <div className="min-h-screen bg-homepage-bg">
       {/* Structured Data per SEO */}
@@ -69,7 +84,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
 
             {/* Galleria immagini */}
             <ProductImageGallery
-              images={product.images}
+              images={displayImages}
               productName={product.name}
               isOutOfStock={isOutOfStock}
             />
@@ -78,6 +93,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
             <ProductInfoSection
               product={product}
               isOutOfStock={isOutOfStock}
+              onVariantChange={handleVariantChange}
             />
           </div>
 

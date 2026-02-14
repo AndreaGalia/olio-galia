@@ -15,6 +15,7 @@ import { useCheckoutHandler } from '@/hooks/useCheckoutHandler';
 import { useCartWeight } from '@/hooks/useCartWeight';
 import { useShippingCost } from '@/hooks/useShippingCost';
 import { useShippingConfig } from '@/contexts/ShippingConfigContext';
+import { parseCartItemId, getVariantOrProduct } from '@/utils/variantHelpers';
 
 // Import dei componenti
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -90,14 +91,15 @@ function CartPageContent() {
     if (!settings.stripe_enabled) return false;
 
     // Verifica che tutti i prodotti nel carrello abbiano gli ID Stripe
-    const cartProducts = cart.map(cartItem =>
-      products.find((p: Product) => p.id === cartItem.id)
-    ).filter(Boolean);
+    // (per varianti, controlla gli stripeIds della variante)
+    return cart.every(cartItem => {
+      const { productId, variantId } = parseCartItemId(cartItem.id);
+      const product = products.find((p: Product) => p.id === productId);
+      if (!product) return false;
 
-    // Se almeno un prodotto non ha stripeProductId o stripePriceId, Stripe non può essere usato
-    return cartProducts.every(product =>
-      product?.stripeProductId && product?.stripePriceId
-    );
+      const resolved = getVariantOrProduct(product, variantId);
+      return resolved.stripeProductId && resolved.stripePriceId;
+    });
   };
 
   const stripeCheckoutAvailable = canUseStripeCheckout();

@@ -113,6 +113,9 @@ export class ProductService {
       slug: product.slug[locale] || product.slug['it'],
       _id: undefined, // Rimuovi _id dalla response
       translations: undefined,
+      // Preserva varianti e label varianti dal documento MongoDB
+      variants: product.variants,
+      variantLabel: product.variantLabel,
       metadata: {
         featured: product.metadata?.featured || false
       }

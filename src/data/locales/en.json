@@ -408,7 +408,8 @@
       "available": "✓ Available",
       "outOfStock": "✗ Out of stock",
       "details": "Details",
-      "addToCart": "Add to Cart"
+      "addToCart": "Add to Cart",
+      "from": "from"
     },
     "benefits": {
       "title": "Why Choose Galia",
@@ -454,7 +455,12 @@
       "relatedProducts": "You might also like"
     },
     "stockAvaible": "AVAILABLE",
-    "stockNotAvaible": "OUT OF STOCK"
+    "stockNotAvaible": "OUT OF STOCK",
+    "variants": {
+      "label": "Variant",
+      "select": "Select {label}",
+      "outOfStock": "Out of stock"
+    }
   },
   "bulkProposal": {
     "section": {
@@ -508,7 +514,8 @@
     "product": {
       "stock": "Stock: {count} available",
       "savings": "You save €{amount}",
-      "remove": "Remove product"
+      "remove": "Remove product",
+      "variant": "{label}: {name}"
     },
     "summary": {
       "title": "Order Summary",

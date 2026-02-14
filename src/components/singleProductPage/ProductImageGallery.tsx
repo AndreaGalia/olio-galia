@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface ProductImageGalleryProps {
   images: string[];
@@ -12,6 +12,11 @@ export default function ProductImageGallery({
   isOutOfStock
 }: ProductImageGalleryProps) {
   const [selectedImage, setSelectedImage] = useState(0);
+
+  // Reset selected image when images change (e.g. variant change)
+  useEffect(() => {
+    setSelectedImage(0);
+  }, [images]);
 
   return (
     <div className="space-y-4">

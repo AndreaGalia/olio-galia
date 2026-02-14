@@ -5,6 +5,9 @@ import { useRouter, useParams } from 'next/navigation';
 import AdminLayout from '@/components/admin/AdminLayout';
 import LoadingSpinner from '@/components/admin/LoadingSpinner';
 import HTMLEditor from '@/components/admin/HTMLEditor';
+import VariantTabs from '@/components/admin/VariantTabs';
+import VariantFormFields from '@/components/admin/VariantFormFields';
+import type { VariantData } from '@/components/admin/VariantFormFields';
 import { ProductDocument, ProductTranslations } from '@/types/products';
 
 interface Category {
@@ -33,6 +36,27 @@ export default function EditProductPage() {
   const [product, setProduct] = useState<ProductWithStripe | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [hasVariants, setHasVariants] = useState(false);
+  const [activeVariantTab, setActiveVariantTab] = useState(0);
+  const [variantLabelIt, setVariantLabelIt] = useState('');
+  const [variantLabelEn, setVariantLabelEn] = useState('');
+  const [variants, setVariants] = useState<VariantData[]>([]);
+
+  const createEmptyVariant = (): VariantData => ({
+    variantId: '',
+    translations: {
+      it: { name: '', description: '' },
+      en: { name: '', description: '' },
+    },
+    stripeProductId: '',
+    stripePriceId: '',
+    price: '',
+    originalPrice: undefined,
+    inStock: false,
+    stockQuantity: 0,
+    images: [''],
+    color: undefined,
+  });
 
   // Carica prodotto
   useEffect(() => {
@@ -47,6 +71,16 @@ export default function EditProductPage() {
         }
         const data = await response.json();
         setProduct(data);
+        // Inizializza stato varianti dal prodotto caricato
+        if (data.variants && data.variants.length > 0) {
+          setHasVariants(true);
+          setVariants(data.variants.map((v: any) => ({
+            ...v,
+            images: v.images?.length > 0 ? v.images : [''],
+          })));
+          setVariantLabelIt(data.variantLabel?.it || '');
+          setVariantLabelEn(data.variantLabel?.en || '');
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Errore nel caricamento');
       } finally {
@@ -153,21 +187,29 @@ export default function EditProductPage() {
     });
   };
 
-  const handleUpdateStock = async (newQuantity: number) => {
+  const handleUpdateStock = async (newQuantity: number, variantId?: string) => {
     if (!product) return;
 
     try {
-      // Determina se il prodotto ha Stripe IDs
-      const hasStripe = !!(product.stripeProductId && product.stripePriceId);
+      // Determina se il prodotto/variante ha Stripe IDs
+      let stripeProductIdForStock: string | undefined;
+      if (variantId) {
+        const variant = variants.find(v => v.variantId === variantId);
+        stripeProductIdForStock = variant?.stripeProductId;
+      } else {
+        stripeProductIdForStock = product.stripeProductId;
+      }
+      const hasStripe = !!stripeProductIdForStock;
 
       const response = await fetch('/api/admin/products/update-stock', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          productId: product.stripeProductId, // Può essere undefined per prodotti non-Stripe
-          mongoId: product.id, // ID MongoDB
+          productId: stripeProductIdForStock,
+          mongoId: product.id,
           quantity: newQuantity,
-          hasStripe: hasStripe
+          hasStripe: hasStripe,
+          variantId: variantId,
         })
       });
 
@@ -176,16 +218,25 @@ export default function EditProductPage() {
         throw new Error(errorData.error || 'Errore nell\'aggiornamento dello stock');
       }
 
-      // Aggiorna il prodotto locale
-      setProduct(prev => prev ? {
-        ...prev,
-        stockQuantity: newQuantity,
-        inStock: newQuantity > 0,
-        stripeData: prev.stripeData ? {
-          ...prev.stripeData,
-          available_quantity: newQuantity
-        } : undefined
-      } : null);
+      if (variantId) {
+        // Aggiorna lo stato locale della variante
+        setVariants(prev => prev.map(v =>
+          v.variantId === variantId
+            ? { ...v, stockQuantity: newQuantity, inStock: newQuantity > 0 }
+            : v
+        ));
+      } else {
+        // Aggiorna il prodotto locale
+        setProduct(prev => prev ? {
+          ...prev,
+          stockQuantity: newQuantity,
+          inStock: newQuantity > 0,
+          stripeData: prev.stripeData ? {
+            ...prev.stripeData,
+            available_quantity: newQuantity
+          } : undefined
+        } : null);
+      }
 
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Errore nell\'aggiornamento');
@@ -199,12 +250,39 @@ export default function EditProductPage() {
     setError(null);
 
     try {
-      // Validazione ID Stripe se presenti
-      if (product.stripeProductId && !product.stripeProductId.startsWith('prod_')) {
-        throw new Error('Stripe Product ID deve iniziare con "prod_"');
+      // Validazione varianti
+      if (hasVariants) {
+        if (variants.length === 0) {
+          throw new Error('Aggiungi almeno una variante');
+        }
+        for (let i = 0; i < variants.length; i++) {
+          const v = variants[i];
+          if (!v.translations.it.name || !v.translations.en.name) {
+            throw new Error(`Variante ${i + 1}: nome IT e EN sono obbligatori`);
+          }
+          if (!v.stripeProductId || !v.stripeProductId.startsWith('prod_')) {
+            throw new Error(`Variante "${v.translations.it.name}": Stripe Product ID non valido`);
+          }
+          if (!v.stripePriceId || !v.stripePriceId.startsWith('price_')) {
+            throw new Error(`Variante "${v.translations.it.name}": Stripe Price ID non valido`);
+          }
+          if (!v.price || parseFloat(v.price) <= 0) {
+            throw new Error(`Variante "${v.translations.it.name}": prezzo non valido`);
+          }
+          if (v.images.filter(img => img.trim()).length === 0) {
+            throw new Error(`Variante "${v.translations.it.name}": aggiungi almeno un'immagine`);
+          }
+        }
       }
-      if (product.stripePriceId && !product.stripePriceId.startsWith('price_')) {
-        throw new Error('Stripe Price ID deve iniziare con "price_"');
+
+      // Validazione ID Stripe se presenti (solo senza varianti)
+      if (!hasVariants) {
+        if (product.stripeProductId && !product.stripeProductId.startsWith('prod_')) {
+          throw new Error('Stripe Product ID deve iniziare con "prod_"');
+        }
+        if (product.stripePriceId && !product.stripePriceId.startsWith('price_')) {
+          throw new Error('Stripe Price ID deve iniziare con "price_"');
+        }
       }
 
       const response = await fetch(`/api/admin/products/${productId}`, {
@@ -241,6 +319,19 @@ export default function EditProductPage() {
           // Includi i campi Stripe se presenti
           stripeProductId: product.stripeProductId || undefined,
           stripePriceId: product.stripePriceId || undefined,
+          // Varianti
+          ...(hasVariants ? {
+            hasVariants: true,
+            variantLabel: { it: variantLabelIt, en: variantLabelEn },
+            variants: variants.map(v => ({
+              ...v,
+              images: v.images.filter(img => img.trim()),
+            })),
+          } : {
+            hasVariants: false,
+            variants: undefined,
+            variantLabel: undefined,
+          }),
           // Subscription
           isSubscribable: (product as any).isSubscribable || false,
           stripeRecurringPriceIds: (product as any).isSubscribable ? (product as any).stripeRecurringPriceIds : undefined,
@@ -313,35 +404,71 @@ export default function EditProductPage() {
           {/* Quick Stock Update */}
           <section className="bg-olive/5 p-4 rounded-lg">
             <h3 className="text-lg font-semibold text-olive mb-3">Gestione Stock Rapida</h3>
-            <div className="flex items-center space-x-4">
-              <div>
-                <span className="text-sm text-gray-600">Stock attuale:</span>
-                <span className={`ml-2 font-bold ${
-                  (product.stripeData?.available_quantity || 0) > 10 ? 'text-green-600' :
-                  (product.stripeData?.available_quantity || 0) > 0 ? 'text-yellow-600' : 'text-red-600'
-                }`}>
-                  {product.stripeData?.available_quantity || 0}
-                </span>
+
+            {hasVariants && variants.length > 0 ? (
+              <div className="space-y-3">
+                <p className="text-sm text-gray-600">Stock per variante:</p>
+                {variants.map((variant) => (
+                  <div key={variant.variantId || variant.translations.it.name} className="flex items-center space-x-4">
+                    <span className="text-sm font-medium text-gray-700 min-w-[120px]">
+                      {variant.translations.it.name || 'Senza nome'}
+                    </span>
+                    <span className={`text-sm font-bold min-w-[40px] ${
+                      variant.stockQuantity > 10 ? 'text-green-600' :
+                      variant.stockQuantity > 0 ? 'text-yellow-600' : 'text-red-600'
+                    }`}>
+                      {variant.stockQuantity}
+                    </span>
+                    <input
+                      type="number"
+                      min="0"
+                      defaultValue={variant.stockQuantity}
+                      onChange={(e) => {
+                        const newValue = parseInt(e.target.value) || 0;
+                        if (e.target.value !== '' && newValue !== variant.stockQuantity) {
+                          const timeoutId = setTimeout(() => {
+                            handleUpdateStock(newValue, variant.variantId);
+                          }, 1000);
+                          return () => clearTimeout(timeoutId);
+                        }
+                      }}
+                      className="w-20 px-2 py-1 border border-olive/30 rounded text-center"
+                    />
+                    <span className="text-sm text-gray-500">unità</span>
+                  </div>
+                ))}
               </div>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="number"
-                  min="0"
-                  defaultValue={product.stripeData?.available_quantity || 0}
-                  onChange={(e) => {
-                    const newValue = parseInt(e.target.value) || 0;
-                    if (e.target.value !== '' && newValue !== (product.stripeData?.available_quantity || 0)) {
-                      const timeoutId = setTimeout(() => {
-                        handleUpdateStock(newValue);
-                      }, 1000);
-                      return () => clearTimeout(timeoutId);
-                    }
-                  }}
-                  className="w-20 px-2 py-1 border border-olive/30 rounded text-center"
-                />
-                <span className="text-sm text-gray-500">unità</span>
+            ) : (
+              <div className="flex items-center space-x-4">
+                <div>
+                  <span className="text-sm text-gray-600">Stock attuale:</span>
+                  <span className={`ml-2 font-bold ${
+                    (product.stripeData?.available_quantity || 0) > 10 ? 'text-green-600' :
+                    (product.stripeData?.available_quantity || 0) > 0 ? 'text-yellow-600' : 'text-red-600'
+                  }`}>
+                    {product.stripeData?.available_quantity || 0}
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="number"
+                    min="0"
+                    defaultValue={product.stripeData?.available_quantity || 0}
+                    onChange={(e) => {
+                      const newValue = parseInt(e.target.value) || 0;
+                      if (e.target.value !== '' && newValue !== (product.stripeData?.available_quantity || 0)) {
+                        const timeoutId = setTimeout(() => {
+                          handleUpdateStock(newValue);
+                        }, 1000);
+                        return () => clearTimeout(timeoutId);
+                      }
+                    }}
+                    className="w-20 px-2 py-1 border border-olive/30 rounded text-center"
+                  />
+                  <span className="text-sm text-gray-500">unità</span>
+                </div>
               </div>
-            </div>
+            )}
           </section>
 
           {/* Informazioni Base */}
@@ -560,6 +687,103 @@ export default function EditProductPage() {
                 </p>
               </div>
             </div>
+          </section>
+
+          {/* Varianti Prodotto */}
+          <section>
+            <h3 className="text-lg font-semibold text-olive mb-4">Varianti Prodotto</h3>
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+              <div className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  id="hasVariants"
+                  checked={hasVariants}
+                  onChange={(e) => {
+                    setHasVariants(e.target.checked);
+                    if (e.target.checked && variants.length === 0) {
+                      setVariants([createEmptyVariant()]);
+                    }
+                  }}
+                  className="mt-1 h-4 w-4 text-purple-600 focus:ring-purple-500 border-purple-300 rounded"
+                />
+                <div className="flex-1">
+                  <label htmlFor="hasVariants" className="font-medium text-gray-900 cursor-pointer">
+                    Questo prodotto ha varianti
+                  </label>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Attiva per prodotti con varianti (es: fragranze, formati). Ogni variante ha il proprio Stripe ID, prezzo, stock e immagini.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {hasVariants && (
+              <div className="space-y-4">
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                  <p className="text-sm text-gray-700">
+                    <strong>Nota:</strong> Quando le varianti sono attive, i campi Stripe Product ID, Stripe Price ID, prezzo e stock
+                    del prodotto base vengono ignorati. Ogni variante ha i propri valori.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Etichetta Variante (IT)
+                      <span className="text-xs text-nocciola ml-2">(es: Fragranza, Formato)</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={variantLabelIt}
+                      onChange={(e) => setVariantLabelIt(e.target.value)}
+                      className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-purple-200 focus:border-purple-500"
+                      placeholder="Fragranza"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Variant Label (EN)
+                      <span className="text-xs text-nocciola ml-2">(e.g: Fragrance, Format)</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={variantLabelEn}
+                      onChange={(e) => setVariantLabelEn(e.target.value)}
+                      className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-purple-200 focus:border-purple-500"
+                      placeholder="Fragrance"
+                    />
+                  </div>
+                </div>
+
+                <VariantTabs
+                  variants={variants}
+                  activeIndex={activeVariantTab}
+                  onSelectTab={setActiveVariantTab}
+                  onRemoveVariant={(index) => {
+                    const newVariants = variants.filter((_, i) => i !== index);
+                    setVariants(newVariants);
+                    if (activeVariantTab >= newVariants.length) {
+                      setActiveVariantTab(Math.max(0, newVariants.length - 1));
+                    }
+                  }}
+                  onAddVariant={() => {
+                    setVariants([...variants, createEmptyVariant()]);
+                    setActiveVariantTab(variants.length);
+                  }}
+                />
+
+                {variants[activeVariantTab] && (
+                  <VariantFormFields
+                    variant={variants[activeVariantTab]}
+                    onChange={(updated) => {
+                      const newVariants = [...variants];
+                      newVariants[activeVariantTab] = updated;
+                      setVariants(newVariants);
+                    }}
+                  />
+                )}
+              </div>
+            )}
           </section>
 
           {/* Configurazione Abbonamento */}
