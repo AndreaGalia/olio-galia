@@ -23,10 +23,19 @@ interface WhatsAppSettings {
   };
 }
 
+interface NewsletterPopupSettings {
+  enabled: boolean;
+  showOnHomepage: boolean;
+  delayMs: number;
+  scrollThreshold: number;
+  dismissDays: number;
+}
+
 interface AdminSettings {
   torino_checkout_enabled: boolean;
   stripe_enabled: boolean;
   whatsapp: WhatsAppSettings;
+  newsletter_popup: NewsletterPopupSettings;
 }
 
 interface WhatsAppStatus {
@@ -49,6 +58,13 @@ export default function AdminSettingsPage() {
       deliveryConfirmation: true,
       reviewRequest: true,
       templates: DEFAULT_TEMPLATES
+    },
+    newsletter_popup: {
+      enabled: true,
+      showOnHomepage: false,
+      delayMs: 20000,
+      scrollThreshold: 50,
+      dismissDays: 7
     }
   });
   const [loading, setLoading] = useState(true);
@@ -315,6 +331,129 @@ export default function AdminSettingsPage() {
             >
               Configura →
             </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Sezione Newsletter Popup */}
+      <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-olive/10 p-6 mb-6">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-semibold text-olive">Popup Newsletter</h2>
+          <button
+            type="button"
+            onClick={() => setSettings(prev => ({
+              ...prev,
+              newsletter_popup: { ...prev.newsletter_popup, enabled: !prev.newsletter_popup.enabled }
+            }))}
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+              settings.newsletter_popup.enabled ? 'bg-olive' : 'bg-gray-200'
+            }`}
+          >
+            <span
+              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                settings.newsletter_popup.enabled ? 'translate-x-6' : 'translate-x-1'
+              }`}
+            />
+          </button>
+        </div>
+
+        <p className="text-sm text-gray-600 mb-6">
+          Mostra un popup per l&apos;iscrizione alla newsletter ai visitatori del sito dopo un certo tempo o scroll.
+        </p>
+
+        <div className="space-y-4">
+          {/* Toggle Mostra in Homepage */}
+          <div className="flex items-center justify-between p-4 border border-olive/10 rounded-lg">
+            <div>
+              <h3 className="font-medium text-gray-900">Mostra in Homepage</h3>
+              <p className="text-sm text-gray-600">
+                Se abilitato, il popup apparirà anche nella pagina principale
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setSettings(prev => ({
+                ...prev,
+                newsletter_popup: { ...prev.newsletter_popup, showOnHomepage: !prev.newsletter_popup.showOnHomepage }
+              }))}
+              disabled={!settings.newsletter_popup.enabled}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                settings.newsletter_popup.showOnHomepage && settings.newsletter_popup.enabled ? 'bg-olive' : 'bg-gray-200'
+              } disabled:opacity-50`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  settings.newsletter_popup.showOnHomepage ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
+          </div>
+
+          {/* Delay */}
+          <div className="p-4 border border-olive/10 rounded-lg">
+            <label className="block text-sm font-medium text-gray-900 mb-1">
+              Delay (secondi)
+            </label>
+            <p className="text-xs text-gray-600 mb-2">
+              Tempo di attesa prima di mostrare il popup
+            </p>
+            <input
+              type="number"
+              min="0"
+              step="1"
+              value={Math.round(settings.newsletter_popup.delayMs / 1000)}
+              onChange={(e) => setSettings(prev => ({
+                ...prev,
+                newsletter_popup: { ...prev.newsletter_popup, delayMs: Math.max(0, parseInt(e.target.value) || 0) * 1000 }
+              }))}
+              disabled={!settings.newsletter_popup.enabled}
+              className="w-32 px-4 py-2 border border-olive/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-olive/50 disabled:opacity-50"
+            />
+          </div>
+
+          {/* Soglia Scroll */}
+          <div className="p-4 border border-olive/10 rounded-lg">
+            <label className="block text-sm font-medium text-gray-900 mb-1">
+              Soglia scroll (%)
+            </label>
+            <p className="text-xs text-gray-600 mb-2">
+              Percentuale di scroll della pagina per triggerare il popup (0-100)
+            </p>
+            <input
+              type="number"
+              min="0"
+              max="100"
+              step="1"
+              value={settings.newsletter_popup.scrollThreshold}
+              onChange={(e) => setSettings(prev => ({
+                ...prev,
+                newsletter_popup: { ...prev.newsletter_popup, scrollThreshold: Math.min(100, Math.max(0, parseInt(e.target.value) || 0)) }
+              }))}
+              disabled={!settings.newsletter_popup.enabled}
+              className="w-32 px-4 py-2 border border-olive/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-olive/50 disabled:opacity-50"
+            />
+          </div>
+
+          {/* Giorni prima di rimostrare */}
+          <div className="p-4 border border-olive/10 rounded-lg">
+            <label className="block text-sm font-medium text-gray-900 mb-1">
+              Giorni prima di rimostrare
+            </label>
+            <p className="text-xs text-gray-600 mb-2">
+              Dopo che l&apos;utente chiude il popup, non verrà rimostrato per questo numero di giorni
+            </p>
+            <input
+              type="number"
+              min="1"
+              step="1"
+              value={settings.newsletter_popup.dismissDays}
+              onChange={(e) => setSettings(prev => ({
+                ...prev,
+                newsletter_popup: { ...prev.newsletter_popup, dismissDays: Math.max(1, parseInt(e.target.value) || 1) }
+              }))}
+              disabled={!settings.newsletter_popup.enabled}
+              className="w-32 px-4 py-2 border border-olive/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-olive/50 disabled:opacity-50"
+            />
           </div>
         </div>
       </div>

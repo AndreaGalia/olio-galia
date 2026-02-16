@@ -264,20 +264,22 @@
       "title": "Iscriviti alla Newsletter",
       "description": "Ricevi offerte esclusive e novità direttamente nella tua casella di posta",
       "close": "Chiudi",
-      "firstName": "Nome",
-      "firstNamePlaceholder": "Mario",
-      "lastName": "Cognome",
-      "lastNamePlaceholder": "Rossi",
       "email": "Email",
       "emailPlaceholder": "mario.rossi@example.com",
-      "phone": "Telefono",
-      "phoneOptional": "(opzionale)",
-      "phonePlaceholder": "+39 123 456 7890",
       "privacy": "Iscrivendoti accetti di ricevere comunicazioni da Olio Galia. Puoi disiscriverti in qualsiasi momento.",
       "cancel": "Annulla",
       "submit": "Iscriviti",
+      "sending": "Invio..."
+    },
+    "newsletterPopup": {
+      "title": "Resta con noi",
+      "description": "Iscriviti alla newsletter per ricevere offerte esclusive, novità e storie dal nostro uliveto.",
+      "placeholder": "Il tuo indirizzo email",
+      "submit": "Iscriviti ora",
       "sending": "Invio...",
-      "required": "*"
+      "close": "Chiudi",
+      "noThanks": "No, grazie",
+      "privacy": "Niente spam. Cancellati quando vuoi."
     },
     "bottom": {
       "copyrightText": "Olio Galia. Tutti i diritti riservati.",

@@ -1,6 +1,7 @@
 import './globals.css';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import NewsletterPopup from '@/components/layout/NewsletterPopup';
 import { CartProvider } from '@/contexts/CartContext';
 import { LocaleProvider } from '@/contexts/LocaleContext';
 import { ShippingConfigProvider } from '@/contexts/ShippingConfigContext';
@@ -57,6 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Navbar />
               <main>{children}</main>
               <Footer />
+              <NewsletterPopup />
             </CartProvider>
           </ShippingConfigProvider>
         </LocaleProvider>

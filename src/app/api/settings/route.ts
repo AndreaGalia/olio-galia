@@ -9,7 +9,14 @@ export async function GET() {
     // Ritorna solo le impostazioni pubbliche necessarie al frontend
     return NextResponse.json({
       torino_checkout_enabled: settings?.torino_checkout_enabled || false,
-      stripe_enabled: settings?.stripe_enabled !== undefined ? settings.stripe_enabled : true // Default true per compatibilità
+      stripe_enabled: settings?.stripe_enabled !== undefined ? settings.stripe_enabled : true, // Default true per compatibilità
+      newsletter_popup: settings?.newsletter_popup || {
+        enabled: true,
+        showOnHomepage: false,
+        delayMs: 20000,
+        scrollThreshold: 50,
+        dismissDays: 7
+      }
     });
   } catch (error) {
     

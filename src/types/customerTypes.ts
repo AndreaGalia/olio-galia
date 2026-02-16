@@ -43,8 +43,8 @@ export interface CustomerWithOrders extends CustomerDocument {
 
 export interface CreateCustomerInput {
   email: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   phone?: string;
   address?: CustomerAddress;
   source?: "manual" | "order" | "quote" | "newsletter";

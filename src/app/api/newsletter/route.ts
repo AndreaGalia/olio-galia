@@ -6,12 +6,12 @@ import { EmailService } from '@/lib/email/resend';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, firstName, lastName, phone } = body;
+    const { email } = body;
 
-    // Validazione campi obbligatori
-    if (!email || !firstName || !lastName) {
+    // Validazione campo obbligatorio
+    if (!email) {
       return NextResponse.json(
-        { error: 'Email, nome e cognome sono obbligatori' },
+        { error: 'Email è obbligatoria' },
         { status: 400 }
       );
     }
@@ -39,16 +39,11 @@ export async function POST(request: NextRequest) {
     // Crea nuovo cliente con source='newsletter'
     const customerId = await CustomerService.createCustomer({
       email,
-      firstName,
-      lastName,
-      phone: phone || undefined,
       source: 'newsletter',
     });
 
     // Invia email di benvenuto
     const emailSent = await EmailService.sendNewsletterWelcome({
-      firstName,
-      lastName,
       email,
     });
 

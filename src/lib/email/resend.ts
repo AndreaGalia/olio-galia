@@ -224,7 +224,7 @@ export class EmailService {
 
       const templateData = {
         logoUrl: LOGO_URL,
-        firstName: newsletterData.firstName,
+        firstName: newsletterData.firstName || '',
         lastName: newsletterData.lastName || '',
         email: newsletterData.email,
         siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://oliogalia.com',

@@ -140,7 +140,7 @@ export function createNewsletterWelcomeHTML(data: NewsletterWelcomeData): string
     <!-- Content -->
     <div class="content">
       <div class="greeting">
-        Ciao ${data.firstName},
+        Ciao${data.firstName ? ` ${data.firstName}` : ''},
       </div>
 
       <div class="message">

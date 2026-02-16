@@ -46,8 +46,8 @@ export interface DeliveryNotificationData {
 }
 
 export interface NewsletterWelcomeData {
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
 }
 

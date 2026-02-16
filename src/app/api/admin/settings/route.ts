@@ -26,6 +26,13 @@ export async function GET(request: NextRequest) {
           shippingUpdate: true,
           deliveryConfirmation: true,
           reviewRequest: true
+        },
+        newsletter_popup: {
+          enabled: true,
+          showOnHomepage: false,
+          delayMs: 20000,
+          scrollThreshold: 50,
+          dismissDays: 7
         }
       });
     }
@@ -48,6 +55,17 @@ export async function GET(request: NextRequest) {
       settings.stripe_enabled = true;
     }
 
+    // Assicura che esista la sezione newsletter_popup
+    if (!settings.newsletter_popup) {
+      settings.newsletter_popup = {
+        enabled: true,
+        showOnHomepage: false,
+        delayMs: 20000,
+        scrollThreshold: 50,
+        dismissDays: 7
+      };
+    }
+
     return NextResponse.json(settings);
   } catch (error) {
 
@@ -67,7 +85,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { torino_checkout_enabled, stripe_enabled, whatsapp } = body;
+    const { torino_checkout_enabled, stripe_enabled, whatsapp, newsletter_popup } = body;
 
     // Validazione
     if (torino_checkout_enabled !== undefined && typeof torino_checkout_enabled !== 'boolean') {
@@ -103,6 +121,10 @@ export async function PUT(request: NextRequest) {
       updateData.whatsapp = whatsapp;
     }
 
+    if (newsletter_popup !== undefined) {
+      updateData.newsletter_popup = newsletter_popup;
+    }
+
     // Aggiorna o crea le impostazioni
     await db.collection('admin_settings').updateOne(
       {},
@@ -130,7 +152,8 @@ export async function PUT(request: NextRequest) {
       success: true,
       torino_checkout_enabled,
       stripe_enabled,
-      whatsapp
+      whatsapp,
+      newsletter_popup
     });
   } catch (error) {
 

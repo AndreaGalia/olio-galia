@@ -378,8 +378,8 @@ export class CustomerService {
 
       const newCustomer: CustomerDocument = {
         email: input.email.toLowerCase(),
-        firstName: input.firstName,
-        lastName: input.lastName,
+        firstName: input.firstName || '',
+        lastName: input.lastName || '',
         phone: input.phone,
         address: input.address,
         orders: [],

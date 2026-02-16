@@ -10,12 +10,7 @@ interface NewsletterModalProps {
 
 export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProps) {
   const { t } = useT();
-  const [newsletterForm, setNewsletterForm] = useState({
-    email: '',
-    firstName: '',
-    lastName: '',
-    phone: '',
-  });
+  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
@@ -28,14 +23,16 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
       const response = await fetch('/api/newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newsletterForm),
+        body: JSON.stringify({ email }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         setMessage({ type: 'success', text: data.message || 'Iscrizione completata con successo!' });
-        setNewsletterForm({ email: '', firstName: '', lastName: '', phone: '' });
+        setEmail('');
+        // Salva flag in localStorage per il popup
+        localStorage.setItem('newsletter_subscribed', 'true');
         // Chiudi modal dopo 3 secondi
         setTimeout(() => {
           onClose();
@@ -52,7 +49,7 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
   };
 
   const handleClose = () => {
-    setNewsletterForm({ email: '', firstName: '', lastName: '', phone: '' });
+    setEmail('');
     setMessage(null);
     onClose();
   };
@@ -61,9 +58,9 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white w-full max-w-md max-h-[90vh] overflow-y-auto border border-olive/20">
+      <div className="bg-white w-full max-w-md overflow-y-auto border border-olive/20">
         {/* Header */}
-        <div className="bg-olive p-4 sm:p-6 text-beige sticky top-0 z-10">
+        <div className="bg-olive p-4 sm:p-6 text-beige">
           <div className="flex justify-between items-start gap-3">
             <div className="flex-1">
               <h3 className="text-xl sm:text-2xl font-serif mb-1 sm:mb-2">
@@ -101,62 +98,18 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
             </div>
           )}
 
-          {/* Nome */}
-          <div>
-            <label className="block text-sm font-medium text-olive mb-2">
-              {t.footer.newsletterModal.firstName} {t.footer.newsletterModal.required}
-            </label>
-            <input
-              type="text"
-              required
-              value={newsletterForm.firstName}
-              onChange={(e) => setNewsletterForm({ ...newsletterForm, firstName: e.target.value })}
-              className="w-full px-4 py-3 sm:py-3.5 border border-gray-300 focus:border-olive focus:ring-2 focus:ring-olive/20 transition-colors text-olive text-base touch-manipulation"
-              placeholder={t.footer.newsletterModal.firstNamePlaceholder}
-            />
-          </div>
-
-          {/* Cognome */}
-          <div>
-            <label className="block text-sm font-medium text-olive mb-2">
-              {t.footer.newsletterModal.lastName} {t.footer.newsletterModal.required}
-            </label>
-            <input
-              type="text"
-              required
-              value={newsletterForm.lastName}
-              onChange={(e) => setNewsletterForm({ ...newsletterForm, lastName: e.target.value })}
-              className="w-full px-4 py-3 sm:py-3.5 border border-gray-300 focus:border-olive focus:ring-2 focus:ring-olive/20 transition-colors text-olive text-base touch-manipulation"
-              placeholder={t.footer.newsletterModal.lastNamePlaceholder}
-            />
-          </div>
-
           {/* Email */}
           <div>
             <label className="block text-sm font-medium text-olive mb-2">
-              {t.footer.newsletterModal.email} {t.footer.newsletterModal.required}
+              {t.footer.newsletterModal.email}
             </label>
             <input
               type="email"
               required
-              value={newsletterForm.email}
-              onChange={(e) => setNewsletterForm({ ...newsletterForm, email: e.target.value })}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 sm:py-3.5 border border-gray-300 focus:border-olive focus:ring-2 focus:ring-olive/20 transition-colors text-olive text-base touch-manipulation"
               placeholder={t.footer.newsletterModal.emailPlaceholder}
-            />
-          </div>
-
-          {/* Telefono */}
-          <div>
-            <label className="block text-sm font-medium text-olive mb-2">
-              {t.footer.newsletterModal.phone} <span className="text-gray-400 font-normal">{t.footer.newsletterModal.phoneOptional}</span>
-            </label>
-            <input
-              type="tel"
-              value={newsletterForm.phone}
-              onChange={(e) => setNewsletterForm({ ...newsletterForm, phone: e.target.value })}
-              className="w-full px-4 py-3 sm:py-3.5 border border-gray-300 focus:border-olive focus:ring-2 focus:ring-olive/20 transition-colors text-olive text-base touch-manipulation"
-              placeholder={t.footer.newsletterModal.phonePlaceholder}
             />
           </div>
 

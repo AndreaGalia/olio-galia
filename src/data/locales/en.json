@@ -264,20 +264,22 @@
       "title": "Subscribe to Newsletter",
       "description": "Receive exclusive offers and news directly in your inbox",
       "close": "Close",
-      "firstName": "First Name",
-      "firstNamePlaceholder": "John",
-      "lastName": "Last Name",
-      "lastNamePlaceholder": "Doe",
       "email": "Email",
       "emailPlaceholder": "john.doe@example.com",
-      "phone": "Phone",
-      "phoneOptional": "(optional)",
-      "phonePlaceholder": "+39 123 456 7890",
       "privacy": "By subscribing you agree to receive communications from Olio Galia. You can unsubscribe at any time.",
       "cancel": "Cancel",
       "submit": "Subscribe",
+      "sending": "Sending..."
+    },
+    "newsletterPopup": {
+      "title": "Stay with us",
+      "description": "Subscribe to our newsletter for exclusive offers, news and stories from our olive grove.",
+      "placeholder": "Your email address",
+      "submit": "Subscribe now",
       "sending": "Sending...",
-      "required": "*"
+      "close": "Close",
+      "noThanks": "No, thanks",
+      "privacy": "No spam. Unsubscribe anytime."
     },
     "bottom": {
       "copyrightText": "Olio Galia. All rights reserved.",
