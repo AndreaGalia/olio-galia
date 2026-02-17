@@ -185,24 +185,26 @@ const calculateCartWeight = async (items: CartItem[]): Promise<number> => {
   return totalGrams;
 };
 
-const buildLineItems = (
+const buildLineItems = async (
   items: CartItem[],
-  products: Stripe.Product[],
-  priceMap: Record<string, Stripe.Price>
 ) => {
   const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
   let totalAmount = 0;
 
   for (const item of items) {
-    const product = products.find(p => p.id === item.id);
+    // Fetch chirurgico: solo il prodotto e i suoi prezzi
+    const [product, prices] = await Promise.all([
+      stripe.products.retrieve(item.id),
+      stripe.prices.list({ product: item.id, active: true, limit: 10 }),
+    ]);
 
-    if (!product) {
-      throw new Error('Prodotto non trovato');
+    if (!product || !product.active) {
+      throw new Error(`Prodotto non trovato su Stripe: ${item.id}`);
     }
 
     validateProductAvailability(product, item.quantity);
 
-    const price = priceMap[item.id];
+    const price = prices.data[0];
     if (price?.id && price.unit_amount) {
       lineItems.push({
         price: price.id,
@@ -382,20 +384,8 @@ export async function POST(request: NextRequest) {
     // Mappa gli ID locali agli ID Stripe (se necessario)
     const mappedItems = await mapLocalIdsToStripeIds(items);
 
-    // Fetch data from Stripe
-    const [productsResult, pricesResult] = await Promise.all([
-      stripe.products.list({ active: true }),
-      stripe.prices.list({ active: true })
-    ]);
-
-    const priceMap = createPriceMap(pricesResult.data);
-
-    // Build line items and calculate total (usa gli ID mappati)
-    const { lineItems, totalAmount } = buildLineItems(
-      mappedItems,
-      productsResult.data,
-      priceMap
-    );
+    // Build line items — fetch chirurgico per ogni prodotto
+    const { lineItems, totalAmount } = await buildLineItems(mappedItems);
 
     // Create session configuration con zona selezionata + calcolo shipping basato su peso/totale
     const sessionConfig = await createSessionConfig(
