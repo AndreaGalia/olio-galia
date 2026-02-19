@@ -2,7 +2,7 @@
 import Stripe from 'stripe';
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
-import { ShippingZone } from '@/types/shipping';
+import { ShippingZone, ZONE_COUNTRIES } from '@/types/shipping';
 import {
   getActiveShippingConfig,
   getShippingCostForZoneAndWeight as getShippingCostForZoneAndWeightService,
@@ -46,6 +46,18 @@ const COUNTRIES = {
     'US', 'CA', 'AU', 'JP', 'SG', 'HK', 'CH', 'NO', 'GB',
     'BR', 'MX', 'IN', 'MY', 'TH', 'PH', 'TW', 'IL', 'AE', 'SA', 'NZ'
   ] as Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[]
+};
+
+const STRIPE_BLOCKED_COUNTRIES = new Set(['BY', 'CU', 'IR', 'KP', 'RU', 'SY']);
+
+const getAllowedCountriesForZone = (
+  zone: ShippingZone
+): Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[] => {
+  const countries = ZONE_COUNTRIES[zone];
+  // 'mondo' ha array vuoto → usiamo COUNTRIES.ALL (tutti i paesi supportati)
+  if (countries.length === 0) return COUNTRIES.ALL;
+  const filtered = countries.filter(c => !STRIPE_BLOCKED_COUNTRIES.has(c));
+  return filtered as Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[];
 };
 
 // Utilities
@@ -356,7 +368,7 @@ const createSessionConfig = async (
     locale: 'it',
 
     shipping_address_collection: {
-      allowed_countries: COUNTRIES.ALL,
+      allowed_countries: getAllowedCountriesForZone(shippingZone),
     },
 
     // Usa shipping_options con riferimento alle shipping rates già create
