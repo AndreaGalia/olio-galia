@@ -114,7 +114,17 @@ export async function POST(request: NextRequest) {
     } else {
       // Per i preventivi: usa order.cart e recupera nomi prodotti dal DB
       if (order.cart && order.cart.length > 0) {
-        const productIds = order.cart.map((cartItem: any) => cartItem.id);
+        // Supporto per compound ID con variante: "local_beauty-oil::zagara"
+        const parsedItems = order.cart.map((cartItem: any) => {
+          const parts = (cartItem.id as string).split('::');
+          return {
+            productId: parts[0],                              // "local_beauty-oil"
+            variantId: parts.length > 1 ? parts[1] : null,  // "zagara" | null
+            quantity: cartItem.quantity || 1,
+          };
+        });
+
+        const productIds = [...new Set(parsedItems.map((i: any) => i.productId))];
 
         // Recupera informazioni prodotti dal database
         const productsCollection = db.collection('products');
@@ -122,18 +132,27 @@ export async function POST(request: NextRequest) {
           id: { $in: productIds }
         }).toArray();
 
-        // Crea una mappa id -> nome prodotto
-        const productNameMap: Record<string, string> = {};
-        products.forEach((p: any) => {
-          productNameMap[p.id] = p.translations?.it?.name || p.name || `Prodotto ${p.id.slice(0, 8)}`;
-        });
+        const productMap: Record<string, any> = {};
+        products.forEach((p: any) => { productMap[p.id] = p; });
 
-        // Mappa cart items con nomi prodotti
-        items = order.cart.map((cartItem: any) => ({
-          productId: cartItem.id || null,
-          name: productNameMap[cartItem.id] || `Prodotto ${cartItem.id?.slice(0, 8) || 'N/A'}`,
-          quantity: cartItem.quantity || 1,
-        }));
+        // Mappa cart items con nomi prodotti, risolvendo la variante se presente
+        items = parsedItems.map((parsed: any) => {
+          const product = productMap[parsed.productId];
+          let name = product?.translations?.it?.name || `Prodotto ${parsed.productId.slice(0, 8)}`;
+
+          if (parsed.variantId && product?.variants?.length) {
+            const variant = product.variants.find((v: any) => v.variantId === parsed.variantId);
+            if (variant?.translations?.it?.variantName) {
+              name = `${name} - ${variant.translations.it.variantName}`;
+            }
+          }
+
+          return {
+            productId: parsed.productId,  // ID padre, non il compound ID
+            name,
+            quantity: parsed.quantity,
+          };
+        });
       }
     }
 

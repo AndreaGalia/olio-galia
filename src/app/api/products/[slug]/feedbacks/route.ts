@@ -46,6 +46,14 @@ export async function GET(
     if (product.stripeProductId) {
       possibleProductIds.push(product.stripeProductId); // ID Stripe (prod_xxx)
     }
+    // Prodotti con varianti: aggiunge stripeProductId di ogni variante
+    if (product.variants?.length) {
+      product.variants.forEach(variant => {
+        if (variant.stripeProductId) {
+          possibleProductIds.push(variant.stripeProductId);
+        }
+      });
+    }
 
     const db = await getDatabase();
     const feedbackCollection = db.collection<FeedbackDocument>('feedbacks');
