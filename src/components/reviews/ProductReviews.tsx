@@ -119,6 +119,12 @@ export default function ProductReviews({ productSlug }: ProductReviewsProps) {
     });
   };
 
+  const extractVariantName = (productName: string): string | null => {
+    const idx = productName.indexOf(' - ');
+    if (idx === -1) return null;
+    return productName.substring(idx + 3);
+  };
+
   // Genera i numeri di pagina da mostrare
   const getPageNumbers = () => {
     const pages: (number | string)[] = [];
@@ -290,13 +296,18 @@ export default function ProductReviews({ productSlug }: ProductReviewsProps) {
               {/* Header recensione */}
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
                 <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
+                  <div className="flex items-center gap-3 mb-2 flex-wrap">
                     <span className="font-semibold text-olive text-lg">
                       {review.isAnonymous ? t.productReviews.review.anonymous : review.customerName}
                     </span>
                     {review.isAnonymous && (
                       <span className="text-xs bg-nocciola/20 text-nocciola px-2 py-1 rounded-full">
                         Anonimo
+                      </span>
+                    )}
+                    {extractVariantName(review.productName) && (
+                      <span className="text-xs bg-olive/10 text-olive px-2 py-1 rounded-full font-medium">
+                        {extractVariantName(review.productName)}
                       </span>
                     )}
                   </div>
