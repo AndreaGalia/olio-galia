@@ -27,8 +27,8 @@ export default function Navbar() {
 
   const menuItems: MenuItem[] = [
     { name: t.navbar.menu.home, href: '/', translationKey: 'home' },
-    { name: t.navbar.menu.about, href: '/about', translationKey: 'about' },
     { name: t.navbar.menu.products, href: '/products', translationKey: 'products' },
+    { name: t.navbar.menu.about, href: '/about', translationKey: 'about' },
     { name: t.navbar.menu.contact, href: '/contact', translationKey: 'contact' }
   ];
 
@@ -55,7 +55,7 @@ export default function Navbar() {
                   <li key={item.translationKey}>
                     <Link
                       href={item.href}
-                      className={`cursor-pointer hover:text-salvia transition-colors duration-200 whitespace-nowrap uppercase ${
+                      className={`cursor-pointer hover:text-salvia transition-colors duration-200 whitespace-nowrap uppercase tracking-widest ${
                         isActive(item.href) ? 'text-salvia' : ''
                       }`}
                     >
@@ -81,7 +81,7 @@ export default function Navbar() {
                   </svg>
                   {/* Badge con numero elementi */}
                   {totalItems > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-olive text-beige text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold leading-none">
+                    <span className="absolute -top-1 -right-1 bg-olive text-beige text-xs rounded-full w-5 h-5 flex items-center justify-center leading-none">
                       {totalItems > 99 ? '99+' : totalItems}
                     </span>
                   )}
@@ -102,7 +102,7 @@ export default function Navbar() {
                   </svg>
                   {/* Badge con numero elementi */}
                   {totalItems > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-olive text-beige text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold leading-none">
+                    <span className="absolute -top-1 -right-1 bg-olive text-beige text-xs rounded-full w-5 h-5 flex items-center justify-center leading-none">
                       {totalItems > 99 ? '99+' : totalItems}
                     </span>
                   )}
@@ -161,7 +161,7 @@ export default function Navbar() {
                   <li key={item.translationKey}>
                     <Link
                       href={item.href}
-                      className={`block text-xl font-serif hover:text-salvia transition-colors duration-200 py-2 uppercase ${
+                      className={`block text-xl font-serif hover:text-salvia transition-colors duration-200 py-2 uppercase tracking-widest ${
                         isActive(item.href) ? 'text-salvia' : 'text-olive'
                       }`}
                       onClick={toggleMenu}
