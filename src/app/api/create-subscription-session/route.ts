@@ -3,6 +3,7 @@ import Stripe from 'stripe';
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import { SubscriptionInterval, ShippingZone } from '@/types/subscription';
+import { ZONE_COUNTRIES } from '@/types/shipping';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -13,13 +14,24 @@ interface RequestBody {
   quantity?: number;
 }
 
-const ALLOWED_COUNTRIES: Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[] = [
+const COUNTRIES_ALL: Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[] = [
   'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR',
   'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL',
   'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE',
   'US', 'CA', 'AU', 'JP', 'SG', 'HK', 'CH', 'NO', 'GB',
   'BR', 'MX', 'IN', 'MY', 'TH', 'PH', 'TW', 'IL', 'AE', 'SA', 'NZ'
 ];
+
+const STRIPE_BLOCKED_COUNTRIES = new Set(['BY', 'CU', 'IR', 'KP', 'RU', 'SY']);
+
+const getAllowedCountriesForZone = (
+  zone: ShippingZone
+): Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[] => {
+  const countries = ZONE_COUNTRIES[zone];
+  if (countries.length === 0) return COUNTRIES_ALL;
+  const filtered = countries.filter(c => !STRIPE_BLOCKED_COUNTRIES.has(c));
+  return filtered as Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[];
+};
 
 const VALID_ZONES: ShippingZone[] = ['italia', 'europa', 'america', 'mondo'];
 const VALID_INTERVALS: SubscriptionInterval[] = ['month', 'bimonth', 'quarter', 'semester'];
@@ -88,7 +100,7 @@ export async function POST(request: NextRequest) {
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${product.slug?.it || ''}?subscription_canceled=true`,
       locale: 'it',
       shipping_address_collection: {
-        allowed_countries: ALLOWED_COUNTRIES,
+        allowed_countries: getAllowedCountriesForZone(shippingZone),
       },
       metadata: {
         type: 'subscription',
