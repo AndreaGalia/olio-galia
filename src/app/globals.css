@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  --color-olive: #556B2F;      /* verde oliva più scuro e profondo */
-  --color-salvia: #789262;     /* verde salvia intenso */
-  --color-sabbia: #D6C7A1;     /* sabbia, neutro ma meno giallo */
-  --color-sabbia-chiaro: #E5DCC0; /* sabbia chiaro per sfondi homepage */
-  --color-beige: #ECE8DF;      /* beige chiaro per sfondi */
-  --color-nocciola: #B2A98C;   /* nocciola, neutro e caldo */
+  --color-olive: #577657;      /* olive */
+  --color-salvia: #577657;     /* olive (stessa palette) */
+  --color-sabbia: #E0D3B7;     /* sicilian stone */
+  --color-sabbia-chiaro: #E0D3B7; /* sicilian stone */
+  --color-beige: #F4F1EA;      /* off white */
+  --color-nocciola: #E0D3B7;   /* sicilian stone */
 
   /* Colore sfondo homepage - CAMBIA QUI per modificare tutto lo sfondo homepage */
   --color-homepage-bg: var(--color-sabbia-chiaro);
