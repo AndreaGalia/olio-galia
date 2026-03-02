@@ -95,7 +95,7 @@ export default function FAQSection() {
         {loading && (
           <div className="text-center py-12">
             <div className="w-8 h-8 border-2 border-olive/30 border-t-olive rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-olive">{t.faq.loading}</p>
+            <p className="text-black">{t.faq.loading}</p>
           </div>
         )}
 
@@ -112,7 +112,7 @@ export default function FAQSection() {
                 />
               ))
             ) : (
-              <div className="text-center py-12 text-nocciola">
+              <div className="text-center py-12 text-black">
                 <p>{t.faq.noFAQ}</p>
               </div>
             )}

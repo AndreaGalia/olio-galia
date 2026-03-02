@@ -149,7 +149,7 @@ function CartPageContent() {
 
       <div className="container mx-auto px-4 sm:px-6 max-w-4xl py-8 sm:py-12">
         <div className="flex items-center gap-3 mb-8">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif text-olive">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif text-black">
             {t.cartPage.title}
           </h1>
           <span className="bg-olive text-beige px-3 py-1 text-sm font-bold whitespace-nowrap border border-olive/20">
@@ -207,7 +207,7 @@ function CartPageLoading() {
     <div className="min-h-screen bg-homepage-bg">
       <div className="container mx-auto px-4 py-16">
         <div className="text-center">
-          <p className="text-olive text-2xl font-serif">Caricamento...</p>
+          <p className="text-black text-2xl font-serif">Caricamento...</p>
         </div>
       </div>
     </div>

@@ -15,7 +15,7 @@ export default function NextSteps() {
       borderColor: "border-olive/10",
       numberBg: "bg-olive",
       numberColor: "text-beige",
-      titleColor: "text-olive"
+      titleColor: "text-black"
     },
     {
       number: "2",
@@ -25,7 +25,7 @@ export default function NextSteps() {
       borderColor: "border-olive/10",
       numberBg: "bg-olive",
       numberColor: "text-beige",
-      titleColor: "text-olive"
+      titleColor: "text-black"
     },
     {
       number: "3",
@@ -35,7 +35,7 @@ export default function NextSteps() {
       borderColor: "border-olive/10",
       numberBg: "bg-olive",
       numberColor: "text-beige",
-      titleColor: "text-olive"
+      titleColor: "text-black"
     }
   ];
 
@@ -46,7 +46,7 @@ export default function NextSteps() {
       transition={{ delay: 0.6 }}
       className="mb-8"
     >
-      <h2 className="text-2xl font-serif text-olive mb-4 flex items-center gap-2">
+      <h2 className="text-2xl font-serif text-black mb-4 flex items-center gap-2">
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
@@ -61,7 +61,7 @@ export default function NextSteps() {
             </div>
             <div>
               <h3 className={`font-semibold ${step.titleColor} mb-1`}>{step.title}</h3>
-              <p className="text-sm text-nocciola">{step.description}</p>
+              <p className="text-sm text-black">{step.description}</p>
             </div>
           </div>
         ))}

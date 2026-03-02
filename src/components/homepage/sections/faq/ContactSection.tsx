@@ -21,11 +21,11 @@ export default function ContactSection({ contact, onEmailClick, onPhoneClick, on
           </svg>
         </div>
         
-        <h3 className="text-xl sm:text-2xl font-serif text-olive mb-4">
+        <h3 className="text-xl sm:text-2xl font-serif text-black mb-4">
           {contact.title}
         </h3>
         
-        <p className="text-nocciola mb-6 max-w-md mx-auto">
+        <p className="text-black mb-6 max-w-md mx-auto">
           {contact.description}
         </p>
         

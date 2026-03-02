@@ -24,11 +24,8 @@ export function VideoBackground({ videoUrl }: VideoBackgroundProps) {
         <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-olive via-salvia to-nocciola" />
       )}
 
-      {/* Overlay gradiente per leggibilità testo */}
-      <div className="absolute inset-0 bg-gradient-to-b from-olive/55 via-olive/35 to-olive/55" />
-
-      {/* Vignette effect per focus centrale */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(85,107,47,0.25)_100%)]" />
+      {/* Filtro verde leggero */}
+      <div className="absolute inset-0 bg-olive/20" />
     </div>
   );
 }

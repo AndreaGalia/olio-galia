@@ -61,7 +61,7 @@ const WizardStep = forwardRef<HTMLDivElement, WizardStepProps>(({
               <div className="w-3 h-3 bg-beige"></div>
             ) : (
               // Lock
-              <svg className="w-4 h-4 text-nocciola" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
             )}
@@ -69,12 +69,12 @@ const WizardStep = forwardRef<HTMLDivElement, WizardStepProps>(({
 
           {/* Titolo e summary */}
           <div>
-            <h3 className="font-serif text-olive font-bold text-sm sm:text-base uppercase tracking-wider">
+            <h3 className="font-serif text-black font-bold text-sm sm:text-base uppercase tracking-wider">
               {stepNumber}. {title}
             </h3>
             {/* Summary - mostra solo quando compressa e completata */}
             {isCompleted && !isActive && summary && (
-              <p className="text-nocciola text-xs sm:text-sm mt-1">{summary}</p>
+              <p className="text-black text-xs sm:text-sm mt-1">{summary}</p>
             )}
           </div>
         </div>
@@ -82,7 +82,7 @@ const WizardStep = forwardRef<HTMLDivElement, WizardStepProps>(({
         {/* Freccia indicatore espansione */}
         {isCompleted && !isActive && (
           <svg
-            className="w-5 h-5 text-olive transition-transform"
+            className="w-5 h-5 text-black transition-transform"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

@@ -30,10 +30,10 @@ export default function WhatsAppContact({ orderId }: WhatsAppContactProps) {
       className="bg-green-50 p-6 mb-8 border border-green-600/20"
     >
       <div className="text-center">
-        <h3 className="text-base sm:text-xl font-serif text-olive mb-3">
+        <h3 className="text-base sm:text-xl font-serif text-black mb-3">
           {t.orderConfirmation.whatsapp.title}
         </h3>
-        <p className="text-nocciola mb-4 text-sm leading-relaxed">
+        <p className="text-black mb-4 text-sm leading-relaxed">
           {t.orderConfirmation.whatsapp.description}
         </p>
 

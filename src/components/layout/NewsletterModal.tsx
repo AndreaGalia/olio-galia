@@ -100,7 +100,7 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
 
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-olive mb-2">
+            <label className="block text-sm font-medium text-black mb-2">
               {t.footer.newsletterModal.email}
             </label>
             <input
@@ -108,7 +108,7 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 sm:py-3.5 border border-gray-300 focus:border-olive focus:ring-2 focus:ring-olive/20 transition-colors text-olive text-base touch-manipulation"
+              className="w-full px-4 py-3 sm:py-3.5 border border-gray-300 focus:border-olive focus:ring-2 focus:ring-olive/20 transition-colors text-black text-base touch-manipulation"
               placeholder={t.footer.newsletterModal.emailPlaceholder}
             />
           </div>

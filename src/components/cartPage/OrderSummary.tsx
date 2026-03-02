@@ -83,10 +83,10 @@ export default function OrderSummary({
 
   return (
     <div className="bg-white border border-olive/10 p-6 sticky top-4">
-      <h2 className="text-xl font-serif text-olive mb-6">{t.cartPage.summary.title}</h2>
+      <h2 className="text-xl font-serif text-black mb-6">{t.cartPage.summary.title}</h2>
 
       <div className="space-y-4 mb-6">
-        <div className="flex justify-between text-nocciola">
+        <div className="flex justify-between text-black">
           <span>{t.cartPage.summary.subtotal?.replace('{count}', totalItems.toString()).replace('{itemLabel}', itemLabel) || `Subtotale (${totalItems} ${itemLabel})`}</span>
           <span>€{total.toFixed(2)}</span>
         </div>
@@ -100,21 +100,21 @@ export default function OrderSummary({
 
         {/* Costo spedizione */}
         {selectedShippingZone ? (
-          <div className="flex justify-between text-nocciola">
+          <div className="flex justify-between text-black">
             <span>{t.cartPage.summary.shipping}</span>
-            <span className={shippingCost.isFree ? "text-green-600 font-medium" : "text-nocciola"}>
+            <span className={shippingCost.isFree ? "text-green-600 font-medium" : "text-black"}>
               {shippingCost.isFree ? t.cartPage.summary.free : `€${shippingCost.costEur.toFixed(2)}`}
             </span>
           </div>
         ) : (
-          <div className="text-xs text-nocciola/70 bg-olive/5 border border-olive/10 p-3">
+          <div className="text-xs text-black/70 bg-olive/5 border border-olive/10 p-3">
             {t.cartPage.summary.shippingCalculatedLater}
           </div>
         )}
 
         <hr className="border-olive/20" />
 
-        <div className="flex justify-between text-olive font-bold text-xl">
+        <div className="flex justify-between text-black font-bold text-xl">
           <span>{t.cartPage.summary.total}</span>
           <span>€{finalTotal.toFixed(2)}</span>
         </div>
@@ -130,10 +130,10 @@ export default function OrderSummary({
             className="mt-1 border-olive/30 text-olive focus:ring-olive focus:ring-offset-0"
           />
           <div>
-            <span className="text-olive font-medium text-sm block">
+            <span className="text-black font-medium text-sm block">
               {t.cartPage.invoice.title}
             </span>
-            <span className="text-nocciola text-xs">
+            <span className="text-black text-xs">
               {t.cartPage.invoice.description}
             </span>
           </div>

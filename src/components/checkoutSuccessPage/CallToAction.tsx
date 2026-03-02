@@ -8,8 +8,8 @@ export default function CallToAction({ className = "" }: CallToActionProps) {
   return (
     <div className={`text-center ${className}`}>
       <div className="bg-white border border-olive/10 p-8 max-w-2xl mx-auto">
-        <h3 className="text-2xl font-serif text-olive mb-6">{t.checkoutSuccess.cta.title}</h3>
-        <p className="text-nocciola mb-8 leading-relaxed">
+        <h3 className="text-2xl font-serif text-black mb-6">{t.checkoutSuccess.cta.title}</h3>
+        <p className="text-black mb-8 leading-relaxed">
           {t.checkoutSuccess.cta.description}
         </p>
 

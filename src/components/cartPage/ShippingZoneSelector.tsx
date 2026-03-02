@@ -17,10 +17,10 @@ export default function ShippingZoneSelector({ selectedZone, onSelectZone }: Shi
     <div className="space-y-6">
       {/* Header con separatore (Opzione A) */}
       <div className="pb-4 border-b-2 border-olive/20">
-        <h3 className="text-xl sm:text-2xl font-serif text-olive mb-3">
+        <h3 className="text-xl sm:text-2xl font-serif text-black mb-3">
           {t.cartPage.shippingSelection.zoneSelector.title}
         </h3>
-        <p className="text-sm sm:text-base text-nocciola">
+        <p className="text-sm sm:text-base text-black">
           {t.cartPage.shippingSelection.zoneSelector.description}
         </p>
       </div>
@@ -84,7 +84,7 @@ export default function ShippingZoneSelector({ selectedZone, onSelectZone }: Shi
       {/* Nota informativa - Solo se zona selezionata */}
       {selectedZone && (
         <div className="mt-4 p-4 bg-olive/5 border border-olive/10">
-          <p className="text-xs sm:text-sm text-nocciola">
+          <p className="text-xs sm:text-sm text-black">
             {t.cartPage.shippingSelection.zoneSelector.deliveryTimeNote}
           </p>
         </div>

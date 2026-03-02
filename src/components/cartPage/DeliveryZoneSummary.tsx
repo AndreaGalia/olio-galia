@@ -25,7 +25,7 @@ export default function DeliveryZoneSummary({ total, savings, totalItems, itemLa
       {/* Riepilogo ordine */}
       <div className="p-3 sm:p-4">
         <div className="space-y-2.5">
-          <div className="flex justify-between text-sm text-nocciola gap-3">
+          <div className="flex justify-between text-sm text-black gap-3">
             <span className="text-xs">Subtotale ({totalItems} {itemLabel})</span>
             <span className="font-semibold whitespace-nowrap">€{total.toFixed(2)}</span>
           </div>
@@ -38,11 +38,11 @@ export default function DeliveryZoneSummary({ total, savings, totalItems, itemLa
           )}
 
           <div className="border-t border-olive/10 pt-2.5 mt-2.5">
-            <div className="flex justify-between text-olive font-bold text-base gap-3">
+            <div className="flex justify-between text-black font-bold text-base gap-3">
               <span className="text-sm">Totale</span>
               <span className="whitespace-nowrap">€{total.toFixed(2)}</span>
             </div>
-            <p className="text-xs text-nocciola mt-1 leading-tight">
+            <p className="text-xs text-black mt-1 leading-tight">
               + Spedizione
             </p>
           </div>

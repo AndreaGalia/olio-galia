@@ -90,10 +90,10 @@ export default function PreventivoCheckoutModal({
             <div className="mb-6 pb-6 border-b-2 border-olive/20">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
-                  <h2 className="text-2xl sm:text-3xl font-serif text-olive mb-2">
+                  <h2 className="text-2xl sm:text-3xl font-serif text-black mb-2">
                     Richiedi Preventivo
                   </h2>
-                  <p className="text-nocciola text-sm sm:text-base">
+                  <p className="text-black text-sm sm:text-base">
                     Compila il form per ricevere un preventivo personalizzato
                   </p>
                 </div>
@@ -113,11 +113,11 @@ export default function PreventivoCheckoutModal({
               {/* Info Box */}
               <div className="bg-olive/5 border border-olive/10 p-4">
                 <div className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-olive mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-black mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <div className="text-sm text-nocciola">
-                    <p className="font-medium text-olive mb-1">Spedizione in tutta Italia e Europa</p>
+                  <div className="text-sm text-black">
+                    <p className="font-medium text-black mb-1">Spedizione in tutta Italia e Europa</p>
                     <p>Riceverai via email un preventivo dettagliato con i costi di spedizione per la tua zona entro 24 ore.</p>
                   </div>
                 </div>

@@ -14,7 +14,7 @@ export function ProductsCTA() {
       >
         {t.products.cta.button}
       </Link>
-      <p className="text-sm sm:text-base text-olive mt-6 max-w-md mx-auto">
+      <p className="text-sm sm:text-base text-black mt-6 max-w-md mx-auto">
         {t.products.cta.description}
       </p>
     </div>

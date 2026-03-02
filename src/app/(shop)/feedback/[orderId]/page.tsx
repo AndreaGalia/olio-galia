@@ -244,7 +244,7 @@ export default function FeedbackPage() {
       <div className="min-h-screen bg-homepage-bg flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-olive mx-auto mb-4"></div>
-          <p className="text-olive font-serif text-xl">{translate('feedback.loading')}</p>
+          <p className="text-black font-serif text-xl">{translate('feedback.loading')}</p>
         </div>
       </div>
     );
@@ -260,7 +260,7 @@ export default function FeedbackPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-serif text-olive mb-4 uppercase">{translate('feedback.error.invalidToken').split('.')[0]}</h1>
+          <h1 className="text-2xl font-serif text-black mb-4 uppercase">{translate('feedback.error.invalidToken').split('.')[0]}</h1>
           <p className="text-gray-700 mb-6 whitespace-pre-line">{error}</p>
           <button
             onClick={() => router.push('/')}
@@ -284,7 +284,7 @@ export default function FeedbackPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h1 className="text-2xl font-serif text-olive mb-4 uppercase">{translate('feedback.alreadySubmitted.title')}</h1>
+            <h1 className="text-2xl font-serif text-black mb-4 uppercase">{translate('feedback.alreadySubmitted.title')}</h1>
             <p className="text-gray-700 mb-6">{translate('feedback.alreadySubmitted.message')}</p>
           </div>
 
@@ -292,9 +292,9 @@ export default function FeedbackPage() {
             <div className="space-y-4 mb-6">
               {existingFeedback.feedbacks.map((fb, index) => (
                 <div key={index} className="bg-beige rounded-lg p-4">
-                  <h3 className="font-semibold text-olive mb-2">{fb.productName}</h3>
+                  <h3 className="font-semibold text-black mb-2">{fb.productName}</h3>
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-2xl text-olive">
+                    <span className="text-2xl text-black">
                       {'★'.repeat(fb.rating)}
                       {'☆'.repeat(5 - fb.rating)}
                     </span>
@@ -324,11 +324,11 @@ export default function FeedbackPage() {
       <div ref={successDivRef} className="min-h-screen bg-homepage-bg flex items-center justify-center px-4">
         <div className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full text-center">
           <div className="flex justify-center mb-4">
-            <svg className="w-16 h-16 text-olive" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-16 h-16 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-serif text-olive mb-4 uppercase">{translate('feedback.success.title')}</h1>
+          <h1 className="text-2xl font-serif text-black mb-4 uppercase">{translate('feedback.success.title')}</h1>
           <p className="text-gray-700 mb-6">
             {translate('feedback.success.message')}
           </p>
@@ -340,7 +340,7 @@ export default function FeedbackPage() {
           </button>
           <button
             onClick={() => router.push('/')}
-            className="text-olive hover:text-salvia transition-colors font-serif uppercase"
+            className="text-black hover:text-salvia transition-colors font-serif uppercase"
           >
             {translate('feedback.success.backToHome')}
           </button>
@@ -365,7 +365,7 @@ export default function FeedbackPage() {
             {/* Order Info */}
             {orderInfo && (
               <div className="bg-beige rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
-                <h2 className="font-serif text-olive text-base sm:text-lg uppercase mb-3 sm:mb-4">
+                <h2 className="font-serif text-black text-base sm:text-lg uppercase mb-3 sm:mb-4">
                   {translate(`feedback.form.orderInfo.${orderInfo.orderType}`)} #{orderInfo.orderNumber.slice(-8).toUpperCase()}
                 </h2>
                 <p className="text-gray-700 mb-2 text-sm sm:text-base">
@@ -385,19 +385,19 @@ export default function FeedbackPage() {
                     {/* Product Header */}
                     <div className="flex items-center justify-between mb-4 sm:mb-6 pb-4 border-b border-sabbia">
                       <div className="flex-1">
-                        <h3 className="font-serif text-olive text-lg sm:text-xl uppercase">{product.productName}</h3>
+                        <h3 className="font-serif text-black text-lg sm:text-xl uppercase">{product.productName}</h3>
                         <p className="text-xs sm:text-sm text-gray-600">
                           {translate('feedback.form.quantity', { count: product.quantity.toString() })}
                         </p>
                       </div>
-                      <span className="text-2xl sm:text-3xl text-olive font-bold ml-2">
+                      <span className="text-2xl sm:text-3xl text-black font-bold ml-2">
                         {translate('feedback.form.productNumber', { number: (index + 1).toString() })}
                       </span>
                     </div>
 
                     {/* Rating */}
                     <div className="mb-6 sm:mb-8">
-                      <label className="block font-serif text-olive text-base sm:text-lg uppercase mb-4 sm:mb-5 text-center">
+                      <label className="block font-serif text-black text-base sm:text-lg uppercase mb-4 sm:mb-5 text-center">
                         {translate('feedback.form.rating.label')}
                       </label>
                       <div className="flex justify-center py-2">
@@ -416,7 +416,7 @@ export default function FeedbackPage() {
 
                     {/* Comment */}
                     <div>
-                      <label htmlFor={`comment-${product.productName}`} className="block font-serif text-olive text-base sm:text-lg uppercase mb-3">
+                      <label htmlFor={`comment-${product.productName}`} className="block font-serif text-black text-base sm:text-lg uppercase mb-3">
                         {translate('feedback.form.comment.label')}
                       </label>
                       <textarea
@@ -467,7 +467,7 @@ export default function FeedbackPage() {
                     className="mt-1 w-5 h-5 text-olive border-2 border-olive rounded focus:ring-2 focus:ring-olive focus:ring-offset-2 disabled:opacity-50 cursor-pointer"
                   />
                   <div className="flex-1">
-                    <span className="text-olive font-semibold text-sm sm:text-base block mb-1">
+                    <span className="text-black font-semibold text-sm sm:text-base block mb-1">
                       {translate('feedback.form.anonymous.label')}
                     </span>
                     <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">

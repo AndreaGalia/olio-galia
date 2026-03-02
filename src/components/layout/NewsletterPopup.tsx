@@ -103,12 +103,12 @@ export default function NewsletterPopup() {
           </div>
 
           {/* Titolo */}
-          <h4 className="text-center text-xl sm:text-2xl font-serif text-olive mb-2 sm:mb-3">
+          <h4 className="text-center text-xl sm:text-2xl font-serif text-black mb-2 sm:mb-3">
             {popup.title}
           </h4>
 
           {/* Descrizione */}
-          <p className="text-center text-nocciola text-sm sm:text-base leading-relaxed mb-6 sm:mb-8">
+          <p className="text-center text-black text-sm sm:text-base leading-relaxed mb-6 sm:mb-8">
             {popup.description}
           </p>
 
@@ -133,7 +133,7 @@ export default function NewsletterPopup() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 sm:py-3.5 bg-beige/50 border border-olive/20 text-olive text-sm sm:text-base placeholder:text-nocciola/60 focus:border-olive focus:ring-2 focus:ring-olive/20 focus:bg-white transition-all duration-300 touch-manipulation outline-none"
+                className="w-full px-4 py-3 sm:py-3.5 bg-beige/50 border border-olive/20 text-black text-sm sm:text-base placeholder:text-black/60 focus:border-olive focus:ring-2 focus:ring-olive/20 focus:bg-white transition-all duration-300 touch-manipulation outline-none"
                 placeholder={popup.placeholder}
                 autoFocus
               />
@@ -160,7 +160,7 @@ export default function NewsletterPopup() {
           )}
 
           {/* Privacy */}
-          <p className="text-center text-[10px] sm:text-xs text-nocciola/50 mt-3 sm:mt-4 leading-relaxed">
+          <p className="text-center text-[10px] sm:text-xs text-black/50 mt-3 sm:mt-4 leading-relaxed">
             {popup.privacy}
           </p>
         </div>

@@ -6,7 +6,7 @@ export default function TimelineProcess({ currentStep = 'confirmation' }: Timeli
 
   return (
     <div className="max-w-4xl mx-auto mb-16">
-      <h2 className="text-2xl sm:text-3xl font-serif text-olive text-center mb-8 sm:mb-12">{t.checkoutSuccess.timeline.title}</h2>
+      <h2 className="text-2xl sm:text-3xl font-serif text-black text-center mb-8 sm:mb-12">{t.checkoutSuccess.timeline.title}</h2>
 
       <div className="relative">
         {/* Linea di connessione - Sinistra su mobile, centro su desktop */}
@@ -22,8 +22,8 @@ export default function TimelineProcess({ currentStep = 'confirmation' }: Timeli
               </svg>
             </div>
             <div className="flex-1 pl-6 md:pl-0 md:text-right md:pr-8">
-              <h3 className="text-lg sm:text-xl font-serif text-olive mb-2">{t.checkoutSuccess.timeline.steps.confirmation.title}</h3>
-              <p className="text-sm sm:text-base text-nocciola mb-2 md:mb-0">{t.checkoutSuccess.timeline.steps.confirmation.description}</p>
+              <h3 className="text-lg sm:text-xl font-serif text-black mb-2">{t.checkoutSuccess.timeline.steps.confirmation.title}</h3>
+              <p className="text-sm sm:text-base text-black mb-2 md:mb-0">{t.checkoutSuccess.timeline.steps.confirmation.description}</p>
               <span className="inline-block md:hidden text-xs sm:text-sm bg-olive text-beige px-3 py-1 border border-olive/20 mt-2">{t.checkoutSuccess.timeline.steps.confirmation.status}</span>
             </div>
             {/* Desktop: Icon */}
@@ -47,8 +47,8 @@ export default function TimelineProcess({ currentStep = 'confirmation' }: Timeli
               </svg>
             </div>
             <div className="flex-1 pl-6 md:hidden">
-              <h3 className="text-lg sm:text-xl font-serif text-olive mb-2">{t.checkoutSuccess.timeline.steps.preparation.title}</h3>
-              <p className="text-sm sm:text-base text-nocciola mb-2">{t.checkoutSuccess.timeline.steps.preparation.description}</p>
+              <h3 className="text-lg sm:text-xl font-serif text-black mb-2">{t.checkoutSuccess.timeline.steps.preparation.title}</h3>
+              <p className="text-sm sm:text-base text-black mb-2">{t.checkoutSuccess.timeline.steps.preparation.description}</p>
               <span className="inline-block text-xs sm:text-sm bg-salvia text-beige px-3 py-1 border border-salvia/20">{t.checkoutSuccess.timeline.steps.preparation.status}</span>
             </div>
             {/* Desktop: Status Badge Left + Icon Center */}
@@ -62,8 +62,8 @@ export default function TimelineProcess({ currentStep = 'confirmation' }: Timeli
               </svg>
             </div>
             <div className="hidden md:flex md:flex-col flex-1 pl-8">
-              <h3 className="text-xl font-serif text-olive mb-2">{t.checkoutSuccess.timeline.steps.preparation.title}</h3>
-              <p className="text-nocciola">{t.checkoutSuccess.timeline.steps.preparation.description}</p>
+              <h3 className="text-xl font-serif text-black mb-2">{t.checkoutSuccess.timeline.steps.preparation.title}</h3>
+              <p className="text-black">{t.checkoutSuccess.timeline.steps.preparation.description}</p>
             </div>
           </div>
 
@@ -71,23 +71,23 @@ export default function TimelineProcess({ currentStep = 'confirmation' }: Timeli
           <div className="relative flex items-start md:items-center">
             {/* Mobile: Icon + Content */}
             <div className="flex md:hidden w-16 h-16 flex-shrink-0 bg-nocciola/30 border border-nocciola/20 items-center justify-center z-10">
-              <svg className="w-8 h-8 text-olive" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
             </div>
             <div className="flex-1 pl-6 md:pl-0 md:text-right md:pr-8">
-              <h3 className="text-lg sm:text-xl font-serif text-olive mb-2">{t.checkoutSuccess.timeline.steps.shipping.title}</h3>
-              <p className="text-sm sm:text-base text-nocciola mb-2 md:mb-0">{t.checkoutSuccess.timeline.steps.shipping.description}</p>
-              <span className="inline-block md:hidden text-xs sm:text-sm bg-nocciola/20 text-nocciola px-3 py-1 border border-nocciola/20 mt-2">{t.checkoutSuccess.timeline.steps.shipping.status}</span>
+              <h3 className="text-lg sm:text-xl font-serif text-black mb-2">{t.checkoutSuccess.timeline.steps.shipping.title}</h3>
+              <p className="text-sm sm:text-base text-black mb-2 md:mb-0">{t.checkoutSuccess.timeline.steps.shipping.description}</p>
+              <span className="inline-block md:hidden text-xs sm:text-sm bg-nocciola/20 text-black px-3 py-1 border border-nocciola/20 mt-2">{t.checkoutSuccess.timeline.steps.shipping.status}</span>
             </div>
             {/* Desktop: Icon */}
             <div className="hidden md:flex w-16 h-16 bg-nocciola/30 border border-nocciola/20 items-center justify-center z-10">
-              <svg className="w-8 h-8 text-olive" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
             </div>
             <div className="hidden md:flex flex-1 pl-8">
-              <span className="text-sm bg-nocciola/20 text-nocciola px-3 py-1 border border-nocciola/20">{t.checkoutSuccess.timeline.steps.shipping.status}</span>
+              <span className="text-sm bg-nocciola/20 text-black px-3 py-1 border border-nocciola/20">{t.checkoutSuccess.timeline.steps.shipping.status}</span>
             </div>
           </div>
         </div>

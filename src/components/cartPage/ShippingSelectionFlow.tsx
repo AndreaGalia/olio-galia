@@ -33,10 +33,10 @@ export default function ShippingSelectionFlow({ value, onChange }: ShippingSelec
 
             {/* Testo conferma */}
             <div className="flex-1">
-              <h4 className="font-medium text-olive mb-1">
+              <h4 className="font-medium text-black mb-1">
                 {t.cartPage.shippingSelection.zoneSelected || 'Zona di spedizione selezionata'}
               </h4>
-              <p className="text-sm text-nocciola">
+              <p className="text-sm text-black">
                 {t.cartPage.shippingSelection.zones[value].name}
               </p>
             </div>

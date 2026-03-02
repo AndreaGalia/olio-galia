@@ -61,8 +61,8 @@
 }
 
 /* Colori personalizzati per Tailwind */
-.textOlive { 
-  color: #556B2F; 
+.textOlive {
+  color: black;
 }
 
 .textSalvia { 
@@ -77,8 +77,8 @@
   color: #ECE8DF; 
 }
 
-.textNocciola { 
-  color: #B2A98C; 
+.textNocciola {
+  color: black;
 }
 
 .bgOlive { 

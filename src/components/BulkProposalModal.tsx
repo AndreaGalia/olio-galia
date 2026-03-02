@@ -91,7 +91,7 @@ function BulkProposalModal({ isOpen, onClose, productName }: {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
       <div className="bg-white border border-olive/10 p-6 w-full max-w-md md:max-w-lg lg:max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-xl md:text-2xl font-serif text-olive">{t.bulkProposal.modal.title}</h3>
+          <h3 className="text-xl md:text-2xl font-serif text-black">{t.bulkProposal.modal.title}</h3>
           <button 
             onClick={onClose}
             className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-nocciola hover:text-olive transition-colors text-lg md:text-xl cursor-pointer"
@@ -101,7 +101,7 @@ function BulkProposalModal({ isOpen, onClose, productName }: {
         </div>
 
         <div className="mb-6">
-          <p className="text-sm md:text-base text-nocciola">
+          <p className="text-sm md:text-base text-black">
             {translate('bulkProposal.modal.description', { productName })}
           </p>
         </div>
@@ -109,7 +109,7 @@ function BulkProposalModal({ isOpen, onClose, productName }: {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="lg:col-span-2">
-              <label className="block text-sm md:text-base font-medium text-olive mb-3">
+              <label className="block text-sm md:text-base font-medium text-black mb-3">
                 {t.bulkProposal.modal.form.quantityLabel}
               </label>
               <div className="flex items-center border border-olive/20 w-full sm:max-w-xs">
@@ -135,11 +135,11 @@ function BulkProposalModal({ isOpen, onClose, productName }: {
                   +
                 </button>
               </div>
-              <p className="text-xs md:text-sm text-nocciola/60 mt-2">{t.bulkProposal.modal.form.quantityMin}</p>
+              <p className="text-xs md:text-sm text-black/60 mt-2">{t.bulkProposal.modal.form.quantityMin}</p>
             </div>
 
             <div>
-              <label className="block text-sm md:text-base font-medium text-olive mb-3">
+              <label className="block text-sm md:text-base font-medium text-black mb-3">
                 {t.bulkProposal.modal.form.nameLabel}
               </label>
               <input
@@ -152,7 +152,7 @@ function BulkProposalModal({ isOpen, onClose, productName }: {
             </div>
 
             <div>
-              <label className="block text-sm md:text-base font-medium text-olive mb-3">
+              <label className="block text-sm md:text-base font-medium text-black mb-3">
                 {t.bulkProposal.modal.form.emailLabel}
               </label>
               <input
@@ -165,7 +165,7 @@ function BulkProposalModal({ isOpen, onClose, productName }: {
             </div>
 
             <div>
-              <label className="block text-sm md:text-base font-medium text-olive mb-3">
+              <label className="block text-sm md:text-base font-medium text-black mb-3">
                 {t.bulkProposal.modal.form.phoneLabel}
               </label>
               <input
@@ -177,7 +177,7 @@ function BulkProposalModal({ isOpen, onClose, productName }: {
             </div>
 
             <div className="lg:col-span-2">
-              <label className="block text-sm md:text-base font-medium text-olive mb-3">
+              <label className="block text-sm md:text-base font-medium text-black mb-3">
                 {t.bulkProposal.modal.form.messageLabel}
               </label>
               <textarea
@@ -191,7 +191,7 @@ function BulkProposalModal({ isOpen, onClose, productName }: {
 
           {/* Selezione metodo di invio */}
           <div>
-            <label className="block text-sm md:text-base font-medium text-olive mb-4">
+            <label className="block text-sm md:text-base font-medium text-black mb-4">
               {t.bulkProposal.modal.form.methodLabel}
             </label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -210,7 +210,7 @@ function BulkProposalModal({ isOpen, onClose, productName }: {
                   </svg>
                   <div>
                     <span className="font-medium text-base md:text-lg">{t.bulkProposal.modal.form.whatsappOption}</span>
-                    <p className="text-xs md:text-sm text-nocciola">{t.bulkProposal.modal.form.whatsappDesc}</p>
+                    <p className="text-xs md:text-sm text-black">{t.bulkProposal.modal.form.whatsappDesc}</p>
                   </div>
                 </div>
               </label>
@@ -225,12 +225,12 @@ function BulkProposalModal({ isOpen, onClose, productName }: {
                   className="text-olive w-4 h-4"
                 />
                 <div className="flex items-center gap-3">
-                  <svg className="w-6 h-6 md:w-7 md:h-7 text-olive" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-6 h-6 md:w-7 md:h-7 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                   <div>
                     <span className="font-medium text-base md:text-lg">{t.bulkProposal.modal.form.emailOption}</span>
-                    <p className="text-xs md:text-sm text-nocciola">{t.bulkProposal.modal.form.emailDesc}</p>
+                    <p className="text-xs md:text-sm text-black">{t.bulkProposal.modal.form.emailDesc}</p>
                   </div>
                 </div>
               </label>
@@ -282,8 +282,8 @@ export function BulkProposalSection({ productName }: { productName: string }) {
       <div className="bg-olive/10 p-4 border border-olive/20">
         <div className="flex items-center justify-between">
           <div>
-            <h4 className="font-medium text-olive mb-1">{t.bulkProposal.section.title}</h4>
-            <p className="text-sm text-nocciola">{t.bulkProposal.section.description}</p>
+            <h4 className="font-medium text-black mb-1">{t.bulkProposal.section.title}</h4>
+            <p className="text-sm text-black">{t.bulkProposal.section.description}</p>
           </div>
           <button
             onClick={() => setIsModalOpen(true)}

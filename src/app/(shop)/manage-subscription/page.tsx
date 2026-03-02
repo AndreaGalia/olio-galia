@@ -48,9 +48,9 @@ export default function ManageSubscriptionPage() {
       <div className="bg-white/50 py-4">
         <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
           <nav className="flex items-center gap-2 text-sm">
-            <Link href="/" className="text-nocciola hover:text-olive transition-colors">Home</Link>
-            <span className="text-nocciola/50">&rarr;</span>
-            <span className="text-olive font-medium">{sub?.manageTitle || 'Gestisci Abbonamento'}</span>
+            <Link href="/" className="text-black hover:text-olive transition-colors">Home</Link>
+            <span className="text-black/50">&rarr;</span>
+            <span className="text-black font-medium">{sub?.manageTitle || 'Gestisci Abbonamento'}</span>
           </nav>
         </div>
       </div>
@@ -59,14 +59,14 @@ export default function ManageSubscriptionPage() {
         {/* Header */}
         <div className="text-center mb-8 sm:mb-10">
           <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-olive/10 mb-4 sm:mb-6">
-            <svg className="w-8 h-8 sm:w-10 sm:h-10 text-olive" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
+            <svg className="w-8 h-8 sm:w-10 sm:h-10 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif text-olive mb-3 sm:mb-4 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif text-black mb-3 sm:mb-4 tracking-tight">
             {sub?.manageTitle || 'Gestisci il tuo Abbonamento'}
           </h1>
-          <p className="text-base sm:text-lg text-nocciola leading-relaxed max-w-md mx-auto">
+          <p className="text-base sm:text-lg text-black leading-relaxed max-w-md mx-auto">
             {sub?.portalEmailIntro || 'Il link per gestire il tuo abbonamento si trova nelle email di conferma e rinnovo.'}
           </p>
         </div>
@@ -76,19 +76,19 @@ export default function ManageSubscriptionPage() {
           {status === 'sent' ? (
             <div className="text-center space-y-4 sm:space-y-6 animate-fadeIn">
               <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-olive/10 mb-2">
-                <svg className="h-7 w-7 sm:h-8 sm:w-8 text-olive" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                <svg className="h-7 w-7 sm:h-8 sm:w-8 text-black" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                 </svg>
               </div>
-              <h2 className="text-xl sm:text-2xl font-serif text-olive">
+              <h2 className="text-xl sm:text-2xl font-serif text-black">
                 {sub?.portalEmailSent || 'Ti abbiamo inviato un\'email con il link di accesso'}
               </h2>
-              <p className="text-sm sm:text-base text-nocciola">
+              <p className="text-sm sm:text-base text-black">
                 {sub?.portalEmailNote || 'Il link è valido per 15 minuti e può essere usato una sola volta.'}
               </p>
               <button
                 onClick={() => { setStatus('idle'); setEmail(''); }}
-                className="mt-4 text-sm text-olive underline hover:text-salvia transition-colors cursor-pointer"
+                className="mt-4 text-sm text-black underline hover:text-salvia transition-colors cursor-pointer"
               >
                 {sub?.sendLink || 'Invia un altro link'}
               </button>
@@ -96,17 +96,17 @@ export default function ManageSubscriptionPage() {
           ) : (
             <>
               <div className="flex items-start gap-3 mb-4 sm:mb-6">
-                <svg className="w-5 h-5 text-olive flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                <svg className="w-5 h-5 text-black flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <p className="text-sm sm:text-base text-nocciola">
+                <p className="text-sm sm:text-base text-black">
                   {sub?.portalEmailFallback || 'Non trovi l\'email? Inserisci la tua email per ricevere un nuovo link di accesso.'}
                 </p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-olive mb-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-black mb-2">
                     Email
                   </label>
                   <input
@@ -151,7 +151,7 @@ export default function ManageSubscriptionPage() {
               </form>
 
               <div className="mt-6 pt-4 border-t border-olive/10">
-                <p className="text-xs text-nocciola text-center">
+                <p className="text-xs text-black text-center">
                   {sub?.manageNote || 'Riceverai un\'email con un link sicuro per accedere al portale di gestione del tuo abbonamento. Il link è valido per 15 minuti.'}
                 </p>
               </div>

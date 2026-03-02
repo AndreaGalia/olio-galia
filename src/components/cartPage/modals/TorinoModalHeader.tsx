@@ -14,7 +14,7 @@ export default function TorinoModalHeader({ onClose, isLoading = false }: Torino
     <div className="border-b border-nocciola/30 pb-6 mb-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-serif text-olive mb-2">
+          <h2 className="text-3xl font-serif text-black mb-2">
             {t.torinoCheckout.modal.title}
           </h2>
           <div className="w-16 h-0.5 bg-olive"></div>

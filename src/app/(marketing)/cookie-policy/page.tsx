@@ -20,14 +20,14 @@ export default function CookiePolicyPage() {
             <p className={`text-lg ${styles.textNocciola} mb-2`}>
               {content.subtitle}
             </p>
-            <p className="text-sm text-nocciola/70">
+            <p className="text-sm text-black/70">
               {content.lastUpdate}
             </p>
           </div>
 
           {/* Intro */}
           <div className="bg-beige/30 border border-olive/10 p-6 sm:p-8 mb-8">
-            <p className="text-nocciola leading-relaxed">
+            <p className="text-black leading-relaxed">
               {content.intro}
             </p>
           </div>
@@ -39,7 +39,7 @@ export default function CookiePolicyPage() {
               <h2 className={`${styles.fontSerif} ${styles.textOlive} text-xl sm:text-2xl mb-4`}>
                 {content.sections.whatAreCookies.title}
               </h2>
-              <p className="text-nocciola leading-relaxed">
+              <p className="text-black leading-relaxed">
                 {content.sections.whatAreCookies.content}
               </p>
             </div>
@@ -55,18 +55,18 @@ export default function CookiePolicyPage() {
                 <h3 className={`${styles.fontSerif} ${styles.textOlive} text-lg sm:text-xl mb-3`}>
                   {content.sections.cookieTypes.technical.title}
                 </h3>
-                <p className="text-nocciola leading-relaxed mb-3">
+                <p className="text-black leading-relaxed mb-3">
                   {content.sections.cookieTypes.technical.description}
                 </p>
-                <ul className="space-y-2 text-nocciola mb-3">
+                <ul className="space-y-2 text-black mb-3">
                   {content.sections.cookieTypes.technical.list.map((item: string, index: number) => (
                     <li key={index} className="flex items-start gap-2">
-                      <span className="text-olive mt-1">•</span>
+                      <span className="text-black mt-1">•</span>
                       <span>{item}</span>
                     </li>
                   ))}
                 </ul>
-                <p className="text-sm text-nocciola/70 italic">
+                <p className="text-sm text-black/70 italic">
                   {content.sections.cookieTypes.technical.note}
                 </p>
               </div>
@@ -76,18 +76,18 @@ export default function CookiePolicyPage() {
                 <h3 className={`${styles.fontSerif} ${styles.textOlive} text-lg sm:text-xl mb-3`}>
                   {content.sections.cookieTypes.analytics.title}
                 </h3>
-                <p className="text-nocciola leading-relaxed mb-3">
+                <p className="text-black leading-relaxed mb-3">
                   {content.sections.cookieTypes.analytics.description}
                 </p>
-                <ul className="space-y-2 text-nocciola mb-3">
+                <ul className="space-y-2 text-black mb-3">
                   {content.sections.cookieTypes.analytics.list.map((item: string, index: number) => (
                     <li key={index} className="flex items-start gap-2">
-                      <span className="text-olive mt-1">•</span>
+                      <span className="text-black mt-1">•</span>
                       <span>{item}</span>
                     </li>
                   ))}
                 </ul>
-                <p className="text-sm text-nocciola/70 italic">
+                <p className="text-sm text-black/70 italic">
                   {content.sections.cookieTypes.analytics.note}
                 </p>
               </div>
@@ -97,13 +97,13 @@ export default function CookiePolicyPage() {
                 <h3 className={`${styles.fontSerif} ${styles.textOlive} text-lg sm:text-xl mb-3`}>
                   {content.sections.cookieTypes.thirdParty.title}
                 </h3>
-                <p className="text-nocciola leading-relaxed mb-3">
+                <p className="text-black leading-relaxed mb-3">
                   {content.sections.cookieTypes.thirdParty.description}
                 </p>
-                <ul className="space-y-2 text-nocciola">
+                <ul className="space-y-2 text-black">
                   {content.sections.cookieTypes.thirdParty.list.map((item: string, index: number) => (
                     <li key={index} className="flex items-start gap-2">
-                      <span className="text-olive mt-1">•</span>
+                      <span className="text-black mt-1">•</span>
                       <span>{item}</span>
                     </li>
                   ))}
@@ -116,22 +116,22 @@ export default function CookiePolicyPage() {
               <h2 className={`${styles.fontSerif} ${styles.textOlive} text-xl sm:text-2xl mb-4`}>
                 {content.sections.cookieManagement.title}
               </h2>
-              <p className="text-nocciola leading-relaxed mb-4">
+              <p className="text-black leading-relaxed mb-4">
                 {content.sections.cookieManagement.content}
               </p>
               <h3 className={`${styles.fontSerif} ${styles.textOlive} text-lg mb-3`}>
                 {content.sections.cookieManagement.browsers.title}
               </h3>
-              <ul className="space-y-2 text-nocciola mb-4">
+              <ul className="space-y-2 text-black mb-4">
                 {content.sections.cookieManagement.browsers.list.map((item: string, index: number) => (
                   <li key={index} className="flex items-start gap-2">
-                    <span className="text-olive mt-1">•</span>
+                    <span className="text-black mt-1">•</span>
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
               <div className="bg-beige/20 border border-olive/10 p-4">
-                <p className="text-sm text-nocciola italic">
+                <p className="text-sm text-black italic">
                   ⚠️ {content.sections.cookieManagement.note}
                 </p>
               </div>
@@ -142,7 +142,7 @@ export default function CookiePolicyPage() {
               <h2 className={`${styles.fontSerif} ${styles.textOlive} text-xl sm:text-2xl mb-4`}>
                 {content.sections.cookieList.title}
               </h2>
-              <p className="text-nocciola leading-relaxed mb-6">
+              <p className="text-black leading-relaxed mb-6">
                 {content.sections.cookieList.description}
               </p>
 
@@ -151,19 +151,19 @@ export default function CookiePolicyPage() {
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="border-b-2 border-olive/20">
-                      <th className="py-3 px-4 text-olive font-semibold">Nome</th>
-                      <th className="py-3 px-4 text-olive font-semibold">Tipo</th>
-                      <th className="py-3 px-4 text-olive font-semibold">Finalità</th>
-                      <th className="py-3 px-4 text-olive font-semibold">Durata</th>
+                      <th className="py-3 px-4 text-black font-semibold">Nome</th>
+                      <th className="py-3 px-4 text-black font-semibold">Tipo</th>
+                      <th className="py-3 px-4 text-black font-semibold">Finalità</th>
+                      <th className="py-3 px-4 text-black font-semibold">Durata</th>
                     </tr>
                   </thead>
                   <tbody>
                     {content.sections.cookieList.items.map((item: any, index: number) => (
                       <tr key={index} className="border-b border-olive/10">
-                        <td className="py-3 px-4 text-nocciola font-mono text-sm">{item.name}</td>
-                        <td className="py-3 px-4 text-nocciola">{item.type}</td>
-                        <td className="py-3 px-4 text-nocciola">{item.purpose}</td>
-                        <td className="py-3 px-4 text-nocciola">{item.duration}</td>
+                        <td className="py-3 px-4 text-black font-mono text-sm">{item.name}</td>
+                        <td className="py-3 px-4 text-black">{item.type}</td>
+                        <td className="py-3 px-4 text-black">{item.purpose}</td>
+                        <td className="py-3 px-4 text-black">{item.duration}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -176,7 +176,7 @@ export default function CookiePolicyPage() {
               <h2 className={`${styles.fontSerif} ${styles.textOlive} text-xl sm:text-2xl mb-4`}>
                 {content.sections.consent.title}
               </h2>
-              <p className="text-nocciola leading-relaxed">
+              <p className="text-black leading-relaxed">
                 {content.sections.consent.content}
               </p>
             </div>
@@ -186,7 +186,7 @@ export default function CookiePolicyPage() {
               <h2 className={`${styles.fontSerif} ${styles.textOlive} text-xl sm:text-2xl mb-4`}>
                 {content.sections.updates.title}
               </h2>
-              <p className="text-nocciola leading-relaxed">
+              <p className="text-black leading-relaxed">
                 {content.sections.updates.content}
               </p>
             </div>
@@ -196,7 +196,7 @@ export default function CookiePolicyPage() {
               <h2 className={`${styles.fontSerif} ${styles.textOlive} text-xl sm:text-2xl mb-4`}>
                 {content.sections.contact.title}
               </h2>
-              <p className="text-nocciola leading-relaxed mb-6">
+              <p className="text-black leading-relaxed mb-6">
                 {content.sections.contact.content}
               </p>
               <Link
@@ -212,7 +212,7 @@ export default function CookiePolicyPage() {
           <div className="mt-12 text-center">
             <Link
               href="/"
-              className="inline-block text-olive hover:text-salvia transition-colors duration-300"
+              className="inline-block text-black hover:text-salvia transition-colors duration-300"
             >
               ← Torna alla Homepage
             </Link>

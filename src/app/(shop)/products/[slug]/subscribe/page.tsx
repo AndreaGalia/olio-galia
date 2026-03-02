@@ -33,7 +33,7 @@ export default function SubscribePage({ params }: SubscribePageProps) {
           <svg className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-8 text-olive/20" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
             <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
           </svg>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif text-olive mb-4">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif text-black mb-4">
             {t.subscription?.notAvailable || 'Abbonamento non disponibile per questo prodotto'}
           </h1>
           <Link
@@ -56,10 +56,10 @@ export default function SubscribePage({ params }: SubscribePageProps) {
       <div className="container mx-auto px-4 sm:px-6 max-w-7xl py-8 sm:py-12">
         {/* Header */}
         <div className="text-center mb-8 sm:mb-12">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif text-olive mb-4 tracking-tight">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif text-black mb-4 tracking-tight">
             {sub?.pageTitle || 'Abbonati e Risparmia'}
           </h1>
-          <p className="text-lg sm:text-xl text-nocciola max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl text-black max-w-2xl mx-auto leading-relaxed">
             {sub?.pageSubtitle || 'Ricevi il tuo prodotto preferito a casa tua con regolarità'}
           </p>
         </div>
@@ -85,8 +85,8 @@ export default function SubscribePage({ params }: SubscribePageProps) {
                   {sub?.subscriptionBadge || 'ABBONAMENTO'}
                 </span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-serif text-olive mb-2">{product.name}</h2>
-              <p className="text-sm sm:text-base text-nocciola leading-relaxed">{product.description}</p>
+              <h2 className="text-2xl sm:text-3xl font-serif text-black mb-2">{product.name}</h2>
+              <p className="text-sm sm:text-base text-black leading-relaxed">{product.description}</p>
             </div>
 
             <SubscriptionForm product={product} />

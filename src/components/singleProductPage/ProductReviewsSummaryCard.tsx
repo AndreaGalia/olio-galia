@@ -76,7 +76,7 @@ export default function ProductReviewsSummaryCard({ productSlug }: ProductReview
     return (
       <div className="bg-white/90 border border-olive/10 p-5 sm:p-6">
         <div className="flex items-center justify-center py-8">
-          <div className="animate-pulse text-nocciola text-sm">
+          <div className="animate-pulse text-black text-sm">
             {t.productReviews?.loading || 'Caricamento recensioni...'}
           </div>
         </div>
@@ -88,14 +88,14 @@ export default function ProductReviewsSummaryCard({ productSlug }: ProductReview
   if (!stats || stats.total === 0) {
     return (
       <div className="bg-white/90 border border-olive/10 p-5 sm:p-6">
-        <h3 className="text-lg font-serif text-olive mb-4">
+        <h3 className="text-lg font-serif text-black mb-4">
           {t.productReviews?.title || 'Recensioni Clienti'}
         </h3>
         <div className="text-center py-6">
-          <svg className="w-12 h-12 text-nocciola/30 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-12 h-12 text-black/30 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
           </svg>
-          <p className="text-nocciola text-sm">
+          <p className="text-black text-sm">
             {t.productReviews?.noReviews || 'Nessuna recensione disponibile'}
           </p>
         </div>
@@ -108,7 +108,7 @@ export default function ProductReviewsSummaryCard({ productSlug }: ProductReview
     <div className="bg-white/90 border border-olive/10 p-5 sm:p-6">
       {/* Header compatto */}
       <div className="flex items-center justify-between mb-5">
-        <h3 className="text-lg font-serif text-olive">
+        <h3 className="text-lg font-serif text-black">
           {t.productReviews?.title || 'Recensioni Clienti'}
         </h3>
         <button
@@ -126,11 +126,11 @@ export default function ProductReviewsSummaryCard({ productSlug }: ProductReview
         {/* Colonna sinistra: Media Rating */}
         <div className="flex items-center gap-4">
           <div className="text-center">
-            <div className="text-4xl font-bold text-olive mb-1">
+            <div className="text-4xl font-bold text-black mb-1">
               {stats.averageRating.toFixed(1)}
             </div>
             <StarDisplay rating={stats.averageRating} size="md" />
-            <p className="text-xs text-nocciola mt-2">
+            <p className="text-xs text-black mt-2">
               {stats.total} {stats.total === 1 ? 'recensione' : 'recensioni'}
             </p>
           </div>
@@ -145,7 +145,7 @@ export default function ProductReviewsSummaryCard({ productSlug }: ProductReview
             return (
               <div key={rating} className="flex items-center gap-2">
                 {/* Rating label */}
-                <div className="flex items-center gap-0.5 w-8 text-xs text-nocciola">
+                <div className="flex items-center gap-0.5 w-8 text-xs text-black">
                   <span>{rating}</span>
                   <svg className="w-3 h-3 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -161,7 +161,7 @@ export default function ProductReviewsSummaryCard({ productSlug }: ProductReview
                 </div>
 
                 {/* Percentage */}
-                <span className="w-10 text-xs text-nocciola text-right">
+                <span className="w-10 text-xs text-black text-right">
                   {percentage}%
                 </span>
               </div>

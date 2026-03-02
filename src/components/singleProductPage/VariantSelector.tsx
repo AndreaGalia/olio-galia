@@ -36,7 +36,7 @@ export default function VariantSelector({
 
   return (
     <div className="space-y-3">
-      <label className="block text-sm font-medium text-olive">{selectText}</label>
+      <label className="block text-sm font-medium text-black">{selectText}</label>
 
       {/* Mobile: native select */}
       <div className="block sm:hidden">
@@ -104,7 +104,7 @@ export default function VariantSelector({
 
       {/* Variant description */}
       {selectedDescription && (
-        <p className="text-sm text-nocciola mt-2">{selectedDescription}</p>
+        <p className="text-sm text-black mt-2">{selectedDescription}</p>
       )}
     </div>
   );

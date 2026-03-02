@@ -97,12 +97,12 @@ function ProductImage({ product, isOutOfStock }: ProductSubComponentProps) {
 function ProductInfo({ product, isOutOfStock }: ProductSubComponentProps) {
   return (
     <div className="space-y-1">
-      <h3 className={`text-base sm:text-lg text-olive leading-tight tracking-wide ${
+      <h3 className={`text-base sm:text-lg text-black leading-tight tracking-wide ${
         isOutOfStock ? 'opacity-50' : ''
       }`}>
         {product.name}
       </h3>
-      <p className={`text-xs sm:text-sm text-olive ${
+      <p className={`text-xs sm:text-sm text-black ${
         isOutOfStock ? 'opacity-50' : ''
       }`}>
         {product.size}
@@ -118,23 +118,23 @@ function ProductPrice({ product, isOutOfStock }: ProductSubComponentProps) {
   return (
     <div className="flex items-baseline gap-2 border-t border-olive/10 pt-3">
       {priceRange.hasRange ? (
-        <div className={`text-2xl sm:text-3xl font-bold text-olive ${
+        <div className={`text-2xl sm:text-3xl font-bold text-black ${
           isOutOfStock ? 'opacity-50' : ''
         }`}>
-          <span className="text-sm sm:text-base font-normal text-nocciola mr-1">
+          <span className="text-sm sm:text-base font-normal text-black mr-1">
             {t.productsPage.product.from}
           </span>
           €{priceRange.min.toFixed(2)}
         </div>
       ) : (
         <>
-          <div className={`text-2xl sm:text-3xl font-bold text-olive ${
+          <div className={`text-2xl sm:text-3xl font-bold text-black ${
             isOutOfStock ? 'opacity-50' : ''
           }`}>
             €{product.price}
           </div>
           {!isOutOfStock && product.originalPrice && product.originalPrice !== 'null' && (
-            <div className="text-sm sm:text-base text-olive/60 line-through">
+            <div className="text-sm sm:text-base text-black/60 line-through">
               €{product.originalPrice}
             </div>
           )}

@@ -176,11 +176,11 @@ export default function ProductReviews({ productSlug }: ProductReviewsProps) {
   if (!loading && stats && stats.total === 0) {
     return (
       <div className="bg-beige rounded-2xl p-8 sm:p-12 text-center">
-        <h2 className="text-2xl sm:text-3xl font-bold text-olive mb-4">
+        <h2 className="text-2xl sm:text-3xl font-bold text-black mb-4">
           {t.productReviews.title}
         </h2>
-        <p className="text-nocciola text-lg mb-2">{t.productReviews.noReviews}</p>
-        <p className="text-nocciola text-sm">{t.productReviews.beFirst}</p>
+        <p className="text-black text-lg mb-2">{t.productReviews.noReviews}</p>
+        <p className="text-black text-sm">{t.productReviews.beFirst}</p>
       </div>
     );
   }
@@ -189,7 +189,7 @@ export default function ProductReviews({ productSlug }: ProductReviewsProps) {
     <div id="product-reviews-section" ref={reviewsRef} className="bg-beige/30 border border-olive/10 rounded-2xl p-6 sm:p-10">
       {/* Header con statistiche */}
       <div className="mb-8">
-        <h2 className="text-2xl sm:text-3xl font-bold text-olive mb-6">
+        <h2 className="text-2xl sm:text-3xl font-bold text-black mb-6">
           {t.productReviews.title}
         </h2>
 
@@ -199,12 +199,12 @@ export default function ProductReviews({ productSlug }: ProductReviewsProps) {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
               <div>
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="text-4xl sm:text-5xl font-bold text-olive">
+                  <span className="text-4xl sm:text-5xl font-bold text-black">
                     {stats.averageRating.toFixed(1)}
                   </span>
                   <div>
                     <StarDisplay rating={stats.averageRating} size="lg" />
-                    <p className="text-sm text-nocciola mt-1">
+                    <p className="text-sm text-black mt-1">
                       {translate('productReviews.totalReviews', { count: stats.total.toString() })}
                     </p>
                   </div>
@@ -219,15 +219,15 @@ export default function ProductReviews({ productSlug }: ProductReviewsProps) {
 
                   return (
                     <div key={star} className="flex items-center gap-2 text-sm">
-                      <span className="text-olive font-medium w-3">{star}</span>
-                      <span className="text-olive">★</span>
+                      <span className="text-black font-medium w-3">{star}</span>
+                      <span className="text-black">★</span>
                       <div className="w-24 sm:w-32 h-2 bg-sabbia rounded-full overflow-hidden">
                         <div
                           className="h-full bg-olive rounded-full transition-all duration-300"
                           style={{ width: `${percentage}%` }}
                         />
                       </div>
-                      <span className="text-nocciola text-xs w-8 text-right">{count}</span>
+                      <span className="text-black text-xs w-8 text-right">{count}</span>
                     </div>
                   );
                 })}
@@ -236,7 +236,7 @@ export default function ProductReviews({ productSlug }: ProductReviewsProps) {
 
             {/* Filtro stelle */}
             <div>
-              <label className="block text-sm font-medium text-olive mb-3">
+              <label className="block text-sm font-medium text-black mb-3">
                 {t.productReviews.filter.label}
               </label>
               <div className="flex flex-wrap gap-2">
@@ -274,7 +274,7 @@ export default function ProductReviews({ productSlug }: ProductReviewsProps) {
       {loading && (
         <div className="text-center py-12">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-olive border-t-transparent"></div>
-          <p className="mt-4 text-nocciola">{t.productReviews.loading}</p>
+          <p className="mt-4 text-black">{t.productReviews.loading}</p>
         </div>
       )}
 
@@ -297,7 +297,7 @@ export default function ProductReviews({ productSlug }: ProductReviewsProps) {
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2 flex-wrap">
-                    <span className="font-semibold text-olive text-lg">
+                    <span className="font-semibold text-black text-lg">
                       {review.isAnonymous ? t.productReviews.review.anonymous : review.customerName}
                     </span>
                     {review.isAnonymous && (
@@ -313,7 +313,7 @@ export default function ProductReviews({ productSlug }: ProductReviewsProps) {
                   </div>
                   <StarDisplay rating={review.rating} size="sm" />
                 </div>
-                <time className="text-sm text-nocciola whitespace-nowrap">
+                <time className="text-sm text-black whitespace-nowrap">
                   {formatDate(review.createdAt)}
                 </time>
               </div>
@@ -323,7 +323,7 @@ export default function ProductReviews({ productSlug }: ProductReviewsProps) {
 
               {/* Badge acquisto verificato */}
               <div className="mt-4 pt-4 border-t border-sabbia">
-                <span className="inline-flex items-center gap-1 text-xs text-olive font-medium">
+                <span className="inline-flex items-center gap-1 text-xs text-black font-medium">
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
@@ -342,7 +342,7 @@ export default function ProductReviews({ productSlug }: ProductReviewsProps) {
       {/* Paginazione */}
       {!loading && !error && totalPages > 1 && (
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-nocciola">
+          <p className="text-sm text-black">
             {translate('productReviews.pagination.page', {
               current: currentPage.toString(),
               total: totalPages.toString(),

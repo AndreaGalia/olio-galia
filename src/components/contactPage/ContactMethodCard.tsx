@@ -15,18 +15,18 @@ export default function ContactMethodCard({ method, index }: ContactMethodCardPr
       style={{animationDelay: `${index * 0.2}s`}}
     >
       <div className="w-20 h-20 bg-olive/10 rounded-full flex items-center justify-center mx-auto mb-6">
-        <div className="text-olive">
+        <div className="text-black">
           {method.icon}
         </div>
       </div>
 
-      <h3 className="text-xl font-serif text-olive mb-3">
+      <h3 className="text-xl font-serif text-black mb-3">
         {method.title}
       </h3>
-      <p className="text-olive font-medium mb-2 text-lg">
+      <p className="text-black font-medium mb-2 text-lg">
         {method.value}
       </p>
-      <p className="text-nocciola">
+      <p className="text-black">
         {method.description}
       </p>
     </div>

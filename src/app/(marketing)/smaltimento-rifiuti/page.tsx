@@ -26,13 +26,13 @@ export default function WasteDisposalPage() {
       <section className="relative py-12 sm:py-16 lg:py-20 overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 max-w-5xl relative z-10">
           <div className="text-center">
-            <div className={`inline-flex items-center gap-3 bg-olive/10 text-olive px-4 py-2 rounded-full text-sm font-medium mb-6 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className={`inline-flex items-center gap-3 bg-olive/10 text-black px-4 py-2 rounded-full text-sm font-medium mb-6 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <div className="w-2 h-2 bg-olive rounded-full animate-pulse"></div>
               {t.wasteDisposalPage.hero.badge}
             </div>
 
             <h1
-              className={`text-3xl sm:text-4xl lg:text-5xl font-serif text-olive mb-4 leading-tight transition-all duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              className={`text-3xl sm:text-4xl lg:text-5xl font-serif text-black mb-4 leading-tight transition-all duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
             >
               {t.wasteDisposalPage.hero.title}
             </h1>
@@ -44,7 +44,7 @@ export default function WasteDisposalPage() {
             </p>
 
             <p
-              className={`text-base sm:text-lg text-nocciola max-w-3xl mx-auto leading-relaxed transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              className={`text-base sm:text-lg text-black max-w-3xl mx-auto leading-relaxed transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
             >
               {t.wasteDisposalPage.hero.description}
             </p>
@@ -71,13 +71,13 @@ export default function WasteDisposalPage() {
               <table className="w-full">
                 <thead>
                   <tr className="bg-beige border-b-2 border-sabbia">
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-olive uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-black uppercase tracking-wider">
                       {t.wasteDisposalPage.table.headers.component}
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-olive uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-black uppercase tracking-wider">
                       {t.wasteDisposalPage.table.headers.material}
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-olive uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-black uppercase tracking-wider">
                       {t.wasteDisposalPage.table.headers.code}
                     </th>
                   </tr>
@@ -88,10 +88,10 @@ export default function WasteDisposalPage() {
                       key={index}
                       className="hover:bg-beige/30 transition-colors duration-200"
                     >
-                      <td className="px-6 py-4 text-sm sm:text-base text-olive font-medium">
+                      <td className="px-6 py-4 text-sm sm:text-base text-black font-medium">
                         {item.name}
                       </td>
-                      <td className="px-6 py-4 text-sm sm:text-base text-nocciola">
+                      <td className="px-6 py-4 text-sm sm:text-base text-black">
                         {item.material}
                       </td>
                       <td className="px-6 py-4 text-sm sm:text-base text-salvia font-semibold">
@@ -112,23 +112,23 @@ export default function WasteDisposalPage() {
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs uppercase tracking-wider text-nocciola font-medium">
+                      <span className="text-xs uppercase tracking-wider text-black font-medium">
                         {t.wasteDisposalPage.table.headers.component}
                       </span>
-                      <span className="text-base font-semibold text-olive">
+                      <span className="text-base font-semibold text-black">
                         {item.name}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-xs uppercase tracking-wider text-nocciola font-medium">
+                      <span className="text-xs uppercase tracking-wider text-black font-medium">
                         {t.wasteDisposalPage.table.headers.material}
                       </span>
-                      <span className="text-base text-nocciola">
+                      <span className="text-base text-black">
                         {item.material}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-xs uppercase tracking-wider text-nocciola font-medium">
+                      <span className="text-xs uppercase tracking-wider text-black font-medium">
                         {t.wasteDisposalPage.table.headers.code}
                       </span>
                       <span className="text-base font-bold text-salvia">
@@ -146,7 +146,7 @@ export default function WasteDisposalPage() {
       {/* Instructions Section */}
       <section className="py-12 sm:py-16 bg-gradient-to-br from-olive/5 to-salvia/5">
         <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
-          <h2 className="text-2xl sm:text-3xl font-serif text-olive text-center mb-10">
+          <h2 className="text-2xl sm:text-3xl font-serif text-black text-center mb-10">
             {t.wasteDisposalPage.instructions.title}
           </h2>
 
@@ -159,10 +159,10 @@ export default function WasteDisposalPage() {
                 <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-olive to-salvia text-beige font-bold text-xl mb-4 mx-auto">
                   {index + 1}
                 </div>
-                <h3 className="text-lg font-semibold text-olive mb-3 text-center">
+                <h3 className="text-lg font-semibold text-black mb-3 text-center">
                   {step.title}
                 </h3>
-                <p className="text-sm sm:text-base text-nocciola text-center leading-relaxed">
+                <p className="text-sm sm:text-base text-black text-center leading-relaxed">
                   {step.description}
                 </p>
               </div>
@@ -177,7 +177,7 @@ export default function WasteDisposalPage() {
           <div className="bg-gradient-to-r from-olive/10 to-salvia/10 rounded-xl p-6 sm:p-8 border-l-4 border-olive">
             <div className="flex items-start gap-4">
               <svg
-                className="w-6 h-6 text-olive flex-shrink-0 mt-1"
+                className="w-6 h-6 text-black flex-shrink-0 mt-1"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
@@ -187,7 +187,7 @@ export default function WasteDisposalPage() {
                   clipRule="evenodd"
                 />
               </svg>
-              <p className="text-sm sm:text-base text-nocciola leading-relaxed">
+              <p className="text-sm sm:text-base text-black leading-relaxed">
                 {t.wasteDisposalPage.footer.note}
               </p>
             </div>

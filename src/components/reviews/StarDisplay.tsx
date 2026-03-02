@@ -28,7 +28,7 @@ export default function StarDisplay({ rating, size = 'md', showNumber = false }:
           <span
             key={star}
             className={`${
-              star <= normalizedRating ? 'text-olive' : 'text-sabbia'
+              star <= normalizedRating ? 'text-black' : 'text-sabbia'
             } transition-colors duration-200`}
             aria-hidden="true"
           >
@@ -37,7 +37,7 @@ export default function StarDisplay({ rating, size = 'md', showNumber = false }:
         ))}
       </div>
       {showNumber && (
-        <span className="ml-2 text-sm text-nocciola font-medium">
+        <span className="ml-2 text-sm text-black font-medium">
           {normalizedRating.toFixed(1)}
         </span>
       )}

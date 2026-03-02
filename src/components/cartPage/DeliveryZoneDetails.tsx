@@ -32,28 +32,28 @@ export default function DeliveryZoneDetails({ zone, onBack }: DeliveryZoneDetail
             {t.deliveryZone.details.torino.badge}
           </div>
 
-          <h4 className="font-serif text-2xl lg:text-3xl text-olive font-bold mb-4">
+          <h4 className="font-serif text-2xl lg:text-3xl text-black font-bold mb-4">
             {t.deliveryZone.details.torino.title}
           </h4>
 
-          <p className="text-base text-nocciola mb-6 leading-relaxed">
+          <p className="text-base text-black mb-6 leading-relaxed">
             {t.deliveryZone.details.torino.description}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div className="flex items-center gap-3 text-base text-olive">
+            <div className="flex items-center gap-3 text-base text-black">
               <svg className="w-6 h-6 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
               </svg>
               <span>{t.deliveryZone.details.torino.features.freeShipping}</span>
             </div>
-            <div className="flex items-center gap-3 text-base text-olive">
+            <div className="flex items-center gap-3 text-base text-black">
               <svg className="w-6 h-6 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
               </svg>
               <span>{t.deliveryZone.details.torino.features.fastDelivery}</span>
             </div>
-            <div className="flex items-center gap-3 text-base text-olive">
+            <div className="flex items-center gap-3 text-base text-black">
               <svg className="w-6 h-6 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
               </svg>
@@ -70,30 +70,30 @@ export default function DeliveryZoneDetails({ zone, onBack }: DeliveryZoneDetail
             {t.deliveryZone.details.italia.badge}
           </div>
 
-          <h4 className="font-serif text-2xl lg:text-3xl text-olive font-bold mb-4">
+          <h4 className="font-serif text-2xl lg:text-3xl text-black font-bold mb-4">
             {t.deliveryZone.details.italia.title}
           </h4>
 
-          <p className="text-base text-nocciola mb-6 leading-relaxed">
+          <p className="text-base text-black mb-6 leading-relaxed">
             {t.deliveryZone.details.italia.description}
           </p>
 
           {/* Processo */}
           <div className="bg-olive/5 border-l-4 border-olive p-5 mb-6">
-            <p className="text-sm font-bold text-olive mb-4 uppercase tracking-wide">
+            <p className="text-sm font-bold text-black mb-4 uppercase tracking-wide">
               {t.deliveryZone.details.italia.processTitle}
             </p>
-            <ol className="space-y-3 text-sm text-nocciola">
+            <ol className="space-y-3 text-sm text-black">
               <li className="flex gap-3">
-                <span className="text-olive font-bold flex-shrink-0">1.</span>
+                <span className="text-black font-bold flex-shrink-0">1.</span>
                 <span>{t.deliveryZone.details.italia.process.step1}</span>
               </li>
               <li className="flex gap-3">
-                <span className="text-olive font-bold flex-shrink-0">2.</span>
+                <span className="text-black font-bold flex-shrink-0">2.</span>
                 <span>{t.deliveryZone.details.italia.process.step2}</span>
               </li>
               <li className="flex gap-3">
-                <span className="text-olive font-bold flex-shrink-0">3.</span>
+                <span className="text-black font-bold flex-shrink-0">3.</span>
                 <span>{t.deliveryZone.details.italia.process.step3}</span>
               </li>
             </ol>

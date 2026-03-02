@@ -12,14 +12,14 @@ export default function SubscriptionSuccessPage() {
       <div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16">
         {/* Hero Section */}
         <div className="text-center mb-12 sm:mb-16">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif text-olive mb-4 sm:mb-6 tracking-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif text-black mb-4 sm:mb-6 tracking-tight">
             {sub?.successTitle || 'Abbonamento Attivato!'}
           </h1>
           <div className="max-w-2xl mx-auto">
             <p className="text-xl sm:text-2xl md:text-3xl text-salvia mb-3 sm:mb-4 font-light">
               {sub?.successSubtitle || 'Grazie per la tua fiducia'}
             </p>
-            <p className="text-base sm:text-lg text-nocciola leading-relaxed">
+            <p className="text-base sm:text-lg text-black leading-relaxed">
               {sub?.successDescription || 'Il tuo abbonamento è stato attivato con successo. Riceverai il prodotto alla frequenza selezionata.'}
             </p>
           </div>
@@ -35,10 +35,10 @@ export default function SubscriptionSuccessPage() {
                 </svg>
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-base sm:text-lg font-bold text-olive mb-1">
+                <h3 className="text-base sm:text-lg font-bold text-black mb-1">
                   {sub?.emailConfirmationTitle || 'Controlla la tua email'}
                 </h3>
-                <p className="text-sm sm:text-base text-nocciola">
+                <p className="text-sm sm:text-base text-black">
                   {sub?.successEmailInfo || 'Riceverai una email di conferma con tutti i dettagli del tuo abbonamento e il link per gestirlo.'}
                 </p>
               </div>
@@ -48,7 +48,7 @@ export default function SubscriptionSuccessPage() {
 
         {/* Timeline */}
         <div className="max-w-4xl mx-auto mb-12 sm:mb-16">
-          <h2 className="text-2xl sm:text-3xl font-serif text-olive text-center mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl font-serif text-black text-center mb-8 sm:mb-12">
             {sub?.nextSteps || 'Prossimi passi'}
           </h2>
 
@@ -65,10 +65,10 @@ export default function SubscriptionSuccessPage() {
                   </svg>
                 </div>
                 <div className="flex-1 pl-6 md:pl-0 md:text-right md:pr-8">
-                  <h3 className="text-lg sm:text-xl font-serif text-olive mb-2">
+                  <h3 className="text-lg sm:text-xl font-serif text-black mb-2">
                     {sub?.step1Title || 'Conferma via email'}
                   </h3>
-                  <p className="text-sm sm:text-base text-nocciola mb-2 md:mb-0">
+                  <p className="text-sm sm:text-base text-black mb-2 md:mb-0">
                     {sub?.step1 || 'Conferma via email con i dettagli dell\'abbonamento'}
                   </p>
                   <span className="inline-block md:hidden text-xs sm:text-sm bg-olive text-beige px-3 py-1 border border-olive/20 mt-2">
@@ -95,10 +95,10 @@ export default function SubscriptionSuccessPage() {
                   </svg>
                 </div>
                 <div className="flex-1 pl-6 md:hidden">
-                  <h3 className="text-lg sm:text-xl font-serif text-olive mb-2">
+                  <h3 className="text-lg sm:text-xl font-serif text-black mb-2">
                     {sub?.step2Title || 'Preparazione ordine'}
                   </h3>
-                  <p className="text-sm sm:text-base text-nocciola mb-2">
+                  <p className="text-sm sm:text-base text-black mb-2">
                     {sub?.step2 || 'Preparazione e spedizione del primo ordine'}
                   </p>
                   <span className="inline-block text-xs sm:text-sm bg-salvia text-beige px-3 py-1 border border-salvia/20">
@@ -116,10 +116,10 @@ export default function SubscriptionSuccessPage() {
                   </svg>
                 </div>
                 <div className="hidden md:flex md:flex-col flex-1 pl-8">
-                  <h3 className="text-xl font-serif text-olive mb-2">
+                  <h3 className="text-xl font-serif text-black mb-2">
                     {sub?.step2Title || 'Preparazione ordine'}
                   </h3>
-                  <p className="text-nocciola">
+                  <p className="text-black">
                     {sub?.step2 || 'Preparazione e spedizione del primo ordine'}
                   </p>
                 </div>
@@ -128,28 +128,28 @@ export default function SubscriptionSuccessPage() {
               {/* Step 3 - Rinnovo automatico */}
               <div className="relative flex items-start md:items-center">
                 <div className="flex md:hidden w-16 h-16 flex-shrink-0 bg-nocciola/30 border border-nocciola/20 items-center justify-center z-10">
-                  <svg className="w-8 h-8 text-olive" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <svg className="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                   </svg>
                 </div>
                 <div className="flex-1 pl-6 md:pl-0 md:text-right md:pr-8">
-                  <h3 className="text-lg sm:text-xl font-serif text-olive mb-2">
+                  <h3 className="text-lg sm:text-xl font-serif text-black mb-2">
                     {sub?.step3Title || 'Rinnovo automatico'}
                   </h3>
-                  <p className="text-sm sm:text-base text-nocciola mb-2 md:mb-0">
+                  <p className="text-sm sm:text-base text-black mb-2 md:mb-0">
                     {sub?.step3 || 'Rinnovo automatico alla frequenza scelta'}
                   </p>
-                  <span className="inline-block md:hidden text-xs sm:text-sm bg-nocciola/20 text-nocciola px-3 py-1 border border-nocciola/20 mt-2">
+                  <span className="inline-block md:hidden text-xs sm:text-sm bg-nocciola/20 text-black px-3 py-1 border border-nocciola/20 mt-2">
                     {sub?.stepPending || 'Programmato'}
                   </span>
                 </div>
                 <div className="hidden md:flex w-16 h-16 bg-nocciola/30 border border-nocciola/20 items-center justify-center z-10">
-                  <svg className="w-8 h-8 text-olive" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <svg className="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                   </svg>
                 </div>
                 <div className="hidden md:flex flex-1 pl-8">
-                  <span className="text-sm bg-nocciola/20 text-nocciola px-3 py-1 border border-nocciola/20">
+                  <span className="text-sm bg-nocciola/20 text-black px-3 py-1 border border-nocciola/20">
                     {sub?.stepPending || 'Programmato'}
                   </span>
                 </div>
@@ -161,10 +161,10 @@ export default function SubscriptionSuccessPage() {
         {/* CTA */}
         <div className="text-center">
           <div className="bg-white border border-olive/10 p-6 sm:p-8 max-w-2xl mx-auto">
-            <h3 className="text-xl sm:text-2xl font-serif text-olive mb-4 sm:mb-6">
+            <h3 className="text-xl sm:text-2xl font-serif text-black mb-4 sm:mb-6">
               {sub?.ctaTitle || 'Gestisci il tuo abbonamento'}
             </h3>
-            <p className="text-nocciola mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base">
+            <p className="text-black mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base">
               {sub?.ctaDescription || 'Puoi modificare o gestire il tuo abbonamento in qualsiasi momento tramite il link nella tua email di conferma.'}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">

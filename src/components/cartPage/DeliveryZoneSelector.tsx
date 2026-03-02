@@ -13,10 +13,10 @@ export default function DeliveryZoneSelector({ onSelectZone }: DeliveryZoneSelec
 
   return (
     <>
-      <h3 className="font-serif text-2xl lg:text-3xl text-olive text-center mb-3">
+      <h3 className="font-serif text-2xl lg:text-3xl text-black text-center mb-3">
         {t.deliveryZone.selector.title}
       </h3>
-      <p className="text-base text-nocciola text-center mb-8">
+      <p className="text-base text-black text-center mb-8">
         {t.deliveryZone.selector.subtitle}
       </p>
 

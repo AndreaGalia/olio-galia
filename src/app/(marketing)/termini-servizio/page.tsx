@@ -20,14 +20,14 @@ export default function TermsOfServicePage() {
             <p className={`text-lg ${styles.textNocciola} mb-2`}>
               {content.subtitle}
             </p>
-            <p className="text-sm text-nocciola/70">
+            <p className="text-sm text-black/70">
               {content.lastUpdate}
             </p>
           </div>
 
           {/* Intro */}
           <div className="bg-beige/30 border border-olive/10 p-6 sm:p-8 mb-8">
-            <p className="text-nocciola leading-relaxed">
+            <p className="text-black leading-relaxed">
               {content.intro}
             </p>
           </div>
@@ -39,24 +39,24 @@ export default function TermsOfServicePage() {
               <h2 className={`${styles.fontSerif} ${styles.textOlive} text-xl sm:text-2xl mb-4`}>
                 {content.sections.companyInfo.title}
               </h2>
-              <p className="text-nocciola leading-relaxed mb-4">
+              <p className="text-black leading-relaxed mb-4">
                 {content.sections.companyInfo.content}
               </p>
-              <ul className="space-y-2 text-nocciola">
+              <ul className="space-y-2 text-black">
                 <li className="flex items-start gap-2">
-                  <span className="text-olive mt-1">•</span>
+                  <span className="text-black mt-1">•</span>
                   <span>Sede legale: {process.env.NEXT_PUBLIC_CONTACT_ADDRESS || 'Sicilia, Italia'}</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-olive mt-1">•</span>
+                  <span className="text-black mt-1">•</span>
                   <span>Partita IVA: {process.env.NEXT_PUBLIC_VAT_NUMBER || 'N/A'}</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-olive mt-1">•</span>
+                  <span className="text-black mt-1">•</span>
                   <span>Email: {process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'info@oliogalia.com'}</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-olive mt-1">•</span>
+                  <span className="text-black mt-1">•</span>
                   <span>Telefono: {process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER || '+39 XXX XXX XXXX'}</span>
                 </li>
               </ul>
@@ -67,13 +67,13 @@ export default function TermsOfServicePage() {
               <h2 className={`${styles.fontSerif} ${styles.textOlive} text-xl sm:text-2xl mb-4`}>
                 {content.sections.contractFormation.title}
               </h2>
-              <p className="text-nocciola leading-relaxed mb-4">
+              <p className="text-black leading-relaxed mb-4">
                 {content.sections.contractFormation.content}
               </p>
-              <ul className="space-y-2 text-nocciola">
+              <ul className="space-y-2 text-black">
                 {content.sections.contractFormation.list.map((item: string, index: number) => (
                   <li key={index} className="flex items-start gap-2">
-                    <span className="text-olive mt-1">•</span>
+                    <span className="text-black mt-1">•</span>
                     <span>{item}</span>
                   </li>
                 ))}
@@ -85,10 +85,10 @@ export default function TermsOfServicePage() {
               <h2 className={`${styles.fontSerif} ${styles.textOlive} text-xl sm:text-2xl mb-4`}>
                 {content.sections.prices.title}
               </h2>
-              <p className="text-nocciola leading-relaxed mb-4">
+              <p className="text-black leading-relaxed mb-4">
                 {content.sections.prices.content}
               </p>
-              <p className="text-nocciola leading-relaxed">
+              <p className="text-black leading-relaxed">
                 {content.sections.prices.shipping}
               </p>
             </div>
@@ -98,19 +98,19 @@ export default function TermsOfServicePage() {
               <h2 className={`${styles.fontSerif} ${styles.textOlive} text-xl sm:text-2xl mb-4`}>
                 {content.sections.payment.title}
               </h2>
-              <p className="text-nocciola leading-relaxed mb-4">
+              <p className="text-black leading-relaxed mb-4">
                 {content.sections.payment.content}
               </p>
-              <ul className="space-y-2 text-nocciola mb-4">
+              <ul className="space-y-2 text-black mb-4">
                 {content.sections.payment.list.map((item: string, index: number) => (
                   <li key={index} className="flex items-start gap-2">
-                    <span className="text-olive mt-1">•</span>
+                    <span className="text-black mt-1">•</span>
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
               <div className="bg-beige/20 border border-olive/10 p-4">
-                <p className="text-sm text-nocciola">
+                <p className="text-sm text-black">
                   🔒 {content.sections.payment.security}
                 </p>
               </div>
@@ -124,18 +124,18 @@ export default function TermsOfServicePage() {
               <h3 className={`${styles.fontSerif} ${styles.textOlive} text-lg mb-3`}>
                 {content.sections.shipping.timeframes.title}
               </h3>
-              <ul className="space-y-2 text-nocciola mb-4">
+              <ul className="space-y-2 text-black mb-4">
                 {content.sections.shipping.timeframes.list.map((item: string, index: number) => (
                   <li key={index} className="flex items-start gap-2">
-                    <span className="text-olive mt-1">•</span>
+                    <span className="text-black mt-1">•</span>
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
-              <p className="text-nocciola leading-relaxed mb-3">
+              <p className="text-black leading-relaxed mb-3">
                 {content.sections.shipping.tracking}
               </p>
-              <p className="text-nocciola leading-relaxed">
+              <p className="text-black leading-relaxed">
                 {content.sections.shipping.issues}
               </p>
             </div>
@@ -145,25 +145,25 @@ export default function TermsOfServicePage() {
               <h2 className={`${styles.fontSerif} ${styles.textOlive} text-xl sm:text-2xl mb-4`}>
                 {content.sections.withdrawal.title}
               </h2>
-              <p className="text-nocciola leading-relaxed mb-4">
+              <p className="text-black leading-relaxed mb-4">
                 {content.sections.withdrawal.content}
               </p>
               <h3 className={`${styles.fontSerif} ${styles.textOlive} text-lg mb-3`}>
                 {content.sections.withdrawal.procedure.title}
               </h3>
-              <ul className="space-y-2 text-nocciola mb-6">
+              <ul className="space-y-2 text-black mb-6">
                 {content.sections.withdrawal.procedure.list.map((item: string, index: number) => (
                   <li key={index} className="flex items-start gap-2">
-                    <span className="text-olive mt-1">•</span>
+                    <span className="text-black mt-1">•</span>
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
               <div className="bg-beige/20 border border-olive/10 p-4">
-                <h4 className="font-semibold text-olive mb-2">
+                <h4 className="font-semibold text-black mb-2">
                   {content.sections.withdrawal.exclusions.title}
                 </h4>
-                <p className="text-sm text-nocciola">
+                <p className="text-sm text-black">
                   {content.sections.withdrawal.exclusions.content}
                 </p>
               </div>
@@ -174,18 +174,18 @@ export default function TermsOfServicePage() {
               <h2 className={`${styles.fontSerif} ${styles.textOlive} text-xl sm:text-2xl mb-4`}>
                 {content.sections.returns.title}
               </h2>
-              <p className="text-nocciola leading-relaxed mb-4">
+              <p className="text-black leading-relaxed mb-4">
                 {content.sections.returns.content}
               </p>
-              <ul className="space-y-2 text-nocciola mb-4">
+              <ul className="space-y-2 text-black mb-4">
                 {content.sections.returns.list.map((item: string, index: number) => (
                   <li key={index} className="flex items-start gap-2">
-                    <span className="text-olive mt-1">•</span>
+                    <span className="text-black mt-1">•</span>
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
-              <p className="text-nocciola leading-relaxed">
+              <p className="text-black leading-relaxed">
                 {content.sections.returns.procedure}
               </p>
             </div>
@@ -195,7 +195,7 @@ export default function TermsOfServicePage() {
               <h2 className={`${styles.fontSerif} ${styles.textOlive} text-xl sm:text-2xl mb-4`}>
                 {content.sections.warranty.title}
               </h2>
-              <p className="text-nocciola leading-relaxed">
+              <p className="text-black leading-relaxed">
                 {content.sections.warranty.content}
               </p>
             </div>
@@ -205,13 +205,13 @@ export default function TermsOfServicePage() {
               <h2 className={`${styles.fontSerif} ${styles.textOlive} text-xl sm:text-2xl mb-4`}>
                 {content.sections.liability.title}
               </h2>
-              <p className="text-nocciola leading-relaxed mb-4">
+              <p className="text-black leading-relaxed mb-4">
                 {content.sections.liability.content}
               </p>
-              <ul className="space-y-2 text-nocciola">
+              <ul className="space-y-2 text-black">
                 {content.sections.liability.list.map((item: string, index: number) => (
                   <li key={index} className="flex items-start gap-2">
-                    <span className="text-olive mt-1">•</span>
+                    <span className="text-black mt-1">•</span>
                     <span>{item}</span>
                   </li>
                 ))}
@@ -223,7 +223,7 @@ export default function TermsOfServicePage() {
               <h2 className={`${styles.fontSerif} ${styles.textOlive} text-xl sm:text-2xl mb-4`}>
                 {content.sections.intellectualProperty.title}
               </h2>
-              <p className="text-nocciola leading-relaxed">
+              <p className="text-black leading-relaxed">
                 {content.sections.intellectualProperty.content}
               </p>
             </div>
@@ -233,12 +233,12 @@ export default function TermsOfServicePage() {
               <h2 className={`${styles.fontSerif} ${styles.textOlive} text-xl sm:text-2xl mb-4`}>
                 {content.sections.privacy.title}
               </h2>
-              <p className="text-nocciola leading-relaxed mb-4">
+              <p className="text-black leading-relaxed mb-4">
                 {content.sections.privacy.content}
               </p>
               <Link
                 href="/privacy-policy"
-                className="inline-block text-olive hover:text-salvia underline transition-colors duration-300"
+                className="inline-block text-black hover:text-salvia underline transition-colors duration-300"
               >
                 Leggi la Privacy Policy →
               </Link>
@@ -249,10 +249,10 @@ export default function TermsOfServicePage() {
               <h2 className={`${styles.fontSerif} ${styles.textOlive} text-xl sm:text-2xl mb-4`}>
                 {content.sections.disputes.title}
               </h2>
-              <p className="text-nocciola leading-relaxed mb-4">
+              <p className="text-black leading-relaxed mb-4">
                 {content.sections.disputes.content}
               </p>
-              <p className="text-sm text-nocciola leading-relaxed">
+              <p className="text-sm text-black leading-relaxed">
                 {content.sections.disputes.odr}
               </p>
             </div>
@@ -262,7 +262,7 @@ export default function TermsOfServicePage() {
               <h2 className={`${styles.fontSerif} ${styles.textOlive} text-xl sm:text-2xl mb-4`}>
                 {content.sections.modifications.title}
               </h2>
-              <p className="text-nocciola leading-relaxed">
+              <p className="text-black leading-relaxed">
                 {content.sections.modifications.content}
               </p>
             </div>
@@ -272,7 +272,7 @@ export default function TermsOfServicePage() {
               <h2 className={`${styles.fontSerif} ${styles.textOlive} text-xl sm:text-2xl mb-4`}>
                 {content.sections.contact.title}
               </h2>
-              <p className="text-nocciola leading-relaxed mb-6">
+              <p className="text-black leading-relaxed mb-6">
                 {content.sections.contact.content}
               </p>
               <Link
@@ -288,7 +288,7 @@ export default function TermsOfServicePage() {
           <div className="mt-12 text-center">
             <Link
               href="/"
-              className="inline-block text-olive hover:text-salvia transition-colors duration-300"
+              className="inline-block text-black hover:text-salvia transition-colors duration-300"
             >
               ← Torna alla Homepage
             </Link>

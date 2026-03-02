@@ -62,15 +62,15 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
             />
           </div>
           <div className="flex-1">
-            <h3 className="font-serif text-olive text-lg font-medium mb-1">{product.name}</h3>
+            <h3 className="font-serif text-black text-lg font-medium mb-1">{product.name}</h3>
             {variantLine && (
-              <p className="text-nocciola text-xs mb-1">{variantLine}</p>
+              <p className="text-black text-xs mb-1">{variantLine}</p>
             )}
-            <p className="text-nocciola text-sm mb-2">{product.size}</p>
+            <p className="text-black text-sm mb-2">{product.size}</p>
             <div className="flex items-end gap-2">
-              <span className="text-olive font-bold text-xl">€{price.toFixed(2)}</span>
+              <span className="text-black font-bold text-xl">€{price.toFixed(2)}</span>
               {originalPrice && (
-                <span className="text-nocciola/60 line-through text-sm">€{originalPrice.toFixed(2)}</span>
+                <span className="text-black/60 line-through text-sm">€{originalPrice.toFixed(2)}</span>
               )}
             </div>
           </div>
@@ -84,7 +84,7 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
             >
               −
             </button>
-            <span className="w-12 text-center font-bold text-lg text-olive">{cartItem.quantity}</span>
+            <span className="w-12 text-center font-bold text-lg text-black">{cartItem.quantity}</span>
             <button
               onClick={() => updateQuantity(cartItem.id, cartItem.quantity + 1)}
               className="w-10 h-10 border border-olive/20 flex items-center justify-center hover:bg-olive hover:text-beige transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -95,7 +95,7 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
           </div>
 
           <div className="text-right">
-            <div className="text-olive font-bold text-xl">€{itemTotal.toFixed(2)}</div>
+            <div className="text-black font-bold text-xl">€{itemTotal.toFixed(2)}</div>
             {itemSavings > 0 && (
               <div className="text-green-600 text-sm font-medium">
                 {translate('cartPage.product.savings', { amount: itemSavings.toFixed(2) })}
@@ -126,15 +126,15 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
         </div>
 
         <div className="flex-1">
-          <h3 className="font-serif text-olive text-xl font-medium mb-1">{product.name}</h3>
+          <h3 className="font-serif text-black text-xl font-medium mb-1">{product.name}</h3>
           {variantLine && (
-            <p className="text-nocciola text-xs mb-1">{variantLine}</p>
+            <p className="text-black text-xs mb-1">{variantLine}</p>
           )}
-          <p className="text-nocciola text-sm mb-2">{product.size}</p>
+          <p className="text-black text-sm mb-2">{product.size}</p>
           <div className="flex items-end gap-3">
-            <span className="text-olive font-bold text-2xl">€{price.toFixed(2)}</span>
+            <span className="text-black font-bold text-2xl">€{price.toFixed(2)}</span>
             {originalPrice && (
-              <span className="text-nocciola/60 line-through text-lg">€{originalPrice.toFixed(2)}</span>
+              <span className="text-black/60 line-through text-lg">€{originalPrice.toFixed(2)}</span>
             )}
           </div>
         </div>
@@ -146,7 +146,7 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
           >
             −
           </button>
-          <span className="w-16 text-center font-bold text-xl text-olive">{cartItem.quantity}</span>
+          <span className="w-16 text-center font-bold text-xl text-black">{cartItem.quantity}</span>
           <button
             onClick={() => updateQuantity(cartItem.id, cartItem.quantity + 1)}
             className="w-12 h-12 border border-olive/20 flex items-center justify-center hover:bg-olive hover:text-beige transition-colors text-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
@@ -157,7 +157,7 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
         </div>
 
         <div className="text-right min-w-[120px]">
-          <div className="text-olive font-bold text-2xl">€{itemTotal.toFixed(2)}</div>
+          <div className="text-black font-bold text-2xl">€{itemTotal.toFixed(2)}</div>
           {itemSavings > 0 && (
             <div className="text-green-600 text-sm font-medium">
               {translate('cartPage.product.savings', { amount: itemSavings.toFixed(2) })}

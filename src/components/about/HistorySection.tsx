@@ -6,11 +6,11 @@ export function HistorySection({ history, variant = "compact" }: HistorySectionP
     <div className={`bg-white/80 backdrop-blur-sm rounded-2xl p-6 sm:p-8 lg:p-10 ${variant === "compact" ? "mb-12 sm:mb-16" : ""} shadow-lg`}>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
         <div className="space-y-6">
-          <h3 className="text-base sm:text-xl md:text-2xl lg:text-3xl font-serif text-olive">
+          <h3 className="text-base sm:text-xl md:text-2xl lg:text-3xl font-serif text-black">
             {history.title}
           </h3>
           
-          <div className="space-y-4 text-nocciola leading-relaxed">
+          <div className="space-y-4 text-black leading-relaxed">
             <p>{history.paragraph1}</p>
             <p>{history.paragraph2}</p>
             <p>

@@ -17,7 +17,7 @@ export function TimelineSection({ timeline, title }: TimelineSectionProps) {
   return (
     <section className="py-10 sm:py-12">
       <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
-        <h2 className="text-lg sm:text-3xl md:text-4xl lg:text-5xl font-serif text-olive text-center mb-12">
+        <h2 className="text-lg sm:text-3xl md:text-4xl lg:text-5xl font-serif text-black text-center mb-12">
           {title}
         </h2>
 
@@ -58,9 +58,9 @@ function TimelineItem({ item, index }: TimelineItemProps) {
       <div className={`w-5/12 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
         <div className="bg-beige border border-olive/10 p-6 transition-all duration-300">
           <div className="text-2xl font-serif text-salvia mb-2">{item.year}</div>
-          <h3 className="text-xl font-serif text-olive mb-3">{item.title}</h3>
-          <p className="text-nocciola text-sm leading-relaxed mb-3">{item.description}</p>
-          <p className="text-xs text-nocciola/70 italic">{item.details}</p>
+          <h3 className="text-xl font-serif text-black mb-3">{item.title}</h3>
+          <p className="text-black text-sm leading-relaxed mb-3">{item.description}</p>
+          <p className="text-xs text-black/70 italic">{item.details}</p>
         </div>
       </div>
 
@@ -82,9 +82,9 @@ function TimelineItemMobile({ item }: TimelineItemMobileProps) {
 
       <div className="bg-beige border border-olive/10 p-4 transition-all duration-300">
         <div className="text-xl font-serif text-salvia mb-1">{item.year}</div>
-        <h3 className="text-lg font-serif text-olive mb-2">{item.title}</h3>
-        <p className="text-nocciola text-sm leading-relaxed mb-2">{item.description}</p>
-        <p className="text-xs text-nocciola/70 italic">{item.details}</p>
+        <h3 className="text-lg font-serif text-black mb-2">{item.title}</h3>
+        <p className="text-black text-sm leading-relaxed mb-2">{item.description}</p>
+        <p className="text-xs text-black/70 italic">{item.details}</p>
       </div>
     </div>
   );

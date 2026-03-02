@@ -134,7 +134,7 @@ export default function CheckoutWizard({
 
         {/* Subtotale */}
         <div className="border-t border-olive/20 pt-4 space-y-2">
-          <div className="flex justify-between text-nocciola">
+          <div className="flex justify-between text-black">
             <span>{t.cartPage.summary.subtotal?.replace('{count}', totalItems.toString()).replace('{itemLabel}', itemLabel) || `Subtotale (${totalItems} ${itemLabel})`}</span>
             <span className="font-bold">€{total.toFixed(2)}</span>
           </div>
@@ -175,10 +175,10 @@ export default function CheckoutWizard({
           <>
             <div className="mb-6 p-4 sm:p-6 bg-white border border-olive/10 transition-all duration-300">
               <div className="mb-4">
-                <h4 className="text-olive font-bold text-sm sm:text-base uppercase tracking-wider mb-2">
+                <h4 className="text-black font-bold text-sm sm:text-base uppercase tracking-wider mb-2">
                   {t.cartPage.wizard?.torinoTitle || "SEI DI TORINO?"}
                 </h4>
-                <p className="text-nocciola text-xs sm:text-sm">
+                <p className="text-black text-xs sm:text-sm">
                   {t.cartPage.wizard?.torinoDescription || "Usa il checkout veloce per ritiro o consegna a Torino"}
                 </p>
               </div>
@@ -191,7 +191,7 @@ export default function CheckoutWizard({
                 <div className="w-full border-t border-olive/20"></div>
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-3 text-nocciola tracking-wider">
+                <span className="bg-white px-3 text-black tracking-wider">
                   {t.cartPage.wizard?.or || "OPPURE"}
                 </span>
               </div>
@@ -211,10 +211,10 @@ export default function CheckoutWizard({
         {selectedShippingZone && (
           <div className="mb-6 bg-beige/50 border border-olive/20 p-4">
             <div className="flex justify-between items-center">
-              <span className="text-nocciola text-sm">
+              <span className="text-black text-sm">
                 {t.cartPage.summary.shipping}
               </span>
-              <span className={`font-bold text-lg ${shippingCost.isFree ? 'text-green-600' : 'text-olive'}`}>
+              <span className={`font-bold text-lg ${shippingCost.isFree ? 'text-green-600' : 'text-black'}`}>
                 {shippingCost.isFree ? t.cartPage.summary.free : `€${shippingCost.costEur.toFixed(2)}`}
               </span>
             </div>
@@ -246,13 +246,13 @@ export default function CheckoutWizard({
       >
         {/* Riepilogo compatto */}
         <div className="space-y-3 mb-6">
-          <div className="flex justify-between text-nocciola text-sm">
+          <div className="flex justify-between text-black text-sm">
             <span>{t.cartPage.summary.subtotal?.replace('{count}', totalItems.toString()).replace('{itemLabel}', itemLabel) || `Prodotti (${totalItems})`}</span>
             <span>€{total.toFixed(2)}</span>
           </div>
 
           {selectedShippingZone && (
-            <div className="flex justify-between text-nocciola text-sm">
+            <div className="flex justify-between text-black text-sm">
               <span>{t.cartPage.summary.shipping}</span>
               <span className={shippingCost.isFree ? "text-green-600 font-medium" : ""}>
                 {shippingCost.isFree ? t.cartPage.summary.free : `€${shippingCost.costEur.toFixed(2)}`}
@@ -260,7 +260,7 @@ export default function CheckoutWizard({
             </div>
           )}
 
-          <div className="border-t-2 border-olive pt-3 flex justify-between text-olive font-bold text-xl">
+          <div className="border-t-2 border-olive pt-3 flex justify-between text-black font-bold text-xl">
             <span>{t.cartPage.summary.total}</span>
             <span>€{finalTotal.toFixed(2)}</span>
           </div>
@@ -276,10 +276,10 @@ export default function CheckoutWizard({
               className="mt-1 border-olive/30 text-olive focus:ring-olive focus:ring-offset-0"
             />
             <div>
-              <span className="text-olive font-medium text-sm block">
+              <span className="text-black font-medium text-sm block">
                 {t.cartPage.invoice.title}
               </span>
-              <span className="text-nocciola text-xs">
+              <span className="text-black text-xs">
                 {t.cartPage.invoice.description}
               </span>
             </div>

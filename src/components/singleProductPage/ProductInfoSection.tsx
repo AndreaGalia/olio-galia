@@ -97,13 +97,13 @@ export default function ProductInfoSection({
           )}
         </div>
 
-        <h1 className={`text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-serif text-olive mb-4 leading-tight ${
+        <h1 className={`text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-serif text-black mb-4 leading-tight ${
           effectiveOutOfStock ? 'opacity-60' : ''
         }`}>
           {product.name}
         </h1>
 
-        <p className={`text-base sm:text-lg text-nocciola leading-relaxed mb-6 ${
+        <p className={`text-base sm:text-lg text-black leading-relaxed mb-6 ${
           effectiveOutOfStock ? 'opacity-60' : ''
         }`}>
           {product.longDescription}
@@ -125,21 +125,21 @@ export default function ProductInfoSection({
       <div className="bg-white border border-olive/10 p-6">
         <div className="flex items-end gap-4 mb-4">
           {resolved.originalPrice && resolved.originalPrice !== 'null' && (
-            <span className="text-xl text-nocciola/60 line-through">
+            <span className="text-xl text-black/60 line-through">
               €{resolved.originalPrice}
             </span>
           )}
-          <span className="text-4xl font-bold text-olive">
+          <span className="text-4xl font-bold text-black">
             €{resolved.price}
           </span>
-          <span className="text-lg text-nocciola mb-1">
+          <span className="text-lg text-black mb-1">
             {product.size}
           </span>
         </div>
 
         <div className="flex items-center gap-4 mb-6">
           <div className="flex items-center gap-3">
-            <label className="text-sm font-medium text-olive">{t.productDetailPage.product.quantity}</label>
+            <label className="text-sm font-medium text-black">{t.productDetailPage.product.quantity}</label>
             <div className={`flex items-center border border-olive/20 ${
               effectiveOutOfStock ? 'opacity-50 pointer-events-none' : ''
             }`}>
@@ -163,7 +163,7 @@ export default function ProductInfoSection({
             </div>
           </div>
 
-          <div className="text-sm text-nocciola">
+          <div className="text-sm text-black">
             {resolved.inStock ? (
               <span className="text-green-600">
                 {t.productDetailPage.product.available}
@@ -212,10 +212,10 @@ export default function ProductInfoSection({
               </svg>
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="text-base sm:text-lg font-bold text-olive mb-1">
+              <h3 className="text-base sm:text-lg font-bold text-black mb-1">
                 {t.subscription?.ctaBanner || 'Abbonati e Risparmia'}
               </h3>
-              <p className="text-sm text-nocciola mb-3">
+              <p className="text-sm text-black mb-3">
                 {t.subscription?.ctaBannerDesc || 'Ricevi questo prodotto a casa tua con regolarità. Spedizione inclusa!'}
               </p>
               <Link

@@ -20,7 +20,7 @@ export default function FAQItem({ faq, isActive, onToggle }: FAQItemProps) {
               {faq.category}
             </span>
           </div>
-          <h3 className="text-lg sm:text-xl font-serif text-olive leading-tight">
+          <h3 className="text-lg sm:text-xl font-serif text-black leading-tight">
             {faq.question}
           </h3>
         </div>
@@ -46,7 +46,7 @@ export default function FAQItem({ faq, isActive, onToggle }: FAQItemProps) {
         isActive ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
       }`}>
         <div className="px-6 sm:px-8 pb-6 sm:pb-8 border-t border-olive/10">
-          <p className="text-nocciola leading-relaxed pt-4 sm:pt-6">
+          <p className="text-black leading-relaxed pt-4 sm:pt-6">
             {faq.answer}
           </p>
         </div>

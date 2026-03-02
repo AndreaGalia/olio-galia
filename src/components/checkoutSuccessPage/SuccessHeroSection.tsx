@@ -14,7 +14,7 @@ export default function SuccessHeroSection({
   return (
     <div className="text-center mb-16">
       {/* Titolo principale */}
-      <h1 className="text-5xl md:text-6xl font-serif text-olive mb-6 tracking-tight">
+      <h1 className="text-5xl md:text-6xl font-serif text-black mb-6 tracking-tight">
         {t.checkoutSuccess.hero.title}
       </h1>
       
@@ -23,7 +23,7 @@ export default function SuccessHeroSection({
         <p className="text-2xl md:text-3xl text-salvia mb-4 font-light">
           {t.checkoutSuccess.hero.subtitle}
         </p>
-        <p className="text-lg text-nocciola leading-relaxed">
+        <p className="text-lg text-black leading-relaxed">
           {t.checkoutSuccess.hero.description}
         </p>
       </div>

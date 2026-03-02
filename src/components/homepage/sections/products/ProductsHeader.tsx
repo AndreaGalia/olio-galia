@@ -7,7 +7,7 @@ export function ProductsHeader() {
 
   return (
     <div className="text-center mb-16 sm:mb-20">
-      <h2 className="font-serif text-olive mb-8 leading-tight">
+      <h2 className="font-serif text-black mb-8 leading-tight">
         <span className="block mb-1 md:mb-2 text-lg sm:text-3xl md:text-4xl lg:text-5xl">
           {t.products.title.line1}
         </span>

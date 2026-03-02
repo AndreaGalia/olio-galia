@@ -161,15 +161,15 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
         <div className="bg-white border border-olive/10 p-4 sm:p-5 text-center animate-fadeIn">
           {selectedPrice !== null ? (
             <>
-              <p className="text-xs sm:text-sm text-nocciola mb-1">{sub?.selectedPrice || 'Prezzo selezionato'}</p>
-              <p className="text-3xl sm:text-4xl font-bold text-olive">{formatPrice(selectedPrice)}</p>
-              <p className="text-sm text-nocciola mt-1">/{label(SUBSCRIPTION_INTERVALS.find(i => i.value === selectedInterval!)!)}</p>
+              <p className="text-xs sm:text-sm text-black mb-1">{sub?.selectedPrice || 'Prezzo selezionato'}</p>
+              <p className="text-3xl sm:text-4xl font-bold text-black">{formatPrice(selectedPrice)}</p>
+              <p className="text-sm text-black mt-1">/{label(SUBSCRIPTION_INTERVALS.find(i => i.value === selectedInterval!)!)}</p>
             </>
           ) : (
             <>
-              <p className="text-xs sm:text-sm text-nocciola mb-1">{sub?.startingFrom || 'A partire da'}</p>
-              <p className="text-3xl sm:text-4xl font-bold text-olive">{formatPrice(minPrice)}</p>
-              <p className="text-sm text-nocciola mt-1">/{sub?.perDelivery || 'consegna'}</p>
+              <p className="text-xs sm:text-sm text-black mb-1">{sub?.startingFrom || 'A partire da'}</p>
+              <p className="text-3xl sm:text-4xl font-bold text-black">{formatPrice(minPrice)}</p>
+              <p className="text-sm text-black mt-1">/{sub?.perDelivery || 'consegna'}</p>
             </>
           )}
         </div>
@@ -185,7 +185,7 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h3 className="text-base sm:text-lg font-serif text-olive uppercase">
+              <h3 className="text-base sm:text-lg font-serif text-black uppercase">
                 {sub?.quantityTitle || 'Quantità'}
               </h3>
             </div>
@@ -233,21 +233,21 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               ) : (
-                <span className="text-olive text-xs sm:text-sm font-bold">{zoneStepNum}</span>
+                <span className="text-black text-xs sm:text-sm font-bold">{zoneStepNum}</span>
               )}
             </div>
-            <h3 className="text-base sm:text-lg font-serif text-olive uppercase">
+            <h3 className="text-base sm:text-lg font-serif text-black uppercase">
               {sub?.zoneTitle || 'Zona di spedizione'}
             </h3>
             {selectedZone && (
-              <span className="ml-auto text-sm text-nocciola">
+              <span className="ml-auto text-sm text-black">
                 {label(SHIPPING_ZONES.find(z => z.value === selectedZone)!)}
               </span>
             )}
           </div>
 
-          <p className="text-xs sm:text-sm text-nocciola mb-3 sm:mb-4 flex items-center gap-2">
-            <svg className="w-4 h-4 text-olive flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+          <p className="text-xs sm:text-sm text-black mb-3 sm:mb-4 flex items-center gap-2">
+            <svg className="w-4 h-4 text-black flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             {sub?.shippingIncluded || 'Spedizione inclusa nel prezzo'}
@@ -293,14 +293,14 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               ) : (
-                <span className={`text-xs sm:text-sm font-bold ${selectedZone ? 'text-olive' : 'text-olive/40'}`}>{intervalStepNum}</span>
+                <span className={`text-xs sm:text-sm font-bold ${selectedZone ? 'text-black' : 'text-black/40'}`}>{intervalStepNum}</span>
               )}
             </div>
-            <h3 className={`text-base sm:text-lg font-serif uppercase ${selectedZone ? 'text-olive' : 'text-olive/40'}`}>
+            <h3 className={`text-base sm:text-lg font-serif uppercase ${selectedZone ? 'text-black' : 'text-black/40'}`}>
               {sub?.intervalTitle || 'Frequenza di consegna'}
             </h3>
             {selectedInterval && (
-              <span className="ml-auto text-sm text-nocciola">
+              <span className="ml-auto text-sm text-black">
                 {label(SUBSCRIPTION_INTERVALS.find(i => i.value === selectedInterval)!)}
               </span>
             )}
@@ -373,10 +373,10 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
       {/* Info spedizione inclusa */}
       <div className="bg-white border-l-4 border-olive p-3 sm:p-4">
         <div className="flex items-start gap-3">
-          <svg className="w-5 h-5 text-olive flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+          <svg className="w-5 h-5 text-black flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
           </svg>
-          <p className="text-xs sm:text-sm text-nocciola">
+          <p className="text-xs sm:text-sm text-black">
             {sub?.shippingNote || 'La spedizione è inclusa nel prezzo dell\'abbonamento. Riceverai il prodotto direttamente a casa tua con la frequenza selezionata.'}
           </p>
         </div>

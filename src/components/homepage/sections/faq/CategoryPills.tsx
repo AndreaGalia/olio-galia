@@ -9,7 +9,7 @@ export default function CategoryPills({ categories }: CategoryPillsProps) {
       {categories.map((category) => (
         <div 
           key={category}
-          className="bg-white/80 text-nocciola px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium shadow-sm border border-olive/10"
+          className="bg-white/80 text-black px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium shadow-sm border border-olive/10"
         >
           {category}
         </div>

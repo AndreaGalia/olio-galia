@@ -12,10 +12,10 @@ export default function OrderHero({ orderId }: OrderHeroProps) {
 
   return (
     <div className="bg-olive/5 p-8 text-center border-b border-olive/10">
-      <h1 className="text-4xl font-serif text-olive mb-3">
+      <h1 className="text-4xl font-serif text-black mb-3">
         {t.orderConfirmation.hero.title}
       </h1>
-      <p className="text-lg text-nocciola">
+      <p className="text-lg text-black">
         {t.orderConfirmation.hero.subtitle}
       </p>
     </div>

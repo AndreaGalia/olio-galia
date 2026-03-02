@@ -20,12 +20,12 @@ export default function ExpiredAccessMessage() {
           </div>
 
           {/* Titolo */}
-          <h1 className="text-3xl md:text-4xl font-bold text-center text-olive mb-4">
+          <h1 className="text-3xl md:text-4xl font-bold text-center text-black mb-4">
             {t.checkoutSuccess.expired.title}
           </h1>
 
           {/* Messaggio principale */}
-          <p className="text-lg text-nocciola text-center mb-6">
+          <p className="text-lg text-black text-center mb-6">
             {t.checkoutSuccess.expired.message}
           </p>
 
@@ -33,13 +33,13 @@ export default function ExpiredAccessMessage() {
           <div className="bg-olive/5 border border-olive/10 rounded-xl p-6 mb-6">
             <div className="flex items-start gap-4">
               <div className="flex-shrink-0">
-                <Mail className="w-6 h-6 text-olive mt-1" />
+                <Mail className="w-6 h-6 text-black mt-1" />
               </div>
               <div>
-                <p className="text-olive font-medium mb-2">
+                <p className="text-black font-medium mb-2">
                   {t.checkoutSuccess.expired.emailInfo}
                 </p>
-                <p className="text-sm text-nocciola">
+                <p className="text-sm text-black">
                   {t.checkoutSuccess.expired.security}
                 </p>
               </div>
@@ -67,7 +67,7 @@ export default function ExpiredAccessMessage() {
         </div>
 
         {/* Info aggiuntiva sotto la card */}
-        <div className="text-center mt-6 text-sm text-nocciola">
+        <div className="text-center mt-6 text-sm text-black">
           <p>
             {t.checkoutSuccess.expired.footer}
           </p>

@@ -41,7 +41,7 @@ export default function Navbar() {
             {/* Logo */}
             <div className="flex-1 flex justify-start">
               <Link href="/" className="hover:opacity-80 transition-opacity duration-200">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif text-olive tracking-widest notranslate" translate="no">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif text-black tracking-widest notranslate" translate="no">
                   {t.navbar.logo}
                 </h1>
               </Link>
@@ -50,7 +50,7 @@ export default function Navbar() {
             {/* Menu Desktop + Language Switcher + Carrello */}
             <div className="hidden lg:flex flex-1 justify-end items-center gap-6">
               {/* Menu Items */}
-              <ul className="flex gap-8 xl:gap-12 text-olive font-serif text-lg">
+              <ul className="flex gap-8 xl:gap-12 text-black font-serif text-lg">
                 {menuItems.map((item) => (
                   <li key={item.translationKey}>
                     <Link
@@ -141,7 +141,7 @@ export default function Navbar() {
           <div className="flex flex-col h-full">
             {/* Header del menu mobile */}
             <div className="flex justify-between items-center p-6 border-b border-olive/20">
-              <h2 className="text-lg font-serif text-olive">{t.navbar.mobile.menuTitle}</h2>
+              <h2 className="text-lg font-serif text-black">{t.navbar.mobile.menuTitle}</h2>
               <button 
                 onClick={toggleMenu}
                 className="w-8 h-8 flex items-center justify-center text-olive hover:text-salvia transition-colors duration-200"
@@ -162,7 +162,7 @@ export default function Navbar() {
                     <Link
                       href={item.href}
                       className={`block text-xl font-serif hover:text-salvia transition-colors duration-200 py-2 uppercase tracking-widest ${
-                        isActive(item.href) ? 'text-salvia' : 'text-olive'
+                        isActive(item.href) ? 'text-salvia' : 'text-black'
                       }`}
                       onClick={toggleMenu}
                     >
@@ -175,7 +175,7 @@ export default function Navbar() {
               {/* Language Switcher Mobile */}
               <div className="mt-8 pt-6 border-t border-olive/20">
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="text-sm font-serif text-olive">{t.navbar.mobile.language}</span>
+                  <span className="text-sm font-serif text-black">{t.navbar.mobile.language}</span>
                   <LanguageSwitcher />
                 </div>
               </div>
@@ -184,7 +184,7 @@ export default function Navbar() {
               <div className="pt-4 border-t border-olive/20">
                 <Link 
                   href="/cart"
-                  className="flex items-center gap-3 text-olive hover:text-salvia transition-colors duration-200 py-2"
+                  className="flex items-center gap-3 text-black hover:text-salvia transition-colors duration-200 py-2"
                   onClick={toggleMenu}
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
@@ -200,8 +200,8 @@ export default function Navbar() {
             {/* Footer del menu mobile */}
             <div className="p-6 border-t border-olive/20">
               <div className="text-center">
-                <p className="text-sm text-nocciola mb-2">{t.navbar.mobile.tagline}</p>
-                <p className="text-xs text-nocciola/70">{t.navbar.mobile.since}</p>
+                <p className="text-sm text-black mb-2">{t.navbar.mobile.tagline}</p>
+                <p className="text-xs text-black/70">{t.navbar.mobile.since}</p>
               </div>
             </div>
           </div>

@@ -11,7 +11,7 @@ export default function RelatedProductsSection({ products }: RelatedProductsSect
 
   return (
     <div>
-      <h2 className="text-2xl sm:text-3xl font-serif text-olive mb-8 text-center">
+      <h2 className="text-2xl sm:text-3xl font-serif text-black mb-8 text-center">
         {t.productDetailPage.product.relatedProducts}
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
@@ -47,12 +47,12 @@ export default function RelatedProductsSection({ products }: RelatedProductsSect
                     </div>
                   )}
                 </div>
-                <h3 className={`font-serif text-olive text-center mb-2 text-sm sm:text-base ${
+                <h3 className={`font-serif text-black text-center mb-2 text-sm sm:text-base ${
                   relatedIsOutOfStock ? 'opacity-60' : ''
                 }`}>
                   {related.name}
                 </h3>
-                <p className={`text-center text-lg sm:text-2xl font-bold text-olive ${
+                <p className={`text-center text-lg sm:text-2xl font-bold text-black ${
                   relatedIsOutOfStock ? 'opacity-50' : ''
                 }`}>
                   €{related.price}
