@@ -24,8 +24,8 @@ export function VideoBackground({ videoUrl }: VideoBackgroundProps) {
         <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-olive via-salvia to-nocciola" />
       )}
 
-      {/* Filtro verde leggero */}
-      <div className="absolute inset-0 bg-olive/20" />
+      {/* Filtro scuro leggero */}
+      <div className="absolute inset-0 bg-black/20" />
     </div>
   );
 }
