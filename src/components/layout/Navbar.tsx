@@ -35,7 +35,7 @@ export default function Navbar() {
     <>
       <nav className="sticky top-0 z-30 bg-[#D6C7A1] px-4 sm:px-6 lg:px-[100px] py-4 sm:py-6">
         <div className="w-full">
-          <div className="flex justify-between items-center lg:grid lg:grid-cols-[1fr_auto_1fr]">
+          <div className="flex justify-between items-center">
             
             {/* Logo */}
             <div className="flex justify-start">
@@ -49,7 +49,7 @@ export default function Navbar() {
             </div>
 
             {/* Menu Items Desktop — centro */}
-            <div className="hidden lg:flex justify-center items-center">
+            <div className="hidden lg:flex flex-1 justify-center items-center">
               <ul className="flex gap-10 xl:gap-14 text-black font-serif text-[11px]">
                 {menuItems.map((item) => (
                   <li key={item.translationKey}>
