@@ -11,7 +11,7 @@ export function LanguageSwitcher() {
         className={`px-3 py-1 text-sm transition-colors cursor-pointer ${
           locale === 'it'
             ? 'font-bold text-black'
-            : 'font-medium text-nocciola hover:text-black'
+            : 'font-medium text-black'
         }`}
       >
         IT
@@ -21,7 +21,7 @@ export function LanguageSwitcher() {
         className={`px-3 py-1 text-sm transition-colors cursor-pointer ${
           locale === 'en'
             ? 'font-bold text-black'
-            : 'font-medium text-nocciola hover:text-black'
+            : 'font-medium text-black'
         }`}
       >
         EN

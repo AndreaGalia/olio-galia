@@ -26,7 +26,6 @@ export default function Navbar() {
   const isActive = (path: string) => pathname === path;
 
   const menuItems: MenuItem[] = [
-    { name: t.navbar.menu.home, href: '/', translationKey: 'home' },
     { name: t.navbar.menu.products, href: '/products', translationKey: 'products' },
     { name: t.navbar.menu.about, href: '/about', translationKey: 'about' },
     { name: t.navbar.menu.contact, href: '/contact', translationKey: 'contact' }
@@ -34,23 +33,24 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="sticky top-0 z-30 bg-[#D6C7A1] px-4 sm:px-6 py-4 sm:py-6">
-        <div className="container mx-auto max-w-7xl">
+      <nav className="sticky top-0 z-30 bg-[#D6C7A1] px-4 sm:px-6 lg:px-[100px] py-4 sm:py-6">
+        <div className="w-full">
           <div className="flex justify-between items-center">
             
             {/* Logo */}
             <div className="flex-1 flex justify-start">
               <Link href="/" className="hover:opacity-80 transition-opacity duration-200">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif text-black tracking-widest notranslate" translate="no">
-                  {t.navbar.logo}
-                </h1>
+                <img
+                  src={process.env.NEXT_PUBLIC_LOGO_SVG_URL}
+                  alt="Olio Galia"
+                  className="h-[16px] sm:h-[22px] w-auto"
+                />
               </Link>
             </div>
 
-            {/* Menu Desktop + Language Switcher + Carrello */}
-            <div className="hidden lg:flex flex-1 justify-end items-center gap-6">
-              {/* Menu Items */}
-              <ul className="flex gap-8 xl:gap-12 text-black font-serif text-lg">
+            {/* Menu Items Desktop — centro */}
+            <div className="hidden lg:flex flex-1 justify-center items-center">
+              <ul className="flex gap-10 xl:gap-14 text-black font-serif text-sm">
                 {menuItems.map((item) => (
                   <li key={item.translationKey}>
                     <Link
@@ -64,16 +64,14 @@ export default function Navbar() {
                   </li>
                 ))}
               </ul>
+            </div>
 
-              {/* Language Switcher Desktop */}
-              <div className="ml-4">
-                <LanguageSwitcher />
-              </div>
-              
-              {/* Carrello Desktop */}
-              <Link href="/cart" className="relative ml-4">
+            {/* Language Switcher + Carrello Desktop — destra */}
+            <div className="hidden lg:flex flex-1 justify-end items-center gap-4">
+              <LanguageSwitcher />
+              <Link href="/cart">
                 <button
-                  className="p-2 text-black hover:text-salvia transition-colors duration-200 relative cursor-pointer"
+                  className="p-2 text-black hover:text-salvia transition-colors duration-200 cursor-pointer"
                   aria-label={t.navbar.cart.title}
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
@@ -117,22 +115,24 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Menu Mobile Overlay */}
-        <div className={`lg:hidden fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 ${
-          isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`} onClick={toggleMenu}></div>
-
-        {/* Menu Mobile */}
-        <div className={`lg:hidden fixed top-0 right-0 w-80 max-w-[85vw] h-full bg-[#D6C7A1] z-50 transform transition-transform duration-300 shadow-2xl ${
+        {/* Menu Mobile — fullscreen */}
+        <div className={`lg:hidden fixed inset-0 w-full h-full bg-[#D6C7A1] z-50 transform transition-transform duration-300 ${
           isMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}>
           <div className="flex flex-col h-full">
+
             {/* Header del menu mobile */}
-            <div className="flex justify-between items-center p-6 border-b border-olive/20">
-              <h2 className="text-lg font-serif text-black">{t.navbar.mobile.menuTitle}</h2>
-              <button 
+            <div className="flex justify-between items-center px-6 py-4 border-b border-olive/20">
+              <Link href="/" onClick={toggleMenu} className="hover:opacity-80 transition-opacity duration-200">
+                <img
+                  src={process.env.NEXT_PUBLIC_LOGO_SVG_URL}
+                  alt="Olio Galia"
+                  className="h-[16px] sm:h-[22px] w-auto"
+                />
+              </Link>
+              <button
                 onClick={toggleMenu}
-                className="w-8 h-8 flex items-center justify-center text-olive hover:text-salvia transition-colors duration-200"
+                className="w-8 h-8 flex items-center justify-center text-black transition-colors duration-200"
                 aria-label={t.navbar.mobile.closeMenu}
               >
                 <span className="sr-only">{t.navbar.mobile.closeMenu}</span>
@@ -142,15 +142,15 @@ export default function Navbar() {
               </button>
             </div>
 
-            {/* Links del menu */}
-            <nav className="flex-1 px-6 py-8">
-              <ul className="space-y-6">
+            {/* Links del menu — centrati verticalmente */}
+            <nav className="flex-1 flex flex-col justify-center items-center gap-8">
+              <ul className="flex flex-col items-center gap-8">
                 {menuItems.map((item) => (
                   <li key={item.translationKey}>
                     <Link
                       href={item.href}
-                      className={`block text-xl font-serif hover:text-salvia transition-colors duration-200 py-2 uppercase tracking-widest ${
-                        isActive(item.href) ? 'text-salvia' : 'text-black'
+                      className={`block text-2xl font-serif tracking-widest uppercase transition-colors duration-200 ${
+                        isActive(item.href) ? 'text-olive' : 'text-black'
                       }`}
                       onClick={toggleMenu}
                     >
@@ -159,39 +159,25 @@ export default function Navbar() {
                   </li>
                 ))}
               </ul>
-
-              {/* Language Switcher Mobile */}
-              <div className="mt-8 pt-6 border-t border-olive/20">
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-sm font-serif text-black">{t.navbar.mobile.language}</span>
-                  <LanguageSwitcher />
-                </div>
-              </div>
-
-              {/* Carrello nel menu mobile */}
-              <div className="pt-4 border-t border-olive/20">
-                <Link 
-                  href="/cart"
-                  className="flex items-center gap-3 text-black hover:text-salvia transition-colors duration-200 py-2"
-                  onClick={toggleMenu}
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-                  </svg>
-                  <span className="text-lg font-serif">
-                    {t.navbar.mobile.cart} {totalItems > 0 && `(${totalItems})`}
-                  </span>
-                </Link>
-              </div>
             </nav>
 
             {/* Footer del menu mobile */}
-            <div className="p-6 border-t border-olive/20">
-              <div className="text-center">
-                <p className="text-sm text-black mb-2">{t.navbar.mobile.tagline}</p>
-                <p className="text-xs text-black/70">{t.navbar.mobile.since}</p>
-              </div>
+            <div className="px-6 py-6 border-t border-olive/20 flex justify-between items-center">
+              <LanguageSwitcher />
+              <Link
+                href="/cart"
+                className="flex items-center gap-2 bg-olive text-white px-4 py-2 transition-opacity duration-200 hover:opacity-80"
+                onClick={toggleMenu}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                </svg>
+                <span className="text-sm font-serif uppercase tracking-widest">
+                  {t.navbar.mobile.cart} {totalItems > 0 && `(${totalItems})`}
+                </span>
+              </Link>
             </div>
+
           </div>
         </div>
       </nav>

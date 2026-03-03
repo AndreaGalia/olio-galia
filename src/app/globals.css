@@ -18,23 +18,32 @@
 
 /* Base font styles */
 body {
-  font-family: var(--font-roboto), sans-serif !important;
-  letter-spacing: 0.05em !important; /* 10% letter spacing */
+  font-family: var(--font-libre-baskerville), serif !important;
+  font-size: 17px !important;
+  font-weight: 400 !important;
+  line-height: 22px !important;
+  letter-spacing: 1.7px !important;
 }
 
-/* Title styles - more specific selectors */
+/* Title styles */
 h1, h2, h3, h4, h5, h6 {
   font-family: "termina", sans-serif !important;
-  font-weight: 500 !important;
+  font-size: 17px !important;
+  font-weight: 400 !important;
   font-style: normal !important;
+  line-height: 20px !important;
+  letter-spacing: 3.4px !important;
   text-transform: uppercase !important;
 }
 
-/* Navbar title override */
+/* Termina UI elements */
 .font-serif {
   font-family: "termina", sans-serif !important;
-  font-weight: 500 !important;
+  font-size: 17px !important;
+  font-weight: 400 !important;
   font-style: normal !important;
+  line-height: 20px !important;
+  letter-spacing: 3.4px !important;
   text-transform: uppercase !important;
 }
 

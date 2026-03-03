@@ -5,7 +5,7 @@ import NewsletterPopup from '@/components/layout/NewsletterPopup';
 import { CartProvider } from '@/contexts/CartContext';
 import { LocaleProvider } from '@/contexts/LocaleContext';
 import { ShippingConfigProvider } from '@/contexts/ShippingConfigContext';
-import { Roboto } from 'next/font/google';
+import { Roboto, Libre_Baskerville } from 'next/font/google';
 import localFont from 'next/font/local';
 import { Analytics } from "@vercel/analytics/next"
 import { GoogleAnalytics } from '@next/third-parties/google'
@@ -14,6 +14,12 @@ const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
   subsets: ['latin'],
   variable: '--font-roboto',
+});
+
+const libreBaskerville = Libre_Baskerville({
+  weight: ['400', '700'],
+  subsets: ['latin'],
+  variable: '--font-libre-baskerville',
 });
 
 const sweetSans = localFont({
@@ -51,7 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="format-detection" content="telephone=no" />
         <link rel="stylesheet" href="https://use.typekit.net/mew4ocs.css" />
       </head>
-      <body className={`${roboto.variable}`}>
+      <body className={`${roboto.variable} ${libreBaskerville.variable}`}>
         <LocaleProvider>
           <ShippingConfigProvider>
             <CartProvider>
