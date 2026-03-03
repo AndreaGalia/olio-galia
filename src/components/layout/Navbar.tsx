@@ -121,61 +121,64 @@ export default function Navbar() {
         }`}>
           <div className="flex flex-col h-full">
 
-            {/* Header del menu mobile */}
-            <div className="flex justify-between items-center px-6 py-4 border-b border-olive/20">
+            {/* Header */}
+            <div className="flex justify-between items-center px-8 py-5">
               <Link href="/" onClick={toggleMenu} className="hover:opacity-80 transition-opacity duration-200">
-                <img
-                  src={process.env.NEXT_PUBLIC_LOGO_SVG_URL}
-                  alt="Olio Galia"
-                  className="h-[16px] sm:h-[22px] w-auto"
-                />
+                <img src={process.env.NEXT_PUBLIC_LOGO_SVG_URL} alt="Olio Galia" className="h-[16px] w-auto" />
               </Link>
-              <button
-                onClick={toggleMenu}
-                className="w-8 h-8 flex items-center justify-center text-black transition-colors duration-200"
-                aria-label={t.navbar.mobile.closeMenu}
-              >
-                <span className="sr-only">{t.navbar.mobile.closeMenu}</span>
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <button onClick={toggleMenu} className="w-8 h-8 flex items-center justify-center text-black" aria-label={t.navbar.mobile.closeMenu}>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
 
-            {/* Links del menu — centrati verticalmente */}
-            <nav className="flex-1 flex flex-col justify-center items-center gap-8">
-              <ul className="flex flex-col items-center gap-8">
-                {menuItems.map((item) => (
-                  <li key={item.translationKey}>
-                    <Link
-                      href={item.href}
-                      className={`block text-2xl font-serif tracking-widest uppercase transition-colors duration-200 ${
-                        isActive(item.href) ? 'text-olive' : 'text-black'
-                      }`}
-                      onClick={toggleMenu}
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
+            {/* Contenuto — unica colonna scorrevole */}
+            <div className="flex-1 overflow-y-auto px-8 pt-6">
 
-            {/* Footer del menu mobile */}
-            <div className="px-6 py-6 border-t border-olive/20 flex justify-between items-center">
-              <LanguageSwitcher />
-              <Link
-                href="/cart"
-                className="flex items-center gap-2 bg-olive text-white px-4 py-2 transition-opacity duration-200 hover:opacity-80"
-                onClick={toggleMenu}
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+              <Link href="/products" onClick={toggleMenu} className={`block py-3 mobile-menu-link-bold ${isActive('/products') ? 'text-olive' : 'text-black'}`}>
+                {t.navbar.menu.allProducts}
+              </Link>
+              <Link href="/olio-extra-vergine" onClick={toggleMenu} className={`block py-3 mobile-menu-link ${isActive('/olio-extra-vergine') ? 'text-olive' : 'text-black'}`}>
+                {t.navbar.menu.extraVirginOil}
+              </Link>
+              <Link href="/olio-corpo" onClick={toggleMenu} className={`block py-3 mobile-menu-link ${isActive('/olio-corpo') ? 'text-olive' : 'text-black'}`}>
+                {t.navbar.menu.bodyOil}
+              </Link>
+
+              <div className="border-t border-black my-4" />
+
+              <Link href="/about" onClick={toggleMenu} className={`block py-3 mobile-menu-link ${isActive('/about') ? 'text-olive' : 'text-black'}`}>
+                {t.navbar.menu.about}
+              </Link>
+              <Link href="/sostenibilita" onClick={toggleMenu} className={`block py-3 mobile-menu-link ${isActive('/sostenibilita') ? 'text-olive' : 'text-black'}`}>
+                {t.navbar.menu.sustainability}
+              </Link>
+              <Link href="/contact" onClick={toggleMenu} className={`block py-3 mobile-menu-link ${isActive('/contact') ? 'text-olive' : 'text-black'}`}>
+                {t.navbar.menu.contact}
+              </Link>
+              <Link href="/faq" onClick={toggleMenu} className={`block py-3 mobile-menu-link ${isActive('/faq') ? 'text-olive' : 'text-black'}`}>
+                {t.navbar.menu.faq}
+              </Link>
+
+              <div className="border-t border-black my-4" />
+
+              <div className="py-3 flex items-center gap-3">
+                <span className="mobile-menu-link text-black">{t.navbar.mobile.language}</span>
+                <LanguageSwitcher mobile />
+              </div>
+
+              <div className="border-t border-black my-4" />
+
+              <Link href="/cart" onClick={toggleMenu} className="flex items-center gap-2 bg-olive text-white px-4 py-2 mt-3 mb-8 transition-opacity duration-200 hover:opacity-80 self-start inline-flex">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
                 </svg>
-                <span className="text-sm font-serif uppercase tracking-widest">
+                <span className="mobile-menu-link" style={{color: 'white'}}>
                   {t.navbar.mobile.cart} {totalItems > 0 && `(${totalItems})`}
                 </span>
               </Link>
+
             </div>
 
           </div>

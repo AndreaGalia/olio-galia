@@ -211,7 +211,12 @@
       "home": "Home",
       "about": "Chi siamo",
       "products": "Prodotti",
-      "contact": "Contatti"
+      "contact": "Contatti",
+      "allProducts": "Tutti i prodotti",
+      "extraVirginOil": "Olio Extra Vergine d'Oliva",
+      "bodyOil": "Olio Corpo",
+      "sustainability": "Sostenibilità",
+      "faq": "FAQ"
     },
     "mobile": {
       "menuTitle": "Menu",

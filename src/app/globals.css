@@ -49,7 +49,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .font-serif-bold {
   font-family: "termina", sans-serif !important;
+  font-size: 17px !important;
   font-weight: 700 !important;
+  font-style: normal !important;
+  line-height: 20px !important;
+  letter-spacing: 3.4px !important;
+  text-transform: uppercase !important;
 }
 
 /* Language Switcher */
@@ -64,6 +69,42 @@ h1, h2, h3, h4, h5, h6 {
 .lang-btn-active {
   font-family: "termina", sans-serif !important;
   font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 3.4px !important;
+  text-transform: uppercase !important;
+}
+
+/* Mobile Menu Links */
+.mobile-menu-link {
+  font-family: "termina", sans-serif !important;
+  font-size: 17px !important;
+  font-weight: 400 !important;
+  letter-spacing: 3.4px !important;
+  text-transform: uppercase !important;
+  line-height: 20px !important;
+}
+
+.mobile-menu-link-bold {
+  font-family: "termina", sans-serif !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  letter-spacing: 3.4px !important;
+  text-transform: uppercase !important;
+  line-height: 20px !important;
+}
+
+/* Language Switcher Mobile */
+.lang-btn-mobile {
+  font-family: "termina", sans-serif !important;
+  font-size: 17px !important;
+  font-weight: 400 !important;
+  letter-spacing: 3.4px !important;
+  text-transform: uppercase !important;
+}
+
+.lang-btn-mobile-active {
+  font-family: "termina", sans-serif !important;
+  font-size: 17px !important;
   font-weight: 700 !important;
   letter-spacing: 3.4px !important;
   text-transform: uppercase !important;

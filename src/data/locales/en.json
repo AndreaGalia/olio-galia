@@ -210,8 +210,13 @@
     "menu": {
       "home": "Home",
       "about": "About Us",
-      "products": "Products", 
-      "contact": "Contact"
+      "products": "Products",
+      "contact": "Contact",
+      "allProducts": "All Products",
+      "extraVirginOil": "Extra Virgin Olive Oil",
+      "bodyOil": "Body Oil",
+      "sustainability": "Sustainability",
+      "faq": "FAQ"
     },
     "mobile": {
       "menuTitle": "Menu",
