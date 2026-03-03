@@ -47,6 +47,28 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase !important;
 }
 
+.font-serif-bold {
+  font-family: "termina", sans-serif !important;
+  font-weight: 700 !important;
+}
+
+/* Language Switcher */
+.lang-btn {
+  font-family: "termina", sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+  letter-spacing: 3.4px !important;
+  text-transform: uppercase !important;
+}
+
+.lang-btn-active {
+  font-family: "termina", sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 3.4px !important;
+  text-transform: uppercase !important;
+}
+
 /* Custom HTML Content Styles */
 .custom-html-content {
   /* Base typography */
