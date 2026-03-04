@@ -2,9 +2,9 @@
   "hero": {
     "badge": "Sicilian Tradition since 1940",
     "title": {
-      "line1": "The Best of Sicily",
-      "line2": "Chosen for You",
-      "line3": ""
+      "line1": "Excellence",
+      "line2": "Nature",
+      "line3": "Tradition"
     },
     "description": {
       "main": "",
@@ -15,9 +15,8 @@
       "watch": "Watch Video"
     },
     "stats": {
-      "natural": "Natural",
-      "since": "Since",
-      "generation": "Generation"
+      "line1": "FROMSICILY",
+      "line2": "SINCE1940"
     }
   },
   "products": {

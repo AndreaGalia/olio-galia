@@ -2,9 +2,9 @@
   "hero": {
     "badge": "Tradizione Siciliana dal 1940",
     "title": {
-      "line1": "Il Meglio della Sicilia",
-      "line2": "Scelto per Te",
-      "line3": ""
+      "line1": "Eccellenza",
+      "line2": "Natura",
+      "line3": "Tradizione"
     },
     "description": {
       "main": "",
@@ -15,9 +15,8 @@
       "watch": "Guarda il Video"
     },
     "stats": {
-      "natural": "Naturale",
-      "since": "Dal",
-      "generation": "Generazione"
+      "line1": "SICILIANO",
+      "line2": "DAL1940"
     }
   },
   "products": {
