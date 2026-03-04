@@ -6,7 +6,7 @@ import { ProductsHeader } from './products/ProductsHeader';
 import { ProductsInfo } from './products/ProductsInfo';
 import { ProductsCTA } from './products/ProductsCTA';
 import { ProductsBanner } from './products/ProductsBanner';
-import ProductsGrid from '@/components/productsPage/ProductsGrid';
+import ProductsSlider from './products/ProductsSlider';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { useT } from '@/hooks/useT';
@@ -28,8 +28,8 @@ export default function ProductsSection() {
     return <ErrorMessage error={error} onRetry={() => window.location.reload()} />;
   }
 
-  // Filtra solo prodotti in evidenza (featured) e limita a 3
-  const featuredProducts = products.filter(p => p.metadata?.featured === true).slice(0, 3);
+  // Filtra solo prodotti in evidenza (featured)
+  const featuredProducts = products.filter(p => p.metadata?.featured === true);
 
   return (
     <>
@@ -39,7 +39,7 @@ export default function ProductsSection() {
         <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10">
           <ProductsHeader />
 
-          <ProductsGrid
+          <ProductsSlider
             products={featuredProducts}
             onAddToCart={handleAddToCart}
           />
