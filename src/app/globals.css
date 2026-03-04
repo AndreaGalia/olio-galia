@@ -18,11 +18,8 @@
 
 /* Base font styles */
 body {
-  font-family: var(--font-libre-baskerville), serif !important;
-  font-size: 17px !important;
-  font-weight: 400 !important;
-  line-height: 22px !important;
-  letter-spacing: 1.7px !important;
+  font-family: var(--font-roboto), sans-serif !important;
+  letter-spacing: 0.05em !important; /* 10% letter spacing */
 }
 
 /* Title styles */
