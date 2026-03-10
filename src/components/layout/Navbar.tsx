@@ -50,7 +50,7 @@ export default function Navbar() {
 
             {/* Menu Items Desktop — centro */}
             <div className="hidden lg:flex flex-1 justify-center items-center">
-              <ul className="flex gap-10 xl:gap-14 text-black font-serif text-[11px]">
+              <ul className="flex gap-10 xl:gap-14 text-black font-serif navbar-desktop-link">
                 {menuItems.map((item) => (
                   <li key={item.translationKey}>
                     <Link

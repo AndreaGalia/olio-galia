@@ -54,6 +54,11 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase !important;
 }
 
+/* Navbar Desktop Links */
+.navbar-desktop-link {
+  font-size: 14px !important;
+}
+
 /* Language Switcher */
 .lang-btn {
   font-family: "termina", sans-serif !important;
