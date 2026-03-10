@@ -211,6 +211,25 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0;
 }
 
+/* Heading size overrides */
+.heading-xl {
+  font-size: 16px !important;
+}
+
+.heading-lg {
+  font-size: 16px !important;
+}
+
+@media (min-width: 640px) {
+  .heading-xl {
+    font-size: 32px !important;
+  }
+
+  .heading-lg {
+    font-size: 32px !important;
+  }
+}
+
 /* Outline Button */
 .btn-outline {
   font-size: 14px !important;

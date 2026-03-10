@@ -2,7 +2,7 @@
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { useCallback, useEffect, useState } from 'react';
-import ProductCard from '@/components/productsPage/ProductCard';
+import HomepageProductCard from './HomepageProductCard';
 import { Product } from '@/types/products';
 import { useT } from '@/hooks/useT';
 
@@ -50,9 +50,8 @@ export default function ProductsSlider({ products, onAddToCart }: ProductsSlider
               key={product.id}
               className="flex-none w-[85%] sm:w-[45%] lg:w-[31%]"
             >
-              <ProductCard
+              <HomepageProductCard
                 product={product}
-                index={index}
                 onAddToCart={onAddToCart}
               />
             </div>
