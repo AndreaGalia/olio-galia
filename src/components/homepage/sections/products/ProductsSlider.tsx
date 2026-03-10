@@ -48,7 +48,7 @@ export default function ProductsSlider({ products, onAddToCart }: ProductsSlider
           {products.map((product, index) => (
             <div
               key={product.id}
-              className="flex-none w-[85%] sm:w-[45%] lg:w-[31%]"
+              className="flex-none w-full sm:w-[45%] lg:w-[31%]"
             >
               <HomepageProductCard
                 product={product}
