@@ -212,6 +212,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Heading size overrides */
+.heading-md {
+  font-size: 17px !important;
+}
+
 .heading-xl {
   font-size: 16px !important;
 }

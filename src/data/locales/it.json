@@ -64,6 +64,32 @@
       "description": "Scopri l'intera gamma dei nostri oli extravergini e trova quello perfetto per la tua tavola"
     }
   },
+  "casaSection": {
+    "title1": "Tradizione Autentica",
+    "title2": "Dal 1940",
+    "description1": "Portiamo avanti la tradizione dell'azienda",
+    "description2": "olearia di famiglia, dedicandoci alla selezione",
+    "description3": "dei migliori prodotti della nostra terra. Con la",
+    "description4": "stessa passione di tre generazioni, portiamo",
+    "description5": "l'eccellenza siciliana sulle vostre tavole.",
+    "button": "Scopri la Nostra Storia"
+  },
+  "olivaSection": {
+    "title": "Qualità Siciliana",
+    "subtitle1": "Dalle migliori olive",
+    "subtitle2": "della Sicilia, Italia",
+    "description1": "Controlli rigorosi e certificazioni di qualità",
+    "description2": "garantiscono l'eccellenza di ogni bottiglia",
+    "button": "Scopri di Più"
+  },
+  "aboutSection": {
+    "title1": "Una Tradizione",
+    "title2": "di Eccellenza",
+    "paragraph1": "Tutto iniziò nel 1940, quando furono piantati i primi ulivi nelle colline siciliane. Con dedizione e amore per la terra, fu costruita un'azienda che divenne sinonimo di qualità e autenticità.",
+    "paragraph2": "Dopo anni in cui l'azienda rimase inattiva, abbiamo deciso di riportare in vita questo patrimonio familiare, dedicandoci alla selezione dei migliori prodotti siciliani. Portiamo avanti questa tradizione, scegliendo solo l'eccellenza della nostra terra.",
+    "paragraph3": "Oggi, OLIO GALIA rappresenta l'incontro perfetto tra tradizione e innovazione. Selezioniamo con cura ogni prodotto, mantenendo intatti i valori e i metodi di qualità della tradizione familiare, ma con uno sguardo rivolto al futuro.",
+    "button": "Scopri la Nostra Storia"
+  },
   "about": {
     "badge": "LA NOSTRA STORIA",
     "title": {

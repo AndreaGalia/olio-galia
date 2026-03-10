@@ -64,6 +64,32 @@
       "description": "Discover our complete range of extra virgin oils and find the perfect one for your table"
     }
   },
+  "casaSection": {
+    "title1": "Authentic Tradition",
+    "title2": "From 1940",
+    "description1": "We carry forward the tradition of the family oil",
+    "description2": "company, dedicating ourselves to selecting the",
+    "description3": "finest products from our land. With the same",
+    "description4": "passion of three generations, we bring Sicilian",
+    "description5": "excellence to your tables.",
+    "button": "Learn About Our Story"
+  },
+  "olivaSection": {
+    "title": "Sicilian Quality",
+    "subtitle1": "From the finest olives",
+    "subtitle2": "in Sicily, Italy",
+    "description1": "Rigorous controls and quality certifications",
+    "description2": "guarantee the excellence of every bottle",
+    "button": "Discover More"
+  },
+  "aboutSection": {
+    "title1": "A Tradition",
+    "title2": "of Excellence",
+    "paragraph1": "It all began in 1940, when the first olive trees were planted in the Sicilian hills. With dedication and love for the land, a company was built that became synonymous with quality and authenticity.",
+    "paragraph2": "After years of inactivity, we decided to revive this family heritage, dedicating ourselves to selecting the finest Sicilian products. We carry forward this tradition, choosing only the excellence of our land.",
+    "paragraph3": "Today, OLIO GALIA represents the perfect blend of tradition and innovation. We carefully select every product, preserving the values and quality methods of our family tradition, while looking toward the future.",
+    "button": "Learn About Our Story"
+  },
   "about": {
     "badge": "OUR STORY",
     "title": {

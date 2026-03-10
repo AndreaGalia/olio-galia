@@ -3,15 +3,11 @@
 import { useProducts } from '@/hooks/useProducts';
 import { ProductsBackground } from './products/ProductsBackground';
 import { ProductsHeader } from './products/ProductsHeader';
-import { ProductsInfo } from './products/ProductsInfo';
-import { ProductsCTA } from './products/ProductsCTA';
-import { ProductsBanner } from './products/ProductsBanner';
 import ProductsSlider from './products/ProductsSlider';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { useT } from '@/hooks/useT';
 import { useAddToCart } from '@/hooks/useAddToCart';
-import ProductsPageBanner from '@/components/productsPage/ProductsPageBanner';
 
 export default function ProductsSection() {
   const { t } = useT();
@@ -46,21 +42,6 @@ export default function ProductsSection() {
         </div>
       </section>
 
-      <ProductsBanner />
-
-      <section className="relative bg-homepage-bg py-20 sm:py-24 lg:py-32 overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10">
-          <ProductsInfo />
-        </div>
-      </section>
-
-      <ProductsPageBanner />
-
-      <section className="relative bg-homepage-bg pt-12 sm:pt-16 lg:pt-20 pb-20 sm:pb-24 lg:pb-32 overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10">
-          <ProductsCTA />
-        </div>
-      </section>
     </>
   );
 }

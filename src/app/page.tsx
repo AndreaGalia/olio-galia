@@ -2,7 +2,11 @@ import { Metadata } from 'next';
 import AboutSection from "@/components/homepage/sections/AboutSection";
 import FAQSection from "@/components/homepage/sections/FAQSection";
 import HeroSection from "@/components/homepage/sections/HeroSection";
+import OlivaSection from "@/components/homepage/sections/OlivaSection";
+import CasaSection from "@/components/homepage/sections/CasaSection";
 import ProductsSection from "@/components/homepage/sections/ProductSection";
+import { UlivetoSection } from "@/components/homepage/sections/UlivetoSection";
+import ProductsPageBanner from "@/components/productsPage/ProductsPageBanner";
 import { generateBaseMetadata } from '@/lib/seo/metadata';
 import { StructuredData, generateOrganizationSchema, generateWebsiteSchema } from '@/lib/seo/structured-data';
 
@@ -21,8 +25,11 @@ export default function HomePage() {
 
       <HeroSection />
       <ProductsSection />
+      <UlivetoSection />
+      <OlivaSection />
+      <CasaSection />
       <AboutSection />
-      <FAQSection />
+      <ProductsPageBanner />
     </>
   );
 }
