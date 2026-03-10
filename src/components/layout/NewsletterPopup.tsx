@@ -15,10 +15,8 @@ export default function NewsletterPopup() {
   } | null>(null);
   const [visible, setVisible] = useState(false);
 
-  // Animazione di entrata
   useEffect(() => {
     if (shouldShow) {
-      // Blocca scroll del body quando il popup è aperto
       document.body.style.overflow = "hidden";
       const timer = setTimeout(() => setVisible(true), 50);
       return () => {
@@ -78,114 +76,99 @@ export default function NewsletterPopup() {
   return (
     <div
       className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300 ease-out ${
-        visible ? "bg-black/50 backdrop-blur-sm" : "bg-black/0"
+        visible ? "bg-black/40" : "bg-black/0"
       }`}
       onClick={(e) => {
-        // Chiudi cliccando sullo sfondo
         if (e.target === e.currentTarget) dismiss();
       }}
     >
       <div
-        className={`relative bg-white w-full max-w-sm sm:max-w-md border border-olive/10 shadow-2xl transition-all duration-500 ease-out ${
+        className={`relative bg-sabbia w-full max-w-sm sm:max-w-md px-10 py-12 transition-all duration-500 ease-out ${
           visible
             ? "opacity-100 scale-100 translate-y-0"
             : "opacity-0 scale-95 translate-y-4"
         }`}
       >
-        {/* Decorazione top */}
-        <div className="h-1.5 bg-gradient-to-r from-olive via-salvia to-olive" />
+        {/* Chiudi × */}
+        <button
+          onClick={dismiss}
+          className="absolute top-4 right-5 text-black/40 hover:text-black transition-colors duration-200 cursor-pointer text-lg leading-none"
+          aria-label={popup.close}
+          type="button"
+        >
+          ×
+        </button>
 
-        {/* Contenuto */}
-        <div className="p-6 sm:p-8">
-          {/* Icona oliva */}
-          <div className="text-center mb-5 sm:mb-6">
-            <span className="text-3xl sm:text-4xl">🌿</span>
+        {/* Titolo */}
+        <h2
+          className="text-4xl sm:text-5xl italic font-normal text-black mb-6"
+          style={{ fontFamily: '"Cormorant Garamond", serif', letterSpacing: "0" }}
+        >
+          {popup.title}
+        </h2>
+
+        {/* Descrizione */}
+        <p className="text-sm text-black/70 leading-relaxed mb-10">
+          {popup.description}
+        </p>
+
+        {/* Messaggio successo/errore */}
+        {message && (
+          <div
+            className={`text-sm mb-6 ${
+              message.type === "success"
+                ? "text-green-800"
+                : "text-red-700"
+            }`}
+          >
+            {message.text}
           </div>
+        )}
 
-          {/* Titolo */}
-          <h4 className="text-center text-xl sm:text-2xl font-serif text-black mb-2 sm:mb-3">
-            {popup.title}
-          </h4>
-
-          {/* Descrizione */}
-          <p className="text-center text-black text-sm sm:text-base leading-relaxed mb-6 sm:mb-8">
-            {popup.description}
-          </p>
-
-          {/* Messaggio successo/errore */}
-          {message && (
-            <div
-              className={`p-3 sm:p-4 text-sm mb-4 border-l-2 ${
-                message.type === "success"
-                  ? "bg-green-50 text-green-800 border-green-600"
-                  : "bg-red-50 text-red-800 border-red-600"
-              }`}
-            >
-              <p className="font-medium">{message.text}</p>
-            </div>
-          )}
-
-          {/* Form */}
-          {(!message || message.type !== "success") && (
-            <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Form */}
+        {(!message || message.type !== "success") && (
+          <form onSubmit={handleSubmit}>
+            <div className="flex items-center border-b border-black/40">
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 sm:py-3.5 bg-beige/50 border border-olive/20 text-black text-sm sm:text-base placeholder:text-black/60 focus:border-olive focus:ring-2 focus:ring-olive/20 focus:bg-white transition-all duration-300 touch-manipulation outline-none"
                 placeholder={popup.placeholder}
                 autoFocus
+                className="flex-1 bg-transparent py-2 text-sm text-black placeholder:text-black/50 outline-none"
               />
-
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-olive text-beige px-6 py-3 sm:py-3.5 text-sm sm:text-base font-medium border border-olive/20 hover:shadow-xl hover:shadow-olive/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation cursor-pointer"
+                className="flex-shrink-0 pl-3 text-black/60 hover:text-black transition-colors duration-200 cursor-pointer disabled:opacity-40 text-lg"
+                aria-label={loading ? popup.sending : "Invia"}
               >
-                {loading ? popup.sending : popup.submit}
+                {loading ? (
+                  <span className="text-xs">{popup.sending}</span>
+                ) : (
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                )}
               </button>
-            </form>
-          )}
+            </div>
+          </form>
+        )}
 
-          {/* "No grazie" link */}
-          {(!message || message.type !== "success") && (
-            <button
-              onClick={dismiss}
-              type="button"
-              className="w-full mt-3 text-nocciola/70 hover:text-olive text-xs sm:text-sm transition-colors duration-300 cursor-pointer py-2 touch-manipulation"
-            >
-              {popup.noThanks}
-            </button>
-          )}
-
-          {/* Privacy */}
-          <p className="text-center text-[10px] sm:text-xs text-black/50 mt-3 sm:mt-4 leading-relaxed">
-            {popup.privacy}
-          </p>
-        </div>
-
-        {/* Bottone X chiudi */}
-        <button
-          onClick={dismiss}
-          className="absolute top-4 right-4 text-nocciola/40 hover:text-olive transition-colors duration-300 cursor-pointer touch-manipulation"
-          aria-label={popup.close}
-          type="button"
-        >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
+        {/* Privacy */}
+        <p className="text-[11px] text-black/40 mt-5 leading-relaxed">
+          {popup.privacy}
+        </p>
       </div>
     </div>
   );

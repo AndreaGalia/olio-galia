@@ -40,6 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Local assets (not tracked by git)
+/local-assets/
+
 # Video files - too large for GitHub
 public/videos/*.mp4
 public/videos/*.MOV

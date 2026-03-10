@@ -276,13 +276,11 @@
       "sending": "Sending..."
     },
     "newsletterPopup": {
-      "title": "Stay with us",
-      "description": "Subscribe to our newsletter for exclusive offers, news and stories from our olive grove.",
-      "placeholder": "Your email address",
-      "submit": "Subscribe now",
+      "title": "Welcome",
+      "description": "Subscribe to our newsletter to receive news and exclusive offers from our olive grove.",
+      "placeholder": "Email Address",
       "sending": "Sending...",
       "close": "Close",
-      "noThanks": "No, thanks",
       "privacy": "No spam. Unsubscribe anytime."
     },
     "bottom": {

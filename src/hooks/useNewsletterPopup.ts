@@ -82,6 +82,13 @@ export function useNewsletterPopup() {
     };
   }, []);
 
+  // Ascolta evento manuale dal footer
+  useEffect(() => {
+    const handler = () => setShouldShow(true);
+    window.addEventListener("show-newsletter-popup", handler);
+    return () => window.removeEventListener("show-newsletter-popup", handler);
+  }, []);
+
   const dismiss = useCallback(() => {
     setShouldShow(false);
     try {

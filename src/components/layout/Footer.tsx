@@ -1,21 +1,9 @@
 "use client";
 
 import { useT } from "@/hooks/useT";
-import { useState } from "react";
-import NewsletterModal from "./NewsletterModal";
-
 
 export default function Footer() {
   const { t } = useT();
-  const [showNewsletterModal, setShowNewsletterModal] = useState(false);
-
-  const handleNewsletterClick = () => {
-    setShowNewsletterModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowNewsletterModal(false);
-  };
 
   return (
     <>
@@ -181,16 +169,14 @@ export default function Footer() {
               <p className="text-beige/80 text-sm sm:text-base">
                 {t.footer.newsletter.description}
               </p>
-
               <div className="flex justify-center">
                 <button
-                  onClick={handleNewsletterClick}
+                  onClick={() => window.dispatchEvent(new CustomEvent("show-newsletter-popup"))}
                   className="bg-beige text-olive px-8 py-3 font-medium transition-colors duration-300 cursor-pointer border border-olive/20"
                 >
                   {t.footer.newsletter.button}
                 </button>
               </div>
-
               <p className="text-xs text-beige/60">
                 {t.footer.newsletter.privacy}
               </p>
@@ -215,11 +201,6 @@ export default function Footer() {
         </div>
       </footer>
 
-      {/* Newsletter Modal */}
-      <NewsletterModal
-        isOpen={showNewsletterModal}
-        onClose={handleCloseModal}
-      />
     </>
   );
 }

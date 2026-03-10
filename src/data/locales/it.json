@@ -276,13 +276,11 @@
       "sending": "Invio..."
     },
     "newsletterPopup": {
-      "title": "Resta con noi",
-      "description": "Iscriviti alla newsletter per ricevere offerte esclusive, novità e storie dal nostro uliveto.",
-      "placeholder": "Il tuo indirizzo email",
-      "submit": "Iscriviti ora",
+      "title": "Benvenuto",
+      "description": "Iscriviti alla nostra newsletter per ricevere novità ed offerte esclusive dal nostro uliveto.",
+      "placeholder": "Indirizzo email",
       "sending": "Invio...",
       "close": "Chiudi",
-      "noThanks": "No, grazie",
       "privacy": "Niente spam. Cancellati quando vuoi."
     },
     "bottom": {
