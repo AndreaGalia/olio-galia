@@ -48,7 +48,7 @@ export function HeroContent({ isVisible }: HeroContentProps) {
         style={{ transitionDelay: '0.4s' }}>
         <Link
           href="/products"
-          className="btn-outline font-serif inline-block border border-sabbia-chiaro text-sabbia-chiaro bg-transparent px-10 py-3 uppercase tracking-wider transition-all duration-300 hover:bg-sabbia-chiaro hover:text-black"
+          className="btn-outline font-serif inline-block border border-sabbia-chiaro text-sabbia-chiaro bg-transparent px-10 py-3 uppercase tracking-wider whitespace-nowrap transition-all duration-300 hover:bg-sabbia-chiaro hover:text-black"
         >
           {t.hero.buttons.discover}
         </Link>
