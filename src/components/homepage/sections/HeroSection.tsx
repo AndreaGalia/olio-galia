@@ -13,7 +13,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden -mt-12 sm:-mt-[70px]">
 
       {/* Video Background con overlay */}
       <VideoBackground videoUrl={process.env.NEXT_PUBLIC_HERO_VIDEO_URL || "/videos/uliveti_sicilia.mp4"} />
