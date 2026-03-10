@@ -29,7 +29,6 @@ export default function HomePage() {
       <OlivaSection />
       <CasaSection />
       <AboutSection />
-      <ProductsPageBanner />
     </>
   );
 }
