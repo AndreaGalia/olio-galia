@@ -277,7 +277,7 @@
     },
     "newsletterPopup": {
       "title": "Welcome",
-      "description": "Subscribe to our newsletter to receive news and exclusive offers from our olive grove.",
+      "description": "Subscribe to our newsletter to receive news and exclusive offers.",
       "placeholder": "Email Address",
       "sending": "Sending...",
       "close": "Close",
