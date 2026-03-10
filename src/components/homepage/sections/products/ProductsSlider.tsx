@@ -44,11 +44,11 @@ export default function ProductsSlider({ products, onAddToCart }: ProductsSlider
     <div className="relative">
       {/* Slider */}
       <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex gap-4 sm:gap-6">
+        <div className="flex -ml-4 sm:-ml-6">
           {products.map((product, index) => (
             <div
               key={product.id}
-              className="flex-none w-full sm:w-[45%] lg:w-[31%]"
+              className="flex-none w-full sm:w-[45%] lg:w-[31%] pl-4 sm:pl-6"
             >
               <HomepageProductCard
                 product={product}
