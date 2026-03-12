@@ -18,16 +18,16 @@ export function ManifestoSection() {
       <div className="grid grid-cols-1 md:grid-cols-2">
 
         {/* Content — top on mobile, left column on md+ */}
-        <div className="flex flex-col justify-center py-12 px-8 sm:px-12 lg:px-20 order-2 md:order-1">
-          <h2 className="heading-md text-black mb-10">
+        <div className="flex flex-col justify-center md:items-end py-20 px-8 sm:px-12 lg:px-20 order-2 md:order-1 md:text-right">
+          <h2 className="heading-md text-black mb-12">
             {t.aboutPage.manifesto.title}
           </h2>
 
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-12">
             {blocks.map((block, index) => (
               <div key={index}>
                 {/* Quote block */}
-                <blockquote className="border-l-2 border-black pl-4 mb-3">
+                <blockquote className="border-l-2 pl-4 md:border-l-0 md:pl-0 md:border-r-2 md:pr-4 border-black mb-4">
                   {block.quote.split('\n').map((line, i) => (
                     <p key={i} className="heading-md text-black leading-relaxed">
                       {line}
@@ -36,7 +36,7 @@ export function ManifestoSection() {
                 </blockquote>
 
                 {/* Description */}
-                <p className="text-sm sm:text-base text-black/60 leading-relaxed">
+                <p className="text-sm sm:text-base text-black/80 leading-relaxed">
                   {block.description}
                 </p>
               </div>
