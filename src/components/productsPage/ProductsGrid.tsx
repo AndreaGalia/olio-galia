@@ -1,11 +1,6 @@
-import ProductCard from './ProductCard';
+import HomepageProductCard from '@/components/homepage/sections/products/HomepageProductCard';
 import { Product } from '@/types/products';
 import { useT } from '@/hooks/useT';
-
-interface ProductsGridProps {
-  products: Product[];
-  onAddToCart: (productId: string) => void;
-}
 
 interface ProductsGridProps {
   products: Product[];
@@ -23,12 +18,11 @@ export default function ProductsGrid({ products, onAddToCart }: ProductsGridProp
             <p className="text-black text-lg">{t.productsPage.noProducts}</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {products.map((product, index) => (
-              <ProductCard 
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
+            {products.map((product) => (
+              <HomepageProductCard
                 key={product.id}
                 product={product}
-                index={index}
                 onAddToCart={onAddToCart}
               />
             ))}
