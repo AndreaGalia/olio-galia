@@ -36,7 +36,6 @@ export default function OlivaSection() {
         {/* Right: Content */}
         <div className="flex flex-col justify-center py-20 px-8 sm:px-12 lg:px-20">
           <div className="mb-10">
-            <h3 className="heading-md text-black mb-3">{t.olivaSection.title}</h3>
             <h3 className="heading-md text-black mb-3">{t.olivaSection.subtitle1}</h3>
             <h3 className="heading-md text-black">{t.olivaSection.subtitle2}</h3>
           </div>

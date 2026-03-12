@@ -18,7 +18,7 @@ export function HistorySection({ history, variant = "compact" }: HistorySectionP
                 index === array.length - 1 ? part : (
                   <span key={index}>
                     {part}
-                    <span className="font-bold">OLIO GALIA</span>
+                    <span className="font-serif-bold">OLIO GALIA</span>
                   </span>
                 )
               ))}
