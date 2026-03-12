@@ -8,9 +8,11 @@ export function ValuesSection({ values, title, subtitle, variant = "compact" }: 
   return (
     <div className={`${variant === "full" ? "" : "mb-12"}`}>
       <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
-        <h3 className={`${variant === "full" ? "text-lg sm:text-3xl md:text-4xl lg:text-5xl" : "text-2xl sm:text-3xl"} ${styles.fontSerif} ${styles.textOlive} text-center mb-4`}>
-          {title}
-        </h3>
+        {title && (
+          <h3 className={`${variant === "full" ? "text-lg sm:text-3xl md:text-4xl lg:text-5xl" : "text-2xl sm:text-3xl"} ${styles.fontSerif} ${styles.textOlive} text-center mb-4`}>
+            {title}
+          </h3>
+        )}
         {subtitle && (
           <p className={`text-lg ${styles.textNocciola} text-center mb-12 max-w-3xl mx-auto`}>
             {subtitle}

@@ -10,16 +10,18 @@ interface TimelineEvent {
 
 interface TimelineSectionProps {
   timeline: TimelineEvent[];
-  title: string;
+  title?: string;
 }
 
 export function TimelineSection({ timeline, title }: TimelineSectionProps) {
   return (
     <section className="py-10 sm:py-12">
       <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
-        <h2 className="text-lg sm:text-3xl md:text-4xl lg:text-5xl font-serif text-black text-center mb-12">
-          {title}
-        </h2>
+        {title && (
+          <h2 className="text-lg sm:text-3xl md:text-4xl lg:text-5xl font-serif text-black text-center mb-12">
+            {title}
+          </h2>
+        )}
 
         {/* Timeline Desktop */}
         <div className="hidden md:block relative">

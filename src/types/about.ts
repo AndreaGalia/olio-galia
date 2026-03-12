@@ -73,7 +73,7 @@ export interface BrotherCardProps {
 
 export interface ValuesSectionProps {
   values: Value[];
-  title: string;
+  title?: string;
   subtitle?: string;
   variant?: "full" | "compact";
 }

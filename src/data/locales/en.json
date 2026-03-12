@@ -415,6 +415,23 @@
       "description": "Taste the authenticity of Sicilian extra virgin olive oil, selected with passion and tradition by OLIO GALIA.",
       "catalog": "Go to Catalog",
       "contact": "Contact Us"
+    },
+    "manifesto": {
+      "title": "Our Manifesto",
+      "blocks": [
+        {
+          "quote": "HEALTHY AND STRONG\nAS GOLIATH\nONLY WITH GALIA OIL\nPROCESSING AND PRODUCTION IN YOUR PRESENCE",
+          "description": "A timeless ambition: the supremacy of quality. True luxury holds no secrets. The art of production, unveiled."
+        },
+        {
+          "quote": "AS A GUARANTEE\nFOR THE GOODS:\nINSTALLMENT PAYMENT\nOF PURE VIRGIN OLIVE OIL\nWHITE AND BLACK OLIVES",
+          "description": "Our roots in Sicily. Where excellence originates."
+        },
+        {
+          "quote": "IN MY HOUSE\nONLY GALIA OIL ENTERS",
+          "description": "Where quality becomes a rite. A silent legacy, passed down to those who know the difference."
+        }
+      ]
     }
   },
   "productsPage": {

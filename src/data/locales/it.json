@@ -415,6 +415,23 @@
       "description": "Assapora l'autenticità dell'olio extravergine di oliva siciliano, selezionato con passione e tradizione da OLIO GALIA.",
       "catalog": "Vai al Catalogo",
       "contact": "Contattaci"
+    },
+    "manifesto": {
+      "title": "Il Nostro Manifesto",
+      "blocks": [
+        {
+          "quote": "SANO E FORTE\nCOME GOLIA\nSOLO CON OLIO GALIA\nLAVORAZIONE E PRODUZIONE IN TUA PRESENZA",
+          "description": "Un'ambizione senza tempo: la supremazia della qualità. Il vero lusso non ha segreti. L'arte della produzione, svelata."
+        },
+        {
+          "quote": "A GARANZIA\nDELLA MERCE:\nPAGAMENTO RATEALE\nD'OLIO PURO VERGINE D'OLIVA\nOLIVE BIANCHE E NERE",
+          "description": "Le nostre radici in Sicilia. Dove nasce l'eccellenza."
+        },
+        {
+          "quote": "IN CASA MIA\nENTRA SOLO OLIO GALIA",
+          "description": "Un'eredità silenziosa, tramandata a chi sa riconoscere la differenza."
+        }
+      ]
     }
   },
   "productsPage": {
