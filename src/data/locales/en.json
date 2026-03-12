@@ -671,26 +671,35 @@
   }
   },
   "contactPage": {
-    "hero": {
-      "badge": "Galia Family",
-      "title": {
-        "main": "Contact Us",
-        "subtitle": ""
-      },
-      "description": "Do you have questions about our products? We are here to help you choose the perfect extra virgin olive oil and Sicilian products for you."
+    "title": "Contact Us",
+    "form": {
+      "title": "Send a Message",
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "submit": "Submit",
+      "submitting": "Sending...",
+      "success": "Message sent successfully!",
+      "error": "Error sending message. Please try again."
     },
-    "methods": [
-      {
-        "title": "Email",
-        "value": "info@example.it",
-        "description": "Write for detailed information about our products"
+    "info": {
+      "title": "Get in touch",
+      "phone": {
+        "title": "Call Us",
+        "description": "Available to answer your questions"
       },
-      {
+      "whatsapp": {
         "title": "WhatsApp",
-        "value": "+39 XXX XXX XXXX",
-        "description": "Direct contact for immediate response"
+        "description": "Message us on WhatsApp"
+      },
+      "email": {
+        "title": "Email",
+        "description": "Write to us for detailed information"
       }
-    ],
+    },
+    "sicilia": {
+      "alt": "Sicily - Olio Galia"
+    },
     "whatsappMessage": "Hi! I would like information about your extra virgin oils"
   },
   "addToCartButton": {

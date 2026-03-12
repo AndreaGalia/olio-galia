@@ -671,26 +671,35 @@
   }
   },
   "contactPage": {
-    "hero": {
-      "badge": "Famiglia Galia",
-      "title": {
-        "main": "Contattaci",
-        "subtitle": ""
-      },
-      "description": "Hai domande sui nostri prodotti? Siamo qui per aiutarti a scegliere l'olio extravergine e i prodotti siciliani perfetti per te."
+    "title": "Contattaci",
+    "form": {
+      "title": "Invia un messaggio",
+      "name": "Nome",
+      "email": "Email",
+      "message": "Messaggio",
+      "submit": "Invia",
+      "submitting": "Invio in corso...",
+      "success": "Messaggio inviato con successo!",
+      "error": "Errore durante l'invio. Riprova."
     },
-    "methods": [
-      {
-        "title": "Email",
-        "value": "info@example.it",
-        "description": "Scrivi per informazioni dettagliate sui nostri prodotti"
+    "info": {
+      "title": "Contatti",
+      "phone": {
+        "title": "Chiamaci",
+        "description": "Disponibili per rispondere alle tue domande"
       },
-      {
+      "whatsapp": {
         "title": "WhatsApp",
-        "value": "+39 XXX XXX XXXX",
-        "description": "Contatto diretto per risposta immediata"
+        "description": "Scrivici su WhatsApp"
+      },
+      "email": {
+        "title": "Email",
+        "description": "Scrivici per informazioni dettagliate"
       }
-    ],
+    },
+    "sicilia": {
+      "alt": "Sicilia - Olio Galia"
+    },
     "whatsappMessage": "Ciao! Vorrei informazioni sui vostri oli extravergini"
   },
   "addToCartButton": {
