@@ -51,6 +51,7 @@ export default function Footer() {
                   <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.mill}</a></li>
                   <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.shipping}</a></li>
                   <li><a href="/manage-subscription" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.manageSubscription || 'Gestisci Abbonamento'}</a></li>
+                  <li><a href="/faq" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.faq}</a></li>
                 </ul>
               </div>
 

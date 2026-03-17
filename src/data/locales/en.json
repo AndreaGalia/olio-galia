@@ -274,7 +274,8 @@
       "story": "Our Story",
       "mill": "The Family Mill",
       "shipping": "Shipping",
-      "manageSubscription": "Manage Subscription"
+      "manageSubscription": "Manage Subscription",
+      "faq": "FAQ"
     },
     "contact": {
       "title": "Contact",
@@ -1425,6 +1426,15 @@
         "title": "14. Contact",
         "content": "For any questions or clarifications regarding the Terms and Conditions, you can contact us through the contact section of the site."
       }
+    }
+  },
+  "faqPage": {
+    "filter": {
+      "all": "All"
+    },
+    "contactCta": {
+      "title": "Didn't find the answer?",
+      "button": "Contact us"
     }
   }
 }

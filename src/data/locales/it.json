@@ -274,7 +274,8 @@
       "story": "La Nostra Storia",
       "mill": "Il Frantoio di Famiglia",
       "shipping": "Spedizioni",
-      "manageSubscription": "Gestisci Abbonamento"
+      "manageSubscription": "Gestisci Abbonamento",
+      "faq": "FAQ"
     },
     "contact": {
       "title": "Contatti",
@@ -1425,6 +1426,15 @@
         "title": "14. Contatti",
         "content": "Per qualsiasi domanda o chiarimento riguardante i Termini e Condizioni, puoi contattarci attraverso la sezione contatti del sito."
       }
+    }
+  },
+  "faqPage": {
+    "filter": {
+      "all": "Tutte"
+    },
+    "contactCta": {
+      "title": "Non hai trovato la risposta?",
+      "button": "Contattaci"
     }
   }
 }   
