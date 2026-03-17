@@ -275,6 +275,7 @@
       "mill": "The Family Mill",
       "shipping": "Shipping",
       "manageSubscription": "Manage Subscription",
+      "sustainability": "Sustainability",
       "faq": "FAQ"
     },
     "contact": {
@@ -1435,6 +1436,27 @@
     "contactCta": {
       "title": "Didn't find the answer?",
       "button": "Contact us"
+    }
+  },
+  "sostenibilitaPage": {
+    "meta": {
+      "title": "Sustainability",
+      "description": "Discover our commitment to sustainable olive oil production: organic farming, hand harvesting and short supply chain in respect of the Sicilian land."
+    },
+    "section1": {
+      "title": "Organic Farming",
+      "subtitle": "Respect for the land",
+      "description": "Our olive groves are cultivated following certified organic farming principles. No pesticides, no chemical fertilisers: we let the Sicilian soil express all its natural vitality. We nurture the earth with traditional methods passed down through generations, because we believe exceptional oil begins with healthy land."
+    },
+    "section2": {
+      "title": "Hand Harvesting",
+      "subtitle": "Artisan care",
+      "description": "Every olive is hand-picked at the exact moment it reaches optimal ripeness. This ancient method, known as 'brucatura', preserves the fruit intact and prevents any oxidative stress. The result is an extra virgin olive oil with superior organoleptic qualities, low acidity and a rich, complex aromatic profile."
+    },
+    "section3": {
+      "title": "Short Supply Chain",
+      "subtitle": "From grove to table",
+      "description": "From harvesting to pressing, every stage takes place within a few hours. The brevity of the supply chain guarantees freshness: no long journeys, no waiting. Our family mill processes the olives within 24 hours of harvesting, maximising the polyphenols and beneficial properties of the oil. A virtuous cycle that respects the environment and offers the consumer an authentic product."
     }
   }
 }

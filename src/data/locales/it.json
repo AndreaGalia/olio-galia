@@ -275,6 +275,7 @@
       "mill": "Il Frantoio di Famiglia",
       "shipping": "Spedizioni",
       "manageSubscription": "Gestisci Abbonamento",
+      "sustainability": "Sostenibilità",
       "faq": "FAQ"
     },
     "contact": {
@@ -1435,6 +1436,27 @@
     "contactCta": {
       "title": "Non hai trovato la risposta?",
       "button": "Contattaci"
+    }
+  },
+  "sostenibilitaPage": {
+    "meta": {
+      "title": "Sostenibilità",
+      "description": "Scopri il nostro impegno per una produzione olearia sostenibile: agricoltura biologica, raccolta a mano e filiera corta nel rispetto della terra siciliana."
+    },
+    "section1": {
+      "title": "Agricoltura Biologica",
+      "subtitle": "Rispetto per la terra",
+      "description": "I nostri uliveti sono coltivati seguendo i principi dell'agricoltura biologica certificata. Nessun pesticida, nessun fertilizzante chimico: lasciamo che la terra siciliana esprima tutta la sua vitalità naturale. Curiamo il suolo con metodi tradizionali tramandati di generazione in generazione, perché crediamo che un olio eccellente inizi dalla salute della terra."
+    },
+    "section2": {
+      "title": "Raccolta a Mano",
+      "subtitle": "Cura artigianale",
+      "description": "Ogni oliva viene raccolta a mano, nel momento esatto in cui raggiunge la maturazione ottimale. Questo metodo antico, detto 'brucatura', preserva intatta la polpa del frutto ed evita qualsiasi tipo di stress ossidativo. Il risultato è un olio extravergine dalle caratteristiche organolettiche superiori, con un basso indice di acidità e un profilo aromatico ricco e complesso."
+    },
+    "section3": {
+      "title": "Filiera Corta",
+      "subtitle": "Dal campo alla tavola",
+      "description": "Dalla raccolta alla frangitura, ogni fase avviene entro poche ore. La brevità della filiera è garanzia di freschezza: nessun trasporto lungo, nessuna attesa. Il nostro frantoio di famiglia lavora le olive entro 24 ore dalla raccolta, conservando al massimo i polifenoli e le proprietà benefiche dell'olio. Un ciclo virtuoso che rispetta l'ambiente e offre al consumatore un prodotto autentico."
     }
   }
 }   
