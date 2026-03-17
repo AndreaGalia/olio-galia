@@ -9,7 +9,7 @@ export default function BreadcrumbNavigation({ productName }: BreadcrumbNavigati
   const { t } = useT();
 
   return (
-    <div className="bg-white/50 py-4">
+    <div className="bg-white/50 pt-8 pb-4">
       <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
         <nav className="flex items-center gap-2 text-sm">
           <Link href="/" className="text-black hover:text-olive transition-colors">
