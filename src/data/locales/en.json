@@ -311,6 +311,9 @@
       "close": "Close",
       "privacy": "No spam. Unsubscribe anytime."
     },
+    "payment": {
+      "title": "Secure payments"
+    },
     "bottom": {
       "copyrightText": "Olio Galia. All rights reserved.",
       "vatLabel": "VAT:",

@@ -1,6 +1,7 @@
 "use client";
 
 import { useT } from "@/hooks/useT";
+import PaymentMethodsStrip from "./PaymentMethodsStrip";
 
 export default function Footer() {
   const { t } = useT();
@@ -184,6 +185,9 @@ export default function Footer() {
               </p>
             </div>
           </div>
+
+          {/* Metodi di pagamento */}
+          <PaymentMethodsStrip />
 
           {/* Bottom footer */}
           <div className="border-t border-beige/20 py-6 sm:py-8">

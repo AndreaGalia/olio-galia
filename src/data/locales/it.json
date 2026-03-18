@@ -311,6 +311,9 @@
       "close": "Chiudi",
       "privacy": "Niente spam. Cancellati quando vuoi."
     },
+    "payment": {
+      "title": "Pagamenti sicuri"
+    },
     "bottom": {
       "copyrightText": "Olio Galia. Tutti i diritti riservati.",
       "vatLabel": "P.IVA:",
