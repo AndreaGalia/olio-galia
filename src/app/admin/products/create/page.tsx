@@ -10,7 +10,7 @@ import type { VariantData } from '@/components/admin/VariantFormFields';
 import { ProductTranslations } from '@/types/products';
 
 interface ProductFormData {
-  category: string;
+  categories: string[];
   price: string;
   originalPrice?: string;
   size: string;
@@ -75,7 +75,7 @@ export default function CreateProductPage() {
   });
 
   const [formData, setFormData] = useState<ProductFormData>({
-    category: '',
+    categories: [],
     price: '',
     originalPrice: '',
     size: '',
@@ -174,27 +174,27 @@ export default function CreateProductPage() {
     fetchCategories();
   }, []);
 
-  // Aggiorna automaticamente categoryDisplay quando cambia la categoria
+  // Aggiorna automaticamente categoryDisplay con la prima categoria selezionata
   useEffect(() => {
-    if (formData.category && categories.length > 0) {
-      const selectedCategory = categories.find(cat => cat.id === formData.category);
-      if (selectedCategory) {
+    if (formData.categories.length > 0 && categories.length > 0) {
+      const firstCategory = categories.find(cat => cat.id === formData.categories[0]);
+      if (firstCategory) {
         setFormData(prev => ({
           ...prev,
           translations: {
             it: {
               ...prev.translations.it,
-              categoryDisplay: selectedCategory.name
+              categoryDisplay: firstCategory.name
             },
             en: {
               ...prev.translations.en,
-              categoryDisplay: selectedCategory.name
+              categoryDisplay: firstCategory.name
             }
           }
         }));
       }
     }
-  }, [formData.category, categories]);
+  }, [formData.categories, categories]);
 
   const updateTranslation = (lang: 'it' | 'en', field: keyof ProductTranslations, value: string | string[]) => {
     setFormData(prev => ({
@@ -275,8 +275,8 @@ export default function CreateProductPage() {
 
     try {
       // Validazione base
-      if (!formData.translations.it.name || !formData.translations.en.name || !formData.category || !formData.price) {
-        throw new Error('Nome (IT/EN), categoria e prezzo sono obbligatori');
+      if (!formData.translations.it.name || !formData.translations.en.name || !formData.categories.length || !formData.price) {
+        throw new Error('Nome (IT/EN), almeno una categoria e prezzo sono obbligatori');
       }
 
       // Validazione varianti
@@ -410,24 +410,31 @@ export default function CreateProductPage() {
           <section>
             <h3 className="text-lg font-semibold text-olive mb-4">Informazioni Base</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Categoria *</label>
-                <select
-                  value={formData.category}
-                  onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                  className="w-full px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
-                  required
-                  disabled={categoriesLoading}
-                >
-                  <option value="">
-                    {categoriesLoading ? 'Caricamento categorie...' : 'Seleziona categoria...'}
-                  </option>
-                  {categories.map(cat => (
-                    <option key={cat.id} value={cat.id}>{cat.name}</option>
-                  ))}
-                </select>
-                {categoriesLoading && (
-                  <p className="mt-1 text-xs text-nocciola">Caricamento categorie da MongoDB...</p>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Categorie *</label>
+                {categoriesLoading ? (
+                  <p className="text-xs text-nocciola">Caricamento categorie da MongoDB...</p>
+                ) : (
+                  <div className="flex flex-wrap gap-3">
+                    {categories.map(cat => (
+                      <label key={cat.id} className="flex items-center gap-2 cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          checked={formData.categories.includes(cat.id)}
+                          onChange={(e) => {
+                            setFormData(prev => ({
+                              ...prev,
+                              categories: e.target.checked
+                                ? [...prev.categories, cat.id]
+                                : prev.categories.filter(id => id !== cat.id)
+                            }));
+                          }}
+                          className="w-4 h-4 accent-olive"
+                        />
+                        <span className="text-sm text-gray-700">{cat.name}</span>
+                      </label>
+                    ))}
+                  </div>
                 )}
               </div>
 

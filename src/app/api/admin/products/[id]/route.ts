@@ -103,7 +103,7 @@ export async function PUT(
     const data = await request.json();
 
     const {
-      category,
+      categories,
       price,
       originalPrice,
       size,
@@ -205,10 +205,9 @@ export async function PUT(
           description: translations.it.description,
           images: validImages,
           metadata: {
-            category,
+            categories: (categories || []).join(','),
             size,
             color: color || '',
-            mongo_category: category,
             last_updated: new Date().toISOString()
           }
         });
@@ -248,7 +247,7 @@ export async function PUT(
               // id: NON aggiornato - rimane quello locale originale
               stripeProductId: finalStripeProductId,
               stripePriceId: newPrice.id,
-              category,
+              categories,
               price: price.toString(),
               originalPrice,
               size,
@@ -266,7 +265,8 @@ export async function PUT(
               slug,
               'metadata.updatedAt': new Date(),
               'metadata.featured': metadata?.featured || false
-            }
+            },
+            $unset: { category: '' }
           }
         );
       } else {
@@ -279,7 +279,7 @@ export async function PUT(
               // id: NON aggiornato - rimane quello locale originale
               stripeProductId: finalStripeProductId,
               stripePriceId: finalStripePriceId,
-              category,
+              categories,
               price: price?.toString() || existingProduct.price,
               originalPrice,
               size,
@@ -297,7 +297,8 @@ export async function PUT(
               slug,
               'metadata.updatedAt': new Date(),
               'metadata.featured': metadata?.featured || false
-            }
+            },
+            $unset: { category: '' }
           }
         );
       }
@@ -311,7 +312,7 @@ export async function PUT(
             // id: NON aggiornato - rimane quello locale originale
             stripeProductId: finalStripeProductId,
             stripePriceId: finalStripePriceId,
-            category,
+            categories,
             price: price?.toString() || existingProduct.price,
             originalPrice,
             size,
@@ -327,7 +328,8 @@ export async function PUT(
             slug,
             'metadata.updatedAt': new Date(),
             'metadata.featured': metadata?.featured || false
-          }
+          },
+          $unset: { category: '' }
         }
       );
     } else {
@@ -340,7 +342,7 @@ export async function PUT(
             // id: NON aggiornato - rimane quello locale originale
             stripeProductId: undefined,
             stripePriceId: undefined,
-            category,
+            categories,
             price: price?.toString() || existingProduct.price,
             originalPrice,
             size,
@@ -356,7 +358,8 @@ export async function PUT(
             slug,
             'metadata.updatedAt': new Date(),
             'metadata.featured': metadata?.featured || false
-          }
+          },
+          $unset: { category: '' }
         }
       );
     }

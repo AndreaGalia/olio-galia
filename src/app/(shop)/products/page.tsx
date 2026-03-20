@@ -1,5 +1,6 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useProducts } from '@/hooks/useProducts';
 import { useT } from '@/hooks/useT';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -9,8 +10,15 @@ import CategoryFilter from '@/components/productsPage/CategoryFilter';
 import ProductsGrid from '@/components/productsPage/ProductsGrid';
 import { useAddToCart } from '@/hooks/useAddToCart';
 
-export default function ProductsPage() {
-  const [selectedCategory, setSelectedCategory] = useState('tutti');
+function ProductsContent() {
+  const searchParams = useSearchParams();
+  const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'tutti');
+
+  useEffect(() => {
+    const cat = searchParams.get('category');
+    setSelectedCategory(cat || 'tutti');
+  }, [searchParams]);
+
   const { t } = useT();
   const { products, categories, loading, error } = useProducts();
 
@@ -19,29 +27,38 @@ export default function ProductsPage() {
     ...categories
   ];
 
-  const filteredProducts = selectedCategory === 'tutti' 
+  const filteredProducts = selectedCategory === 'tutti'
     ? products
-    : products.filter(product => product.category === selectedCategory);
+    : products.filter(product =>
+        product.categories?.includes(selectedCategory) ||
+        product.category === selectedCategory
+      );
 
-    const { handleAddToCart } = useAddToCart({ products });
+  const { handleAddToCart } = useAddToCart({ products });
 
   if (loading) return <LoadingSpinner message={t.productsPage.loading} />;
   if (error) return <ErrorMessage error={error} onRetry={() => window.location.reload()} />;
 
   return (
-    <>
-      <div className="min-h-screen bg-homepage-bg">
-        <ProductsHero />
-        <CategoryFilter
-          categories={allCategories}
-          selectedCategory={selectedCategory}
-          onCategoryChange={setSelectedCategory}
-        />
-        <ProductsGrid
-          products={filteredProducts}
-          onAddToCart={handleAddToCart}
-        />
-      </div>
-    </>
+    <div className="min-h-screen bg-homepage-bg">
+      <ProductsHero />
+      <CategoryFilter
+        categories={allCategories}
+        selectedCategory={selectedCategory}
+        onCategoryChange={setSelectedCategory}
+      />
+      <ProductsGrid
+        products={filteredProducts}
+        onAddToCart={handleAddToCart}
+      />
+    </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner message="Caricamento..." />}>
+      <ProductsContent />
+    </Suspense>
   );
 }

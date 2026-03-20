@@ -150,11 +150,11 @@ export default function Navbar() {
               <Link href="/products" onClick={toggleMenu} className={`block py-3 mobile-menu-link-bold ${isActive('/products') ? 'text-olive' : 'text-black'}`}>
                 {t.navbar.menu.allProducts}
               </Link>
-              <Link href="/olio-extra-vergine" onClick={toggleMenu} className={`block py-3 mobile-menu-link ${isActive('/olio-extra-vergine') ? 'text-olive' : 'text-black'}`}>
-                {t.navbar.menu.extraVirginOil}
+              <Link href="/products?category=olio-evo" onClick={toggleMenu} className="block py-3 mobile-menu-link text-black">
+                {t.footer.products.classic}
               </Link>
-              <Link href="/olio-corpo" onClick={toggleMenu} className={`block py-3 mobile-menu-link ${isActive('/olio-corpo') ? 'text-olive' : 'text-black'}`}>
-                {t.navbar.menu.bodyOil}
+              <Link href="/products?category=beauty" onClick={toggleMenu} className="block py-3 mobile-menu-link text-black">
+                {t.footer.products.bodyOil}
               </Link>
 
               <div className="border-t border-black my-4" />

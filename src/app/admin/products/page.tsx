@@ -55,7 +55,7 @@ export default function AdminProductsPage() {
   const filteredProducts = products.filter(product =>
     product.translations.it.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     product.translations.en.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.category.toLowerCase().includes(searchTerm.toLowerCase())
+    (product.categories ?? (product.category ? [product.category] : [])).join(' ').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const headerActions = (

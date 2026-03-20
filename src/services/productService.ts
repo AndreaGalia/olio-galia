@@ -9,7 +9,11 @@ export class ProductService {
       
       let filter: any = { 'metadata.isActive': true };
       if (category) {
-        filter.category = category;
+        // Supporta sia il nuovo campo categories[] che il vecchio campo category (legacy)
+        filter.$or = [
+          { categories: { $in: [category] } },
+          { category: category }
+        ];
       }
       
       const products = await db
@@ -106,9 +110,15 @@ export class ProductService {
   private static localizeProduct(product: ProductDocument, locale: SupportedLocale): Product {
     const translation = product.translations[locale] || product.translations['it'];
 
+    // Normalizza categories: usa il nuovo campo o ricava dal legacy category
+    const normalizedCategories = product.categories?.length
+      ? product.categories
+      : product.category ? [product.category] : [];
+
     return {
       ...product,
       ...translation,
+      categories: normalizedCategories,
       images: product.images || [], // ✅ Preserva sempre le immagini dal documento prodotto
       slug: product.slug[locale] || product.slug['it'],
       _id: undefined, // Rimuovi _id dalla response

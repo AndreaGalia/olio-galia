@@ -45,7 +45,8 @@ export interface ProductVariant {
 
 export interface BaseProduct {
   id: string;
-  category: string;
+  categories: string[];
+  category?: string; // legacy - mantenuto per retrocompatibilità
   price: string;
   originalPrice?: string;
   stripeProductId?: string; // Opzionale - può essere vuoto se non configurato con Stripe

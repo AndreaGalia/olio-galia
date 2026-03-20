@@ -24,8 +24,11 @@ export async function GET(request: NextRequest) {
         const productCount = await db
           .collection('products')
           .countDocuments({
-            category: category.id,
-            'metadata.isActive': true
+            'metadata.isActive': true,
+            $or: [
+              { categories: { $in: [category.id] } },
+              { category: category.id }
+            ]
           });
 
         return {

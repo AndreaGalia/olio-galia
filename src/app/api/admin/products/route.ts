@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
     const {
-      category,
+      categories,
       price,
       originalPrice,
       size,
@@ -127,7 +127,7 @@ export async function POST(request: NextRequest) {
     } = data;
 
     // Validazione dei dati richiesti
-    if (!category || !price || !size || !translations?.it?.name || !translations?.en?.name) {
+    if (!categories?.length || !price || !size || !translations?.it?.name || !translations?.en?.name) {
       return NextResponse.json(
         { error: 'Dati mancanti per la creazione del prodotto' },
         { status: 400 }
@@ -237,7 +237,7 @@ export async function POST(request: NextRequest) {
 
     const productDocument: ProductDocument = {
       id: localId, // SEMPRE l'ID locale, mai sovrascritto
-      category,
+      categories,
       price: price.toString(),
       originalPrice: originalPrice ? originalPrice.toString() : undefined,
       stripeProductId: finalStripeProductId, // ID Stripe separato (opzionale)

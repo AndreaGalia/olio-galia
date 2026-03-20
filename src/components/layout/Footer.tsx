@@ -39,8 +39,8 @@ export default function Footer() {
               <div className="space-y-4 sm:space-y-6">
                 <h4 className="text-lg sm:text-xl font-serif">{t.footer.products.title}</h4>
                 <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base">
-                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.products.classic}</a></li>
-                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.products.bodyOil}</a></li>
+                  <li><a href="/products?category=olio-evo" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.products.classic}</a></li>
+                  <li><a href="/products?category=beauty" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.products.bodyOil}</a></li>
                 </ul>
               </div>
 
