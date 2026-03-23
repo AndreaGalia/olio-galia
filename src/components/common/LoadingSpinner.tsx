@@ -1,4 +1,4 @@
-const LOGO_URL = process.env.NEXT_PUBLIC_LOGO_SVG_URL || '';
+const LOGO_URL = process.env.NEXT_PUBLIC_LOGO_ICON_URL || '';
 
 interface LoadingSpinnerProps {
   message?: string;
@@ -11,7 +11,7 @@ export default function LoadingSpinner({ message }: LoadingSpinnerProps) {
         <img
           src={LOGO_URL}
           alt="Olio Galia"
-          className="h-8 w-auto mx-auto animate-pulse"
+          className="h-150 w-auto mx-auto animate-pulse"
         />
         {message && <p className="text-black/50 text-sm mt-6">{message}</p>}
       </div>

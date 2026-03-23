@@ -24,15 +24,6 @@ export default function Footer() {
                   </p>
                 </div>
                 
-                {/* Badge qualità */}
-                <div className="flex flex-wrap gap-2">
-                  <span className="bg-beige/20 text-beige px-3 py-1 rounded-full text-xs font-medium">
-                    {t.footer.brand.badges.sicilian}
-                  </span>
-                  <span className="bg-beige/20 text-beige px-3 py-1 rounded-full text-xs font-medium">
-                    {t.footer.brand.badges.extraVirgin}
-                  </span>
-                </div>
               </div>
 
               {/* Prodotti */}

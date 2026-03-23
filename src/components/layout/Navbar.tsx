@@ -44,7 +44,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 w-full z-30 px-4 sm:px-6 lg:px-[100px] py-4 sm:py-6 transition-colors duration-300 ${transparent ? 'bg-transparent' : 'bg-[#D6C7A1]'}`}>
+      <nav className={`fixed top-0 left-0 right-0 w-full z-30 px-4 sm:px-6 lg:px-[100px] py-4 sm:py-6 transition-colors duration-300 ${transparent ? 'bg-transparent' : 'bg-sabbia-chiaro'}`}>
         <div className="w-full">
           <div className="flex justify-between items-center">
             
@@ -127,7 +127,7 @@ export default function Navbar() {
         </div>
 
         {/* Menu Mobile — fullscreen */}
-        <div className={`lg:hidden fixed inset-0 w-full h-full bg-[#D6C7A1] z-50 transform transition-transform duration-300 ${
+        <div className={`lg:hidden fixed inset-0 w-full h-full bg-sabbia-chiaro z-50 transform transition-transform duration-300 ${
           isMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}>
           <div className="flex flex-col h-full">

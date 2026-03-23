@@ -16,7 +16,7 @@ export function HeroContent({ isVisible }: HeroContentProps) {
 
       {/* Title */}
       <div
-        className={`w-full pb-6 font-serif text-sabbia-chiaro space-y-2 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+        className={`w-full pb-6 font-serif text-beige space-y-2 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
         style={{ transitionDelay: '0.1s' }}
       >
         <JustifiedWord text={t.hero.title.line1} className="text-base sm:text-2xl md:text-3xl lg:text-4xl" />
@@ -48,7 +48,7 @@ export function HeroContent({ isVisible }: HeroContentProps) {
         style={{ transitionDelay: '0.4s' }}>
         <Link
           href="/products"
-          className="btn-outline font-serif inline-block border border-sabbia-chiaro text-sabbia-chiaro bg-transparent px-10 py-3 uppercase tracking-wider whitespace-nowrap transition-all duration-300 hover:bg-sabbia-chiaro hover:text-black"
+          className="btn-outline font-serif inline-block border border-beige text-beige bg-transparent px-10 py-3 uppercase tracking-wider whitespace-nowrap transition-all duration-300 hover:bg-beige hover:text-black"
         >
           {t.hero.buttons.discover}
         </Link>

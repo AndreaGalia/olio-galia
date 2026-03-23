@@ -73,9 +73,19 @@ export default function FaqListSection() {
       <div className="container mx-auto px-4 sm:px-6 max-w-4xl">
 
         {loading ? (
-          <div className="text-center py-16">
-            <div className="w-8 h-8 border-2 border-olive/30 border-t-olive rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-black">{t.faq.loading}</p>
+          <div className="space-y-4 pt-4">
+            {/* Filtri skeleton */}
+            <div className="flex gap-2 mb-6">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-8 w-24 bg-olive/10 rounded-full animate-pulse" />
+              ))}
+            </div>
+            {/* Domande skeleton */}
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="border-b border-olive/20 py-5 space-y-2 animate-pulse">
+                <div className="h-4 bg-olive/10 rounded w-3/4" />
+              </div>
+            ))}
           </div>
         ) : (
           <>

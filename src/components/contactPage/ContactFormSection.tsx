@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useT } from '@/hooks/useT';
 
-export default function ContactFormSection() {
+export default function ContactFormSection({ hideTitle }: { hideTitle?: boolean }) {
   const { t } = useT();
   const form = t.contactPage.form;
 
@@ -36,7 +36,7 @@ export default function ContactFormSection() {
 
   return (
     <div>
-      <h2 className="font-serif text-black mb-8">{form.title}</h2>
+      {!hideTitle && <h2 className="font-serif text-black mb-8">{form.title}</h2>}
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         <div className="flex flex-col gap-1">
           <label className="text-xs tracking-widest uppercase text-black/60 font-sans">{form.name}</label>

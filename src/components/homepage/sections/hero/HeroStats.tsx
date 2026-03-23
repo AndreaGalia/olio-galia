@@ -16,8 +16,8 @@ export function HeroStats({ isVisible }: HeroStatsProps) {
       style={{ transitionDelay: '0.8s' }}
     >
       <div className="max-w-[160px] mx-auto space-y-1">
-        <JustifiedWord text={t.hero.stats.line1} className="btn-outline font-serif text-sabbia-chiaro" />
-        <JustifiedWord text={t.hero.stats.line2} className="btn-outline font-serif text-sabbia-chiaro" />
+        <JustifiedWord text={t.hero.stats.line1} className="btn-outline font-serif text-beige" />
+        <JustifiedWord text={t.hero.stats.line2} className="btn-outline font-serif text-beige" />
       </div>
     </div>
   );
