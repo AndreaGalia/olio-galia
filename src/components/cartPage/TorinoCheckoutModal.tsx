@@ -79,14 +79,14 @@ export default function TorinoCheckoutModal({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
         >
           <motion.div
-            className="bg-beige shadow-2xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-nocciola/20 relative"
+            className="bg-sabbia-chiaro p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-black/10 relative"
             initial={{ scale: 0.95, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 20 }}

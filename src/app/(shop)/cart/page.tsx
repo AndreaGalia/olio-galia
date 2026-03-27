@@ -119,7 +119,7 @@ function CartPageContent() {
 
   // Contenuto principale del carrello
   return (
-    <div className="min-h-screen bg-homepage-bg">
+    <div className="min-h-screen bg-sabbia-chiaro">
       {/* Modal per errori di checkout */}
       <CheckoutErrorModal
         isVisible={showCheckoutError}
@@ -129,7 +129,9 @@ function CartPageContent() {
       />
 
       {/* Breadcrumb */}
-      <CartBreadcrumb />
+      <div className="px-6 sm:px-12 lg:px-16 xl:px-24 pt-10">
+        <CartBreadcrumb />
+      </div>
 
       {/* Banner Pagamento Cancellato */}
       <PaymentCanceledBanner
@@ -148,13 +150,13 @@ function CartPageContent() {
       />
 
       <div className="container mx-auto px-4 sm:px-6 max-w-4xl py-8 sm:py-12">
-        <div className="flex items-center gap-3 mb-8">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif text-black">
+        <div className="mb-8">
+          <p className="text-[11px] tracking-[0.2em] uppercase text-black/40">
+            {totalItems} {itemCountLabel}
+          </p>
+          <h1 style={{ fontSize: 'clamp(1.4rem, 3vw, 2rem)', lineHeight: '1.3', letterSpacing: '0.15em' }}>
             {t.cartPage.title}
           </h1>
-          <span className="bg-olive text-beige px-3 py-1 text-sm font-bold whitespace-nowrap border border-olive/20">
-            {totalItems} {itemCountLabel}
-          </span>
         </div>
 
         {/* Checkout Wizard - 3 Step Flow */}
@@ -185,7 +187,7 @@ function CartPageContent() {
               itemLabel={itemLabel}
             />
 
-            <div className="mt-8 bg-white border border-olive/10 p-6 lg:p-8">
+            <div className="mt-8 border border-black/10 p-6 lg:p-8">
               {!deliveryChoice ? (
                 <DeliveryZoneSelector onSelectZone={setDeliveryChoice} />
               ) : (
@@ -204,10 +206,10 @@ function CartPageContent() {
 
 function CartPageLoading() {
   return (
-    <div className="min-h-screen bg-homepage-bg">
+    <div className="min-h-screen bg-sabbia-chiaro">
       <div className="container mx-auto px-4 py-16">
         <div className="text-center">
-          <p className="text-black text-2xl font-serif">Caricamento...</p>
+          <p className="text-black/60 text-sm tracking-wider uppercase">Caricamento...</p>
         </div>
       </div>
     </div>

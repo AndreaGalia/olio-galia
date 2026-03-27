@@ -504,6 +504,8 @@
       "nutritionalNotAvailable": "Nutritional values not available.",
       "awards": "Awards and Recognition",
       "noAwards": "No awards assigned yet.",
+      "origin": "Origin",
+      "details": "Details",
       "relatedProducts": "You might also like"
     },
     "stockAvaible": "AVAILABLE",

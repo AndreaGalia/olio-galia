@@ -9,7 +9,6 @@ import { useT } from "@/hooks/useT";
 import BreadcrumbNavigation from "@/components/singleProductPage/BreadcrumbNavigation";
 import ProductImageGallery from "@/components/singleProductPage/ProductImageGallery";
 import ProductInfoSection from "@/components/singleProductPage/ProductInfoSection";
-import ProductDetailsCards from "@/components/singleProductPage/ProductDetailsCards";
 import RelatedProductsSection from "@/components/singleProductPage/RelatedProductsSection";
 import CustomHTMLRenderer from "@/components/singleProductPage/CustomHTMLRenderer";
 import ProductReviews from "@/components/reviews/ProductReviews";
@@ -24,12 +23,10 @@ interface ProductDetailPageProps {
 export default function ProductDetailPage({ params }: ProductDetailPageProps) {
   const { slug } = use(params);
 
-  // Hooks per i dati
   const { product, loading, error, notFound } = useProductBySlug(slug);
   const { products: allProducts } = useProducts();
   const { t } = useT();
 
-  // State per le immagini della variante selezionata
   const [selectedVariantImages, setSelectedVariantImages] = useState<string[] | null>(null);
 
   const handleVariantChange = useCallback((variant: ProductVariant | null) => {
@@ -40,22 +37,16 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
     }
   }, []);
 
-  // Prodotti correlati (escluso il prodotto corrente)
   const relatedProducts = allProducts.filter((p) => p.slug !== slug);
 
-  // Stati di caricamento, errore e prodotto non trovato
   if (loading) return <LoadingSpinner message={t.productDetailPage.loading} />;
   if (error) return <ErrorMessage error={error} />;
   if (notFound) return <NotFoundState />;
   if (!product) return null;
 
-  // Verifica se il prodotto è esaurito
   const isOutOfStock = !product.inStock || product.stockQuantity === 0;
-
-  // Verifica se il prodotto ha HTML personalizzato (con optional chaining sicuro)
   const hasCustomHTML = Boolean(product.customHTML?.trim());
 
-  // Genera structured data per SEO
   const productSchema = generateProductSchema(product, 'it');
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: '/' },
@@ -63,75 +54,62 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
     { name: product.name, url: `/products/${slug}` }
   ], 'it');
 
-  // Immagini da mostrare: variante selezionata o immagini prodotto base
   const displayImages = selectedVariantImages || product.images;
 
   return (
-    <div className="min-h-screen bg-homepage-bg">
-      {/* Structured Data per SEO */}
+    <div className="min-h-screen bg-sabbia-chiaro">
       <StructuredData data={productSchema} />
       <StructuredData data={breadcrumbSchema} />
 
-      {/* Breadcrumb Navigation */}
-      <BreadcrumbNavigation productName={product.name} />
+      {/* Hero: full-width two-column */}
+      <div className="lg:grid lg:grid-cols-2 lg:items-start">
 
-      <div className="container mx-auto px-4 sm:px-6 max-w-7xl py-8 sm:py-12">
+        {/* Left: Image slider — sticky, fills full viewport height on desktop */}
+        <div className="h-[120vw] sm:h-[85vw] lg:sticky lg:top-0 lg:h-screen">
+          <ProductImageGallery
+            images={displayImages}
+            productName={product.name}
+            isOutOfStock={isOutOfStock}
+          />
+        </div>
 
-        {/* Layout standard - SEMPRE VISIBILE */}
-        <>
-          {/* Sezione principale del prodotto */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 mb-16">
-
-            {/* Galleria immagini */}
-            <ProductImageGallery
-              images={displayImages}
-              productName={product.name}
-              isOutOfStock={isOutOfStock}
-            />
-
-            {/* Informazioni prodotto */}
+        {/* Right: Info — scrolls naturally */}
+        <div className="px-6 sm:px-12 lg:px-16 xl:px-24 py-10 lg:py-20 max-w-xl lg:max-w-none mx-auto lg:mx-0">
+          <BreadcrumbNavigation productName={product.name} />
+          <div className="mt-10">
             <ProductInfoSection
               product={product}
               isOutOfStock={isOutOfStock}
               onVariantChange={handleVariantChange}
             />
           </div>
+        </div>
 
-          {/* Schede dettagliate */}
-          <ProductDetailsCards
-            productSlug={slug}
-          />
-        </>
+      </div>
 
-        {/* HTML Personalizzato - SE PRESENTE, VIENE AGGIUNTO SOTTO */}
+      {/* Below-the-fold content */}
+      <div className="container mx-auto px-4 sm:px-6 max-w-7xl py-12">
+
+        {/* Custom HTML (if present) */}
         {hasCustomHTML && (
           <>
-            {/* Badge avviso HTML personalizzato (visibile solo in sviluppo) */}
             {process.env.NODE_ENV === 'development' && (
-              <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
+              <div className="mb-4 p-3 bg-blue-50 border border-blue-200 text-sm text-blue-800">
                 🎨 <strong>Contenuto Aggiuntivo:</strong> Questo prodotto ha contenuto HTML personalizzato.
               </div>
             )}
-
-            {/* Separatore visivo */}
-            <div className="my-12 border-t-2 border-olive/20"></div>
-
-            <CustomHTMLRenderer
-              html={product.customHTML || ''}
-              className="mb-16"
-            />
+            <div className="my-12 border-t border-olive/20" />
+            <CustomHTMLRenderer html={product.customHTML || ''} className="mb-16" />
           </>
         )}
 
-        {/* Separatore visivo prima delle recensioni */}
-        <div className="my-12 border-t-2 border-olive/20"></div>
-
-        {/* Recensioni prodotto */}
-        <div className="mb-16">
+        {/* Reviews */}
+        <div className="my-12 border-t border-olive/20" />
+        <div id="product-reviews-section" className="mb-16">
           <ProductReviews productSlug={slug} />
         </div>
 
-        {/* Prodotti correlati (sempre visibili) */}
+        {/* Related products */}
         <RelatedProductsSection products={relatedProducts} />
 
       </div>

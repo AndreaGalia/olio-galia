@@ -115,8 +115,8 @@ export default function CheckoutWizard({
         isLocked={false}
         onClick={() => setCurrentStep(1)}
       >
-        {/* Lista prodotti */}
-        <div className="space-y-3 mb-6">
+        {/* Lista prodotti — primo item senza border-t, lo gestisce CartItem */}
+        <div className="mb-6">
           {cart.map((cartItem) => {
             const { productId } = parseCartItemId(cartItem.id);
             const product = products.find((p: Product) => p.id === productId);
@@ -133,14 +133,14 @@ export default function CheckoutWizard({
         </div>
 
         {/* Subtotale */}
-        <div className="border-t border-olive/20 pt-4 space-y-2">
-          <div className="flex justify-between text-black">
+        <div className="border-t border-black/10 pt-4 space-y-2">
+          <div className="flex justify-between text-sm text-black/70">
             <span>{t.cartPage.summary.subtotal?.replace('{count}', totalItems.toString()).replace('{itemLabel}', itemLabel) || `Subtotale (${totalItems} ${itemLabel})`}</span>
-            <span className="font-bold">€{total.toFixed(2)}</span>
+            <span>€{total.toFixed(2)}</span>
           </div>
 
           {savings > 0 && (
-            <div className="flex justify-between text-green-600 font-medium text-sm">
+            <div className="flex justify-between text-olive text-sm">
               <span>{t.cartPage.summary.totalSavings}</span>
               <span>-€{savings.toFixed(2)}</span>
             </div>
@@ -150,12 +150,9 @@ export default function CheckoutWizard({
         {/* Bottone Continua */}
         <button
           onClick={() => setCurrentStep(2)}
-          className="w-full mt-6 bg-olive text-beige py-3 px-4 font-medium uppercase tracking-wider hover:bg-olive/90 transition-colors flex items-center justify-center gap-2 border border-olive/20 cursor-pointer"
+          className="w-full mt-6 py-4 bg-sabbia text-black text-[11px] tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-olive hover:text-beige disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          <span>{t.cartPage.wizard?.continue || "CONTINUA"}</span>
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-          </svg>
+          {t.cartPage.wizard?.continue || "CONTINUA"}
         </button>
       </WizardStep>
 
@@ -173,25 +170,23 @@ export default function CheckoutWizard({
         {/* Checkout Torino - mostra solo se abilitato */}
         {settings.torino_checkout_enabled && (
           <>
-            <div className="mb-6 p-4 sm:p-6 bg-white border border-olive/10 transition-all duration-300">
+            <div className="mb-6 border-b border-black/10 pb-6">
               <div className="mb-4">
-                <h4 className="text-black font-bold text-sm sm:text-base uppercase tracking-wider mb-2">
+                <h4 className="text-[11px] tracking-[0.2em] uppercase text-black/60 mb-2">
                   {t.cartPage.wizard?.torinoTitle || "SEI DI TORINO?"}
                 </h4>
-                <p className="text-black text-xs sm:text-sm">
+                <p className="text-xs text-black/40">
                   {t.cartPage.wizard?.torinoDescription || "Usa il checkout veloce per ritiro o consegna a Torino"}
                 </p>
               </div>
               <CheckoutTorinoButton minimal={true} />
             </div>
 
-            {/* Separatore */}
+            {/* Separatore OPPURE */}
             <div className="relative mb-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-olive/20"></div>
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-3 text-black tracking-wider">
+              <div className="border-t border-black/10"></div>
+              <div className="flex justify-center -mt-2.5">
+                <span className="bg-sabbia-chiaro px-3 text-[11px] tracking-widest uppercase text-black/30">
                   {t.cartPage.wizard?.or || "OPPURE"}
                 </span>
               </div>
@@ -209,12 +204,12 @@ export default function CheckoutWizard({
 
         {/* Preview costo spedizione */}
         {selectedShippingZone && (
-          <div className="mb-6 bg-beige/50 border border-olive/20 p-4">
+          <div className="border-t border-black/10 pt-3 mb-6">
             <div className="flex justify-between items-center">
-              <span className="text-black text-sm">
+              <span className="text-xs text-black/60">
                 {t.cartPage.summary.shipping}
               </span>
-              <span className={`font-bold text-lg ${shippingCost.isFree ? 'text-green-600' : 'text-black'}`}>
+              <span className={`text-sm font-light ${shippingCost.isFree ? 'text-olive' : 'text-black'}`}>
                 {shippingCost.isFree ? t.cartPage.summary.free : `€${shippingCost.costEur.toFixed(2)}`}
               </span>
             </div>
@@ -225,12 +220,9 @@ export default function CheckoutWizard({
         <button
           onClick={() => selectedShippingZone && setCurrentStep(3)}
           disabled={!selectedShippingZone}
-          className="w-full mt-4 bg-olive text-beige py-3 px-4 font-medium uppercase tracking-wider hover:bg-olive/90 transition-colors flex items-center justify-center gap-2 border border-olive/20 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full mt-4 py-4 bg-sabbia text-black text-[11px] tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-olive hover:text-beige disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          <span>{t.cartPage.wizard?.continue || "CONTINUA"}</span>
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-          </svg>
+          {t.cartPage.wizard?.continue || "CONTINUA"}
         </button>
       </WizardStep>
 
@@ -246,40 +238,40 @@ export default function CheckoutWizard({
       >
         {/* Riepilogo compatto */}
         <div className="space-y-3 mb-6">
-          <div className="flex justify-between text-black text-sm">
+          <div className="flex justify-between text-sm text-black/70">
             <span>{t.cartPage.summary.subtotal?.replace('{count}', totalItems.toString()).replace('{itemLabel}', itemLabel) || `Prodotti (${totalItems})`}</span>
             <span>€{total.toFixed(2)}</span>
           </div>
 
           {selectedShippingZone && (
-            <div className="flex justify-between text-black text-sm">
+            <div className="flex justify-between text-sm text-black/70">
               <span>{t.cartPage.summary.shipping}</span>
-              <span className={shippingCost.isFree ? "text-green-600 font-medium" : ""}>
+              <span className={shippingCost.isFree ? "text-olive" : ""}>
                 {shippingCost.isFree ? t.cartPage.summary.free : `€${shippingCost.costEur.toFixed(2)}`}
               </span>
             </div>
           )}
 
-          <div className="border-t-2 border-olive pt-3 flex justify-between text-black font-bold text-xl">
+          <div className="border-t border-black/10 pt-3 flex justify-between text-black font-medium text-base">
             <span>{t.cartPage.summary.total}</span>
             <span>€{finalTotal.toFixed(2)}</span>
           </div>
         </div>
 
         {/* Checkbox fattura */}
-        <div className="mb-6 p-4 bg-olive/5 border border-olive/10">
+        <div className="border-t border-black/10 pt-4 mb-6">
           <label className="flex items-start gap-3 cursor-pointer">
             <input
               type="checkbox"
               checked={needsInvoice}
               onChange={(e) => setNeedsInvoice(e.target.checked)}
-              className="mt-1 border-olive/30 text-olive focus:ring-olive focus:ring-offset-0"
+              className="mt-1 border-black/20 text-olive focus:ring-olive focus:ring-offset-0"
             />
             <div>
-              <span className="text-black font-medium text-sm block">
+              <span className="text-black/70 text-xs block tracking-wide">
                 {t.cartPage.invoice.title}
               </span>
-              <span className="text-black text-xs">
+              <span className="text-black/40 text-xs">
                 {t.cartPage.invoice.description}
               </span>
             </div>
@@ -290,32 +282,19 @@ export default function CheckoutWizard({
         <button
           onClick={handleCheckout}
           disabled={checkoutLoading}
-          className="w-full bg-olive text-beige py-4 px-4 font-bold text-lg uppercase tracking-wider hover:bg-olive/90 transition-colors flex items-center justify-center gap-2 border border-olive/20 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-4 bg-sabbia text-black text-[11px] tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-olive hover:text-beige disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {checkoutLoading ? (
-            <>
-              <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              <span>{t.cartPage.summary.processing}</span>
-            </>
+            <span>{t.cartPage.summary.processing}</span>
           ) : (
-            <>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-              </svg>
-              <span>{t.cartPage.summary.checkout}</span>
-            </>
+            <span>{t.cartPage.summary.checkout}</span>
           )}
         </button>
 
         {needsInvoice && (
-          <div className="mt-4 p-3 bg-blue-50 border border-blue-100">
-            <p className="text-blue-800 text-xs">
-              {t.cartPage.invoice.checkoutNote}
-            </p>
-          </div>
+          <p className="mt-4 text-xs text-black/40">
+            {t.cartPage.invoice.checkoutNote}
+          </p>
         )}
       </WizardStep>
     </div>

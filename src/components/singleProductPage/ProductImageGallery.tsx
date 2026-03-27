@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+'use client';
+import { useEffect, useState, useCallback } from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
 
 interface ProductImageGalleryProps {
   images: string[];
@@ -6,77 +8,95 @@ interface ProductImageGalleryProps {
   isOutOfStock: boolean;
 }
 
-export default function ProductImageGallery({
-  images,
-  productName,
-  isOutOfStock
-}: ProductImageGalleryProps) {
-  const [selectedImage, setSelectedImage] = useState(0);
+export default function ProductImageGallery({ images, productName, isOutOfStock }: ProductImageGalleryProps) {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, dragFree: false });
+  const [current, setCurrent] = useState(0);
 
-  // Reset selected image when images change (e.g. variant change)
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setCurrent(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
   useEffect(() => {
-    setSelectedImage(0);
-  }, [images]);
+    if (!emblaApi) return;
+    emblaApi.on('select', onSelect);
+    return () => { emblaApi.off('select', onSelect); };
+  }, [emblaApi, onSelect]);
+
+  // Reset on images change (variant change)
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.scrollTo(0);
+    setCurrent(0);
+  }, [images, emblaApi]);
+
+  const prev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const next = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+
+  const hasMultiple = images.length > 1;
 
   return (
-    <div className="space-y-4">
-      {/* Main image */}
-      <div className={`aspect-square bg-white rounded-2xl p-4 sm:p-8 shadow-lg border border-olive/10 relative ${
-        isOutOfStock ? 'opacity-75 grayscale' : ''
-      }`}>
-        <div className="w-full h-full bg-beige/20 rounded-xl flex items-center justify-center relative">
-          <img 
-            src={images[selectedImage]} 
-            alt={productName} 
-            className={`object-contain h-full w-full rounded-xl ${
-              isOutOfStock ? 'opacity-60' : ''
-            }`}
-          />
-          
-          {/* Overlay SOLD OUT sull'immagine */}
-          {isOutOfStock && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-xl">
-              <div className="bg-red-600/90 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold text-lg sm:text-2xl shadow-xl transform -rotate-12">
-                SOLD OUT
-              </div>
+    <div className={`group relative w-full h-full overflow-hidden ${isOutOfStock ? 'grayscale' : ''}`}>
+
+      {/* Embla viewport */}
+      <div ref={emblaRef} className="w-full h-full overflow-hidden cursor-grab active:cursor-grabbing">
+        <div className="flex h-full">
+          {images.map((img, index) => (
+            <div key={index} className="flex-[0_0_100%] h-full relative">
+              <img
+                src={img}
+                alt={`${productName}${hasMultiple ? ` — ${index + 1}` : ''}`}
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+                  isOutOfStock ? 'opacity-60' : 'opacity-100'
+                }`}
+                draggable={false}
+              />
             </div>
-          )}
+          ))}
         </div>
-        
-        {/* Badge SOLD OUT nell'angolo - sinistra */}
-        {isOutOfStock && (
-          <div className="absolute top-3 sm:top-4 left-3 sm:left-4 bg-red-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold z-10 shadow-lg animate-pulse">
-            SOLD OUT
-          </div>
-        )}
       </div>
-      
-      {/* Thumbnail gallery */}
-      <div className="grid grid-cols-4 gap-2 sm:gap-3">
-        {images.map((img, index) => (
+
+      {/* Sold out badge */}
+      {isOutOfStock && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <span className="bg-black/70 text-white px-6 py-2 text-xs tracking-widest uppercase">
+            Sold Out
+          </span>
+        </div>
+      )}
+
+      {/* Arrows — on hover, only if multiple */}
+      {hasMultiple && (
+        <>
           <button
-            key={index}
-            onClick={() => setSelectedImage(index)}
-            className={`aspect-square bg-white rounded-lg p-1.5 sm:p-2 border-2 transition-all duration-300 cursor-pointer relative ${
-              selectedImage === index ? 'border-olive shadow-md' : 'border-olive/10'
-            } ${isOutOfStock ? 'opacity-60' : ''}`}
+            onClick={prev}
+            aria-label="Immagine precedente"
+            className="absolute left-5 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
           >
-            <img 
-              src={img} 
-              alt={`${productName} ${index + 1}`} 
-              className={`object-contain w-full h-full ${
-                isOutOfStock ? 'opacity-60' : ''
-              }`}
-            />
-            {/* Mini overlay su thumbnails */}
-            {isOutOfStock && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-lg">
-                <span className="text-white text-xs font-bold">OUT</span>
-              </div>
-            )}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-7 h-7 text-black/50 hover:text-black">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
           </button>
-        ))}
-      </div>
+
+          <button
+            onClick={next}
+            aria-label="Immagine successiva"
+            className="absolute right-5 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-7 h-7 text-black/50 hover:text-black">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </button>
+
+          {/* Progress bar */}
+          <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-black/10 pointer-events-none">
+            <div
+              className="h-full bg-black/35 transition-all duration-300 ease-out"
+              style={{ width: `${((current + 1) / images.length) * 100}%` }}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }
