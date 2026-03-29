@@ -9,6 +9,7 @@
     "lint": "next lint",
     "create-admin": "tsx src/scripts/create-admin.ts",
     "seed-shipping": "tsx scripts/seed-shipping-config.ts",
+    "seed-product-stories": "tsx scripts/seed-product-stories.ts",
     "reseed-templates": "tsx src/scripts/reseedEmailTemplatesCustom.ts"
   },
   "dependencies": {

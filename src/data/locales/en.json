@@ -514,6 +514,14 @@
       "label": "Variant",
       "select": "Select {label}",
       "outOfStock": "Out of stock"
+    },
+    "productStory": {
+      "cultivars": "Cultivar",
+      "sensorProfile": "Sensory Profile",
+      "process": "Process",
+      "location": "Location",
+      "altitude": "Altitude",
+      "climate": "Climate"
     }
   },
   "bulkProposal": {

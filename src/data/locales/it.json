@@ -514,6 +514,14 @@
       "label": "Variante",
       "select": "Seleziona {label}",
       "outOfStock": "Esaurito"
+    },
+    "productStory": {
+      "cultivars": "Cultivar",
+      "sensorProfile": "Profilo Sensoriale",
+      "process": "Processo",
+      "location": "Località",
+      "altitude": "Altitudine",
+      "climate": "Clima"
     }
   },
   "bulkProposal": {

@@ -8,6 +8,8 @@ import VariantTabs from '@/components/admin/VariantTabs';
 import VariantFormFields from '@/components/admin/VariantFormFields';
 import type { VariantData } from '@/components/admin/VariantFormFields';
 import { ProductTranslations } from '@/types/products';
+import ProductStoryEditor from '@/components/admin/ProductStoryEditor';
+import type { ProductStory } from '@/types/productStory';
 
 interface ProductFormData {
   categories: string[];
@@ -196,7 +198,7 @@ export default function CreateProductPage() {
     }
   }, [formData.categories, categories]);
 
-  const updateTranslation = (lang: 'it' | 'en', field: keyof ProductTranslations, value: string | string[]) => {
+  const updateTranslation = (lang: 'it' | 'en', field: keyof ProductTranslations, value: string | string[] | ProductStory | undefined) => {
     setFormData(prev => ({
       ...prev,
       translations: {
@@ -1324,44 +1326,50 @@ export default function CreateProductPage() {
             </div>
           </section>
 
-          {/* HTML Personalizzato Italiano */}
+          {/* Product Story — layout editoriale strutturato */}
           <section>
-            <h3 className="text-lg font-semibold text-olive mb-4">
-              HTML Personalizzato (Italiano) - Opzionale
+            <h3 className="text-lg font-semibold text-olive mb-2">
+              Product Story — Layout Editoriale
             </h3>
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
-              <p className="text-sm text-gray-700">
-                <strong>⚠️ Nota:</strong> Se inserisci HTML personalizzato, questo sostituirà completamente
-                il layout standard del prodotto. Lascia vuoto per usare il layout predefinito.
+            <p className="text-sm text-gray-500 mb-4">
+              Costruisci il contenuto below-the-fold con sezioni numerate e tipizzate.
+              Se compilato, <strong>ha priorità</strong> sull&apos;HTML personalizzato.
+            </p>
+            <ProductStoryEditor
+              valueIt={formData.translations.it.productStory}
+              valueEn={formData.translations.en.productStory}
+              onChangeIt={(story) => updateTranslation('it', 'productStory', story)}
+              onChangeEn={(story) => updateTranslation('en', 'productStory', story)}
+            />
+          </section>
+
+          {/* HTML Personalizzato (legacy) */}
+          <section>
+            <h3 className="text-lg font-semibold text-gray-400 mb-2">
+              HTML Personalizzato — Legacy
+            </h3>
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
+              <p className="text-sm text-gray-500">
+                <strong>Deprecato:</strong> Usa il <em>Product Story</em> qui sopra per i nuovi prodotti.
+                Questo campo viene ignorato se Product Story è compilato.
               </p>
             </div>
             <HTMLEditor
               value={formData.translations.it.customHTML || ''}
               onChange={(value) => updateTranslation('it', 'customHTML', value)}
-              label="Codice HTML Personalizzato (IT)"
-              placeholder="Inserisci HTML personalizzato per la versione italiana..."
-              height="500px"
+              label="HTML Personalizzato (IT) — legacy"
+              placeholder="Lascia vuoto se usi Product Story..."
+              height="400px"
             />
-          </section>
-
-          {/* HTML Personalizzato Inglese */}
-          <section>
-            <h3 className="text-lg font-semibold text-olive mb-4">
-              Custom HTML (English) - Optional
-            </h3>
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
-              <p className="text-sm text-gray-700">
-                <strong>⚠️ Note:</strong> If you add custom HTML, it will completely replace
-                the standard product layout. Leave empty to use the default layout.
-              </p>
+            <div className="mt-4">
+              <HTMLEditor
+                value={formData.translations.en.customHTML || ''}
+                onChange={(value) => updateTranslation('en', 'customHTML', value)}
+                label="Custom HTML (EN) — legacy"
+                placeholder="Leave empty if using Product Story..."
+                height="400px"
+              />
             </div>
-            <HTMLEditor
-              value={formData.translations.en.customHTML || ''}
-              onChange={(value) => updateTranslation('en', 'customHTML', value)}
-              label="Custom HTML Code (EN)"
-              placeholder="Insert custom HTML for the English version..."
-              height="500px"
-            />
           </section>
 
           {/* Informazioni Nutrizionali */}

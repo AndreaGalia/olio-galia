@@ -1,3 +1,5 @@
+import type { ProductStory } from './productStory';
+
 export interface ProductTranslations {
   name: string;
   description: string;
@@ -13,7 +15,8 @@ export interface ProductTranslations {
   awards: string[];
   seoKeywords: string[];
   tags: string[];
-  customHTML?: string; // HTML personalizzato per layout custom del prodotto
+  customHTML?: string; // HTML personalizzato (legacy) — usare productStory per i nuovi prodotti
+  productStory?: ProductStory; // Layout editoriale strutturato — sostituisce customHTML
   // SEO Fields
   metaTitle?: string; // Titolo SEO personalizzato (max 60 caratteri consigliati)
   metaDescription?: string; // Meta description (max 160 caratteri consigliati)
