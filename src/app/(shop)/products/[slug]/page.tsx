@@ -62,10 +62,10 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
       <StructuredData data={breadcrumbSchema} />
 
       {/* Hero: full-width two-column */}
-      <div className="lg:grid lg:grid-cols-2 lg:items-start">
+      <div className="lg:grid lg:grid-cols-[2fr_3fr] lg:items-start">
 
         {/* Left: Image slider — sticky, fills full viewport height on desktop */}
-        <div className="h-[120vw] sm:h-[85vw] lg:sticky lg:top-0 lg:h-screen">
+        <div className="aspect-[3/4] lg:aspect-auto lg:sticky lg:top-0 lg:h-screen">
           <ProductImageGallery
             images={displayImages}
             productName={product.name}
