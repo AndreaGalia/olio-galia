@@ -1,7 +1,7 @@
 'use client';
 
 import type { ProductStory as ProductStoryType } from '@/types/productStory';
-import StorySectionWrapper from './StorySectionWrapper';
+import StoryAccordion from './StoryAccordion';
 import StoryItemsSection from './StoryItemsSection';
 import StoryFlavorSection from './StoryFlavorSection';
 import StoryOriginSection from './StoryOriginSection';
@@ -11,25 +11,13 @@ interface ProductStoryProps {
   story: ProductStoryType;
 }
 
-/**
- * Main editorial story renderer.
- *
- * Iterates over `story.sections` and delegates each section to its
- * specialised component, wrapped in the numbered `StorySectionWrapper`.
- *
- * Section types:
- *  - 'items'         → StoryItemsSection  (benefits, strengths, usage, info, ingredients)
- *  - 'flavorProfile' → StoryFlavorSection (cultivars + sensory notes with photos)
- *  - 'origin'        → StoryOriginSection (location, territory, production steps)
- *  - 'technicalData' → StoryTechnicalSection (key-value table)
- */
 export default function ProductStory({ story }: ProductStoryProps) {
   if (!story.sections?.length) return null;
 
   return (
     <div>
       {story.sections.map((section, index) => (
-        <StorySectionWrapper key={index} index={index} title={section.title}>
+        <StoryAccordion key={index} title={section.title}>
           {section.type === 'items' && section.items && (
             <StoryItemsSection
               items={section.items}
@@ -65,7 +53,7 @@ export default function ProductStory({ story }: ProductStoryProps) {
               description={section.description}
             />
           )}
-        </StorySectionWrapper>
+        </StoryAccordion>
       ))}
     </div>
   );

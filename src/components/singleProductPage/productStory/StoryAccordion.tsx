@@ -1,14 +1,14 @@
 'use client';
+
 import { useState } from 'react';
 
-interface ProductAccordionProps {
+interface StoryAccordionProps {
   title: string;
   children: React.ReactNode;
-  defaultOpen?: boolean;
 }
 
-export default function ProductAccordion({ title, children, defaultOpen = false }: ProductAccordionProps) {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
+export default function StoryAccordion({ title, children }: StoryAccordionProps) {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="border-t border-olive/20">
@@ -19,17 +19,17 @@ export default function ProductAccordion({ title, children, defaultOpen = false 
         <span className="text-xs tracking-widest uppercase font-medium text-black group-hover:text-olive transition-colors">
           {title}
         </span>
-        <span className="text-sm text-black/50 group-hover:text-olive transition-colors leading-none select-none">
+        <span className="text-base text-black/40 group-hover:text-olive transition-colors leading-none select-none ml-4 shrink-0">
           {isOpen ? '−' : '+'}
         </span>
       </button>
 
       <div
         className={`overflow-hidden transition-all duration-300 ${
-          isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+          isOpen ? 'max-h-[3000px] opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <div className="pb-5 text-sm text-black/70 leading-relaxed">
+        <div className="pb-8 sm:pb-10">
           {children}
         </div>
       </div>

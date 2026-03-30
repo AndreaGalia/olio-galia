@@ -11,7 +11,6 @@ import ProductImageGallery from "@/components/singleProductPage/ProductImageGall
 import ProductInfoSection from "@/components/singleProductPage/ProductInfoSection";
 import RelatedProductsSection from "@/components/singleProductPage/RelatedProductsSection";
 import CustomHTMLRenderer from "@/components/singleProductPage/CustomHTMLRenderer";
-import ProductStory from "@/components/singleProductPage/productStory/ProductStory";
 import ProductReviews from "@/components/reviews/ProductReviews";
 import { StructuredData, generateProductSchema, generateBreadcrumbSchema } from '@/lib/seo/structured-data';
 import type { ProductVariant } from '@/types/products';
@@ -46,8 +45,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
   if (!product) return null;
 
   const isOutOfStock = !product.inStock || product.stockQuantity === 0;
-  const hasProductStory = Boolean(product.productStory?.sections?.length);
-  const hasCustomHTML = !hasProductStory && Boolean(product.customHTML?.trim());
+  const hasCustomHTML = !product.productStory?.sections?.length && Boolean(product.customHTML?.trim());
 
   const productSchema = generateProductSchema(product, 'it');
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -91,14 +89,6 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
 
       {/* Below-the-fold content */}
       <div className="container mx-auto px-4 sm:px-6 max-w-7xl py-12">
-
-        {/* Product story (structured editorial layout) */}
-        {hasProductStory && (
-          <>
-            <div className="my-12 border-t border-black/10" />
-            <ProductStory story={product.productStory!} />
-          </>
-        )}
 
         {/* Custom HTML — legacy fallback for products not yet migrated to productStory */}
         {hasCustomHTML && (

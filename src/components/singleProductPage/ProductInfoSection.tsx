@@ -7,6 +7,7 @@ import { useT } from '@/hooks/useT';
 import { useLocale } from '@/contexts/LocaleContext';
 import VariantSelector from './VariantSelector';
 import ProductAccordion from './ProductAccordion';
+import ProductStory from './productStory/ProductStory';
 import { buildCartItemId, getVariantOrProduct } from '@/utils/variantHelpers';
 import type { Product, ProductVariant } from '@/types/products';
 import type { RecurringPriceMap } from '@/types/subscription';
@@ -302,7 +303,11 @@ export default function ProductInfoSection({
           </ProductAccordion>
         )}
 
-        <div className="border-t border-black/10" />
+        {product.productStory?.sections?.length && (
+          <ProductStory story={product.productStory} />
+        )}
+
+        <div className="border-t border-olive/20" />
       </div>
     </div>
   );

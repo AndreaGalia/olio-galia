@@ -8,6 +8,24 @@ interface StoryItemsSectionProps {
 }
 
 /**
+ * Returns the col-span class for the last item in an incomplete grid row,
+ * so no empty colored cell is left visible.
+ */
+function getLastItemSpan(total: number): string {
+  const rem2 = total % 2;
+  const rem3 = total % 3;
+  const classes: string[] = [];
+
+  if (rem2 === 1) classes.push('sm:col-span-2');
+
+  if (rem3 === 1) classes.push('lg:col-span-3');
+  else if (rem3 === 2) classes.push('lg:col-span-2');
+  else if (rem2 === 1) classes.push('lg:col-span-1'); // reset sm override
+
+  return classes.join(' ');
+}
+
+/**
  * Renders a list of named items either as a card grid (default)
  * or as a numbered vertical list.
  *
@@ -33,7 +51,7 @@ export default function StoryItemsSection({
       {layout === 'grid' ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-black/10">
           {items.map((item, i) => (
-            <div key={i} className="bg-beige/50 p-5 space-y-2">
+            <div key={i} className={`bg-beige/50 p-5 space-y-2 ${i === items.length - 1 ? getLastItemSpan(items.length) : ''}`}>
               {item.image && (
                 <div className="w-full h-28 overflow-hidden mb-3">
                   <img src={item.image} alt={item.name} className="w-full h-full object-cover" />

@@ -21,7 +21,7 @@ L'estetica è minimal, ariosa, con forti influenze editoriali. Ogni elemento dev
 - **Non usare mai colori esadecimali hardcoded** — usa sempre i token Tailwind (`bg-sabbia`, `text-olive`, ecc.)
 - Lo sfondo delle pagine prodotto e della navbar è sempre `bg-sabbia-chiaro`
 - Il testo principale è `text-black`, il testo secondario è `text-black/40` o `text-black/60`
-- I bordi sono sempre `border-black/10` o `border-black/15` — mai `border-olive/20` nelle nuove UI
+- I bordi sono sempre `border-olive/20` — mai `border-black/10` o `border-black/15`
 - Niente gradienti (`bg-gradient-to-r`)
 
 ---
@@ -93,13 +93,13 @@ className="text-xs tracking-wider text-black/40 underline underline-offset-2 hov
 Usare sempre un bordo sottile, mai elementi decorativi pesanti:
 
 ```tsx
-<div className="border-t border-black/10" />
+<div className="border-t border-olive/20" />
 ```
 
 Con padding sopra/sotto:
 
 ```tsx
-className="border-t border-black/10 pt-5"
+className="border-t border-olive/20 pt-5"
 // oppure dentro un elemento
 className="space-y-5"
 ```
@@ -190,15 +190,15 @@ className="w-full py-4 bg-sabbia text-black text-[11px] tracking-[0.25em] upperc
 ## Quantity Selector
 
 ```tsx
-<div className="flex items-center border border-black/15">
+<div className="flex items-center border border-olive/20">
   <button className="w-9 h-9 flex items-center justify-center text-sm hover:bg-black/5 transition-colors cursor-pointer select-none">−</button>
-  <span className="w-9 h-9 flex items-center justify-center text-sm border-x border-black/10">{quantity}</span>
+  <span className="w-9 h-9 flex items-center justify-center text-sm border-x border-olive/20">{quantity}</span>
   <button className="w-9 h-9 flex items-center justify-center text-sm hover:bg-black/5 transition-colors cursor-pointer select-none">+</button>
 </div>
 ```
 
 - Dimensione fissa `w-9 h-9` per ogni cella
-- Bordo `border-black/15`, molto leggero
+- Bordo `border-olive/20`, molto leggero
 - Nessun colore di sfondo di default
 
 ---
@@ -217,7 +217,7 @@ Il componente `ProductAccordion` è usato per sezioni collassabili nella pagina 
 
 ### Stile
 
-- Separatore: `border-t border-black/10`
+- Separatore: `border-t border-olive/20`
 - Titolo: `text-xs tracking-widest uppercase` con `hover:text-olive`
 - Toggle: `+` / `−` in `text-black/50`
 - Transizione: `max-h` con `overflow-hidden` — niente JS per animazioni
@@ -239,7 +239,7 @@ Il componente `ProductAccordion` è usato per sezioni collassabili nella pagina 
 ### Trigger (inline)
 
 ```tsx
-<div className="border-t border-black/10 pt-4 flex items-center justify-between gap-4">
+<div className="border-t border-olive/20 pt-4 flex items-center justify-between gap-4">
   <div>
     <p className="text-[11px] tracking-[0.15em] uppercase text-black/60">{title}</p>
     <p className="text-xs text-black/40 mt-0.5">{description}</p>
@@ -253,9 +253,9 @@ Il componente `ProductAccordion` è usato per sezioni collassabili nella pagina 
 ### Modal
 
 - Sfondo overlay: `bg-black/40`
-- Pannello: `bg-sabbia-chiaro border border-black/10 p-8` — nessun `rounded`
-- Input: `border border-black/15 focus:border-black/40 bg-transparent`
-- Bottone annulla: outline minimal `border border-black/15`
+- Pannello: `bg-sabbia-chiaro border border-olive/20 p-8` — nessun `rounded`
+- Input: `border border-olive/20 focus:border-olive/40 bg-transparent`
+- Bottone annulla: outline minimal `border border-olive/20`
 - Bottone submit: `bg-olive text-beige` — nessun gradiente
 
 ---
@@ -264,7 +264,7 @@ Il componente `ProductAccordion` è usato per sezioni collassabili nella pagina 
 
 ### Da usare ✓
 
-- `border-black/10` per separatori e bordi leggeri
+- `border-olive/20` per separatori e bordi leggeri
 - `text-black/40`, `text-black/50`, `text-black/60` per testo secondario
 - `tracking-[0.2em]` o `tracking-widest` per uppercase piccoli
 - `transition-colors duration-200` o `duration-300` per hover
