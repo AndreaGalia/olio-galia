@@ -1,5 +1,5 @@
 import { FAQ } from '@/types/faq';
-import FAQItem from '@/components/homepage/sections/faq/FAQItem';
+import FaqItem from './FaqItem';
 
 interface FaqListProps {
   faqs: FAQ[];
@@ -11,22 +11,23 @@ interface FaqListProps {
 export default function FaqList({ faqs, activeIndex, noFaqLabel, onToggle }: FaqListProps) {
   if (faqs.length === 0) {
     return (
-      <div className="text-center py-12 text-black/60">
-        <p>{noFaqLabel}</p>
+      <div className="border-t border-olive/20 py-12 text-center">
+        <p className="text-sm text-black/50">{noFaqLabel}</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-3 sm:space-y-4">
+    <div>
       {faqs.map((faq, index) => (
-        <FAQItem
+        <FaqItem
           key={faq.id}
           faq={faq}
           isActive={activeIndex === index}
           onToggle={() => onToggle(index)}
         />
       ))}
+      <div className="border-t border-olive/20" />
     </div>
   );
 }

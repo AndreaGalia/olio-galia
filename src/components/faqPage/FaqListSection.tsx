@@ -70,22 +70,24 @@ export default function FaqListSection() {
 
   return (
     <section className="pb-16 sm:pb-24">
-      <div className="container mx-auto px-4 sm:px-6 max-w-4xl">
+      <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-4xl mx-auto">
 
         {loading ? (
-          <div className="space-y-4 pt-4">
+          <div className="pt-4">
             {/* Filtri skeleton */}
-            <div className="flex gap-2 mb-6">
+            <div className="flex gap-2 mb-8">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-8 w-24 bg-olive/10 rounded-full animate-pulse" />
+                <div key={i} className="h-7 w-20 bg-olive/10 animate-pulse" />
               ))}
             </div>
             {/* Domande skeleton */}
             {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="border-b border-olive/20 py-5 space-y-2 animate-pulse">
-                <div className="h-4 bg-olive/10 rounded w-3/4" />
+              <div key={i} className="border-t border-olive/20 py-5 animate-pulse">
+                <div className="h-3 bg-olive/10 w-16 mb-2" />
+                <div className="h-4 bg-olive/10 w-3/4" />
               </div>
             ))}
+            <div className="border-t border-olive/20" />
           </div>
         ) : (
           <>

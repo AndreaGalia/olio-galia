@@ -1315,6 +1315,7 @@
     "portalEmailIntro": "The link to manage your subscription can be found in the confirmation and renewal emails.",
     "portalEmailFallback": "Can't find the email? Enter your email to receive a new access link.",
     "sendLink": "Send link",
+  "sendAnotherLink": "Send another link",
     "sendingLink": "Sending...",
     "accessLoading": "Accessing portal...",
     "accessLoadingDesc": "Verifying your link, you will be redirected automatically.",

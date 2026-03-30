@@ -6,13 +6,17 @@ export default function FaqHeroSection() {
   const { t } = useT();
 
   return (
-    <section className="bg-homepage-bg pt-10 pb-6 sm:pt-12 sm:pb-8 lg:pt-16 lg:pb-10">
-      <div className="container mx-auto px-4 sm:px-6 max-w-4xl text-center">
-
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif text-black leading-tight">
+    <section className="bg-sabbia-chiaro pt-16 pb-8 lg:pt-24 lg:pb-12">
+      <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-4xl mx-auto">
+        <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-4">
+          {t.faq.badge}
+        </p>
+        <h1 style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', lineHeight: '1.1', letterSpacing: '0.15em' }}>
           {t.faq.title.line1} {t.faq.title.line2}
         </h1>
-
+        <p className="mt-5 text-sm text-black/60 leading-relaxed max-w-xl">
+          {t.faq.description}
+        </p>
       </div>
     </section>
   );

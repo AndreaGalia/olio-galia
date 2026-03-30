@@ -1315,6 +1315,7 @@
     "portalEmailIntro": "Il link per gestire il tuo abbonamento si trova nelle email di conferma e rinnovo.",
     "portalEmailFallback": "Non trovi l'email? Inserisci la tua email per ricevere un nuovo link di accesso.",
     "sendLink": "Invia link",
+  "sendAnotherLink": "Invia un altro link",
     "sendingLink": "Invio in corso...",
     "accessLoading": "Accesso al portale in corso...",
     "accessLoadingDesc": "Verifica del link in corso, sarai reindirizzato automaticamente.",

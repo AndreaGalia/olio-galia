@@ -2,8 +2,6 @@
 
 import { useT } from '@/hooks/useT';
 import { openEmail, openWhatsApp } from '@/utils/contactActions';
-import ContactInfoCard from './ContactInfoCard';
-import { EmailIcon, PhoneIcon, WhatsAppIcon } from './ContactIcons';
 
 export default function ContactInfoSection() {
   const { t } = useT();
@@ -17,30 +15,25 @@ export default function ContactInfoSection() {
     if (phone) window.location.href = `tel:${phone.replace(/\s/g, '')}`;
   }
 
+  const rows = [
+    { label: info.phone.title, value: phone, action: handlePhone },
+    { label: info.whatsapp.title, value: whatsapp, action: () => openWhatsApp(whatsapp, t.contactPage.whatsappMessage) },
+    { label: info.email.title, value: email, action: () => openEmail() },
+  ];
+
   return (
-    <div>
-      <h2 className="font-serif text-black mb-8">{info.title}</h2>
-      <ContactInfoCard
-        icon={<PhoneIcon />}
-        title={info.phone.title}
-        value={phone}
-        description={info.phone.description}
-        onClick={handlePhone}
-      />
-      <ContactInfoCard
-        icon={<WhatsAppIcon />}
-        title={info.whatsapp.title}
-        value={whatsapp}
-        description={info.whatsapp.description}
-        onClick={() => openWhatsApp(whatsapp, t.contactPage.whatsappMessage)}
-      />
-      <ContactInfoCard
-        icon={<EmailIcon />}
-        title={info.email.title}
-        value={email}
-        description={info.email.description}
-        onClick={() => openEmail()}
-      />
+    <div className="mt-14">
+      {rows.map((row, i) => (
+        <div
+          key={i}
+          onClick={row.action}
+          className="border-t border-olive/20 py-4 cursor-pointer group"
+        >
+          <span className="text-[11px] tracking-[0.2em] uppercase text-black/40 mr-3">{row.label}:</span>
+          <span className="text-sm text-black group-hover:text-olive transition-colors duration-200">{row.value}</span>
+        </div>
+      ))}
+      <div className="border-t border-olive/20" />
     </div>
   );
 }

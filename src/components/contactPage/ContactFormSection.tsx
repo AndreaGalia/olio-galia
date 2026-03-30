@@ -35,57 +35,55 @@ export default function ContactFormSection({ hideTitle }: { hideTitle?: boolean 
   }
 
   return (
-    <div>
-      {!hideTitle && <h2 className="font-serif text-black mb-8">{form.title}</h2>}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-        <div className="flex flex-col gap-1">
-          <label className="text-xs tracking-widest uppercase text-black/60 font-sans">{form.name}</label>
-          <input
-            type="text"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            required
-            className="border-0 border-b border-black/30 bg-transparent py-2 text-black placeholder-black/30 focus:outline-none focus:border-black transition-colors text-sm font-sans"
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-xs tracking-widest uppercase text-black/60 font-sans">{form.email}</label>
-          <input
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            required
-            className="border-0 border-b border-black/30 bg-transparent py-2 text-black placeholder-black/30 focus:outline-none focus:border-black transition-colors text-sm font-sans"
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-xs tracking-widest uppercase text-black/60 font-sans">{form.message}</label>
-          <textarea
-            value={message}
-            onChange={e => setMessage(e.target.value)}
-            required
-            rows={5}
-            className="border-0 border-b border-black/30 bg-transparent py-2 text-black placeholder-black/30 focus:outline-none focus:border-black transition-colors text-sm font-sans resize-none"
-          />
-        </div>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-0">
+      {!hideTitle && (
+        <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-8">{form.title}</p>
+      )}
 
-        {status === 'success' && (
-          <p className="text-sm text-olive font-sans">{form.success}</p>
-        )}
-        {status === 'error' && (
-          <p className="text-sm text-red-600 font-sans">{form.error}</p>
-        )}
+      {/* Name + Email affiancati */}
+      <div className="grid grid-cols-2 gap-6 mb-6">
+        <input
+          type="text"
+          placeholder={form.name}
+          value={name}
+          onChange={e => setName(e.target.value)}
+          required
+          className="border-b border-olive/20 bg-transparent py-3 text-sm text-black placeholder-black/30 focus:outline-none focus:border-olive/50 transition-colors"
+        />
+        <input
+          type="email"
+          placeholder={form.email}
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          required
+          className="border-b border-olive/20 bg-transparent py-3 text-sm text-black placeholder-black/30 focus:outline-none focus:border-olive/50 transition-colors"
+        />
+      </div>
 
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            disabled={status === 'submitting'}
-            className="btn-outline border border-black text-black px-8 py-3 text-xs tracking-widest uppercase font-sans cursor-pointer hover:bg-olive hover:border-olive hover:text-[#E0D3B7] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {status === 'submitting' ? form.submitting : `→ ${form.submit}`}
-          </button>
-        </div>
-      </form>
-    </div>
+      {/* Textarea con bordo completo */}
+      <textarea
+        placeholder={form.message}
+        value={message}
+        onChange={e => setMessage(e.target.value)}
+        required
+        rows={8}
+        className="border border-olive/20 bg-transparent p-4 text-sm text-black placeholder-black/30 focus:outline-none focus:border-olive/50 transition-colors resize-none mb-1"
+      />
+
+      {status === 'success' && (
+        <p className="text-[11px] tracking-[0.15em] uppercase text-olive py-3">{form.success}</p>
+      )}
+      {status === 'error' && (
+        <p className="text-[11px] tracking-[0.15em] uppercase text-red-600 py-3">{form.error}</p>
+      )}
+
+      <button
+        type="submit"
+        disabled={status === 'submitting'}
+        className="w-full py-4 bg-sabbia text-black text-[11px] tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-olive hover:text-beige disabled:bg-sabbia/40 disabled:text-black/30 disabled:cursor-not-allowed"
+      >
+        {status === 'submitting' ? form.submitting : form.submit}
+      </button>
+    </form>
   );
 }

@@ -7,11 +7,11 @@ interface FaqContactCtaProps {
 
 export default function FaqContactCta({ title, button }: FaqContactCtaProps) {
   return (
-    <div className="mt-12 sm:mt-16 pt-10 sm:pt-12 border-t border-olive/15 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <p className="text-sm text-black/60 tracking-wide">{title}</p>
+    <div className="mt-16 border-t border-olive/20 pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <p className="text-sm text-black/60 leading-relaxed">{title}</p>
       <Link
         href="/contact"
-        className="btn-outline border border-olive text-olive px-6 py-2.5 text-sm tracking-widest uppercase hover:bg-olive hover:text-white transition-colors duration-200 whitespace-nowrap"
+        className="text-[11px] tracking-[0.25em] uppercase px-6 py-3 border border-olive/20 text-black/60 hover:bg-olive hover:text-beige hover:border-olive transition-all duration-300 cursor-pointer whitespace-nowrap"
       >
         {button}
       </Link>

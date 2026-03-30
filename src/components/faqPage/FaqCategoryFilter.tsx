@@ -12,13 +12,13 @@ export default function FaqCategoryFilter({
   onSelect,
 }: FaqCategoryFilterProps) {
   return (
-    <div className="flex flex-wrap gap-2 sm:gap-3 mb-8 sm:mb-10">
+    <div className="flex flex-wrap gap-2 mb-8">
       <button
         onClick={() => onSelect(null)}
-        className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors duration-200 cursor-pointer ${
+        className={`px-4 py-1.5 text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 cursor-pointer border ${
           activeCategory === null
-            ? 'bg-olive text-white'
-            : 'bg-white/80 text-black border border-olive/10 hover:bg-olive/10'
+            ? 'border-olive bg-olive text-beige'
+            : 'border-olive/20 text-black/50 hover:border-olive/40 hover:text-black'
         }`}
       >
         {allLabel}
@@ -28,10 +28,10 @@ export default function FaqCategoryFilter({
         <button
           key={category}
           onClick={() => onSelect(category)}
-          className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors duration-200 cursor-pointer ${
+          className={`px-4 py-1.5 text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 cursor-pointer border ${
             activeCategory === category
-              ? 'bg-olive text-white'
-              : 'bg-white/80 text-black border border-olive/10 hover:bg-olive/10'
+              ? 'border-olive bg-olive text-beige'
+              : 'border-olive/20 text-black/50 hover:border-olive/40 hover:text-black'
           }`}
         >
           {category}
