@@ -104,8 +104,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
         )}
 
         {/* Reviews */}
-        <div className="my-12 border-t border-olive/20" />
-        <div id="product-reviews-section" className="mb-16">
+        <div className="mb-16">
           <ProductReviews productSlug={slug} />
         </div>
 
