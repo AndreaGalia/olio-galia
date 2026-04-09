@@ -43,6 +43,9 @@ next-env.d.ts
 # Local assets (not tracked by git)
 /local-assets/
 
+# Docs interni - non tracciati
+/docs/
+
 # Video files - too large for GitHub
 public/videos/*.mp4
 public/videos/*.MOV
