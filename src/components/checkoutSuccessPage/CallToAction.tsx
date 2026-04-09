@@ -6,29 +6,34 @@ export default function CallToAction({ className = "" }: CallToActionProps) {
   const { t } = useT();
 
   return (
-    <div className={`text-center ${className}`}>
-      <div className="bg-white border border-olive/10 p-8 max-w-2xl mx-auto">
-        <h3 className="text-2xl font-serif text-black mb-6">{t.checkoutSuccess.cta.title}</h3>
-        <p className="text-black mb-8 leading-relaxed">
-          {t.checkoutSuccess.cta.description}
-        </p>
+    <section className={`pb-16 sm:pb-24 ${className}`}>
+      <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-4xl mx-auto">
+        <div className="border-t border-olive/20 pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+          <div>
+            <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-2">
+              {t.checkoutSuccess.cta.title}
+            </p>
+            <p className="text-sm text-black/60 leading-relaxed max-w-sm">
+              {t.checkoutSuccess.cta.description}
+            </p>
+          </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
-            href="/products"
-            className="px-8 py-4 bg-olive text-beige transition-all duration-300 font-medium text-lg border border-olive/20 uppercase tracking-wider hover:bg-salvia"
-          >
-            {t.checkoutSuccess.cta.discoverProducts}
-          </Link>
-
-          <Link
-            href="/"
-            className="px-8 py-4 border-2 border-olive text-olive hover:bg-olive hover:text-beige transition-all duration-300 font-medium text-lg uppercase tracking-wider"
-          >
-            {t.checkoutSuccess.cta.backToHome}
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+            <Link
+              href="/products"
+              className="text-[11px] tracking-[0.25em] uppercase px-6 py-3 bg-sabbia text-black hover:bg-olive hover:text-beige transition-all duration-300 cursor-pointer whitespace-nowrap text-center"
+            >
+              {t.checkoutSuccess.cta.discoverProducts}
+            </Link>
+            <Link
+              href="/"
+              className="text-[11px] tracking-[0.25em] uppercase px-6 py-3 border border-olive/20 text-black/60 hover:bg-olive hover:text-beige hover:border-olive transition-all duration-300 cursor-pointer whitespace-nowrap text-center"
+            >
+              {t.checkoutSuccess.cta.backToHome}
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

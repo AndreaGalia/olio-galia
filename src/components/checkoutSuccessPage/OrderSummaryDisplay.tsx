@@ -4,158 +4,132 @@ import { OrderSummaryDisplayProps } from '@/types/checkoutSuccessTypes';
 export default function OrderSummaryDisplay({ orderDetails, loading }: OrderSummaryDisplayProps) {
   const { t } = useT();
 
-  if (loading) {
-    return (
-      <div className="max-w-3xl mx-auto mb-16">
-        <div className="bg-white border border-olive/10 p-8">
-          <div className="text-center">
-            <p className="text-black text-xl font-serif">{t.checkoutSuccess.loading.orderSummary}</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!orderDetails) return null;
-
   return (
-    <div className="max-w-3xl mx-auto mb-16">
-      <div className="bg-white border border-olive/10 p-8">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-serif text-black">{t.checkoutSuccess.orderSummary.title}</h2>
-        </div>
+    <section className="pb-8">
+      <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-4xl mx-auto">
+        <div className="border-t border-olive/20 pt-8 space-y-8">
 
-        {/* Numero Ordine */}
-        {orderDetails.paymentIntent && (
-          <div className="bg-olive/5 border border-olive/10 p-4 mb-8">
-            <div className="flex items-center justify-center gap-3">
-              <span className="text-sm font-medium text-black/80 uppercase tracking-wide">{t.checkoutSuccess.hero.orderNumber}</span>
-              <span className="text-xl font-serif text-black font-bold tracking-wider">
-                #{orderDetails.paymentIntent.slice(-8).toUpperCase()}
-              </span>
+          {loading ? (
+            <div className="animate-pulse space-y-4">
+              <div className="h-3 bg-olive/10 w-24" />
+              <div className="h-4 bg-olive/10 w-48" />
+              <div className="h-4 bg-olive/10 w-64" />
             </div>
-          </div>
-        )}
-
-        {/* Informazioni Cliente */}
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
-          <div className="bg-beige/50 border border-olive/10 p-6">
-            <h3 className="font-serif text-lg text-black mb-4 flex items-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-              {t.checkoutSuccess.orderSummary.customerData}
-            </h3>
-            <p className="text-black mb-2">
-              <span className="font-medium">{t.checkoutSuccess.orderSummary.name}</span> {orderDetails.customer?.name || 'N/D'}
-            </p>
-            <p className="text-black">
-              <span className="font-medium">{t.checkoutSuccess.orderSummary.email}</span> {orderDetails.customer?.email || 'N/D'}
-            </p>
-          </div>
-
-          <div className="bg-beige/50 border border-olive/10 p-6">
-            <h3 className="font-serif text-lg text-black mb-4 flex items-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              {t.checkoutSuccess.orderSummary.shipping}
-            </h3>
-            <p className="text-black mb-2">
-              <span className="font-medium">{t.checkoutSuccess.orderSummary.address}</span> {orderDetails.shipping?.address || t.checkoutSuccess.orderSummary.asPerCheckout}
-            </p>
-          </div>
-        </div>
-
-        {/* Prodotti Ordinati */}
-        <div className="mb-8">
-          <h3 className="font-serif text-xl text-black mb-6 flex items-center gap-2">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z" />
-            </svg>
-            {t.checkoutSuccess.orderSummary.productsOrdered}
-          </h3>
-          
-          <div className="space-y-4">
-            {orderDetails.items?.map((item, index) => (
-              <div key={index} className="flex items-center justify-between p-4 bg-beige/30 border border-nocciola/10">
-                <div className="flex items-center gap-4">
-                  {item.image && (
-                    <div className="w-16 h-16 bg-olive/10 border border-olive/10 flex items-center justify-center overflow-hidden">
-                      <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
-                    </div>
-                  )}
-                  <div>
-                    <h4 className="font-medium text-black">{item.name}</h4>
-                    <p className="text-sm text-black">{t.checkoutSuccess.orderSummary.quantity} {item.quantity}</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="font-semibold text-black">€{(item.price * item.quantity).toFixed(2)}</p>
-                  <p className="text-sm text-black">€{item.price.toFixed(2)} {t.checkoutSuccess.orderSummary.each}</p>
-                </div>
-              </div>
-            )) || (
-              <div className="text-center py-8 text-black">
-                <p>{t.checkoutSuccess.orderSummary.productDetailsNotAvailable}</p>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Totale */}
-        <div className="border-t border-nocciola/20 pt-6">
-          <div className="bg-olive/5 border border-olive/10 p-6">
-            
-            {/* Subtotale prodotti */}
-            <div className="flex justify-between items-center mb-4">
-              <span className="text-black">{t.checkoutSuccess.orderSummary.subtotal}</span>
-              <span className="text-black">
-                €{orderDetails.pricing?.subtotal?.toFixed(2) || 
-                   ((orderDetails.total || 0) - (orderDetails.pricing?.shippingCost || (orderDetails.total || 0) * 0.1)).toFixed(2)}
-              </span>
-            </div>
-            
-            {/* Costo spedizione reale da Stripe */}
-            <div className="flex justify-between items-center mb-4">
-              <div className="flex items-center gap-2">
-                <span className="text-black">{t.checkoutSuccess.orderSummary.shippingCost}</span>
-                {orderDetails.pricing?.shippingCost === 0 && (
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 border border-green-200 font-medium">
-                    {t.checkoutSuccess.freeShipping}
-                  </span>
-                )}
-              </div>
-              <span className="text-black">
-                {orderDetails.pricing?.shippingCost !== undefined ?
-                  `€${orderDetails.pricing.shippingCost.toFixed(2)}` : 
-                  `€${((orderDetails.total || 0) * 0.1).toFixed(2)}`
-                }
-              </span>
-            </div>
-            
-            {/* Separatore prima del totale */}
-            <div className="border-t border-olive/20 pt-4">
-              <div className="flex justify-between items-center">
-                <span className="text-xl font-serif text-black font-bold">{t.checkoutSuccess.orderSummary.total}</span>
-                <span className="text-2xl font-serif text-black font-bold">
-                  €{(orderDetails.pricing?.total || orderDetails.total || 0).toFixed(2)}
-                </span>
-              </div>
-              
-              {/* Informazioni aggiuntive sul metodo di spedizione */}
-              {orderDetails.shipping?.method && (
-                <div className="mt-3 pt-3 border-t border-olive/10">
-                  <p className="text-sm text-black/80 text-center">
-                    <span className="font-medium">{t.checkoutSuccess.shippingMethod}</span> {orderDetails.shipping.method}
+          ) : orderDetails ? (
+            <>
+              {/* Numero ordine */}
+              {orderDetails.paymentIntent && (
+                <div>
+                  <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-2">
+                    {t.checkoutSuccess.hero.orderNumber}
+                  </p>
+                  <p style={{ fontSize: 'clamp(1.2rem, 2.5vw, 1.6rem)', letterSpacing: '0.1em' }}>
+                    #{orderDetails.paymentIntent.slice(-8).toUpperCase()}
                   </p>
                 </div>
               )}
-            </div>
-          </div>
+
+              {/* Dati cliente + spedizione */}
+              <div className="grid sm:grid-cols-2 gap-6">
+                <div>
+                  <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-3">
+                    {t.checkoutSuccess.orderSummary.customerData}
+                  </p>
+                  <div className="space-y-1.5 text-sm text-black/70 leading-relaxed">
+                    <p>{orderDetails.customer?.name || 'N/D'}</p>
+                    <p>{orderDetails.customer?.email || 'N/D'}</p>
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-3">
+                    {t.checkoutSuccess.orderSummary.shipping}
+                  </p>
+                  <div className="space-y-1.5 text-sm text-black/70 leading-relaxed">
+                    <p>{orderDetails.shipping?.address || t.checkoutSuccess.orderSummary.asPerCheckout}</p>
+                    {orderDetails.shipping?.method && (
+                      <p>{orderDetails.shipping.method}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Prodotti */}
+              <div>
+                <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-4">
+                  {t.checkoutSuccess.orderSummary.productsOrdered}
+                </p>
+
+                <div className="space-y-0">
+                  {orderDetails.items?.map((item, index) => (
+                    <div key={index} className="border-t border-olive/20 py-4 flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-4">
+                        {item.image && (
+                          <div className="w-14 h-14 border border-olive/20 overflow-hidden flex-shrink-0">
+                            <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                          </div>
+                        )}
+                        <div>
+                          <p className="text-sm text-black/80">{item.name}</p>
+                          <p className="text-[11px] tracking-[0.1em] uppercase text-black/40 mt-0.5">
+                            {t.checkoutSuccess.orderSummary.quantity} {item.quantity}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm text-black/80">€{(item.price * item.quantity).toFixed(2)}</p>
+                        <p className="text-[11px] text-black/40 mt-0.5">€{item.price.toFixed(2)} {t.checkoutSuccess.orderSummary.each}</p>
+                      </div>
+                    </div>
+                  )) || (
+                    <p className="text-sm text-black/40 py-4 border-t border-olive/20">
+                      {t.checkoutSuccess.orderSummary.productDetailsNotAvailable}
+                    </p>
+                  )}
+                  <div className="border-t border-olive/20" />
+                </div>
+              </div>
+
+              {/* Totale */}
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm text-black/60">
+                  <span>{t.checkoutSuccess.orderSummary.subtotal}</span>
+                  <span>
+                    €{orderDetails.pricing?.subtotal?.toFixed(2) ||
+                      ((orderDetails.total || 0) - (orderDetails.pricing?.shippingCost || (orderDetails.total || 0) * 0.1)).toFixed(2)}
+                  </span>
+                </div>
+
+                <div className="flex justify-between text-sm text-black/60">
+                  <span className="flex items-center gap-2">
+                    {t.checkoutSuccess.orderSummary.shippingCost}
+                    {orderDetails.pricing?.shippingCost === 0 && (
+                      <span className="text-[10px] tracking-[0.1em] uppercase text-olive border border-olive/30 px-1.5 py-0.5">
+                        {t.checkoutSuccess.freeShipping}
+                      </span>
+                    )}
+                  </span>
+                  <span>
+                    {orderDetails.pricing?.shippingCost !== undefined
+                      ? `€${orderDetails.pricing.shippingCost.toFixed(2)}`
+                      : `€${((orderDetails.total || 0) * 0.1).toFixed(2)}`}
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-baseline border-t border-olive/20 pt-3 mt-3">
+                  <span className="text-[11px] tracking-[0.2em] uppercase text-black/60">
+                    {t.checkoutSuccess.orderSummary.total}
+                  </span>
+                  <span style={{ fontSize: 'clamp(1.2rem, 2.5vw, 1.5rem)', letterSpacing: '0.05em' }}>
+                    €{(orderDetails.pricing?.total || orderDetails.total || 0).toFixed(2)}
+                  </span>
+                </div>
+              </div>
+            </>
+          ) : null}
+
         </div>
       </div>
-    </div>
+    </section>
   );
 }

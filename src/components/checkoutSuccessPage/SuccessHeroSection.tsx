@@ -7,43 +7,38 @@ export default function SuccessHeroSection({
   sessionId,
   orderDetails,
   invoiceStatus,
-  receiptStatus
+  receiptStatus,
 }: SuccessHeroSectionProps) {
   const { t } = useT();
 
   return (
-    <div className="text-center mb-16">
-      {/* Titolo principale */}
-      <h1 className="text-5xl md:text-6xl font-serif text-black mb-6 tracking-tight">
-        {t.checkoutSuccess.hero.title}
-      </h1>
-      
-      {/* Sottotitolo */}
-      <div className="max-w-2xl mx-auto mb-8">
-        <p className="text-2xl md:text-3xl text-salvia mb-4 font-light">
+    <section className="pt-16 pb-8 lg:pt-24 lg:pb-12">
+      <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-4xl mx-auto">
+        <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-4">
           {t.checkoutSuccess.hero.subtitle}
         </p>
-        <p className="text-lg text-black leading-relaxed">
+        <h1 style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', lineHeight: '1.1', letterSpacing: '0.15em' }}>
+          {t.checkoutSuccess.hero.title}
+        </h1>
+        <p className="mt-5 text-sm text-black/60 leading-relaxed max-w-xl">
           {t.checkoutSuccess.hero.description}
         </p>
-      </div>
 
-      {/* Azioni: WhatsApp e Ricevuta */}
-      {orderDetails?.paymentIntent && (
-        <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-center mb-8">
-          <WhatsAppButton
-            orderDetails={orderDetails}
-            sessionId={orderDetails.paymentIntent}
-          />
-
-          {receiptStatus.hasReceipt && (
-            <ReceiptButton
-              receiptStatus={receiptStatus}
-              invoiceStatus={invoiceStatus}
+        {orderDetails?.paymentIntent && (
+          <div className="mt-8 flex flex-col sm:flex-row gap-3">
+            <WhatsAppButton
+              orderDetails={orderDetails}
+              sessionId={orderDetails.paymentIntent}
             />
-          )}
-        </div>
-      )}
-    </div>
+            {receiptStatus.hasReceipt && (
+              <ReceiptButton
+                receiptStatus={receiptStatus}
+                invoiceStatus={invoiceStatus}
+              />
+            )}
+          </div>
+        )}
+      </div>
+    </section>
   );
 }

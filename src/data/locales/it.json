@@ -1452,6 +1452,23 @@
       "button": "Contattaci"
     }
   },
+  "cookiePolicyPage": {
+    "table": {
+      "name": "Nome",
+      "type": "Tipo",
+      "purpose": "Finalità",
+      "duration": "Durata"
+    }
+  },
+  "termsOfServicePage": {
+    "companyInfo": {
+      "address": "Sede legale",
+      "vat": "Partita IVA",
+      "email": "Email",
+      "phone": "Telefono"
+    },
+    "privacyLink": "Leggi la Privacy Policy"
+  },
   "sostenibilitaPage": {
     "meta": {
       "title": "Sostenibilità",

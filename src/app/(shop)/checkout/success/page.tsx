@@ -1,4 +1,3 @@
-// app/checkout/success/page.tsx
 'use client';
 
 import { Suspense } from 'react';
@@ -9,11 +8,14 @@ function CheckoutSuccessLoading() {
   const { t } = useT();
 
   return (
-    <div className="min-h-screen bg-homepage-bg">
-      <div className="container mx-auto px-4 py-16">
-        <div className="text-center">
-          <p className="text-black text-2xl font-serif">{t.checkoutSuccess.loading.text}</p>
+    <div className="min-h-screen bg-sabbia-chiaro">
+      <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-4xl mx-auto pt-16 lg:pt-24">
+        <div className="animate-pulse space-y-4">
+          <div className="h-3 bg-olive/10 w-32" />
+          <div className="h-8 bg-olive/10 w-64" />
+          <div className="h-4 bg-olive/10 w-48 mt-5" />
         </div>
+        <p className="mt-8 text-sm text-black/40">{t.checkoutSuccess.loading.text}</p>
       </div>
     </div>
   );
