@@ -1,7 +1,8 @@
 'use client';
 
 import { useT } from '@/hooks/useT';
-import RelatedProductCard from './RelatedProductCard';
+import HomepageProductCard from '@/components/homepage/sections/products/HomepageProductCard';
+import { useAddToCart } from '@/hooks/useAddToCart';
 import type { Product } from '@/types/products';
 
 interface RelatedProductsSectionProps {
@@ -10,6 +11,7 @@ interface RelatedProductsSectionProps {
 
 export default function RelatedProductsSection({ products }: RelatedProductsSectionProps) {
   const { t } = useT();
+  const { handleAddToCart } = useAddToCart({ products });
 
   if (!products.length) return null;
 
@@ -19,9 +21,13 @@ export default function RelatedProductsSection({ products }: RelatedProductsSect
         {t.productDetailPage.product.relatedProducts}
       </p>
 
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
         {products.map((product) => (
-          <RelatedProductCard key={product.id} product={product} />
+          <HomepageProductCard
+            key={product.id}
+            product={product}
+            onAddToCart={handleAddToCart}
+          />
         ))}
       </div>
     </div>
