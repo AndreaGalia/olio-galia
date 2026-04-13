@@ -44,7 +44,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 w-full z-30 px-4 sm:px-6 lg:px-[100px] py-4 sm:py-6 transition-colors duration-300 ${transparent ? 'bg-transparent' : 'bg-sabbia-chiaro'}`}>
+      <nav className={`fixed top-0 left-0 right-0 w-full z-30 px-4 sm:px-6 lg:px-[6.25rem] py-4 sm:py-6 transition-colors duration-300 ${transparent ? 'bg-transparent' : 'bg-sabbia-chiaro'}`}>
         <div className="w-full">
           <div className="flex justify-between items-center">
             
@@ -54,7 +54,7 @@ export default function Navbar() {
                 <img
                   src={process.env.NEXT_PUBLIC_LOGO_SVG_URL}
                   alt="Olio Galia"
-                  className="h-[16px] sm:h-[22px] w-auto"
+                  className="h-[1rem] sm:h-[1.375rem] w-auto"
                 />
               </Link>
             </div>
@@ -135,7 +135,7 @@ export default function Navbar() {
             {/* Header */}
             <div className="flex justify-between items-center px-8 py-5">
               <Link href="/" onClick={toggleMenu} className="hover:opacity-80 transition-opacity duration-200">
-                <img src={process.env.NEXT_PUBLIC_LOGO_SVG_URL} alt="Olio Galia" className="h-[16px] w-auto" />
+                <img src={process.env.NEXT_PUBLIC_LOGO_SVG_URL} alt="Olio Galia" className="h-[1rem] w-auto" />
               </Link>
               <button onClick={toggleMenu} className="w-8 h-8 flex items-center justify-center text-black" aria-label={t.navbar.mobile.closeMenu}>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

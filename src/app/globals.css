@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+/* ============================================================
+   UI SCALE — modifica --ui-scale per scalare l'intera UI.
+   Tutti i valori rem (Tailwind + globals) scalano di conseguenza.
+   Esempi: 1.0 = 100% | 0.9 = 90% | 0.85 = 85%
+   ============================================================ */
+:root {
+  --ui-scale: 0.85;
+}
+
+html {
+  font-size: calc(16px * var(--ui-scale));
+}
+
 @theme {
   --color-olive: #577657;      /* olive */
   --color-salvia: #577657;     /* olive (stessa palette) */
@@ -25,90 +38,90 @@ body {
 /* Title styles */
 h1, h2, h3, h4, h5, h6 {
   font-family: "termina", sans-serif !important;
-  font-size: 17px !important;
+  font-size: 1.0625rem !important;  /* 17px base */
   font-weight: 400 !important;
   font-style: normal !important;
-  line-height: 20px !important;
-  letter-spacing: 3.4px !important;
+  line-height: 1.25rem !important;  /* 20px base */
+  letter-spacing: 0.2125rem !important; /* 3.4px base */
   text-transform: uppercase !important;
 }
 
 /* Termina UI elements */
 .font-serif {
   font-family: "termina", sans-serif !important;
-  font-size: 17px !important;
+  font-size: 1.0625rem !important;  /* 17px base */
   font-weight: 400 !important;
   font-style: normal !important;
-  line-height: 20px !important;
-  letter-spacing: 3.4px !important;
+  line-height: 1.25rem !important;  /* 20px base */
+  letter-spacing: 0.2125rem !important; /* 3.4px base */
   text-transform: uppercase !important;
 }
 
 .font-serif-bold {
   font-family: "termina", sans-serif !important;
-  font-size: 17px !important;
+  font-size: 1.0625rem !important;  /* 17px base */
   font-weight: 700 !important;
   font-style: normal !important;
-  line-height: 20px !important;
-  letter-spacing: 3.4px !important;
+  line-height: 1.25rem !important;  /* 20px base */
+  letter-spacing: 0.2125rem !important; /* 3.4px base */
   text-transform: uppercase !important;
 }
 
 /* Navbar Desktop Links */
 .navbar-desktop-link {
-  font-size: 14px !important;
+  font-size: 0.875rem !important;   /* 14px base */
 }
 
 /* Language Switcher */
 .lang-btn {
   font-family: "termina", sans-serif !important;
-  font-size: 11px !important;
+  font-size: 0.6875rem !important;  /* 11px base */
   font-weight: 400 !important;
-  letter-spacing: 3.4px !important;
+  letter-spacing: 0.2125rem !important; /* 3.4px base */
   text-transform: uppercase !important;
 }
 
 .lang-btn-active {
   font-family: "termina", sans-serif !important;
-  font-size: 11px !important;
+  font-size: 0.6875rem !important;  /* 11px base */
   font-weight: 700 !important;
-  letter-spacing: 3.4px !important;
+  letter-spacing: 0.2125rem !important; /* 3.4px base */
   text-transform: uppercase !important;
 }
 
 /* Mobile Menu Links */
 .mobile-menu-link {
   font-family: "termina", sans-serif !important;
-  font-size: 12px !important;
+  font-size: 0.75rem !important;    /* 12px base */
   font-weight: 400 !important;
-  letter-spacing: 3.4px !important;
+  letter-spacing: 0.2125rem !important; /* 3.4px base */
   text-transform: uppercase !important;
-  line-height: 20px !important;
+  line-height: 1.25rem !important;  /* 20px base */
 }
 
 .mobile-menu-link-bold {
   font-family: "termina", sans-serif !important;
-  font-size: 12px !important;
+  font-size: 0.75rem !important;    /* 12px base */
   font-weight: 700 !important;
-  letter-spacing: 3.4px !important;
+  letter-spacing: 0.2125rem !important; /* 3.4px base */
   text-transform: uppercase !important;
-  line-height: 20px !important;
+  line-height: 1.25rem !important;  /* 20px base */
 }
 
 /* Language Switcher Mobile */
 .lang-btn-mobile {
   font-family: "termina", sans-serif !important;
-  font-size: 12px !important;
+  font-size: 0.75rem !important;    /* 12px base */
   font-weight: 400 !important;
-  letter-spacing: 3.4px !important;
+  letter-spacing: 0.2125rem !important; /* 3.4px base */
   text-transform: uppercase !important;
 }
 
 .lang-btn-mobile-active {
   font-family: "termina", sans-serif !important;
-  font-size: 12px !important;
+  font-size: 0.75rem !important;    /* 12px base */
   font-weight: 700 !important;
-  letter-spacing: 3.4px !important;
+  letter-spacing: 0.2125rem !important; /* 3.4px base */
   text-transform: uppercase !important;
 }
 
@@ -213,30 +226,30 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Heading size overrides */
 .heading-md {
-  font-size: 17px !important;
+  font-size: 1.0625rem !important; /* 17px base */
 }
 
 .heading-xl {
-  font-size: 16px !important;
+  font-size: 1rem !important;      /* 16px base */
 }
 
 .heading-lg {
-  font-size: 16px !important;
+  font-size: 1rem !important;      /* 16px base */
 }
 
 @media (min-width: 640px) {
   .heading-xl {
-    font-size: 32px !important;
+    font-size: 2rem !important;    /* 32px base */
   }
 
   .heading-lg {
-    font-size: 32px !important;
+    font-size: 2rem !important;    /* 32px base */
   }
 }
 
 /* Outline Button */
 .btn-outline {
-  font-size: 14px !important;
+  font-size: 0.875rem !important;  /* 14px base */
 }
 
 /* Toast and Modal Animations */
