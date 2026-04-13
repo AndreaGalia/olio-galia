@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     const categories = await db
       .collection<CategoryDocument>('categories')
       .find(filter)
-      .sort({ 'metadata.createdAt': 1 })
+      .sort({ displayOrder: 1, 'metadata.createdAt': 1 })
       .toArray();
 
     // Restituisci con informazioni aggiuntive per admin
@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
-    const { id, translations } = data;
+    const { id, translations, displayOrder } = data;
 
     // Validazione
     if (!id || !translations?.it?.name || !translations?.en?.name) {
@@ -97,6 +97,7 @@ export async function POST(request: NextRequest) {
     // Crea la categoria
     const categoryDocument: CategoryDocument = {
       id: categoryId,
+      displayOrder: displayOrder !== undefined ? Number(displayOrder) : undefined,
       translations: {
         it: {
           name: translations.it.name.trim(),

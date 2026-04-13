@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { ProductService } from '@/services/productService';
+import { ProductService } from '@/services/ProductService';
 import { isValidLocale } from '@/types/products';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {

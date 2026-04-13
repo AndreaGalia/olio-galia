@@ -14,6 +14,7 @@ interface CategoryTranslation {
 
 interface CategoryDocument {
   id: string;
+  displayOrder?: number;
   translations: {
     it: CategoryTranslation;
     en: CategoryTranslation;
@@ -34,6 +35,7 @@ export default function EditCategoryPage({ params }: { params: Promise<{ id: str
   const [error, setError] = useState<string | null>(null);
   const [category, setCategory] = useState<CategoryDocument | null>(null);
   const [formData, setFormData] = useState({
+    displayOrder: '' as string | number,
     translations: {
       it: {
         name: '',
@@ -82,6 +84,7 @@ export default function EditCategoryPage({ params }: { params: Promise<{ id: str
       const categoryData = await response.json();
       setCategory(categoryData);
       setFormData({
+        displayOrder: categoryData.displayOrder ?? '',
         translations: categoryData.translations
       });
     } catch (err) {
@@ -292,6 +295,23 @@ export default function EditCategoryPage({ params }: { params: Promise<{ id: str
                 />
               </div>
             </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-olive mb-2">
+              Ordine di visualizzazione
+            </label>
+            <input
+              type="number"
+              value={formData.displayOrder}
+              onChange={(e) => setFormData(prev => ({ ...prev, displayOrder: e.target.value }))}
+              className="w-full p-3 border border-olive/20 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive bg-white/90"
+              placeholder="es: 1, 2, 3..."
+              min="0"
+            />
+            <p className="text-sm text-nocciola mt-1">
+              Numeri più bassi appaiono prima nel filtro. Lascia vuoto per ordine automatico.
+            </p>
           </div>
 
           <div className="bg-olive/5 rounded-lg p-4">

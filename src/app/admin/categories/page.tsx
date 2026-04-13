@@ -17,6 +17,7 @@ interface CategoryTranslation {
 
 interface CategoryDocument {
   id: string;
+  displayOrder?: number;
   translations: {
     it: CategoryTranslation;
     en: CategoryTranslation;
@@ -238,6 +239,9 @@ export default function CategoriesPage() {
                 <thead className="bg-olive/5">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-olive uppercase tracking-wider">
+                      Ordine
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-olive uppercase tracking-wider">
                       ID
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-olive uppercase tracking-wider">
@@ -310,6 +314,11 @@ interface CategoryRowProps {
 function CategoryTableRow({ category, onToggleActive, onDelete, onEdit }: CategoryRowProps) {
   return (
     <tr className="hover:bg-olive/5 transition-colors">
+      <td className="px-6 py-4 whitespace-nowrap text-center">
+        <span className="text-sm font-medium text-olive">
+          {category.displayOrder ?? '—'}
+        </span>
+      </td>
       <td className="px-6 py-4 whitespace-nowrap">
         <code className="text-sm bg-olive/10 px-2 py-1 rounded text-olive font-mono">
           {category.id}

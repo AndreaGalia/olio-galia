@@ -25,7 +25,7 @@ export default function HomepageProductCardFooter({ product }: HomepageProductCa
       </div>
 
       {/* Linea separatore */}
-      <div className="border-t border-black/20" />
+      <div className="border-t border-olive/20" />
     </>
   );
 }

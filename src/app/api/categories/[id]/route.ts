@@ -43,7 +43,7 @@ export async function PUT(
   try {
     const { id: categoryId } = await params;
     const data = await request.json();
-    const { translations } = data;
+    const { translations, displayOrder } = data;
 
     if (!translations?.it?.name || !translations?.en?.name) {
       return NextResponse.json(
@@ -72,6 +72,7 @@ export async function PUT(
       {
         $set: {
           translations,
+          ...(displayOrder !== undefined && { displayOrder: Number(displayOrder) }),
           'metadata.updatedAt': new Date()
         }
       }

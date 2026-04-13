@@ -107,6 +107,7 @@ export interface CategoryTranslations {
 export interface CategoryDocument {
   _id?: string;
   id: string;
+  displayOrder?: number;
   translations: {
     it: CategoryTranslations;
     en: CategoryTranslations;

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ProductService } from '@/services/productService';
+import { ProductService } from '@/services/ProductService';
 import { isValidLocale, CategoryDocument } from '@/types/products';
 import { connectToDatabase } from '@/lib/mongodb';
 

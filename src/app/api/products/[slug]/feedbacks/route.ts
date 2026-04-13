@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDatabase } from '@/lib/mongodb';
 import { FeedbackDocument } from '@/types/feedback';
-import { ProductService } from '@/services/productService';
+import { ProductService } from '@/services/ProductService';
 import { isValidLocale } from '@/types/products';
 
 /**

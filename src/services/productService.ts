@@ -75,9 +75,9 @@ export class ProductService {
       const categories = await db
         .collection<CategoryDocument>('categories')
         .find({ 'metadata.isActive': true })
-        .sort({ 'metadata.createdAt': 1 })
+        .sort({ displayOrder: 1, 'metadata.createdAt': 1 })
         .toArray();
-      
+
       return categories.map(category => this.localizeCategory(category, locale));
     } catch (error) {
       throw new Error('Failed to fetch categories');

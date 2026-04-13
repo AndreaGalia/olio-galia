@@ -9,6 +9,7 @@ import ProductsHero from '@/components/productsPage/ProductsHero';
 import CategoryFilter from '@/components/productsPage/CategoryFilter';
 import ProductsGrid from '@/components/productsPage/ProductsGrid';
 import { useAddToCart } from '@/hooks/useAddToCart';
+import styles from '@/styles/ProductsPage.module.css';
 
 function ProductsContent() {
   const searchParams = useSearchParams();
@@ -47,10 +48,12 @@ function ProductsContent() {
         selectedCategory={selectedCategory}
         onCategoryChange={setSelectedCategory}
       />
-      <ProductsGrid
-        products={filteredProducts}
-        onAddToCart={handleAddToCart}
-      />
+      <div key={selectedCategory} className={styles.animateFadeIn}>
+        <ProductsGrid
+          products={filteredProducts}
+          onAddToCart={handleAddToCart}
+        />
+      </div>
     </div>
   );
 }

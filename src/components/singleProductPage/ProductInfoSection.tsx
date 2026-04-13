@@ -179,16 +179,16 @@ export default function ProductInfoSection({
         </div>
       </div>
 
-      {/* 9 — Add to cart — flat sabbia, LeMarke style */}
+      {/* 9 — Add to cart */}
       <button
         onClick={handleAddToCart}
         disabled={effectiveOutOfStock || isAdded}
-        className={`w-full py-4 text-[11px] tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer disabled:cursor-not-allowed ${
+        className={`w-full py-4 text-[11px] tracking-[3.4px] uppercase transition-all duration-200 cursor-pointer disabled:cursor-not-allowed border border-olive ${
           isAdded
-            ? 'bg-olive/80 text-beige'
+            ? 'bg-sabbia text-olive'
             : effectiveOutOfStock
-              ? 'bg-sabbia/40 text-black/30'
-              : 'bg-sabbia text-black hover:bg-olive hover:text-beige'
+              ? 'bg-sabbia/40 text-black/30 border-olive/30'
+              : 'bg-olive text-beige hover:bg-sabbia hover:text-olive'
         }`}
       >
         {isAdded

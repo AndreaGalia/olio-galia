@@ -12,6 +12,7 @@ export default function CreateCategoryPage() {
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     id: '',
+    displayOrder: '',
     translations: {
       it: {
         name: '',
@@ -106,21 +107,39 @@ export default function CreateCategoryPage() {
 
       <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-olive/10 p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-olive mb-2">
-              ID Categoria *
-            </label>
-            <input
-              type="text"
-              value={formData.id}
-              onChange={(e) => setFormData(prev => ({ ...prev, id: e.target.value }))}
-              className="w-full p-3 border border-olive/20 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive bg-white/90"
-              placeholder="es: olio-extravergine"
-              required
-            />
-            <p className="text-sm text-nocciola mt-1">
-              L'ID verrà generato automaticamente dal nome italiano se lasciato vuoto
-            </p>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-olive mb-2">
+                ID Categoria *
+              </label>
+              <input
+                type="text"
+                value={formData.id}
+                onChange={(e) => setFormData(prev => ({ ...prev, id: e.target.value }))}
+                className="w-full p-3 border border-olive/20 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive bg-white/90"
+                placeholder="es: olio-extravergine"
+                required
+              />
+              <p className="text-sm text-nocciola mt-1">
+                L'ID verrà generato automaticamente dal nome italiano se lasciato vuoto
+              </p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-olive mb-2">
+                Ordine di visualizzazione
+              </label>
+              <input
+                type="number"
+                value={formData.displayOrder}
+                onChange={(e) => setFormData(prev => ({ ...prev, displayOrder: e.target.value }))}
+                className="w-full p-3 border border-olive/20 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive bg-white/90"
+                placeholder="es: 1, 2, 3..."
+                min="0"
+              />
+              <p className="text-sm text-nocciola mt-1">
+                Numeri più bassi appaiono prima nel filtro. Lascia vuoto per ordine automatico.
+              </p>
+            </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
