@@ -36,7 +36,7 @@ export default function VariantSelector({
 
   return (
     <div className="space-y-3">
-      <label className="block text-sm font-medium text-black">{selectText}</label>
+      <label className="block font-serif termina-11 tracking-[0.15em] uppercase text-black">{selectText}</label>
 
       {/* Mobile: native select */}
       <div className="block sm:hidden">
@@ -78,7 +78,7 @@ export default function VariantSelector({
               type="button"
               onClick={() => !isDisabled && onVariantChange(variant)}
               disabled={isDisabled}
-              className={`px-4 py-2.5 border text-sm font-medium transition-all duration-200 cursor-pointer
+              className={`px-4 py-2.5 border font-serif termina-11 transition-all duration-200 cursor-pointer
                 ${isSelected
                   ? 'border-olive bg-olive text-beige'
                   : isDisabled
@@ -95,7 +95,7 @@ export default function VariantSelector({
               )}
               {name}
               {!variant.inStock && (
-                <span className="ml-2 text-xs opacity-60">({outOfStockText})</span>
+                <span className="ml-2 garamond-13 opacity-60">({outOfStockText})</span>
               )}
             </button>
           );
@@ -104,7 +104,7 @@ export default function VariantSelector({
 
       {/* Variant description */}
       {selectedDescription && (
-        <p className="text-sm text-black mt-2">{selectedDescription}</p>
+        <p className="garamond-13 mt-2">{selectedDescription}</p>
       )}
     </div>
   );

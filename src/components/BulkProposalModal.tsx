@@ -265,16 +265,16 @@ export function BulkProposalSection({ productName }: { productName: string }) {
     <>
       <div className="border-t border-black/10 pt-4 flex items-center justify-between gap-4">
         <div>
-          <p className="text-[11px] tracking-[0.15em] uppercase text-black/60">
+          <p className="font-serif termina-8 tracking-[0.15em] uppercase text-black">
             {t.bulkProposal.section.title}
           </p>
-          <p className="text-xs text-black/40 mt-0.5">
+          <p className="garamond-13 mt-0.5 text-black">
             {t.bulkProposal.section.description}
           </p>
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="text-[11px] tracking-[0.15em] uppercase text-black/50 underline underline-offset-2 hover:text-black transition-colors cursor-pointer whitespace-nowrap flex-shrink-0"
+          className="font-serif termina-8 tracking-[0.15em] uppercase text-black underline underline-offset-2 hover:text-black transition-colors cursor-pointer whitespace-nowrap flex-shrink-0"
         >
           {t.bulkProposal.section.button}
         </button>

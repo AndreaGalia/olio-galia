@@ -72,6 +72,61 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 0.875rem !important;   /* 14px base */
 }
 
+/* Breadcrumb Links */
+.breadcrumb {
+  font-size: 0.7125rem !important;  /* 11.4px base */
+}
+
+/* Termina 8px */
+.termina-8 {
+  font-size: 8px !important;
+}
+
+/* Termina 11px */
+.termina-11 {
+  font-size: 11px !important;
+}
+
+/* Termina 13.3px */
+.termina-13 {
+  font-size: 13.3px !important;
+}
+
+/* Termina 22.8px */
+.termina-22 {
+  font-size: 22.8px !important;
+}
+
+
+/* Garamond font only — senza colore, usare su sfondi scuri (es. footer) */
+.garamond-font {
+  font-family: "EB Garamond", serif !important;
+  font-size: 13px !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  line-height: 18px !important;
+}
+
+/* Garamond 13px — testo body normale */
+.garamond-13 {
+  font-family: "EB Garamond", serif !important;
+  font-size: 13px !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  line-height: 18px !important;
+  color: black !important;
+}
+
+/* Body Garamond — testo descrittivo in corsivo */
+.body-garamond {
+  font-family: "EB Garamond", serif !important;
+  font-size: 0.7125rem !important;  /* 11.4px base */
+  font-style: italic !important;
+  font-weight: 400 !important;
+  line-height: 1.125rem !important; /* 18px base */
+  color: black !important;
+}
+
 /* Language Switcher */
 .lang-btn {
   font-family: "termina", sans-serif !important;

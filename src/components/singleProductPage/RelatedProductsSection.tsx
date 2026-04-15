@@ -17,7 +17,7 @@ export default function RelatedProductsSection({ products }: RelatedProductsSect
 
   return (
     <div className="border-t border-olive/20 pt-6 mb-16">
-      <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-6">
+      <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-6">
         {t.productDetailPage.product.relatedProducts}
       </p>
 

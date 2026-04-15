@@ -10,74 +10,73 @@ export default function Footer() {
     <>
       <footer className="relative bg-olive text-beige overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10">
-          
+
           {/* Sezione principale del footer */}
           <div className="py-12 sm:py-16 lg:py-20">
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
-              
+
               {/* Brand e descrizione */}
               <div className="lg:col-span-1 space-y-6">
                 <div className="space-y-4">
-                  <h3 className="text-2xl sm:text-3xl font-serif notranslate" translate="no">{t.navbar.logo}</h3>
-                  <p className="text-beige/80 leading-relaxed text-sm sm:text-base">
+                  <h3 className="notranslate" translate="no">{t.navbar.logo}</h3>
+                  <p className="garamond-font text-beige/80">
                     {t.footer.brand.description}
                   </p>
                 </div>
-                
               </div>
 
               {/* Prodotti */}
               <div className="space-y-4 sm:space-y-6">
-                <h4 className="text-lg sm:text-xl font-serif">{t.footer.products.title}</h4>
-                <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base">
-                  <li><a href="/products?category=olio-evo" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.products.classic}</a></li>
-                  <li><a href="/products?category=beauty" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.products.bodyOil}</a></li>
+                <h4>{t.footer.products.title}</h4>
+                <ul className="space-y-2 sm:space-y-3">
+                  <li><a href="/products?category=olio-evo" className="garamond-font text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.products.classic}</a></li>
+                  <li><a href="/products?category=beauty" className="garamond-font text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.products.bodyOil}</a></li>
                 </ul>
               </div>
 
               {/* Informazioni */}
               <div className="space-y-4 sm:space-y-6">
-                <h4 className="text-lg sm:text-xl font-serif">{t.footer.info.title}</h4>
-                <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base">
-                  <li><a href="/about" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.story}</a></li>
-                  <li><a href="/sostenibilita" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.sustainability}</a></li>
-                  <li><a href="#" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.shipping}</a></li>
-                  <li><a href="/manage-subscription" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.manageSubscription || 'Gestisci Abbonamento'}</a></li>
-                  <li><a href="/faq" className="text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.faq}</a></li>
+                <h4>{t.footer.info.title}</h4>
+                <ul className="space-y-2 sm:space-y-3">
+                  <li><a href="/about" className="garamond-font text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.story}</a></li>
+                  <li><a href="/sostenibilita" className="garamond-font text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.sustainability}</a></li>
+                  <li><a href="#" className="garamond-font text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.shipping}</a></li>
+                  <li><a href="/manage-subscription" className="garamond-font text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.manageSubscription || 'Gestisci Abbonamento'}</a></li>
+                  <li><a href="/faq" className="garamond-font text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.faq}</a></li>
                 </ul>
               </div>
 
               {/* Contatti e social */}
               <div className="space-y-4 sm:space-y-6">
-                <h4 className="text-lg sm:text-xl font-serif">{t.footer.contact.title}</h4>
-                
+                <h4>{t.footer.contact.title}</h4>
+
                 <div className="space-y-3 sm:space-y-4">
                   <div className="flex items-center gap-3">
                     <svg className="w-4 h-4 text-beige/60 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                     </svg>
-                    <span className="text-beige/80 text-sm sm:text-base">{process.env.NEXT_PUBLIC_CONTACT_ADDRESS || t.footer.contact.address}</span>
+                    <span className="garamond-font text-beige/80">{process.env.NEXT_PUBLIC_CONTACT_ADDRESS || t.footer.contact.address}</span>
                   </div>
-                  
+
                   <div className="flex items-center gap-3">
                     <svg className="w-4 h-4 text-beige/60 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                     </svg>
-                    <span className="text-beige/80 text-sm sm:text-base">{process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER || t.footer.contact.phone}</span>
+                    <span className="garamond-font text-beige/80">{process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER || t.footer.contact.phone}</span>
                   </div>
-                  
+
                   <div className="flex items-center gap-3">
                     <svg className="w-4 h-4 text-beige/60 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                       <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                     </svg>
-                    <span className="text-beige/80 text-sm sm:text-base">{process.env.NEXT_PUBLIC_CONTACT_EMAIL || t.footer.contact.email}</span>
+                    <span className="garamond-font text-beige/80">{process.env.NEXT_PUBLIC_CONTACT_EMAIL || t.footer.contact.email}</span>
                   </div>
                 </div>
 
                 {/* Social media */}
                 <div className="space-y-3">
-                  <h5 className="text-sm font-medium">{t.footer.contact.social}</h5>
+                  <h5>{t.footer.contact.social}</h5>
                   <div className="flex gap-3 flex-wrap">
                     {/* WhatsApp */}
                     <button
@@ -158,19 +157,19 @@ export default function Footer() {
           {/* Newsletter */}
           <div className="border-t border-beige/20 py-8 sm:py-12">
             <div className="max-w-2xl mx-auto text-center space-y-4 sm:space-y-6">
-              <h4 className="text-xl sm:text-2xl font-serif">{t.footer.newsletter.title}</h4>
-              <p className="text-beige/80 text-sm sm:text-base">
+              <h4>{t.footer.newsletter.title}</h4>
+              <p className="garamond-font text-beige/80">
                 {t.footer.newsletter.description}
               </p>
               <div className="flex justify-center">
                 <button
                   onClick={() => window.dispatchEvent(new CustomEvent("show-newsletter-popup"))}
-                  className="bg-beige text-olive px-8 py-3 font-medium transition-colors duration-300 cursor-pointer border border-olive/20"
+                  className="font-serif termina-11 bg-beige text-olive px-8 py-3 tracking-[0.15em] uppercase transition-colors duration-300 cursor-pointer border border-olive/20"
                 >
                   {t.footer.newsletter.button}
                 </button>
               </div>
-              <p className="text-xs text-beige/60">
+              <p className="garamond-font text-beige/60">
                 {t.footer.newsletter.privacy}
               </p>
             </div>
@@ -182,21 +181,20 @@ export default function Footer() {
           {/* Bottom footer */}
           <div className="border-t border-beige/20 py-6 sm:py-8">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-              <div className="text-sm text-beige/60 text-center sm:text-left">
+              <div className="garamond-font text-beige/60 text-center sm:text-left">
                 © {process.env.NEXT_PUBLIC_COMPANY_YEAR || new Date().getFullYear()} {t.footer.bottom.copyrightText} | {t.footer.bottom.vatLabel} {process.env.NEXT_PUBLIC_VAT_NUMBER || '12345678901'}
               </div>
-              
-              <div className="flex flex-wrap justify-center sm:justify-end gap-4 sm:gap-6 text-sm">
-                <a href="/privacy-policy" className="text-beige/60 hover:text-beige transition-colors duration-300">{t.footer.bottom.privacy}</a>
-                <a href="/cookie-policy" className="text-beige/60 hover:text-beige transition-colors duration-300">{t.footer.bottom.cookies}</a>
-                <a href="/termini-servizio" className="text-beige/60 hover:text-beige transition-colors duration-300">{t.footer.bottom.terms}</a>
+
+              <div className="flex flex-wrap justify-center sm:justify-end gap-4 sm:gap-6">
+                <a href="/privacy-policy" className="garamond-font text-beige/60 hover:text-beige transition-colors duration-300">{t.footer.bottom.privacy}</a>
+                <a href="/cookie-policy" className="garamond-font text-beige/60 hover:text-beige transition-colors duration-300">{t.footer.bottom.cookies}</a>
+                <a href="/termini-servizio" className="garamond-font text-beige/60 hover:text-beige transition-colors duration-300">{t.footer.bottom.terms}</a>
               </div>
             </div>
           </div>
 
         </div>
       </footer>
-
     </>
   );
 }

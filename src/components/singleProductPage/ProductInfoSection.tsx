@@ -86,7 +86,7 @@ export default function ProductInfoSection({
 
       {/* 1 — Category */}
       {product.categoryDisplay && (
-        <p className="text-[11px] tracking-[0.2em] uppercase text-black/40">
+        <p className="font-serif breadcrumb tracking-[0.2em] uppercase text-black">
           {product.categoryDisplay}
         </p>
       )}
@@ -100,7 +100,7 @@ export default function ProductInfoSection({
           {product.name}
         </h1>
         {product.size && (
-          <p className="mt-1 text-xs tracking-wider text-black/40">{product.size}</p>
+          <p className="mt-1 body-garamond">{product.size}</p>
         )}
       </div>
 
@@ -108,7 +108,7 @@ export default function ProductInfoSection({
       {reviewCount !== null && reviewCount > 0 && (
         <button
           onClick={scrollToReviews}
-          className="text-xs tracking-wider text-black/40 underline underline-offset-2 hover:text-black transition-colors cursor-pointer text-left"
+          className="font-serif termina-8 tracking-wider text-black underline underline-offset-2 hover:text-black transition-colors cursor-pointer text-left"
         >
           {reviewCount} {locale === 'it' ? 'recensioni' : 'reviews'}
         </button>
@@ -117,9 +117,9 @@ export default function ProductInfoSection({
       {/* 4 — Price */}
       <div className={`flex items-baseline gap-3 ${effectiveOutOfStock ? 'opacity-60' : ''}`}>
         {resolved.originalPrice && resolved.originalPrice !== 'null' && (
-          <span className="text-sm text-black/40 line-through">€{resolved.originalPrice}</span>
+          <span className="font-serif termina-13 text-black line-through">€{resolved.originalPrice}</span>
         )}
-        <span className="text-2xl font-light text-black tracking-wide">€{resolved.price}</span>
+        <span className="font-serif termina-22 text-black tracking-wide">€{resolved.price}</span>
         {effectiveOutOfStock && (
           <span className="text-xs tracking-widest uppercase text-red-500 ml-1">
             {t.productDetailPage.stockNotAvaible}
@@ -129,14 +129,14 @@ export default function ProductInfoSection({
 
       {/* 5 — Short italic tagline (details field) */}
       {product.details && (
-        <p className="text-sm text-black/60 italic leading-relaxed border-t border-black/8 pt-5">
+        <p className="garamond-13 border-t border-black/8 pt-5">
           {product.details}
         </p>
       )}
 
       {/* 6 — Long description */}
       {product.longDescription && (
-        <p className="text-sm text-black/70 leading-relaxed">
+        <p className="garamond-13">
           {product.longDescription}
         </p>
       )}
@@ -156,7 +156,7 @@ export default function ProductInfoSection({
 
       {/* 8 — Quantity */}
       <div className={`flex items-center gap-4 border-t border-black/8 pt-5 ${effectiveOutOfStock ? 'opacity-40 pointer-events-none' : ''}`}>
-        <span className="text-[11px] tracking-[0.15em] uppercase text-black/50">
+        <span className="font-serif termina-11 tracking-[0.15em] uppercase text-black">
           {t.productDetailPage.product.quantity}
         </span>
         <div className="flex items-center border border-black/15">
@@ -166,7 +166,7 @@ export default function ProductInfoSection({
           >
             −
           </button>
-          <span className="w-9 h-9 flex items-center justify-center text-sm border-x border-black/10">
+          <span className="w-9 h-9 flex items-center justify-center font-serif termina-13 border-x border-black/10">
             {quantity}
           </span>
           <button
@@ -183,7 +183,7 @@ export default function ProductInfoSection({
       <button
         onClick={handleAddToCart}
         disabled={effectiveOutOfStock || isAdded}
-        className={`w-full py-4 text-[11px] tracking-[3.4px] uppercase transition-all duration-200 cursor-pointer disabled:cursor-not-allowed border border-olive ${
+        className={`w-full py-4 font-serif termina-11 tracking-[3.4px] uppercase transition-all duration-200 cursor-pointer disabled:cursor-not-allowed border border-olive ${
           isAdded
             ? 'bg-sabbia text-olive'
             : effectiveOutOfStock
@@ -207,15 +207,15 @@ export default function ProductInfoSection({
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
             <div>
-              <p className="text-[11px] tracking-[0.15em] uppercase text-black mb-1">
+              <p className="font-serif termina-8 tracking-[0.15em] uppercase text-black mb-1">
                 {t.subscription?.ctaBanner || 'Abbonati e Risparmia'}
               </p>
-              <p className="text-xs text-black/50 mb-2">
+              <p className="garamond-13 mb-2">
                 {t.subscription?.ctaBannerDesc || 'Ricevi questo prodotto con regolarità.'}
               </p>
               <Link
                 href={`/products/${product.slug}/subscribe`}
-                className="text-[11px] tracking-[0.15em] uppercase text-black/60 hover:text-black transition-colors underline underline-offset-2"
+                className="font-serif termina-8 tracking-[0.15em] uppercase text-black hover:text-black transition-colors underline underline-offset-2"
               >
                 {t.subscription?.ctaButton || "Scopri l'abbonamento"}
               </Link>
@@ -232,15 +232,15 @@ export default function ProductInfoSection({
               <ul className="space-y-1.5">
                 {product.features.map((f, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <span className="text-black/30 mt-0.5">—</span>
+                    <span className="text-black mt-0.5">—</span>
                     <span>{f}</span>
                   </li>
                 ))}
               </ul>
             )}
             {product.bestFor && (
-              <p className={`text-black/50 ${hasFeatures ? 'mt-3' : ''}`}>
-                <span className="text-black/70">
+              <p className={`text-black ${hasFeatures ? 'mt-3' : ''}`}>
+                <span className="text-black">
                   {locale === 'it' ? 'Ideale per:' : 'Best for:'}
                 </span>{' '}
                 {product.bestFor}
@@ -254,19 +254,19 @@ export default function ProductInfoSection({
             <dl className="space-y-2">
               {product.origin && (
                 <div className="flex gap-4">
-                  <dt className="min-w-[90px] text-black/50">{locale === 'it' ? 'Provenienza' : 'Origin'}</dt>
+                  <dt className="min-w-[90px] text-black">{locale === 'it' ? 'Provenienza' : 'Origin'}</dt>
                   <dd>{product.origin}</dd>
                 </div>
               )}
               {product.harvest && (
                 <div className="flex gap-4">
-                  <dt className="min-w-[90px] text-black/50">{locale === 'it' ? 'Raccolta' : 'Harvest'}</dt>
+                  <dt className="min-w-[90px] text-black">{locale === 'it' ? 'Raccolta' : 'Harvest'}</dt>
                   <dd>{product.harvest}</dd>
                 </div>
               )}
               {product.processing && (
                 <div className="flex gap-4">
-                  <dt className="min-w-[90px] text-black/50">{locale === 'it' ? 'Lavorazione' : 'Processing'}</dt>
+                  <dt className="min-w-[90px] text-black">{locale === 'it' ? 'Lavorazione' : 'Processing'}</dt>
                   <dd>{product.processing}</dd>
                 </div>
               )}
@@ -276,13 +276,13 @@ export default function ProductInfoSection({
 
         {hasNutritionalInfo && (
           <ProductAccordion title={t.productDetailPage.product.nutritionalInfo}>
-            <p className="mb-3 text-[11px] tracking-widest uppercase text-black/40">
+            <p className="mb-3 garamond-13">
               {t.productDetailPage.product.nutritionalPer100g}
             </p>
             <dl className="space-y-1.5">
               {Object.entries(product.nutritionalInfo!).map(([key, value]) => (
                 <div key={key} className="flex justify-between border-b border-black/5 pb-1.5">
-                  <dt className="capitalize text-black/60">{key}</dt>
+                  <dt className="capitalize text-black">{key}</dt>
                   <dd className="text-black">{value}</dd>
                 </div>
               ))}
@@ -295,7 +295,7 @@ export default function ProductInfoSection({
             <ul className="space-y-1.5">
               {product.awards.map((award, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <span className="text-black/30">★</span>
+                  <span className="text-black">★</span>
                   <span>{award}</span>
                 </li>
               ))}

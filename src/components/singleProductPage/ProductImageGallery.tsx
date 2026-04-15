@@ -59,7 +59,7 @@ export default function ProductImageGallery({ images, productName, isOutOfStock 
       {/* Sold out badge */}
       {isOutOfStock && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <span className="bg-black/70 text-white px-6 py-2 text-xs tracking-widest uppercase">
+          <span className="bg-black/70 text-white px-6 py-2 font-serif termina-11 tracking-widest uppercase">
             Sold Out
           </span>
         </div>
@@ -73,7 +73,7 @@ export default function ProductImageGallery({ images, productName, isOutOfStock 
             aria-label="Immagine precedente"
             className="absolute left-5 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-7 h-7 text-black/50 hover:text-black">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-7 h-7 text-black">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
           </button>
@@ -83,7 +83,7 @@ export default function ProductImageGallery({ images, productName, isOutOfStock 
             aria-label="Immagine successiva"
             className="absolute right-5 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-7 h-7 text-black/50 hover:text-black">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-7 h-7 text-black">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
             </svg>
           </button>

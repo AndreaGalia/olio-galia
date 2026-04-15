@@ -34,13 +34,13 @@ export default function ReviewsStats({ stats, selectedRating, onRatingChange, tr
         <div className="shrink-0">
           <span
             className="text-black block"
-            style={{ fontSize: 'clamp(3.5rem, 10vw, 5rem)', lineHeight: 1, letterSpacing: '-0.02em' }}
+            style={{ fontFamily: '"termina", sans-serif', fontSize: 'clamp(3.5rem, 10vw, 5rem)', lineHeight: 1, letterSpacing: '-0.02em' }}
           >
             {stats.averageRating.toFixed(1)}
           </span>
           <div className="mt-2">
             <StarDisplay rating={stats.averageRating} size="sm" />
-            <p className="text-[11px] tracking-[0.15em] uppercase text-black/40 mt-2">
+            <p className="font-serif termina-11 tracking-[0.15em] uppercase text-black mt-2">
               {translate('productReviews.totalReviews', { count: stats.total.toString() })}
             </p>
           </div>
@@ -54,15 +54,15 @@ export default function ReviewsStats({ stats, selectedRating, onRatingChange, tr
 
             return (
               <div key={star} className="flex items-center gap-3">
-                <span className="text-[11px] text-black/50 w-3 shrink-0">{star}</span>
-                <span className="text-black/40 text-xs shrink-0">★</span>
+                <span className="font-serif termina-8 text-black w-3 shrink-0">{star}</span>
+                <span className="garamond-13 text-black shrink-0">★</span>
                 <div className="flex-1 h-[2px] bg-olive/10">
                   <div
                     className="h-full bg-olive transition-all duration-500"
                     style={{ width: `${percentage}%` }}
                   />
                 </div>
-                <span className="text-[11px] text-black/40 w-5 text-right shrink-0">{count}</span>
+                <span className="font-serif termina-8 text-black w-5 text-right shrink-0">{count}</span>
               </div>
             );
           })}
@@ -71,16 +71,16 @@ export default function ReviewsStats({ stats, selectedRating, onRatingChange, tr
 
       {/* Filtro */}
       <div>
-        <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-3">
+        <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-3">
           {t.productReviews.filter.label}
         </p>
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => onRatingChange('all')}
-            className={`px-3 py-1.5 text-[11px] tracking-[0.15em] uppercase transition-colors cursor-pointer border ${
+            className={`px-3 py-1.5 font-serif termina-11 tracking-[0.15em] uppercase transition-colors cursor-pointer border ${
               selectedRating === 'all'
                 ? 'border-olive bg-olive text-beige'
-                : 'border-olive/20 text-black/50 hover:border-olive/40 hover:text-black'
+                : 'border-olive/20 text-black hover:border-olive/40 hover:text-black'
             }`}
           >
             {t.productReviews.filter.all}
@@ -89,10 +89,10 @@ export default function ReviewsStats({ stats, selectedRating, onRatingChange, tr
             <button
               key={star}
               onClick={() => onRatingChange(star.toString())}
-              className={`px-3 py-1.5 text-[11px] tracking-[0.15em] uppercase transition-colors cursor-pointer border flex items-center gap-1 ${
+              className={`px-3 py-1.5 font-serif termina-11 tracking-[0.15em] uppercase transition-colors cursor-pointer border flex items-center gap-1 ${
                 selectedRating === star.toString()
                   ? 'border-olive bg-olive text-beige'
-                  : 'border-olive/20 text-black/50 hover:border-olive/40 hover:text-black'
+                  : 'border-olive/20 text-black hover:border-olive/40 hover:text-black'
               }`}
             >
               <span>{star}</span>

@@ -21,7 +21,7 @@ export default function HomepageProductCardImage({ product, isOutOfStock }: Home
 
       {isOutOfStock && (
         <div className="absolute inset-0 flex items-center justify-center bg-olive/70">
-          <span className="text-beige text-[10px] sm:text-[11px] tracking-[3.4px] uppercase">
+          <span className="font-serif termina-11 text-beige tracking-[3.4px] uppercase">
             Sold Out
           </span>
         </div>

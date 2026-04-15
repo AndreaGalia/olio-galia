@@ -71,7 +71,7 @@ export default function ProductReviewsSummaryCard({ productSlug }: ProductReview
   if (loading) {
     return (
       <div className="border-t border-olive/20 pt-5">
-        <p className="text-[11px] tracking-[0.2em] uppercase text-black/40">
+        <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black">
           {t.productReviews.loading}
         </p>
       </div>
@@ -81,10 +81,10 @@ export default function ProductReviewsSummaryCard({ productSlug }: ProductReview
   if (!stats || stats.total === 0) {
     return (
       <div className="border-t border-olive/20 pt-5">
-        <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-2">
+        <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-2">
           {t.productReviews.title}
         </p>
-        <p className="text-xs text-black/40 leading-relaxed">{t.productReviews.noReviews}</p>
+        <p className="garamond-13">{t.productReviews.noReviews}</p>
       </div>
     );
   }
@@ -93,12 +93,12 @@ export default function ProductReviewsSummaryCard({ productSlug }: ProductReview
     <div className="border-t border-olive/20 pt-5">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <p className="text-[11px] tracking-[0.2em] uppercase text-black/40">
+        <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black">
           {t.productReviews.title}
         </p>
         <button
           onClick={scrollToReviews}
-          className="text-xs tracking-wider text-black/40 underline underline-offset-2 hover:text-black transition-colors cursor-pointer"
+          className="font-serif termina-8 tracking-wider text-black underline underline-offset-2 hover:text-black transition-colors cursor-pointer"
         >
           {t.productReviews.viewAll}
         </button>
@@ -115,7 +115,7 @@ export default function ProductReviewsSummaryCard({ productSlug }: ProductReview
           </span>
           <div className="mt-1.5">
             <StarDisplay rating={stats.averageRating} size="sm" />
-            <p className="text-[11px] tracking-[0.1em] uppercase text-black/40 mt-1">
+            <p className="font-serif termina-8 tracking-[0.1em] uppercase text-black mt-1">
               {translate('productReviews.totalReviews', { count: stats.total.toString() })}
             </p>
           </div>
@@ -129,15 +129,15 @@ export default function ProductReviewsSummaryCard({ productSlug }: ProductReview
 
             return (
               <div key={rating} className="flex items-center gap-2.5">
-                <span className="text-[11px] text-black/50 w-3 shrink-0">{rating}</span>
-                <span className="text-black/40 text-xs shrink-0">★</span>
+                <span className="font-serif termina-8 text-black w-3 shrink-0">{rating}</span>
+                <span className="garamond-13 text-black shrink-0">★</span>
                 <div className="flex-1 h-[2px] bg-olive/10">
                   <div
                     className="h-full bg-olive transition-all duration-500"
                     style={{ width: `${percentage}%` }}
                   />
                 </div>
-                <span className="text-[11px] text-black/40 w-8 text-right shrink-0">
+                <span className="font-serif termina-8 text-black w-8 text-right shrink-0">
                   {percentage}%
                 </span>
               </div>

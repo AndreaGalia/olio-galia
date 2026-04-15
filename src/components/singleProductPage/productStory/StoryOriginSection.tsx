@@ -52,7 +52,7 @@ export default function StoryOriginSection({
   return (
     <div className="space-y-8">
       {description && (
-        <p className="text-sm text-black/60 leading-relaxed">{description}</p>
+        <p className="text-sm text-black leading-relaxed">{description}</p>
       )}
 
       {/* Location / altitude / climate */}
@@ -60,8 +60,8 @@ export default function StoryOriginSection({
         <div className={`grid gap-px bg-black/10 ${factsColClass}`}>
           {facts.map((f, i) => (
             <div key={i} className="bg-beige/50 p-5">
-              <p className="text-[10px] tracking-[0.2em] uppercase text-black/40 mb-1">{f.label}</p>
-              <p className="text-sm text-black/80">{f.value}</p>
+              <p className="text-[10px] tracking-[0.2em] uppercase text-black mb-1">{f.label}</p>
+              <p className="text-sm text-black">{f.value}</p>
             </div>
           ))}
         </div>
@@ -69,7 +69,7 @@ export default function StoryOriginSection({
 
       {/* Territory description */}
       {territory && (
-        <p className="text-sm text-black/60 leading-relaxed border-l-2 border-black/10 pl-5">
+        <p className="text-sm text-black leading-relaxed border-l-2 border-black/10 pl-5">
           {territory}
         </p>
       )}
@@ -77,12 +77,12 @@ export default function StoryOriginSection({
       {/* Production steps */}
       {steps && steps.length > 0 && (
         <div className="space-y-4">
-          <p className="text-[11px] tracking-[0.2em] uppercase text-black/40">{st.process}</p>
+          <p className="text-[11px] tracking-[0.2em] uppercase text-black">{st.process}</p>
           <div className={`grid gap-px bg-black/10 ${stepsColClass}`}>
             {steps.map((step, i) => (
               <div key={i} className="bg-beige/50 p-5 space-y-1">
-                <p className="text-[10px] tracking-[0.2em] uppercase text-black/40">{step.label}</p>
-                <p className="text-sm text-black/80">{step.value}</p>
+                <p className="text-[10px] tracking-[0.2em] uppercase text-black">{step.label}</p>
+                <p className="text-sm text-black">{step.value}</p>
               </div>
             ))}
           </div>

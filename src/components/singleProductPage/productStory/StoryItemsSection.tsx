@@ -40,12 +40,12 @@ export default function StoryItemsSection({
   return (
     <div className="space-y-6">
       {badge && (
-        <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 pb-4 border-b border-black/10">
+        <p className="text-[11px] tracking-[0.2em] uppercase text-black pb-4 border-b border-black/10">
           {badge}
         </p>
       )}
       {description && (
-        <p className="text-sm text-black/60 leading-relaxed">{description}</p>
+        <p className="text-sm text-black leading-relaxed">{description}</p>
       )}
 
       {layout === 'grid' ? (
@@ -61,7 +61,7 @@ export default function StoryItemsSection({
               {item.action && (
                 <p className="text-xs text-olive/80 tracking-wide">{item.action}</p>
               )}
-              <p className="text-sm text-black/60 leading-relaxed">{item.description}</p>
+              <p className="text-sm text-black leading-relaxed">{item.description}</p>
             </div>
           ))}
         </div>
@@ -69,7 +69,7 @@ export default function StoryItemsSection({
         <div className="divide-y divide-black/5">
           {items.map((item, i) => (
             <div key={i} className="flex gap-6 py-5">
-              <span className="text-[11px] tracking-[0.2em] tabular-nums text-black/25 pt-0.5 select-none shrink-0">
+              <span className="text-[11px] tracking-[0.2em] tabular-nums text-black pt-0.5 select-none shrink-0">
                 {String(i + 1).padStart(2, '0')}
               </span>
               <div className="space-y-1">
@@ -77,7 +77,7 @@ export default function StoryItemsSection({
                 {item.action && (
                   <p className="text-xs text-olive/80 tracking-wide">{item.action}</p>
                 )}
-                <p className="text-sm text-black/60 leading-relaxed">{item.description}</p>
+                <p className="text-sm text-black leading-relaxed">{item.description}</p>
               </div>
             </div>
           ))}

@@ -29,13 +29,13 @@ export default function StoryFlavorSection({
   return (
     <div className="space-y-10">
       {description && (
-        <p className="text-sm text-black/60 leading-relaxed">{description}</p>
+        <p className="text-sm text-black leading-relaxed">{description}</p>
       )}
 
       {/* Cultivars */}
       {cultivars && cultivars.length > 0 && (
         <div className="space-y-4">
-          <p className="text-[11px] tracking-[0.2em] uppercase text-black/40">{st.cultivars}</p>
+          <p className="text-[11px] tracking-[0.2em] uppercase text-black">{st.cultivars}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-black/10">
             {cultivars.map((c, i) => (
               <div key={i} className="bg-beige/50 p-6 space-y-2">
@@ -49,7 +49,7 @@ export default function StoryFlavorSection({
                   </div>
                 )}
                 <p className="text-xs tracking-widest uppercase text-black">{c.name}</p>
-                <p className="text-sm text-black/60 leading-relaxed">{c.description}</p>
+                <p className="text-sm text-black leading-relaxed">{c.description}</p>
               </div>
             ))}
           </div>
@@ -59,7 +59,7 @@ export default function StoryFlavorSection({
       {/* Sensory notes — editorial photo per note */}
       {sensorNotes && sensorNotes.length > 0 && (
         <div className="space-y-4">
-          <p className="text-[11px] tracking-[0.2em] uppercase text-black/40">{st.sensorProfile}</p>
+          <p className="text-[11px] tracking-[0.2em] uppercase text-black">{st.sensorProfile}</p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-black/10">
             {sensorNotes.map((note, i) => (
               <div key={i} className="bg-beige/50">
@@ -75,8 +75,8 @@ export default function StoryFlavorSection({
                   <div className="w-full aspect-square bg-black/5" />
                 )}
                 <div className="p-4 space-y-1">
-                  <p className="text-[10px] tracking-[0.2em] uppercase text-black/40">{note.label}</p>
-                  <p className="text-sm text-black/70">{note.value}</p>
+                  <p className="text-[10px] tracking-[0.2em] uppercase text-black">{note.label}</p>
+                  <p className="text-sm text-black">{note.value}</p>
                 </div>
               </div>
             ))}

@@ -16,7 +16,7 @@ export default function ProductAccordion({ title, children, defaultOpen = false 
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between py-5 text-left cursor-pointer group"
       >
-        <span className="text-xs tracking-widest uppercase font-medium text-black group-hover:text-olive transition-colors">
+        <span className="font-serif termina-11 tracking-widest uppercase text-black group-hover:text-olive transition-colors">
           {title}
         </span>
         <span className="text-sm text-black/50 group-hover:text-olive transition-colors leading-none select-none">
@@ -29,7 +29,7 @@ export default function ProductAccordion({ title, children, defaultOpen = false 
           isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <div className="pb-5 text-sm text-black/70 leading-relaxed">
+        <div className="pb-5 garamond-13">
           {children}
         </div>
       </div>

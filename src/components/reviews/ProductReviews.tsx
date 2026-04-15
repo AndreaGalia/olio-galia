@@ -108,11 +108,11 @@ export default function ProductReviews({ productSlug }: ProductReviewsProps) {
   if (!loading && stats && stats.total === 0) {
     return (
       <div id="product-reviews-section" className="border-t border-olive/20 py-8 text-center">
-        <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-4">
+        <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-4">
           {t.productReviews.title}
         </p>
-        <p className="text-sm text-black/60 leading-relaxed">{t.productReviews.noReviews}</p>
-        <p className="mt-1 text-xs text-black/40">{t.productReviews.beFirst}</p>
+        <p className="garamond-13">{t.productReviews.noReviews}</p>
+        <p className="mt-1 garamond-13">{t.productReviews.beFirst}</p>
       </div>
     );
   }
@@ -121,7 +121,7 @@ export default function ProductReviews({ productSlug }: ProductReviewsProps) {
     <div id="product-reviews-section" ref={reviewsRef} className="border-t border-olive/20 pt-6">
 
       {/* Titolo sezione */}
-      <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-4">
+      <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-4">
         {t.productReviews.title}
       </p>
 
@@ -138,7 +138,7 @@ export default function ProductReviews({ productSlug }: ProductReviewsProps) {
       {/* Loading */}
       {loading && (
         <div className="py-12 text-center">
-          <p className="text-[11px] tracking-[0.2em] uppercase text-black/40">
+          <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black">
             {t.productReviews.loading}
           </p>
         </div>
@@ -147,7 +147,7 @@ export default function ProductReviews({ productSlug }: ProductReviewsProps) {
       {/* Error */}
       {error && (
         <div className="border border-olive/20 p-4 mb-6">
-          <p className="text-sm text-black/60">{error}</p>
+          <p className="garamond-13">{error}</p>
         </div>
       )}
 

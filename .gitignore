@@ -46,6 +46,9 @@ next-env.d.ts
 # Docs interni - non tracciati
 /docs/
 
+# Email templates - non tracciati
+/email-templates/
+
 # Video files - too large for GitHub
 public/videos/*.mp4
 public/videos/*.MOV

@@ -23,7 +23,7 @@ export default function StarDisplay({ rating, size = 'md', showNumber = false }:
 
   return (
     <div className="flex items-center gap-1">
-      <div className={`flex gap-0.5 ${sizeClasses[size]}`} aria-label={`${normalizedRating} stelle su 5`}>
+      <div className={`flex gap-0.5 font-serif ${sizeClasses[size]}`} aria-label={`${normalizedRating} stelle su 5`}>
         {[1, 2, 3, 4, 5].map((star) => (
           <span
             key={star}
