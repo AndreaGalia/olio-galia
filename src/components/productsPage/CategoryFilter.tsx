@@ -14,7 +14,7 @@ export default function CategoryFilter({ categories, selectedCategory, onCategor
           <button
             key={category.id}
             onClick={() => onCategoryChange(category.id)}
-            className={`text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 cursor-pointer ${
+            className={`font-serif termina-9 tracking-[0.2em] uppercase transition-colors duration-200 cursor-pointer ${
               selectedCategory === category.id
                 ? 'text-black underline underline-offset-4 decoration-black'
                 : 'text-black/40 hover:text-black'

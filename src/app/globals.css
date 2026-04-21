@@ -82,6 +82,11 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 8px !important;
 }
 
+/* Termina 9px */
+.termina-9 {
+  font-size: 9px !important;
+}
+
 /* Termina 11px */
 .termina-11 {
   font-size: 11px !important;
