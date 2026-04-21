@@ -87,6 +87,17 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 11px !important;
 }
 
+/* Termina card — 11px mobile, 11px da sm (per bottoni in grid 2 colonne) */
+.termina-card {
+  font-size: 9px !important;
+}
+
+@media (min-width: 640px) {
+  .termina-card {
+    font-size: 11px !important;
+  }
+}
+
 /* Termina 13.3px */
 .termina-13 {
   font-size: 13.3px !important;

@@ -16,10 +16,10 @@ export default function HomepageProductCardFooter({ product }: HomepageProductCa
     <>
       {/* Riga nome + prezzo */}
       <div className="flex justify-between items-center pt-3 pb-2 gap-2">
-        <span className="font-serif termina-11 tracking-[2.5px] sm:tracking-[3.4px] uppercase text-black leading-tight">
+        <span className="font-serif termina-11 tracking-[1px] sm:tracking-[3.4px] uppercase text-black whitespace-nowrap truncate">
           {product.name}
         </span>
-        <span className="font-serif termina-11 tracking-[2.5px] sm:tracking-[3.4px] uppercase text-black whitespace-nowrap">
+        <span className="font-serif termina-11 tracking-[2.5px] sm:tracking-[3.4px] uppercase text-black whitespace-nowrap flex-shrink-0">
           {priceDisplay}
         </span>
       </div>

@@ -41,7 +41,7 @@ export default function HomepageProductCard({ product, onAddToCart }: HomepagePr
       {!isOutOfStock && (
         <button
           onClick={handleAddToCart}
-          className="w-full mt-2 py-2.5 text-center font-serif termina-11 tracking-[3.4px] uppercase cursor-pointer transition-all duration-200 active:scale-95 border border-olive bg-olive text-beige hover:bg-sabbia hover:text-olive"
+          className="w-full mt-2 py-2.5 text-center font-serif termina-card tracking-[1px] sm:tracking-[3.4px] uppercase whitespace-nowrap cursor-pointer transition-all duration-200 active:scale-95 border border-olive bg-olive text-beige hover:bg-sabbia hover:text-olive"
         >
           {isAdding ? t.addToCartButton.added : t.addToCartButton.addToCart}
         </button>
