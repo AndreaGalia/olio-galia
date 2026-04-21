@@ -27,7 +27,7 @@ export function FamilyStorySection() {
           <h2 className="heading-md text-black mb-6">
             {t.about.title.line2}
           </h2>
-          <p className="text-sm sm:text-base text-black/80 leading-relaxed">
+          <p className="garamond-13 max-w-xs">
             {t.about.intro}
           </p>
         </div>

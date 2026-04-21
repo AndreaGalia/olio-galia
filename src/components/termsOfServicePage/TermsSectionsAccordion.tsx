@@ -20,7 +20,7 @@ function ItemList({ items }: { items: string[] }) {
 
 function SubLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-2 mt-5 first:mt-0">
+    <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-2 mt-5 first:mt-0">
       {children}
     </p>
   );
@@ -28,7 +28,7 @@ function SubLabel({ children }: { children: React.ReactNode }) {
 
 function Note({ children }: { children: React.ReactNode }) {
   return (
-    <p className="border-t border-olive/20 pt-4 mt-4 text-xs text-black/50 leading-relaxed">
+    <p className="border-t border-olive/20 pt-4 mt-4 garamond-13">
       {children}
     </p>
   );
@@ -51,7 +51,7 @@ export default function TermsSectionsAccordion() {
       <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-4xl mx-auto">
 
         {/* Intro */}
-        <p className="border-t border-olive/20 pt-8 text-sm text-black/70 leading-relaxed">
+        <p className="border-t border-olive/20 pt-8 garamond-13">
           {ts.intro}
         </p>
 
@@ -113,10 +113,10 @@ export default function TermsSectionsAccordion() {
             <SubLabel>{ts.sections.withdrawal.procedure.title}</SubLabel>
             <ItemList items={ts.sections.withdrawal.procedure.list} />
             <div className="border-t border-olive/20 pt-4 mt-5 space-y-1.5">
-              <p className="text-[11px] tracking-[0.2em] uppercase text-black/40">
+              <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black">
                 {ts.sections.withdrawal.exclusions.title}
               </p>
-              <p className="text-xs text-black/50 leading-relaxed">
+              <p className="garamond-13">
                 {ts.sections.withdrawal.exclusions.content}
               </p>
             </div>
@@ -150,7 +150,7 @@ export default function TermsSectionsAccordion() {
             <p className="mb-4">{ts.sections.privacy.content}</p>
             <Link
               href="/privacy-policy"
-              className="text-xs tracking-wider text-black/40 underline underline-offset-2 hover:text-black transition-colors"
+              className="font-serif termina-8 tracking-wider text-black underline underline-offset-2 hover:text-black transition-colors"
             >
               {tsPage.privacyLink} →
             </Link>
@@ -159,7 +159,7 @@ export default function TermsSectionsAccordion() {
           {/* 12 — Risoluzione delle Controversie */}
           <TermsSection number={pad(12)} title={ts.sections.disputes.title} isActive={activeIndex === 11} onToggle={() => handleToggle(11)}>
             <p className="mb-3">{ts.sections.disputes.content}</p>
-            <p className="text-xs text-black/50 leading-relaxed">{ts.sections.disputes.odr}</p>
+            <p className="garamond-13">{ts.sections.disputes.odr}</p>
           </TermsSection>
 
           {/* 13 — Modifiche ai Termini */}
@@ -172,12 +172,12 @@ export default function TermsSectionsAccordion() {
 
         {/* CTA contatti */}
         <div className="mt-16 border-t border-olive/20 pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <p className="text-sm text-black/60 leading-relaxed">
+          <p className="garamond-13">
             {ts.sections.contact.content}
           </p>
           <Link
             href="/contact"
-            className="text-[11px] tracking-[0.25em] uppercase px-6 py-3 border border-olive/20 text-black/60 hover:bg-olive hover:text-beige hover:border-olive transition-all duration-300 cursor-pointer whitespace-nowrap"
+            className="font-serif termina-11 tracking-[0.25em] uppercase px-6 py-3 border border-olive/20 text-black hover:bg-olive hover:text-beige hover:border-olive transition-all duration-300 cursor-pointer whitespace-nowrap"
           >
             {ts.sections.contact.title}
           </Link>

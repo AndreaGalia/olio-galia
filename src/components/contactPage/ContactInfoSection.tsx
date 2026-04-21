@@ -29,8 +29,8 @@ export default function ContactInfoSection() {
           onClick={row.action}
           className="border-t border-olive/20 py-4 cursor-pointer group"
         >
-          <span className="text-[11px] tracking-[0.2em] uppercase text-black/40 mr-3">{row.label}:</span>
-          <span className="text-sm text-black group-hover:text-olive transition-colors duration-200">{row.value}</span>
+          <span className="font-serif termina-11 tracking-[0.2em] uppercase text-black mr-3">{row.label}:</span>
+          <span className="garamond-13 group-hover:text-olive transition-colors duration-200">{row.value}</span>
         </div>
       ))}
       <div className="border-t border-olive/20" />

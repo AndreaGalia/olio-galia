@@ -33,7 +33,7 @@ export default function CookieSectionsAccordion() {
       <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-4xl mx-auto">
 
         {/* Intro */}
-        <p className="border-t border-olive/20 pt-8 text-sm text-black/70 leading-relaxed">
+        <p className="border-t border-olive/20 pt-8 garamond-13">
           {cp.intro}
         </p>
 
@@ -60,27 +60,27 @@ export default function CookieSectionsAccordion() {
             <div className="space-y-6">
               {/* Tecnici */}
               <div>
-                <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-2">
+                <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-2">
                   {cp.sections.cookieTypes.technical.title}
                 </p>
                 <p>{cp.sections.cookieTypes.technical.description}</p>
                 <ItemList items={cp.sections.cookieTypes.technical.list} />
-                <p className="mt-3 text-black/40 text-xs">{cp.sections.cookieTypes.technical.note}</p>
+                <p className="garamond-13 mt-3">{cp.sections.cookieTypes.technical.note}</p>
               </div>
 
               {/* Analytics */}
               <div className="border-t border-olive/20 pt-5">
-                <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-2">
+                <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-2">
                   {cp.sections.cookieTypes.analytics.title}
                 </p>
                 <p>{cp.sections.cookieTypes.analytics.description}</p>
                 <ItemList items={cp.sections.cookieTypes.analytics.list} />
-                <p className="mt-3 text-black/40 text-xs">{cp.sections.cookieTypes.analytics.note}</p>
+                <p className="garamond-13 mt-3">{cp.sections.cookieTypes.analytics.note}</p>
               </div>
 
               {/* Terze parti */}
               <div className="border-t border-olive/20 pt-5">
-                <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-2">
+                <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-2">
                   {cp.sections.cookieTypes.thirdParty.title}
                 </p>
                 <p>{cp.sections.cookieTypes.thirdParty.description}</p>
@@ -100,13 +100,13 @@ export default function CookieSectionsAccordion() {
               <p>{cp.sections.cookieManagement.content}</p>
 
               <div>
-                <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-2">
+                <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-2">
                   {cp.sections.cookieManagement.browsers.title}
                 </p>
                 <ItemList items={cp.sections.cookieManagement.browsers.list} />
               </div>
 
-              <p className="border-t border-olive/20 pt-4 text-black/50 text-xs leading-relaxed">
+              <p className="border-t border-olive/20 pt-4 garamond-13">
                 {cp.sections.cookieManagement.note}
               </p>
             </div>
@@ -126,19 +126,19 @@ export default function CookieSectionsAccordion() {
                 <table className="w-full text-left">
                   <thead>
                     <tr className="border-b border-olive/20">
-                      <th className="pb-3 pr-4 text-[11px] tracking-[0.15em] uppercase text-black/40 font-normal">{cpPage.table.name}</th>
-                      <th className="pb-3 pr-4 text-[11px] tracking-[0.15em] uppercase text-black/40 font-normal">{cpPage.table.type}</th>
-                      <th className="pb-3 pr-4 text-[11px] tracking-[0.15em] uppercase text-black/40 font-normal">{cpPage.table.purpose}</th>
-                      <th className="pb-3 text-[11px] tracking-[0.15em] uppercase text-black/40 font-normal">{cpPage.table.duration}</th>
+                      <th className="pb-3 pr-4 font-serif termina-11 tracking-[0.15em] uppercase text-black font-normal">{cpPage.table.name}</th>
+                      <th className="pb-3 pr-4 font-serif termina-11 tracking-[0.15em] uppercase text-black font-normal">{cpPage.table.type}</th>
+                      <th className="pb-3 pr-4 font-serif termina-11 tracking-[0.15em] uppercase text-black font-normal">{cpPage.table.purpose}</th>
+                      <th className="pb-3 font-serif termina-11 tracking-[0.15em] uppercase text-black font-normal">{cpPage.table.duration}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {cp.sections.cookieList.items.map((item: { name: string; type: string; purpose: string; duration: string }, i: number) => (
                       <tr key={i} className="border-b border-olive/20">
-                        <td className="py-3 pr-4 font-mono text-xs text-black/70">{item.name}</td>
-                        <td className="py-3 pr-4 text-black/70">{item.type}</td>
-                        <td className="py-3 pr-4 text-black/70">{item.purpose}</td>
-                        <td className="py-3 text-black/70">{item.duration}</td>
+                        <td className="py-3 pr-4 font-mono text-xs text-black">{item.name}</td>
+                        <td className="py-3 pr-4 text-black">{item.type}</td>
+                        <td className="py-3 pr-4 text-black">{item.purpose}</td>
+                        <td className="py-3 text-black">{item.duration}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -172,12 +172,12 @@ export default function CookieSectionsAccordion() {
 
         {/* CTA contatti */}
         <div className="mt-16 border-t border-olive/20 pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <p className="text-sm text-black/60 leading-relaxed">
+          <p className="garamond-13">
             {cp.sections.contact.content}
           </p>
           <Link
             href="/contact"
-            className="text-[11px] tracking-[0.25em] uppercase px-6 py-3 border border-olive/20 text-black/60 hover:bg-olive hover:text-beige hover:border-olive transition-all duration-300 cursor-pointer whitespace-nowrap"
+            className="font-serif termina-11 tracking-[0.25em] uppercase px-6 py-3 border border-olive/20 text-black hover:bg-olive hover:text-beige hover:border-olive transition-all duration-300 cursor-pointer whitespace-nowrap"
           >
             {cp.sections.contact.title}
           </Link>

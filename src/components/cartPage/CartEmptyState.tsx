@@ -20,13 +20,13 @@ export default function CartEmptyState() {
             {t.cartPage.empty.title}
           </h1>
 
-          <p className="text-black/60 mb-12 text-sm max-w-md mx-auto">
+          <p className="garamond-13 mb-12 max-w-md mx-auto">
             {t.cartPage.empty.description}
           </p>
 
           <Link
             href="/products"
-            className="inline-block px-12 py-4 bg-sabbia text-black text-[11px] tracking-[0.25em] uppercase hover:bg-olive hover:text-beige transition-all duration-300"
+            className="inline-block px-12 py-4 bg-sabbia text-black font-serif termina-11 tracking-[0.25em] uppercase hover:bg-olive hover:text-beige transition-all duration-300"
           >
             {t.cartPage.empty.button}
           </Link>

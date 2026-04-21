@@ -12,7 +12,7 @@ export default function FaqList({ faqs, activeIndex, noFaqLabel, onToggle }: Faq
   if (faqs.length === 0) {
     return (
       <div className="border-t border-olive/20 py-12 text-center">
-        <p className="text-sm text-black/50">{noFaqLabel}</p>
+        <p className="garamond-13">{noFaqLabel}</p>
       </div>
     );
   }

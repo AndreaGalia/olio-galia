@@ -15,10 +15,10 @@ export default function FaqCategoryFilter({
     <div className="flex flex-wrap gap-2 mb-8">
       <button
         onClick={() => onSelect(null)}
-        className={`px-4 py-1.5 text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 cursor-pointer border ${
+        className={`px-4 py-1.5 font-serif termina-11 tracking-[0.2em] uppercase transition-colors duration-200 cursor-pointer border ${
           activeCategory === null
             ? 'border-olive bg-olive text-beige'
-            : 'border-olive/20 text-black/50 hover:border-olive/40 hover:text-black'
+            : 'border-olive/20 text-black hover:border-olive/40'
         }`}
       >
         {allLabel}
@@ -28,10 +28,10 @@ export default function FaqCategoryFilter({
         <button
           key={category}
           onClick={() => onSelect(category)}
-          className={`px-4 py-1.5 text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 cursor-pointer border ${
+          className={`px-4 py-1.5 font-serif termina-11 tracking-[0.2em] uppercase transition-colors duration-200 cursor-pointer border ${
             activeCategory === category
               ? 'border-olive bg-olive text-beige'
-              : 'border-olive/20 text-black/50 hover:border-olive/40 hover:text-black'
+              : 'border-olive/20 text-black hover:border-olive/40'
           }`}
         >
           {category}

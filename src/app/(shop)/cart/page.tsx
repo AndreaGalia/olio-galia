@@ -151,7 +151,7 @@ function CartPageContent() {
 
       <div className="container mx-auto px-4 sm:px-6 max-w-4xl py-8 sm:py-12">
         <div className="mb-8">
-          <p className="text-[11px] tracking-[0.2em] uppercase text-black/40">
+          <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black">
             {totalItems} {itemCountLabel}
           </p>
           <h1 style={{ fontSize: 'clamp(1.4rem, 3vw, 2rem)', lineHeight: '1.3', letterSpacing: '0.15em' }}>
@@ -209,7 +209,7 @@ function CartPageLoading() {
     <div className="min-h-screen bg-sabbia-chiaro">
       <div className="container mx-auto px-4 py-16">
         <div className="text-center">
-          <p className="text-black/60 text-sm tracking-wider uppercase">Caricamento...</p>
+          <p className="font-serif termina-11 tracking-wider uppercase text-black">Caricamento...</p>
         </div>
       </div>
     </div>

@@ -23,14 +23,14 @@ export default function PaymentCanceledBanner({
 
   return (
     <div className="container mx-auto px-4 sm:px-6 max-w-6xl pt-8">
-      <div className="border border-black/15 p-4 mb-6 animate-fadeIn">
+      <div className="border border-olive/20 p-4 mb-6 animate-fadeIn">
         <div className="flex items-start gap-3">
           {/* Content */}
           <div className="flex-1 min-w-0">
-            <h3 className="text-[11px] tracking-[0.15em] uppercase text-black/60 mb-2">
+            <h3 className="font-serif termina-11 tracking-[0.15em] uppercase text-black mb-2">
               {t.cartPage.paymentCanceled?.title || 'Pagamento non completato'}
             </h3>
-            <p className="text-sm text-black/60 mb-4">
+            <p className="garamond-13 mb-4">
               {t.cartPage.paymentCanceled?.message || 'Il tuo ordine non è stato processato. I prodotti sono ancora nel carrello e puoi riprovare quando vuoi.'}
             </p>
 
@@ -39,7 +39,7 @@ export default function PaymentCanceledBanner({
               <button
                 onClick={onRetry}
                 disabled={loading}
-                className="w-full py-4 bg-sabbia text-black text-[11px] tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-olive hover:text-beige disabled:opacity-40 disabled:cursor-not-allowed"
+                className="w-full py-4 bg-sabbia text-black font-serif termina-11 tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-olive hover:text-beige disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {loading
                   ? (t.cartPage.paymentCanceled?.retrying || 'Caricamento...')

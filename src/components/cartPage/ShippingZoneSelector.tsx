@@ -15,7 +15,7 @@ export default function ShippingZoneSelector({ selectedZone, onSelectZone }: Shi
 
   return (
     <div className="space-y-3">
-      <p className="text-[11px] tracking-[0.2em] uppercase text-black/50">
+      <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black">
         {t.cartPage.shippingSelection.zoneSelector.title}
       </p>
 
@@ -31,13 +31,13 @@ export default function ShippingZoneSelector({ selectedZone, onSelectZone }: Shi
               className={`py-3 px-4 border text-left transition-all duration-200 cursor-pointer ${
                 isSelected
                   ? 'border-olive bg-olive text-beige'
-                  : 'border-black/15 text-black hover:border-olive/40'
+                  : 'border-olive/20 text-black hover:border-olive/40'
               }`}
               aria-pressed={isSelected}
               aria-label={`Seleziona zona ${zoneData.name}`}
             >
-              <span className="block text-xs tracking-wider uppercase">{zoneData.name}</span>
-              <span className={`block text-xs mt-0.5 ${isSelected ? 'text-beige/70' : 'text-black/40'}`}>
+              <span className="block font-serif termina-8 tracking-wider uppercase">{zoneData.name}</span>
+              <span className={`block text-xs mt-0.5 ${isSelected ? 'text-beige/70' : 'text-black'}`}>
                 {zoneData.deliveryTime}
               </span>
             </button>

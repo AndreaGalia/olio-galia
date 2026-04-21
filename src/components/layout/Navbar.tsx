@@ -157,7 +157,7 @@ export default function Navbar() {
                 {t.footer.products.bodyOil}
               </Link>
 
-              <div className="border-t border-black my-4" />
+              <div className="border-t border-olive/20 my-4" />
 
               <Link href="/about" onClick={toggleMenu} className={`block py-3 mobile-menu-link ${isActive('/about') ? 'text-olive' : 'text-black'}`}>
                 {t.navbar.menu.about}
@@ -172,20 +172,20 @@ export default function Navbar() {
                 {t.navbar.menu.faq}
               </Link>
 
-              <div className="border-t border-black my-4" />
+              <div className="border-t border-olive/20 my-4" />
 
               <div className="py-3 flex items-center gap-3">
                 <span className="mobile-menu-link text-black">{t.navbar.mobile.language}</span>
                 <LanguageSwitcher mobile />
               </div>
 
-              <div className="border-t border-black my-4" />
+              <div className="border-t border-olive/20 my-4" />
 
-              <Link href="/cart" onClick={toggleMenu} className="flex items-center gap-2 bg-olive text-white px-4 py-2 mt-3 mb-8 transition-opacity duration-200 hover:opacity-80 self-start inline-flex">
+              <Link href="/cart" onClick={toggleMenu} className="flex items-center gap-2 bg-olive text-beige px-4 py-2 mt-3 mb-8 transition-opacity duration-200 hover:opacity-80 self-start inline-flex">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
                 </svg>
-                <span className="mobile-menu-link" style={{color: 'white'}}>
+                <span className="mobile-menu-link text-beige">
                   {t.navbar.mobile.cart} {totalItems > 0 && `(${totalItems})`}
                 </span>
               </Link>

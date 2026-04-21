@@ -25,10 +25,10 @@ const WizardStep = forwardRef<HTMLDivElement, WizardStepProps>(({
 }, ref) => {
   const containerClasses = `
     border transition-all duration-300
-    ${isActive ? 'border-black/20 bg-sabbia-chiaro' : ''}
-    ${isCompleted && !isActive ? 'border-black/10' : ''}
-    ${isLocked ? 'border-black/10 opacity-40' : ''}
-    ${!isActive && !isCompleted && !isLocked ? 'border-black/10' : ''}
+    ${isActive ? 'border-olive/20 bg-sabbia-chiaro' : ''}
+    ${isCompleted && !isActive ? 'border-olive/20' : ''}
+    ${isLocked ? 'border-olive/20 opacity-40' : ''}
+    ${!isActive && !isCompleted && !isLocked ? 'border-olive/20' : ''}
   `.trim();
 
   const headerClasses = `
@@ -50,7 +50,7 @@ const WizardStep = forwardRef<HTMLDivElement, WizardStepProps>(({
               ? 'bg-olive text-beige border-olive'
               : isCompleted
               ? 'bg-olive text-beige border-olive'
-              : 'border-black/20 text-black/40'
+              : 'border-olive/20 text-black'
           }`}>
             {isCompleted && !isActive ? (
               <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -63,12 +63,12 @@ const WizardStep = forwardRef<HTMLDivElement, WizardStepProps>(({
 
           {/* Titolo e summary */}
           <div>
-            <h3 className="text-[11px] tracking-[0.2em] uppercase text-black/60">
+            <h3 className="font-serif termina-11 tracking-[0.2em] uppercase text-black">
               {title}
             </h3>
             {/* Summary - mostra solo quando compressa e completata */}
             {isCompleted && !isActive && summary && (
-              <p className="text-black/40 text-xs mt-0.5">{summary}</p>
+              <p className="garamond-13 mt-0.5">{summary}</p>
             )}
           </div>
         </div>

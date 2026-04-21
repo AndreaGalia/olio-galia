@@ -29,9 +29,9 @@ export default function AboutSection() {
             <h3 className="heading-md text-black">{t.aboutSection.title2}</h3>
           </div>
           <div className="mb-12 flex flex-col gap-6">
-            <p className="text-sm sm:text-base text-black/80 leading-relaxed">{t.aboutSection.paragraph1}</p>
-            <p className="text-sm sm:text-base text-black/80 leading-relaxed">{t.aboutSection.paragraph2}</p>
-            <p className="text-sm sm:text-base text-black/80 leading-relaxed">
+            <p className="garamond-13">{t.aboutSection.paragraph1}</p>
+            <p className="garamond-13">{t.aboutSection.paragraph2}</p>
+            <p className="garamond-13">
               {t.aboutSection.paragraph3.split('OLIO GALIA').map((part: string, index: number, array: string[]) =>
                 index === array.length - 1 ? part : (
                   <span key={index}>

@@ -53,11 +53,11 @@ export function SostenibilitaBlock({
             reverse ? 'order-2 md:order-1 md:items-end md:text-right' : 'order-2'
           }`}
         >
-          <p className="text-xs uppercase tracking-widest text-black/50 mb-3">
+          <p className="font-serif termina-11 uppercase tracking-widest text-black mb-3">
             {subtitle}
           </p>
           <h2 className="heading-md text-black mb-6">{title}</h2>
-          <p className="text-sm sm:text-base text-black/80 leading-relaxed">
+          <p className="garamond-13 max-w-xs">
             {description}
           </p>
         </div>

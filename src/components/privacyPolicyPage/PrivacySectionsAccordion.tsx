@@ -31,7 +31,7 @@ export default function PrivacySectionsAccordion() {
       <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-4xl mx-auto">
 
         {/* Intro */}
-        <p className="border-t border-olive/20 pt-8 text-sm text-black/70 leading-relaxed">
+        <p className="border-t border-olive/20 pt-8 garamond-13">
           {pp.intro}
         </p>
 

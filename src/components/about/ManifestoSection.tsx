@@ -36,7 +36,7 @@ export function ManifestoSection() {
                 </blockquote>
 
                 {/* Description */}
-                <p className="text-sm sm:text-base text-black/80 leading-relaxed">
+                <p className="garamond-13">
                   {block.description}
                 </p>
               </div>

@@ -133,16 +133,16 @@ export default function CheckoutWizard({
         </div>
 
         {/* Subtotale */}
-        <div className="border-t border-black/10 pt-4 space-y-2">
-          <div className="flex justify-between text-sm text-black/70">
-            <span>{t.cartPage.summary.subtotal?.replace('{count}', totalItems.toString()).replace('{itemLabel}', itemLabel) || `Subtotale (${totalItems} ${itemLabel})`}</span>
-            <span>€{total.toFixed(2)}</span>
+        <div className="border-t border-olive/20 pt-4 space-y-2">
+          <div className="flex justify-between">
+            <span className="garamond-13">{t.cartPage.summary.subtotal?.replace('{count}', totalItems.toString()).replace('{itemLabel}', itemLabel) || `Subtotale (${totalItems} ${itemLabel})`}</span>
+            <span className="garamond-13">€{total.toFixed(2)}</span>
           </div>
 
           {savings > 0 && (
-            <div className="flex justify-between text-olive text-sm">
-              <span>{t.cartPage.summary.totalSavings}</span>
-              <span>-€{savings.toFixed(2)}</span>
+            <div className="flex justify-between text-olive">
+              <span className="garamond-font">{t.cartPage.summary.totalSavings}</span>
+              <span className="garamond-font">-€{savings.toFixed(2)}</span>
             </div>
           )}
         </div>
@@ -150,7 +150,7 @@ export default function CheckoutWizard({
         {/* Bottone Continua */}
         <button
           onClick={() => setCurrentStep(2)}
-          className="w-full mt-6 py-4 bg-sabbia text-black text-[11px] tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-olive hover:text-beige disabled:opacity-40 disabled:cursor-not-allowed"
+          className="w-full mt-6 py-4 bg-sabbia text-black font-serif termina-11 tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-olive hover:text-beige disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {t.cartPage.wizard?.continue || "CONTINUA"}
         </button>
@@ -170,12 +170,12 @@ export default function CheckoutWizard({
         {/* Checkout Torino - mostra solo se abilitato */}
         {settings.torino_checkout_enabled && (
           <>
-            <div className="mb-6 border-b border-black/10 pb-6">
+            <div className="mb-6 border-b border-olive/20 pb-6">
               <div className="mb-4">
-                <h4 className="text-[11px] tracking-[0.2em] uppercase text-black/60 mb-2">
+                <h4 className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-2">
                   {t.cartPage.wizard?.torinoTitle || "SEI DI TORINO?"}
                 </h4>
-                <p className="text-xs text-black/40">
+                <p className="garamond-13">
                   {t.cartPage.wizard?.torinoDescription || "Usa il checkout veloce per ritiro o consegna a Torino"}
                 </p>
               </div>
@@ -184,9 +184,9 @@ export default function CheckoutWizard({
 
             {/* Separatore OPPURE */}
             <div className="relative mb-6">
-              <div className="border-t border-black/10"></div>
+              <div className="border-t border-olive/20"></div>
               <div className="flex justify-center -mt-2.5">
-                <span className="bg-sabbia-chiaro px-3 text-[11px] tracking-widest uppercase text-black/30">
+                <span className="bg-sabbia-chiaro px-3 font-serif termina-11 tracking-widest uppercase text-black/30">
                   {t.cartPage.wizard?.or || "OPPURE"}
                 </span>
               </div>
@@ -204,9 +204,9 @@ export default function CheckoutWizard({
 
         {/* Preview costo spedizione */}
         {selectedShippingZone && (
-          <div className="border-t border-black/10 pt-3 mb-6">
+          <div className="border-t border-olive/20 pt-3 mb-6">
             <div className="flex justify-between items-center">
-              <span className="text-xs text-black/60">
+              <span className="garamond-13">
                 {t.cartPage.summary.shipping}
               </span>
               <span className={`text-sm font-light ${shippingCost.isFree ? 'text-olive' : 'text-black'}`}>
@@ -220,7 +220,7 @@ export default function CheckoutWizard({
         <button
           onClick={() => selectedShippingZone && setCurrentStep(3)}
           disabled={!selectedShippingZone}
-          className="w-full mt-4 py-4 bg-sabbia text-black text-[11px] tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-olive hover:text-beige disabled:opacity-40 disabled:cursor-not-allowed"
+          className="w-full mt-4 py-4 bg-sabbia text-black font-serif termina-11 tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-olive hover:text-beige disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {t.cartPage.wizard?.continue || "CONTINUA"}
         </button>
@@ -238,28 +238,28 @@ export default function CheckoutWizard({
       >
         {/* Riepilogo compatto */}
         <div className="space-y-3 mb-6">
-          <div className="flex justify-between text-sm text-black/70">
-            <span>{t.cartPage.summary.subtotal?.replace('{count}', totalItems.toString()).replace('{itemLabel}', itemLabel) || `Prodotti (${totalItems})`}</span>
-            <span>€{total.toFixed(2)}</span>
+          <div className="flex justify-between">
+            <span className="garamond-13">{t.cartPage.summary.subtotal?.replace('{count}', totalItems.toString()).replace('{itemLabel}', itemLabel) || `Prodotti (${totalItems})`}</span>
+            <span className="garamond-13">€{total.toFixed(2)}</span>
           </div>
 
           {selectedShippingZone && (
-            <div className="flex justify-between text-sm text-black/70">
-              <span>{t.cartPage.summary.shipping}</span>
-              <span className={shippingCost.isFree ? "text-olive" : ""}>
+            <div className="flex justify-between">
+              <span className="garamond-13">{t.cartPage.summary.shipping}</span>
+              <span className={`garamond-font ${shippingCost.isFree ? 'text-olive' : 'text-black'}`}>
                 {shippingCost.isFree ? t.cartPage.summary.free : `€${shippingCost.costEur.toFixed(2)}`}
               </span>
             </div>
           )}
 
-          <div className="border-t border-black/10 pt-3 flex justify-between text-black font-medium text-base">
+          <div className="border-t border-olive/20 pt-3 flex justify-between font-serif text-black">
             <span>{t.cartPage.summary.total}</span>
             <span>€{finalTotal.toFixed(2)}</span>
           </div>
         </div>
 
         {/* Checkbox fattura */}
-        <div className="border-t border-black/10 pt-4 mb-6">
+        <div className="border-t border-olive/20 pt-4 mb-6">
           <label className="flex items-start gap-3 cursor-pointer">
             <input
               type="checkbox"
@@ -268,10 +268,10 @@ export default function CheckoutWizard({
               className="mt-1 border-black/20 text-olive focus:ring-olive focus:ring-offset-0"
             />
             <div>
-              <span className="text-black/70 text-xs block tracking-wide">
+              <span className="garamond-13 block tracking-wide">
                 {t.cartPage.invoice.title}
               </span>
-              <span className="text-black/40 text-xs">
+              <span className="garamond-13">
                 {t.cartPage.invoice.description}
               </span>
             </div>
@@ -282,7 +282,7 @@ export default function CheckoutWizard({
         <button
           onClick={handleCheckout}
           disabled={checkoutLoading}
-          className="w-full py-4 bg-sabbia text-black text-[11px] tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-olive hover:text-beige disabled:opacity-40 disabled:cursor-not-allowed"
+          className="w-full py-4 bg-sabbia text-black font-serif termina-11 tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-olive hover:text-beige disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {checkoutLoading ? (
             <span>{t.cartPage.summary.processing}</span>
@@ -292,7 +292,7 @@ export default function CheckoutWizard({
         </button>
 
         {needsInvoice && (
-          <p className="mt-4 text-xs text-black/40">
+          <p className="garamond-13 mt-4">
             {t.cartPage.invoice.checkoutNote}
           </p>
         )}

@@ -19,7 +19,7 @@ export default function CasaSection() {
             <h3 className="heading-md text-black mb-3">{t.casaSection.title1}</h3>
             <h3 className="heading-md text-black">{t.casaSection.title2}</h3>
           </div>
-          <p className="text-sm sm:text-base text-black/80 leading-relaxed mb-12">
+          <p className="garamond-13 mb-12">
             {t.casaSection.description1}<br />
             {t.casaSection.description2}<br />
             {t.casaSection.description3}<br />
@@ -29,7 +29,7 @@ export default function CasaSection() {
           <div>
             <Link
               href="/about"
-              className="inline-block bg-olive text-beige px-6 py-3 md:px-8 md:py-4 text-xs md:text-sm font-medium transition-all duration-300 border border-olive/20 uppercase tracking-wider"
+              className="inline-block bg-olive text-beige px-6 py-3 md:px-8 md:py-4 font-serif termina-11 transition-all duration-300 border border-olive/20 uppercase tracking-wider"
             >
               {t.casaSection.button}
             </Link>

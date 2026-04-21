@@ -53,7 +53,7 @@ export default function FloatingActionButton({
       <button
         onClick={selectedShippingZone ? onCheckout : onScrollToShipping}
         disabled={checkoutLoading}
-        className="w-full bg-olive text-beige py-2 sm:py-3 px-4 text-xs sm:text-sm font-medium transition-colors duration-300 uppercase tracking-wider hover:bg-olive/90 flex items-center justify-center gap-2 border-t border-olive/20 disabled:opacity-50"
+        className="w-full bg-olive text-beige py-2 sm:py-3 px-4 font-serif termina-11 transition-colors duration-300 uppercase tracking-wider hover:bg-olive/90 flex items-center justify-center gap-2 border-t border-olive/20 disabled:opacity-50"
       >
         {checkoutLoading ? (
           <>

@@ -18,7 +18,7 @@ export function TimelineSection({ timeline, title }: TimelineSectionProps) {
     <section className="py-10 sm:py-12">
       <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
         {title && (
-          <h2 className="text-lg sm:text-3xl md:text-4xl lg:text-5xl font-serif text-black text-center mb-12">
+          <h2 className="font-serif text-black text-center mb-12">
             {title}
           </h2>
         )}
@@ -59,10 +59,10 @@ function TimelineItem({ item, index }: TimelineItemProps) {
     >
       <div className={`w-5/12 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
         <div className="bg-beige border border-olive/10 p-6 transition-all duration-300">
-          <div className="text-2xl font-serif text-salvia mb-2">{item.year}</div>
-          <h3 className="text-xl font-serif text-black mb-3">{item.title}</h3>
-          <p className="text-black text-sm leading-relaxed mb-3">{item.description}</p>
-          <p className="text-xs text-black/70 italic">{item.details}</p>
+          <div className="font-serif termina-22 text-salvia mb-2">{item.year}</div>
+          <h3 className="font-serif text-black mb-3">{item.title}</h3>
+          <p className="garamond-13 mb-3">{item.description}</p>
+          <p className="body-garamond">{item.details}</p>
         </div>
       </div>
 
@@ -83,10 +83,10 @@ function TimelineItemMobile({ item }: TimelineItemMobileProps) {
       <div className="absolute left-3.5 top-6 bottom-0 w-0.5 bg-olive/30"></div>
 
       <div className="bg-beige border border-olive/10 p-4 transition-all duration-300">
-        <div className="text-xl font-serif text-salvia mb-1">{item.year}</div>
-        <h3 className="text-lg font-serif text-black mb-2">{item.title}</h3>
-        <p className="text-black text-sm leading-relaxed mb-2">{item.description}</p>
-        <p className="text-xs text-black/70 italic">{item.details}</p>
+        <div className="font-serif termina-22 text-salvia mb-1">{item.year}</div>
+        <h3 className="font-serif text-black mb-2">{item.title}</h3>
+        <p className="garamond-13 mb-2">{item.description}</p>
+        <p className="body-garamond">{item.details}</p>
       </div>
     </div>
   );

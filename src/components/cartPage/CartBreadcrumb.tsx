@@ -5,9 +5,9 @@ export default function CartBreadcrumb() {
   const { t } = useT();
   return (
     <nav className="flex items-center gap-2 text-xs tracking-wider">
-      <Link href="/" className="text-black/40 hover:text-olive transition-colors uppercase">{t.cartPage.breadcrumb.home}</Link>
+      <Link href="/" className="text-black hover:text-olive transition-colors uppercase">{t.cartPage.breadcrumb.home}</Link>
       <span className="text-black/30">/</span>
-      <span className="text-black/70 uppercase">{t.cartPage.breadcrumb.cart}</span>
+      <span className="text-black uppercase">{t.cartPage.breadcrumb.cart}</span>
     </nav>
   );
 }

@@ -50,7 +50,7 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
   const displayImage = resolved.images[0] || product.images[0];
 
   return (
-    <div className="border-t border-black/10 py-4 sm:py-6 transition-all duration-300">
+    <div className="border-t border-olive/20 py-4 sm:py-6 transition-all duration-300">
       {/* Mobile Layout */}
       <div className="block sm:hidden">
         <div className="flex gap-4 mb-4">
@@ -64,13 +64,13 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
           <div className="flex-1">
             <h3 className="text-black text-base mb-1">{product.name}</h3>
             {variantLine && (
-              <p className="text-black/60 text-xs mb-1">{variantLine}</p>
+              <p className="garamond-13 mb-1">{variantLine}</p>
             )}
-            <p className="text-black/60 text-xs mb-2">{product.size}</p>
+            <p className="garamond-13 mb-2">{product.size}</p>
             <div className="flex items-end gap-2">
-              <span className="text-black font-light text-lg">€{price.toFixed(2)}</span>
+              <span className="font-serif">€{price.toFixed(2)}</span>
               {originalPrice && (
-                <span className="text-black/40 line-through text-sm">€{originalPrice.toFixed(2)}</span>
+                <span className="font-serif termina-13 text-black line-through">€{originalPrice.toFixed(2)}</span>
               )}
             </div>
           </div>
@@ -80,14 +80,14 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
           <div className="flex items-center gap-2">
             <button
               onClick={() => updateQuantity(cartItem.id, cartItem.quantity - 1)}
-              className="w-9 h-9 flex items-center justify-center border border-black/15 hover:bg-black/5 transition-colors cursor-pointer"
+              className="w-9 h-9 flex items-center justify-center border border-olive/20 hover:bg-black/5 transition-colors cursor-pointer"
             >
               −
             </button>
             <span className="w-10 text-center text-black">{cartItem.quantity}</span>
             <button
               onClick={() => updateQuantity(cartItem.id, cartItem.quantity + 1)}
-              className="w-9 h-9 flex items-center justify-center border border-black/15 hover:bg-black/5 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-9 h-9 flex items-center justify-center border border-olive/20 hover:bg-black/5 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
               disabled={cartItem.quantity >= resolved.stockQuantity}
             >
               +
@@ -95,9 +95,9 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
           </div>
 
           <div className="text-right">
-            <div className="text-black font-light text-lg">€{itemTotal.toFixed(2)}</div>
+            <div className="font-serif">€{itemTotal.toFixed(2)}</div>
             {itemSavings > 0 && (
-              <div className="text-olive text-xs">
+              <div className="garamond-font text-olive">
                 {translate('cartPage.product.savings', { amount: itemSavings.toFixed(2) })}
               </div>
             )}
@@ -128,13 +128,13 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
         <div className="flex-1">
           <h3 className="text-black text-lg mb-1">{product.name}</h3>
           {variantLine && (
-            <p className="text-black/60 text-xs mb-1">{variantLine}</p>
+            <p className="garamond-13 mb-1">{variantLine}</p>
           )}
-          <p className="text-black/60 text-xs mb-2">{product.size}</p>
+          <p className="garamond-13 mb-2">{product.size}</p>
           <div className="flex items-end gap-3">
-            <span className="text-black font-light text-xl">€{price.toFixed(2)}</span>
+            <span className="font-serif">€{price.toFixed(2)}</span>
             {originalPrice && (
-              <span className="text-black/40 line-through text-base">€{originalPrice.toFixed(2)}</span>
+              <span className="font-serif termina-13 text-black line-through">€{originalPrice.toFixed(2)}</span>
             )}
           </div>
         </div>
@@ -142,14 +142,14 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
         <div className="flex items-center gap-3">
           <button
             onClick={() => updateQuantity(cartItem.id, cartItem.quantity - 1)}
-            className="w-9 h-9 flex items-center justify-center border border-black/15 hover:bg-black/5 transition-colors cursor-pointer"
+            className="w-9 h-9 flex items-center justify-center border border-olive/20 hover:bg-black/5 transition-colors cursor-pointer font-serif"
           >
             −
           </button>
-          <span className="w-10 text-center text-black">{cartItem.quantity}</span>
+          <span className="w-10 text-center font-serif">{cartItem.quantity}</span>
           <button
             onClick={() => updateQuantity(cartItem.id, cartItem.quantity + 1)}
-            className="w-9 h-9 flex items-center justify-center border border-black/15 hover:bg-black/5 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-9 h-9 flex items-center justify-center border border-olive/20 hover:bg-black/5 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed font-serif"
             disabled={cartItem.quantity >= resolved.stockQuantity}
           >
             +
@@ -157,9 +157,9 @@ export default function CartItem({ cartItem, product }: CartItemProps) {
         </div>
 
         <div className="text-right min-w-[100px]">
-          <div className="text-black font-light text-xl">€{itemTotal.toFixed(2)}</div>
+          <div className="font-serif">€{itemTotal.toFixed(2)}</div>
           {itemSavings > 0 && (
-            <div className="text-olive text-xs">
+            <div className="garamond-font text-olive">
               {translate('cartPage.product.savings', { amount: itemSavings.toFixed(2) })}
             </div>
           )}
