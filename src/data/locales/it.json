@@ -719,6 +719,7 @@
   "addToCartButton": {
   "add": "Aggiungi",
   "addToCart": "Al Carrello",
+  "addToCartFull": "Aggiungi Al Carrello",
   "added": "Aggiunto",
   "productAdded": "Prodotto Aggiunto"
 },

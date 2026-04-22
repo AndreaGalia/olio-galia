@@ -10,9 +10,10 @@ import HomepageProductCardFooter from "./HomepageProductCardFooter";
 interface HomepageProductCardProps {
   product: Product;
   onAddToCart: (productId: string) => void;
+  compact?: boolean;
 }
 
-export default function HomepageProductCard({ product, onAddToCart }: HomepageProductCardProps) {
+export default function HomepageProductCard({ product, onAddToCart, compact = false }: HomepageProductCardProps) {
   const { t } = useT();
   const [isAdding, setIsAdding] = useState(false);
 
@@ -43,7 +44,15 @@ export default function HomepageProductCard({ product, onAddToCart }: HomepagePr
           onClick={handleAddToCart}
           className="w-full mt-2 py-2.5 text-center font-serif termina-card tracking-[1px] sm:tracking-[3.4px] uppercase whitespace-nowrap cursor-pointer transition-all duration-200 active:scale-95 border border-olive bg-olive text-beige hover:bg-sabbia hover:text-olive"
         >
-          {isAdding ? t.addToCartButton.added : t.addToCartButton.addToCart}
+          {isAdding
+            ? t.addToCartButton.added
+            : compact
+              ? (<>
+                  <span className="lg:hidden">{t.addToCartButton.addToCart}</span>
+                  <span className="hidden lg:inline">{t.addToCartButton.addToCartFull}</span>
+                </>)
+              : t.addToCartButton.addToCartFull
+          }
         </button>
       )}
     </div>

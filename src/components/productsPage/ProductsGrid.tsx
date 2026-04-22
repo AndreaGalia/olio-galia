@@ -24,6 +24,7 @@ export default function ProductsGrid({ products, onAddToCart }: ProductsGridProp
                 key={product.id}
                 product={product}
                 onAddToCart={onAddToCart}
+                compact
               />
             ))}
           </div>
