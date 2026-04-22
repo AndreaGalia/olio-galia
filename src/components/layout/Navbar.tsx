@@ -39,6 +39,7 @@ export default function Navbar() {
   const menuItems: MenuItem[] = [
     { name: t.navbar.menu.products, href: '/products', translationKey: 'products' },
     { name: t.navbar.menu.about, href: '/about', translationKey: 'about' },
+    { name: t.navbar.menu.sustainability, href: '/sostenibilita', translationKey: 'sustainability' },
     { name: t.navbar.menu.contact, href: '/contact', translationKey: 'contact' }
   ];
 

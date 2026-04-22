@@ -92,7 +92,7 @@ export default function NewsletterPopup() {
         {/* Chiudi × */}
         <button
           onClick={dismiss}
-          className="absolute top-4 right-5 text-black/40 hover:text-black transition-colors duration-200 cursor-pointer text-lg leading-none"
+          className="absolute top-4 right-5 text-black hover:text-black/50 transition-colors duration-200 cursor-pointer text-lg leading-none"
           aria-label={popup.close}
           type="button"
         >
@@ -101,21 +101,21 @@ export default function NewsletterPopup() {
 
         {/* Titolo */}
         <h2
-          className="text-4xl sm:text-5xl italic font-normal text-black mb-6"
-          style={{ fontFamily: '"Cormorant Garamond", serif', letterSpacing: "0" }}
+          className="text-black mb-6"
+          style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 'clamp(2rem, 5vw, 3rem)', fontStyle: 'italic', fontWeight: 400, letterSpacing: 0, lineHeight: 1.2 }}
         >
           {popup.title}
         </h2>
 
         {/* Descrizione */}
-        <p className="text-sm text-black/70 leading-relaxed mb-10">
+        <p className="garamond-13 mb-10">
           {popup.description}
         </p>
 
         {/* Messaggio successo/errore */}
         {message && (
           <div
-            className={`text-sm mb-6 ${
+            className={`garamond-13 mb-6 ${
               message.type === "success"
                 ? "text-green-800"
                 : "text-red-700"
@@ -128,7 +128,7 @@ export default function NewsletterPopup() {
         {/* Form */}
         {(!message || message.type !== "success") && (
           <form onSubmit={handleSubmit}>
-            <div className="flex items-center border-b border-black/40">
+            <div className="flex items-center border-b border-olive/20">
               <input
                 type="email"
                 required
@@ -136,16 +136,16 @@ export default function NewsletterPopup() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={popup.placeholder}
                 autoFocus
-                className="flex-1 bg-transparent py-2 text-sm text-black placeholder:text-black/50 outline-none"
+                className="flex-1 bg-transparent py-2 garamond-13 placeholder:text-black/50 outline-none"
               />
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-shrink-0 pl-3 text-black/60 hover:text-black transition-colors duration-200 cursor-pointer disabled:opacity-40 text-lg"
+                className="flex-shrink-0 pl-3 text-black hover:text-black/50 transition-colors duration-200 cursor-pointer disabled:opacity-40 text-lg"
                 aria-label={loading ? popup.sending : "Invia"}
               >
                 {loading ? (
-                  <span className="text-xs">{popup.sending}</span>
+                  <span className="font-serif termina-8">{popup.sending}</span>
                 ) : (
                   <svg
                     width="18"
@@ -166,7 +166,7 @@ export default function NewsletterPopup() {
         )}
 
         {/* Privacy */}
-        <p className="text-[11px] text-black/40 mt-5 leading-relaxed">
+        <p className="garamond-13 mt-5">
           {popup.privacy}
         </p>
       </div>
