@@ -27,6 +27,7 @@ export default function RelatedProductsSection({ products }: RelatedProductsSect
             key={product.id}
             product={product}
             onAddToCart={handleAddToCart}
+            compact
           />
         ))}
       </div>
