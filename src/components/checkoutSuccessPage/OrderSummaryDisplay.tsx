@@ -20,7 +20,7 @@ export default function OrderSummaryDisplay({ orderDetails, loading }: OrderSumm
               {/* Numero ordine */}
               {orderDetails.paymentIntent && (
                 <div>
-                  <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-2">
+                  <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-2">
                     {t.checkoutSuccess.hero.orderNumber}
                   </p>
                   <p style={{ fontSize: 'clamp(1.2rem, 2.5vw, 1.6rem)', letterSpacing: '0.1em' }}>
@@ -32,20 +32,20 @@ export default function OrderSummaryDisplay({ orderDetails, loading }: OrderSumm
               {/* Dati cliente + spedizione */}
               <div className="grid sm:grid-cols-2 gap-6">
                 <div>
-                  <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-3">
+                  <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-3">
                     {t.checkoutSuccess.orderSummary.customerData}
                   </p>
-                  <div className="space-y-1.5 text-sm text-black/70 leading-relaxed">
+                  <div className="space-y-1.5 garamond-13">
                     <p>{orderDetails.customer?.name || 'N/D'}</p>
                     <p>{orderDetails.customer?.email || 'N/D'}</p>
                   </div>
                 </div>
 
                 <div>
-                  <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-3">
+                  <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-3">
                     {t.checkoutSuccess.orderSummary.shipping}
                   </p>
-                  <div className="space-y-1.5 text-sm text-black/70 leading-relaxed">
+                  <div className="space-y-1.5 garamond-13">
                     <p>{orderDetails.shipping?.address || t.checkoutSuccess.orderSummary.asPerCheckout}</p>
                     {orderDetails.shipping?.method && (
                       <p>{orderDetails.shipping.method}</p>
@@ -56,7 +56,7 @@ export default function OrderSummaryDisplay({ orderDetails, loading }: OrderSumm
 
               {/* Prodotti */}
               <div>
-                <p className="text-[11px] tracking-[0.2em] uppercase text-black/40 mb-4">
+                <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-4">
                   {t.checkoutSuccess.orderSummary.productsOrdered}
                 </p>
 
@@ -70,19 +70,19 @@ export default function OrderSummaryDisplay({ orderDetails, loading }: OrderSumm
                           </div>
                         )}
                         <div>
-                          <p className="text-sm text-black/80">{item.name}</p>
-                          <p className="text-[11px] tracking-[0.1em] uppercase text-black/40 mt-0.5">
+                          <p className="garamond-13">{item.name}</p>
+                          <p className="font-serif termina-11 tracking-[0.1em] uppercase text-black mt-0.5">
                             {t.checkoutSuccess.orderSummary.quantity} {item.quantity}
                           </p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm text-black/80">€{(item.price * item.quantity).toFixed(2)}</p>
-                        <p className="text-[11px] text-black/40 mt-0.5">€{item.price.toFixed(2)} {t.checkoutSuccess.orderSummary.each}</p>
+                        <p className="garamond-13">€{(item.price * item.quantity).toFixed(2)}</p>
+                        <p className="font-serif termina-11 text-black mt-0.5">€{item.price.toFixed(2)} {t.checkoutSuccess.orderSummary.each}</p>
                       </div>
                     </div>
                   )) || (
-                    <p className="text-sm text-black/40 py-4 border-t border-olive/20">
+                    <p className="garamond-13 text-black py-4 border-t border-olive/20">
                       {t.checkoutSuccess.orderSummary.productDetailsNotAvailable}
                     </p>
                   )}
@@ -92,7 +92,7 @@ export default function OrderSummaryDisplay({ orderDetails, loading }: OrderSumm
 
               {/* Totale */}
               <div className="space-y-2">
-                <div className="flex justify-between text-sm text-black/60">
+                <div className="flex justify-between garamond-13 text-black">
                   <span>{t.checkoutSuccess.orderSummary.subtotal}</span>
                   <span>
                     €{orderDetails.pricing?.subtotal?.toFixed(2) ||
@@ -100,11 +100,11 @@ export default function OrderSummaryDisplay({ orderDetails, loading }: OrderSumm
                   </span>
                 </div>
 
-                <div className="flex justify-between text-sm text-black/60">
+                <div className="flex justify-between garamond-13 text-black">
                   <span className="flex items-center gap-2">
                     {t.checkoutSuccess.orderSummary.shippingCost}
                     {orderDetails.pricing?.shippingCost === 0 && (
-                      <span className="text-[10px] tracking-[0.1em] uppercase text-olive border border-olive/30 px-1.5 py-0.5">
+                      <span className="font-serif termina-8 tracking-[0.1em] uppercase text-olive border border-olive/30 px-1.5 py-0.5">
                         {t.checkoutSuccess.freeShipping}
                       </span>
                     )}
@@ -117,7 +117,7 @@ export default function OrderSummaryDisplay({ orderDetails, loading }: OrderSumm
                 </div>
 
                 <div className="flex justify-between items-baseline border-t border-olive/20 pt-3 mt-3">
-                  <span className="text-[11px] tracking-[0.2em] uppercase text-black/60">
+                  <span className="font-serif termina-11 tracking-[0.2em] uppercase text-black">
                     {t.checkoutSuccess.orderSummary.total}
                   </span>
                   <span style={{ fontSize: 'clamp(1.2rem, 2.5vw, 1.5rem)', letterSpacing: '0.05em' }}>

@@ -15,7 +15,7 @@ function CheckoutSuccessLoading() {
           <div className="h-8 bg-olive/10 w-64" />
           <div className="h-4 bg-olive/10 w-48 mt-5" />
         </div>
-        <p className="mt-8 text-sm text-black/40">{t.checkoutSuccess.loading.text}</p>
+        <p className="mt-8 garamond-13 text-black">{t.checkoutSuccess.loading.text}</p>
       </div>
     </div>
   );
