@@ -138,20 +138,24 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
         <div>
           {selectedPrice !== null ? (
             <div className="flex items-baseline gap-3">
-              <span className="text-2xl font-light text-black tracking-wide">{formatPrice(selectedPrice)}</span>
-              <span className="text-xs text-black/40 tracking-wider uppercase">
+              <span className="font-serif termina-22 text-black tracking-wide">
+                {formatPrice(selectedPrice)}
+              </span>
+              <span className="font-serif termina-8 tracking-wider uppercase text-black">
                 / {label(SUBSCRIPTION_INTERVALS.find(i => i.value === selectedInterval!)!)}
               </span>
             </div>
           ) : (
             <div className="flex items-baseline gap-2">
-              <span className="text-xs tracking-[0.15em] uppercase text-black/40">
+              <span className="font-serif termina-8 tracking-[0.15em] uppercase text-black">
                 {sub?.startingFrom || 'A partire da'}
               </span>
-              <span className="text-2xl font-light text-black tracking-wide">{formatPrice(minPrice)}</span>
+              <span className="font-serif termina-22 text-black tracking-wide">
+                {formatPrice(minPrice)}
+              </span>
             </div>
           )}
-          <p className="text-xs text-black/40 mt-1">
+          <p className="font-serif termina-8 text-black mt-1">
             {sub?.shippingIncluded || 'Spedizione inclusa'}
           </p>
         </div>
@@ -160,7 +164,7 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
       {/* Step 1 — Quantità */}
       {showQuantityStep && (
         <div className="space-y-3">
-          <p className="text-[11px] tracking-[0.2em] uppercase text-black/50">
+          <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black">
             {sub?.quantityTitle || 'Quantità'}
           </p>
           <div className="flex gap-2">
@@ -173,10 +177,10 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
                   setSelectedZone(null);
                   setSelectedInterval(null);
                 }}
-                className={`px-5 py-2.5 border text-sm transition-all duration-200 cursor-pointer ${
+                className={`px-5 py-2.5 border font-serif termina-11 transition-all duration-200 cursor-pointer ${
                   selectedQuantity === qty
                     ? 'border-olive bg-olive text-beige'
-                    : 'border-black/15 text-black hover:border-olive/40'
+                    : 'border-olive/20 text-black hover:border-olive/40'
                 }`}
               >
                 {qty === 1
@@ -190,7 +194,7 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
 
       {/* Step 2 — Zona spedizione */}
       <div className="space-y-3">
-        <p className="text-[11px] tracking-[0.2em] uppercase text-black/50">
+        <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black">
           {sub?.zoneTitle || 'Zona di spedizione'}
         </p>
         <div className="grid grid-cols-2 gap-2">
@@ -202,10 +206,10 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
                 setSelectedZone(zone.value);
                 setSelectedInterval(null);
               }}
-              className={`py-3 px-4 border text-xs tracking-wider uppercase transition-all duration-200 cursor-pointer text-left ${
+              className={`py-3 px-4 border font-serif termina-8 tracking-wider uppercase transition-all duration-200 cursor-pointer text-left ${
                 selectedZone === zone.value
                   ? 'border-olive bg-olive text-beige'
-                  : 'border-black/15 text-black hover:border-olive/40'
+                  : 'border-olive/20 text-black hover:border-olive/40'
               }`}
             >
               {label(zone)}
@@ -216,7 +220,7 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
 
       {/* Step 3 — Frequenza */}
       <div className={`space-y-3 transition-opacity duration-300 ${!selectedZone ? 'opacity-30 pointer-events-none' : 'opacity-100'}`}>
-        <p className="text-[11px] tracking-[0.2em] uppercase text-black/50">
+        <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black">
           {sub?.intervalTitle || 'Frequenza di consegna'}
         </p>
         <div className="grid grid-cols-2 gap-2">
@@ -230,13 +234,15 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
                 className={`py-3 px-4 border text-left transition-all duration-200 cursor-pointer ${
                   selectedInterval === interval.value
                     ? 'border-olive bg-olive text-beige'
-                    : 'border-black/15 text-black hover:border-olive/40'
+                    : 'border-olive/20 text-black hover:border-olive/40'
                 }`}
               >
-                <span className="block text-xs tracking-wider uppercase">{label(interval)}</span>
+                <span className="block font-serif termina-8 tracking-wider uppercase">
+                  {label(interval)}
+                </span>
                 {price !== null && (
-                  <span className={`block text-xs mt-0.5 ${
-                    selectedInterval === interval.value ? 'text-beige/70' : 'text-black/40'
+                  <span className={`block font-serif termina-8 mt-0.5 ${
+                    selectedInterval === interval.value ? 'text-beige/70' : 'text-black'
                   }`}>
                     {formatPrice(price)}
                   </span>
@@ -249,7 +255,7 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
 
       {/* Error */}
       {error && (
-        <p className="text-xs text-red-600 tracking-wider">
+        <p className="font-serif termina-8 tracking-wider text-red-600">
           {error}
         </p>
       )}
@@ -258,7 +264,7 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
       <button
         onClick={handleSubmit}
         disabled={!selectedZone || !selectedInterval || loading}
-        className={`w-full py-4 text-[11px] tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer disabled:cursor-not-allowed ${
+        className={`w-full py-4 font-serif termina-11 tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer disabled:cursor-not-allowed ${
           loading
             ? 'bg-black/20 text-black/40'
             : !selectedZone || !selectedInterval
@@ -274,7 +280,7 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
       </button>
 
       {/* Shipping note */}
-      <p className="text-xs text-black/40 leading-relaxed">
+      <p className="garamond-13">
         {sub?.shippingNote || "La spedizione è inclusa nel prezzo dell'abbonamento. Riceverai il prodotto direttamente a casa tua con la frequenza selezionata."}
       </p>
 
