@@ -15,8 +15,8 @@ export default function OlivaSection() {
       {/* Header: Why Choose / Olio Galia — right-aligned, mirrors ProductsHeader */}
       <div className="container mx-auto px-4 sm:px-6 max-w-7xl pt-20 mb-16 sm:mb-20">
         <div className="text-right">
-          <h2 className="heading-xl text-black mb-3">{t.products.whyChoose.title}</h2>
-          <h3 className="heading-lg text-black">{t.products.whyChoose.subtitle}</h3>
+          <h2 className="text-black mb-3">{t.products.whyChoose.title}</h2>
+          <h3 className="text-black">{t.products.whyChoose.subtitle}</h3>
         </div>
       </div>
 

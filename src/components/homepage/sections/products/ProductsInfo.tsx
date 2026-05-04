@@ -8,7 +8,7 @@ export function ProductsInfo() {
   return (
     <div className="mt-24 sm:mt-28">
       <div className="text-right mb-16">
-        <h3 className="heading-xl text-black">{t.products.whyChoose.title} <span className="block mt-3">{t.products.whyChoose.subtitle}</span></h3>
+        <h3 className="text-black">{t.products.whyChoose.title} <span className="block mt-3">{t.products.whyChoose.subtitle}</span></h3>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">

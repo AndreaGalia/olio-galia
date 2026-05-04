@@ -7,8 +7,8 @@ export function ProductsHeader() {
 
   return (
     <div className="text-left mb-16 sm:mb-20">
-      <h1 className="heading-xl text-black mb-3">{t.products.title.line1}</h1>
-      <h2 className="heading-lg text-black">{t.products.title.line2}</h2>
+      <h1 className="text-black mb-3">{t.products.title.line1}</h1>
+      <h2 className="text-black">{t.products.title.line2}</h2>
     </div>
   );
 }
