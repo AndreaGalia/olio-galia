@@ -111,6 +111,7 @@ export async function POST(request: NextRequest) {
       weight,
       color,
       images,
+      media,
       nutritionalInfo,
       translations,
       slug,
@@ -167,9 +168,10 @@ export async function POST(request: NextRequest) {
             { status: 400 }
           );
         }
-        if (!v.images || v.images.length === 0) {
+        const variantMedia = v.media?.filter((m: any) => m.url?.trim()) || v.images || [];
+        if (variantMedia.length === 0) {
           return NextResponse.json(
-            { error: `Variante "${v.translations.it.name}": aggiungi almeno un'immagine` },
+            { error: `Variante "${v.translations.it.name}": aggiungi almeno un media` },
             { status: 400 }
           );
         }
@@ -248,6 +250,7 @@ export async function POST(request: NextRequest) {
       stockQuantity: 0,
       color: color || '',
       images: images || [],
+      media: media || undefined,
       nutritionalInfo: nutritionalInfo || {},
       isSubscribable: isSubscribable || false,
       stripeRecurringPriceIds: stripeRecurringPriceIds || undefined,

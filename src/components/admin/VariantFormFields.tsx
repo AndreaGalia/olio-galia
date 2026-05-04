@@ -1,3 +1,5 @@
+import type { MediaItem } from '@/types/products';
+
 interface VariantData {
   variantId: string;
   translations: {
@@ -10,7 +12,8 @@ interface VariantData {
   originalPrice?: string;
   inStock: boolean;
   stockQuantity: number;
-  images: string[];
+  images: string[]; // URL delle sole immagini — usato per Stripe, cart, thumbnail
+  media: MediaItem[]; // Media ordinato (immagini + video) — usato dalla gallery
   color?: string;
 }
 
@@ -47,6 +50,24 @@ export default function VariantFormFields({ variant, onChange }: VariantFormFiel
         ? { variantId: generateVariantId(value) }
         : {}),
     });
+  };
+
+  const updateMediaItem = (index: number, field: keyof MediaItem, value: string) => {
+    const newMedia = [...variant.media];
+    newMedia[index] = { ...newMedia[index], [field]: value };
+    const newImages = newMedia.filter(m => m.type === 'image').map(m => m.url).filter(u => u.trim());
+    onChange({ ...variant, media: newMedia, images: newImages });
+  };
+
+  const addMediaItem = (type: 'image' | 'video') => {
+    const newMedia = [...variant.media, { type, url: '' }];
+    onChange({ ...variant, media: newMedia });
+  };
+
+  const removeMediaItem = (index: number) => {
+    const newMedia = variant.media.filter((_, i) => i !== index);
+    const newImages = newMedia.filter(m => m.type === 'image').map(m => m.url).filter(u => u.trim());
+    onChange({ ...variant, media: newMedia.length > 0 ? newMedia : [{ type: 'image', url: '' }], images: newImages });
   };
 
   return (
@@ -198,29 +219,33 @@ export default function VariantFormFields({ variant, onChange }: VariantFormFiel
         />
       </div>
 
-      {/* Immagini */}
+      {/* Media Variante */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Immagini Variante *</label>
-        {variant.images.map((img, index) => (
-          <div key={index} className="flex gap-2 mb-2">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Media Variante *
+          <span className="text-xs text-nocciola ml-2">(immagini e video in ordine)</span>
+        </label>
+        {variant.media.map((item, index) => (
+          <div key={index} className="flex gap-2 mb-2 items-center">
+            <select
+              value={item.type}
+              onChange={(e) => updateMediaItem(index, 'type', e.target.value)}
+              className="px-2 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-purple-200 focus:border-purple-500 text-sm bg-white"
+            >
+              <option value="image">Immagine</option>
+              <option value="video">Video</option>
+            </select>
             <input
               type="text"
-              value={img}
-              onChange={(e) => {
-                const newImages = [...variant.images];
-                newImages[index] = e.target.value;
-                update('images', newImages);
-              }}
+              value={item.url}
+              onChange={(e) => updateMediaItem(index, 'url', e.target.value)}
               className="flex-1 px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-purple-200 focus:border-purple-500"
-              placeholder="URL immagine"
+              placeholder={item.type === 'video' ? 'URL video Cloudflare (.mp4)' : 'URL immagine'}
             />
-            {variant.images.length > 1 && (
+            {variant.media.length > 1 && (
               <button
                 type="button"
-                onClick={() => {
-                  const newImages = variant.images.filter((_, i) => i !== index);
-                  update('images', newImages);
-                }}
+                onClick={() => removeMediaItem(index)}
                 className="px-3 py-2 text-red-600 hover:text-red-800 text-sm"
               >
                 Rimuovi
@@ -228,13 +253,22 @@ export default function VariantFormFields({ variant, onChange }: VariantFormFiel
             )}
           </div>
         ))}
-        <button
-          type="button"
-          onClick={() => update('images', [...variant.images, ''])}
-          className="px-3 py-1.5 text-purple-700 hover:text-purple-900 text-sm"
-        >
-          + Aggiungi Immagine
-        </button>
+        <div className="flex gap-2 mt-1">
+          <button
+            type="button"
+            onClick={() => addMediaItem('image')}
+            className="px-3 py-1.5 text-purple-700 hover:text-purple-900 text-sm"
+          >
+            + Aggiungi Immagine
+          </button>
+          <button
+            type="button"
+            onClick={() => addMediaItem('video')}
+            className="px-3 py-1.5 text-purple-700 hover:text-purple-900 text-sm"
+          >
+            + Aggiungi Video
+          </button>
+        </div>
       </div>
     </div>
   );

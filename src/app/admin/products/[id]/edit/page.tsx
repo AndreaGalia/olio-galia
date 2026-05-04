@@ -8,7 +8,7 @@ import HTMLEditor from '@/components/admin/HTMLEditor';
 import VariantTabs from '@/components/admin/VariantTabs';
 import VariantFormFields from '@/components/admin/VariantFormFields';
 import type { VariantData } from '@/components/admin/VariantFormFields';
-import { ProductDocument, ProductTranslations } from '@/types/products';
+import { ProductDocument, ProductTranslations, MediaItem } from '@/types/products';
 import ProductStoryEditor from '@/components/admin/ProductStoryEditor';
 import type { ProductStory } from '@/types/productStory';
 
@@ -56,7 +56,8 @@ export default function EditProductPage() {
     originalPrice: undefined,
     inStock: false,
     stockQuantity: 0,
-    images: [''],
+    images: [],
+    media: [{ type: 'image', url: '' }],
     color: undefined,
   });
 
@@ -78,7 +79,9 @@ export default function EditProductPage() {
           setHasVariants(true);
           setVariants(data.variants.map((v: any) => ({
             ...v,
-            images: v.images?.length > 0 ? v.images : [''],
+            images: v.images?.length > 0 ? v.images : [],
+            // Se media è già salvato usalo, altrimenti converti le immagini esistenti
+            media: v.media?.length > 0 ? v.media : (v.images?.length > 0 ? v.images.map((url: string) => ({ type: 'image', url })) : [{ type: 'image', url: '' }]),
           })));
           setVariantLabelIt(data.variantLabel?.it || '');
           setVariantLabelEn(data.variantLabel?.en || '');
@@ -271,8 +274,8 @@ export default function EditProductPage() {
           if (!v.price || parseFloat(v.price) <= 0) {
             throw new Error(`Variante "${v.translations.it.name}": prezzo non valido`);
           }
-          if (v.images.filter(img => img.trim()).length === 0) {
-            throw new Error(`Variante "${v.translations.it.name}": aggiungi almeno un'immagine`);
+          if (v.media.filter(m => m.url.trim()).length === 0) {
+            throw new Error(`Variante "${v.translations.it.name}": aggiungi almeno un media`);
           }
         }
       }
@@ -297,7 +300,10 @@ export default function EditProductPage() {
           size: product.size,
           weight: product.weight || 0,
           color: product.color,
-          images: product.images.filter(img => img && img.trim() !== ''),
+          media: (product as any).media ? (product as any).media.filter((m: MediaItem) => m.url.trim() !== '') : undefined,
+          images: (product as any).media
+            ? (product as any).media.filter((m: MediaItem) => m.type === 'image' && m.url.trim()).map((m: MediaItem) => m.url)
+            : product.images.filter(img => img && img.trim() !== ''),
           nutritionalInfo: product.nutritionalInfo,
           customBadge: product.customBadge || undefined,
           translations: {
@@ -327,7 +333,8 @@ export default function EditProductPage() {
             variantLabel: { it: variantLabelIt, en: variantLabelEn },
             variants: variants.map(v => ({
               ...v,
-              images: v.images.filter(img => img.trim()),
+              media: v.media.filter((m: MediaItem) => m.url.trim()),
+              images: v.media.filter((m: MediaItem) => m.type === 'image' && m.url.trim()).map((m: MediaItem) => m.url),
             })),
           } : {
             hasVariants: false,
@@ -957,28 +964,50 @@ export default function EditProductPage() {
             })()}
           </section>
 
-          {/* Immagini */}
+          {/* Media (Immagini e Video) */}
           <section>
-            <h3 className="text-lg font-semibold text-olive mb-4">Immagini</h3>
-            {product.images.map((image, index) => (
-              <div key={index} className="flex gap-2 mb-2">
-                <input
-                  type="url"
-                  value={image}
+            <h3 className="text-lg font-semibold text-olive mb-1">Media</h3>
+            <p className="text-sm text-gray-500 mb-4">
+              Immagini e video in ordine. Puoi mescolarli liberamente — il gallery li mostra nella sequenza definita qui.
+              Per i video usa l&apos;URL diretto MP4 da Cloudflare Stream.
+            </p>
+            {((product as any).media as MediaItem[] | undefined ?? product.images.map(url => ({ type: 'image' as const, url }))).map((item: MediaItem, index: number) => (
+              <div key={index} className="flex gap-2 mb-2 items-center">
+                <select
+                  value={item.type}
                   onChange={(e) => {
-                    const newImages = [...product.images];
-                    newImages[index] = e.target.value;
-                    setProduct(prev => prev ? { ...prev, images: newImages } : null);
+                    const currentMedia: MediaItem[] = (product as any).media ?? product.images.map(url => ({ type: 'image' as const, url }));
+                    const newMedia = [...currentMedia];
+                    newMedia[index] = { ...newMedia[index], type: e.target.value as 'image' | 'video' };
+                    const newImages = newMedia.filter(m => m.type === 'image').map(m => m.url).filter(u => u.trim());
+                    setProduct(prev => prev ? { ...prev, media: newMedia, images: newImages } as any : null);
+                  }}
+                  className="px-2 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive text-sm bg-white"
+                >
+                  <option value="image">Immagine</option>
+                  <option value="video">Video</option>
+                </select>
+                <input
+                  type="text"
+                  value={item.url}
+                  onChange={(e) => {
+                    const currentMedia: MediaItem[] = (product as any).media ?? product.images.map(url => ({ type: 'image' as const, url }));
+                    const newMedia = [...currentMedia];
+                    newMedia[index] = { ...newMedia[index], url: e.target.value };
+                    const newImages = newMedia.filter(m => m.type === 'image').map(m => m.url).filter(u => u.trim());
+                    setProduct(prev => prev ? { ...prev, media: newMedia, images: newImages } as any : null);
                   }}
                   className="flex-1 px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
-                  placeholder="https://esempio.com/immagine.jpg"
+                  placeholder={item.type === 'video' ? 'URL video Cloudflare (.mp4)' : 'URL immagine'}
                 />
-                {product.images.length > 1 && (
+                {((product as any).media ?? product.images).length > 1 && (
                   <button
                     type="button"
                     onClick={() => {
-                      const newImages = product.images.filter((_, i) => i !== index);
-                      setProduct(prev => prev ? { ...prev, images: newImages.length > 0 ? newImages : [''] } : null);
+                      const currentMedia: MediaItem[] = (product as any).media ?? product.images.map(url => ({ type: 'image' as const, url }));
+                      const newMedia = currentMedia.filter((_, i) => i !== index);
+                      const newImages = newMedia.filter(m => m.type === 'image').map(m => m.url).filter(u => u.trim());
+                      setProduct(prev => prev ? { ...prev, media: newMedia.length > 0 ? newMedia : [{ type: 'image', url: '' }], images: newImages } as any : null);
                     }}
                     className="px-3 py-2 text-red-600 hover:text-red-800"
                   >
@@ -987,13 +1016,28 @@ export default function EditProductPage() {
                 )}
               </div>
             ))}
-            <button
-              type="button"
-              onClick={() => setProduct(prev => prev ? { ...prev, images: [...prev.images, ''] } : null)}
-              className="px-3 py-2 text-olive hover:text-salvia text-sm"
-            >
-              + Aggiungi Immagine
-            </button>
+            <div className="flex gap-3 mt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  const currentMedia: MediaItem[] = (product as any).media ?? product.images.map(url => ({ type: 'image' as const, url }));
+                  setProduct(prev => prev ? { ...prev, media: [...currentMedia, { type: 'image', url: '' }] } as any : null);
+                }}
+                className="px-3 py-2 text-olive hover:text-salvia text-sm"
+              >
+                + Aggiungi Immagine
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const currentMedia: MediaItem[] = (product as any).media ?? product.images.map(url => ({ type: 'image' as const, url }));
+                  setProduct(prev => prev ? { ...prev, media: [...currentMedia, { type: 'video', url: '' }] } as any : null);
+                }}
+                className="px-3 py-2 text-olive hover:text-salvia text-sm"
+              >
+                + Aggiungi Video
+              </button>
+            </div>
           </section>
 
           {/* Traduzioni Italiano */}

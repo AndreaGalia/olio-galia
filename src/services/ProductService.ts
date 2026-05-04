@@ -120,6 +120,7 @@ export class ProductService {
       ...translation,
       categories: normalizedCategories,
       images: product.images || [], // ✅ Preserva sempre le immagini dal documento prodotto
+      media: product.media || undefined, // Media ordinato (immagini + video)
       slug: product.slug[locale] || product.slug['it'],
       _id: undefined, // Rimuovi _id dalla response
       translations: undefined,

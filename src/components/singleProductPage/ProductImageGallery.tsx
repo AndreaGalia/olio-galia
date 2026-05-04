@@ -1,14 +1,15 @@
 'use client';
 import { useEffect, useState, useCallback } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
+import type { MediaItem } from '@/types/products';
 
 interface ProductImageGalleryProps {
-  images: string[];
+  media: MediaItem[];
   productName: string;
   isOutOfStock: boolean;
 }
 
-export default function ProductImageGallery({ images, productName, isOutOfStock }: ProductImageGalleryProps) {
+export default function ProductImageGallery({ media, productName, isOutOfStock }: ProductImageGalleryProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, dragFree: false });
   const [current, setCurrent] = useState(0);
 
@@ -23,17 +24,17 @@ export default function ProductImageGallery({ images, productName, isOutOfStock 
     return () => { emblaApi.off('select', onSelect); };
   }, [emblaApi, onSelect]);
 
-  // Reset on images change (variant change)
+  // Reset on media change (variant change)
   useEffect(() => {
     if (!emblaApi) return;
     emblaApi.scrollTo(0);
     setCurrent(0);
-  }, [images, emblaApi]);
+  }, [media, emblaApi]);
 
   const prev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const next = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
-  const hasMultiple = images.length > 1;
+  const hasMultiple = media.length > 1;
 
   return (
     <div className={`group relative w-full h-full overflow-hidden ${isOutOfStock ? 'grayscale' : ''}`}>
@@ -41,16 +42,30 @@ export default function ProductImageGallery({ images, productName, isOutOfStock 
       {/* Embla viewport */}
       <div ref={emblaRef} className="w-full h-full overflow-hidden cursor-grab active:cursor-grabbing">
         <div className="flex h-full">
-          {images.map((img, index) => (
+          {media.map((item, index) => (
             <div key={index} className="flex-[0_0_100%] h-full relative">
-              <img
-                src={img}
-                alt={`${productName}${hasMultiple ? ` — ${index + 1}` : ''}`}
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
-                  isOutOfStock ? 'opacity-60' : 'opacity-100'
-                }`}
-                draggable={false}
-              />
+              {item.type === 'video' ? (
+                <video
+                  src={item.url}
+                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+                    isOutOfStock ? 'opacity-60' : 'opacity-100'
+                  }`}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                />
+              ) : (
+                <img
+                  src={item.url}
+                  alt={`${productName}${hasMultiple ? ` — ${index + 1}` : ''}`}
+                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+                    isOutOfStock ? 'opacity-60' : 'opacity-100'
+                  }`}
+                  draggable={false}
+                />
+              )}
             </div>
           ))}
         </div>
@@ -70,7 +85,7 @@ export default function ProductImageGallery({ images, productName, isOutOfStock 
         <>
           <button
             onClick={prev}
-            aria-label="Immagine precedente"
+            aria-label="Media precedente"
             className="absolute left-5 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-7 h-7 text-black">
@@ -80,7 +95,7 @@ export default function ProductImageGallery({ images, productName, isOutOfStock 
 
           <button
             onClick={next}
-            aria-label="Immagine successiva"
+            aria-label="Media successivo"
             className="absolute right-5 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-7 h-7 text-black">
@@ -92,7 +107,7 @@ export default function ProductImageGallery({ images, productName, isOutOfStock 
           <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-black/10 pointer-events-none">
             <div
               className="h-full bg-black/35 transition-all duration-300 ease-out"
-              style={{ width: `${((current + 1) / images.length) * 100}%` }}
+              style={{ width: `${((current + 1) / media.length) * 100}%` }}
             />
           </div>
         </>

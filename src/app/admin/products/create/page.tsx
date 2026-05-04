@@ -7,7 +7,7 @@ import HTMLEditor from '@/components/admin/HTMLEditor';
 import VariantTabs from '@/components/admin/VariantTabs';
 import VariantFormFields from '@/components/admin/VariantFormFields';
 import type { VariantData } from '@/components/admin/VariantFormFields';
-import { ProductTranslations } from '@/types/products';
+import { ProductTranslations, MediaItem } from '@/types/products';
 import ProductStoryEditor from '@/components/admin/ProductStoryEditor';
 import type { ProductStory } from '@/types/productStory';
 
@@ -18,7 +18,8 @@ interface ProductFormData {
   size: string;
   weight: number; // Peso in grammi (usato per calcolo spedizione)
   color: string;
-  images: string[];
+  images: string[]; // derivato da media — per Stripe, thumbnail
+  media: MediaItem[]; // media ordinato (immagini + video)
   nutritionalInfo: Record<string, string>;
   customBadge?: string; // Badge personalizzato (es: "Campagna Olearia 2024")
   translations: {
@@ -72,7 +73,8 @@ export default function CreateProductPage() {
     originalPrice: undefined,
     inStock: false,
     stockQuantity: 0,
-    images: [''],
+    images: [],
+    media: [{ type: 'image', url: '' }],
     color: undefined,
   });
 
@@ -83,7 +85,8 @@ export default function CreateProductPage() {
     size: '',
     weight: 0, // Default: 0 grammi
     color: '',
-    images: [''],
+    images: [],
+    media: [{ type: 'image', url: '' }],
     nutritionalInfo: {},
     customBadge: '', // Badge personalizzato opzionale
     translations: {
@@ -300,8 +303,8 @@ export default function CreateProductPage() {
           if (!v.price || parseFloat(v.price) <= 0) {
             throw new Error(`Variante "${v.translations.it.name}": prezzo non valido`);
           }
-          if (v.images.filter(img => img.trim()).length === 0) {
-            throw new Error(`Variante "${v.translations.it.name}": aggiungi almeno un'immagine`);
+          if (v.media.filter(m => m.url.trim()).length === 0) {
+            throw new Error(`Variante "${v.translations.it.name}": aggiungi almeno un media`);
           }
         }
       }
@@ -343,14 +346,16 @@ export default function CreateProductPage() {
             tags: formData.translations.en.tags.filter(t => t.trim())
           }
         },
-        images: formData.images.filter(img => img.trim()),
+        media: formData.media.filter(m => m.url.trim()),
+        images: formData.media.filter(m => m.type === 'image' && m.url.trim()).map(m => m.url),
         // Varianti
         ...(hasVariants ? {
           hasVariants: true,
           variantLabel: { it: variantLabelIt, en: variantLabelEn },
           variants: variants.map(v => ({
             ...v,
-            images: v.images.filter(img => img.trim()),
+            media: v.media.filter(m => m.url.trim()),
+            images: v.media.filter(m => m.type === 'image' && m.url.trim()).map(m => m.url),
           })),
         } : {}),
         // Subscription
@@ -883,28 +888,47 @@ export default function CreateProductPage() {
             })()}
           </section>
 
-          {/* Immagini */}
+          {/* Media (Immagini e Video) */}
           <section>
-            <h3 className="text-lg font-semibold text-olive mb-4">Immagini</h3>
-            {formData.images.map((image, index) => (
-              <div key={index} className="flex gap-2 mb-2">
+            <h3 className="text-lg font-semibold text-olive mb-1">Media</h3>
+            <p className="text-sm text-gray-500 mb-4">
+              Immagini e video in ordine. Puoi mescolarli liberamente — il gallery li mostra nella sequenza definita qui.
+              Per i video usa l&apos;URL diretto MP4 da Cloudflare Stream.
+            </p>
+            {formData.media.map((item, index) => (
+              <div key={index} className="flex gap-2 mb-2 items-center">
+                <select
+                  value={item.type}
+                  onChange={(e) => {
+                    const newMedia = [...formData.media];
+                    newMedia[index] = { ...newMedia[index], type: e.target.value as 'image' | 'video' };
+                    const newImages = newMedia.filter(m => m.type === 'image').map(m => m.url).filter(u => u.trim());
+                    setFormData(prev => ({ ...prev, media: newMedia, images: newImages }));
+                  }}
+                  className="px-2 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive text-sm bg-white"
+                >
+                  <option value="image">Immagine</option>
+                  <option value="video">Video</option>
+                </select>
                 <input
                   type="text"
-                  value={image}
+                  value={item.url}
                   onChange={(e) => {
-                    const newImages = [...formData.images];
-                    newImages[index] = e.target.value;
-                    setFormData(prev => ({ ...prev, images: newImages }));
+                    const newMedia = [...formData.media];
+                    newMedia[index] = { ...newMedia[index], url: e.target.value };
+                    const newImages = newMedia.filter(m => m.type === 'image').map(m => m.url).filter(u => u.trim());
+                    setFormData(prev => ({ ...prev, media: newMedia, images: newImages }));
                   }}
                   className="flex-1 px-3 py-2 border border-olive/30 rounded-lg focus:ring-2 focus:ring-olive/20 focus:border-olive"
-                  placeholder="URL immagine o percorso"
+                  placeholder={item.type === 'video' ? 'URL video Cloudflare (.mp4)' : 'URL immagine'}
                 />
-                {formData.images.length > 1 && (
+                {formData.media.length > 1 && (
                   <button
                     type="button"
                     onClick={() => {
-                      const newImages = formData.images.filter((_, i) => i !== index);
-                      setFormData(prev => ({ ...prev, images: newImages }));
+                      const newMedia = formData.media.filter((_, i) => i !== index);
+                      const newImages = newMedia.filter(m => m.type === 'image').map(m => m.url).filter(u => u.trim());
+                      setFormData(prev => ({ ...prev, media: newMedia.length > 0 ? newMedia : [{ type: 'image', url: '' }], images: newImages }));
                     }}
                     className="px-3 py-2 text-red-600 hover:text-red-800"
                   >
@@ -913,13 +937,22 @@ export default function CreateProductPage() {
                 )}
               </div>
             ))}
-            <button
-              type="button"
-              onClick={() => setFormData(prev => ({ ...prev, images: [...prev.images, ''] }))}
-              className="px-3 py-2 text-olive hover:text-salvia text-sm"
-            >
-              + Aggiungi Immagine
-            </button>
+            <div className="flex gap-3 mt-1">
+              <button
+                type="button"
+                onClick={() => setFormData(prev => ({ ...prev, media: [...prev.media, { type: 'image', url: '' }] }))}
+                className="px-3 py-2 text-olive hover:text-salvia text-sm"
+              >
+                + Aggiungi Immagine
+              </button>
+              <button
+                type="button"
+                onClick={() => setFormData(prev => ({ ...prev, media: [...prev.media, { type: 'video', url: '' }] }))}
+                className="px-3 py-2 text-olive hover:text-salvia text-sm"
+              >
+                + Aggiungi Video
+              </button>
+            </div>
           </section>
 
           {/* Traduzioni Italiano */}

@@ -38,7 +38,7 @@ export default function SubscribePage({ params }: SubscribePageProps) {
         {/* Left: sticky image */}
         <div className="h-[120vw] sm:h-[85vw] lg:sticky lg:top-0 lg:h-screen">
           <ProductImageGallery
-            images={product.images}
+            media={product.media?.length ? product.media : (product.images || []).map(url => ({ type: 'image' as const, url }))}
             productName={product.name}
             isOutOfStock={false}
           />

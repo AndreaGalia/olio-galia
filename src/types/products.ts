@@ -1,5 +1,10 @@
 import type { ProductStory } from './productStory';
 
+export interface MediaItem {
+  type: 'image' | 'video';
+  url: string;
+}
+
 export interface ProductTranslations {
   name: string;
   description: string;
@@ -42,7 +47,8 @@ export interface ProductVariant {
   originalPrice?: string;
   inStock: boolean;
   stockQuantity: number;
-  images: string[];
+  images: string[]; // URL delle sole immagini — usato per thumbnail, Stripe, cart
+  media?: MediaItem[]; // Media ordinato (immagini + video) — usato dalla gallery
   color?: string;
 }
 
@@ -59,7 +65,8 @@ export interface BaseProduct {
   inStock: boolean;
   stockQuantity: number;
   color: string;
-  images: string[];
+  images: string[]; // URL delle sole immagini — usato per thumbnail, Stripe, cart
+  media?: MediaItem[]; // Media ordinato (immagini + video) — usato dalla gallery
   nutritionalInfo?: Record<string, string>;
   customBadge?: string; // Badge personalizzato opzionale (es: "NOVITÀ", "BIO", "LIMITED")
   isSubscribable?: boolean; // Abilita abbonamento ricorrente

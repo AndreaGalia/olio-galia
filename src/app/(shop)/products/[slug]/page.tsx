@@ -13,7 +13,7 @@ import RelatedProductsSection from "@/components/singleProductPage/RelatedProduc
 import CustomHTMLRenderer from "@/components/singleProductPage/CustomHTMLRenderer";
 import ProductReviews from "@/components/reviews/ProductReviews";
 import { StructuredData, generateProductSchema, generateBreadcrumbSchema } from '@/lib/seo/structured-data';
-import type { ProductVariant } from '@/types/products';
+import type { ProductVariant, MediaItem } from '@/types/products';
 
 
 interface ProductDetailPageProps {
@@ -27,13 +27,15 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
   const { products: allProducts } = useProducts();
   const { t } = useT();
 
-  const [selectedVariantImages, setSelectedVariantImages] = useState<string[] | null>(null);
+  const [selectedVariantMedia, setSelectedVariantMedia] = useState<MediaItem[] | null>(null);
 
   const handleVariantChange = useCallback((variant: ProductVariant | null) => {
-    if (variant && variant.images && variant.images.length > 0) {
-      setSelectedVariantImages(variant.images);
+    if (variant && variant.media && variant.media.length > 0) {
+      setSelectedVariantMedia(variant.media);
+    } else if (variant && variant.images && variant.images.length > 0) {
+      setSelectedVariantMedia(variant.images.map(url => ({ type: 'image' as const, url })));
     } else {
-      setSelectedVariantImages(null);
+      setSelectedVariantMedia(null);
     }
   }, []);
 
@@ -54,7 +56,10 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
     { name: product.name, url: `/products/${slug}` }
   ], 'it');
 
-  const displayImages = selectedVariantImages || product.images;
+  const productMedia: MediaItem[] = product.media?.length
+    ? product.media
+    : (product.images || []).map(url => ({ type: 'image' as const, url }));
+  const displayMedia = selectedVariantMedia || productMedia;
 
   return (
     <div className="min-h-screen bg-sabbia-chiaro">
@@ -67,7 +72,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
         {/* Left: Image slider — sticky, fills full viewport height on desktop */}
         <div className="aspect-[3/4] lg:aspect-auto lg:sticky lg:top-0 lg:h-screen">
           <ProductImageGallery
-            images={displayImages}
+            media={displayMedia}
             productName={product.name}
             isOutOfStock={isOutOfStock}
           />
