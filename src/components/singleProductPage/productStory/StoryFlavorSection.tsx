@@ -44,7 +44,7 @@ export default function StoryFlavorSection({
                     <img
                       src={c.image}
                       alt={c.name}
-                      className="w-full h-full object-cover grayscale"
+                      className="w-full h-full object-cover "
                     />
                   </div>
                 )}
@@ -68,7 +68,7 @@ export default function StoryFlavorSection({
                     <img
                       src={note.image}
                       alt={note.label}
-                      className="w-full h-full object-cover grayscale"
+                      className="w-full h-full object-cover "
                     />
                   </div>
                 ) : (
