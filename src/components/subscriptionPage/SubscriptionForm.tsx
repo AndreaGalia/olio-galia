@@ -264,12 +264,12 @@ export default function SubscriptionForm({ product }: SubscriptionFormProps) {
       <button
         onClick={handleSubmit}
         disabled={!selectedZone || !selectedInterval || loading}
-        className={`w-full py-4 font-serif termina-11 tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer disabled:cursor-not-allowed ${
+        className={`w-full py-4 font-serif termina-11 tracking-[3.4px] uppercase transition-all duration-200 cursor-pointer disabled:cursor-not-allowed border ${
           loading
-            ? 'bg-black/20 text-black/40'
+            ? 'bg-black/20 text-black/40 border-olive/30'
             : !selectedZone || !selectedInterval
-              ? 'bg-sabbia/40 text-black/30'
-              : 'bg-sabbia text-black hover:bg-olive hover:text-beige'
+              ? 'bg-sabbia/40 text-black/30 border-olive/30'
+              : 'bg-olive text-beige hover:bg-sabbia hover:text-olive border-olive'
         }`}
       >
         {loading
