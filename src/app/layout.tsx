@@ -66,7 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ShippingConfigProvider>
             <CartProvider>
               <Navbar />
-              <main className="pt-12 sm:pt-[70px]">{children}</main>
+              <main className="pt-12 sm:pt-[4.375rem]">{children}</main>
               <Footer />
               <NewsletterPopup />
             </CartProvider>

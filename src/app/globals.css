@@ -1,12 +1,39 @@
 @import "tailwindcss";
 
 /* ============================================================
-   UI SCALE — modifica --ui-scale per scalare l'intera UI.
-   Tutti i valori rem (Tailwind + globals) scalano di conseguenza.
-   Esempi: 1.0 = 100% | 0.9 = 90% | 0.85 = 85%
+   UI SCALE — scala automatica in base alla risoluzione fisica.
+   Usa min-width + min-resolution per gestire il DPI scaling OS.
+   Formula: physical_px = css_px × DPR
    ============================================================ */
+
+/* Mobile / schermi piccoli */
 :root {
-  --ui-scale: 0.95;
+  --ui-scale: 1.0;
+}
+
+/* ~1280px fisici — 100% DPI */
+@media (min-width: 1280px) {
+  :root { --ui-scale: 0.90; }
+}
+
+/* ~1536px fisici — 100% DPI */
+@media (min-width: 1536px) {
+  :root { --ui-scale: 0.85; }
+}
+
+/* ~1920px fisici — 100% DPI: viewport = 1920px */
+@media (min-width: 1920px) {
+  :root { --ui-scale: 0.75; }
+}
+
+/* ~1920px fisici — 125% DPI: DPR=1.25, viewport = 1536px */
+@media (min-width: 1536px) and (min-resolution: 1.25dppx) and (max-resolution: 1.49dppx) {
+  :root { --ui-scale: 0.75; }
+}
+
+/* ~1920px fisici — 150% DPI: DPR=1.5, viewport = 1280px */
+@media (min-width: 1280px) and (min-resolution: 1.5dppx) and (max-resolution: 1.99dppx) {
+  :root { --ui-scale: 0.75; }
 }
 
 html {
