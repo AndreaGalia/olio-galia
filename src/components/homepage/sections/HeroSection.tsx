@@ -19,7 +19,7 @@ export default function HeroSection() {
       <VideoBackground videoUrl={process.env.NEXT_PUBLIC_HERO_VIDEO_URL || "/videos/uliveti_sicilia.mp4"} />
 
       {/* Main Content - Centrato */}
-      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6">
+      <div className="relative z-10 w-full max-w-[var(--container-wide)] mx-auto px-4 sm:px-6">
         <div className="flex flex-col items-center justify-center min-h-screen">
 
           {/* Hero Content (Badge + Title + Description + Button) */}

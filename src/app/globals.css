@@ -40,6 +40,17 @@ html {
   font-size: calc(16px * var(--ui-scale));
 }
 
+/* ============================================================
+   CONTAINER WIDTH — modifica qui per cambiare la larghezza
+   massima di tutti i contenitori della pagina.
+   --container-wide  : sezioni prodotti, hero, grid
+   --container-narrow: sezioni testo (FAQ, ecc.)
+   ============================================================ */
+:root {
+  --container-wide: 1100px;
+  --container-narrow: 780px;
+}
+
 @theme {
   --color-olive: #577657;      /* olive */
   --color-salvia: #577657;     /* olive (stessa palette) */

@@ -85,7 +85,7 @@ export default function FAQSection() {
 
   return (
     <section className="relative bg-homepage-bg py-16 sm:py-20 lg:py-24 overflow-hidden">
-      <div className="container mx-auto px-4 sm:px-6 max-w-4xl relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 max-w-[var(--container-narrow)] relative z-10">
         <FAQHeader
           title={t.faq.title}
           description={t.faq.description}

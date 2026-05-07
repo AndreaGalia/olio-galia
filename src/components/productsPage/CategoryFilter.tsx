@@ -8,7 +8,7 @@ interface CategoryFilterProps {
 
 export default function CategoryFilter({ categories, selectedCategory, onCategoryChange }: CategoryFilterProps) {
   return (
-    <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
+    <div className="container mx-auto px-4 sm:px-6 max-w-[var(--container-wide)]">
       <div className="flex justify-between overflow-x-auto mb-16 sm:mb-20 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {categories.map((category) => (
           <button

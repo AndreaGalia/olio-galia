@@ -32,7 +32,7 @@ export default function ProductsSection() {
       <section className="relative bg-homepage-bg py-20 sm:py-24 lg:py-32 overflow-hidden">
         <ProductsBackground />
 
-        <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 max-w-[var(--container-wide)] relative z-10">
           <ProductsHeader />
 
           <ProductsSlider

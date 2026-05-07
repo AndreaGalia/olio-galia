@@ -12,7 +12,7 @@ export default function ProductsGrid({ products, onAddToCart }: ProductsGridProp
 
   return (
     <section className="pb-10 sm:pb-12 lg:pb-16">
-      <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
+      <div className="container mx-auto px-4 sm:px-6 max-w-[var(--container-wide)]">
         {products.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-black text-lg">{t.productsPage.noProducts}</p>

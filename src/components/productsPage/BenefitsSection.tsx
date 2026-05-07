@@ -13,7 +13,7 @@ export default function BenefitsSection() {
 
   return (
     <section className="py-10 sm:py-12 bg-white/50">
-      <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
+      <div className="container mx-auto px-4 sm:px-6 max-w-[var(--container-wide)]">
         <div className={`text-center mb-12 ${styles.animateFadeInSlow}`}>
           <h2 className="text-3xl sm:text-4xl font-serif text-black mb-4">
             {t.productsPage.benefits.title}
