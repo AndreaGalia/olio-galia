@@ -129,14 +129,14 @@ export default function ProductInfoSection({
 
       {/* 5 — Short italic tagline (details field) */}
       {product.details && (
-        <p className="garamond-13 border-t border-black/8 pt-5">
+        <p className="garamond-13 border-t border-black/8 pt-5 whitespace-pre-wrap">
           {product.details}
         </p>
       )}
 
       {/* 6 — Long description */}
       {product.longDescription && (
-        <p className="garamond-13">
+        <p className="garamond-13 whitespace-pre-wrap">
           {product.longDescription}
         </p>
       )}
