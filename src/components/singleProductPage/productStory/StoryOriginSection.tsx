@@ -60,7 +60,7 @@ export default function StoryOriginSection({
         <div className={`grid gap-px bg-black/10 ${factsColClass}`}>
           {facts.map((f, i) => (
             <div key={i} className="bg-beige/50 p-5">
-              <p className="text-[10px] tracking-[0.2em] uppercase text-black mb-1">{f.label}</p>
+              <p className="font-serif termina-8 tracking-[0.2em] uppercase text-black mb-1">{f.label}</p>
               <p className="text-sm text-black">{f.value}</p>
             </div>
           ))}
@@ -77,11 +77,11 @@ export default function StoryOriginSection({
       {/* Production steps */}
       {steps && steps.length > 0 && (
         <div className="space-y-4">
-          <p className="text-[11px] tracking-[0.2em] uppercase text-black">{st.process}</p>
+          <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black">{st.process}</p>
           <div className={`grid gap-px bg-black/10 ${stepsColClass}`}>
             {steps.map((step, i) => (
               <div key={i} className="bg-beige/50 p-5 space-y-1">
-                <p className="text-[10px] tracking-[0.2em] uppercase text-black">{step.label}</p>
+                <p className="font-serif termina-8 tracking-[0.2em] uppercase text-black">{step.label}</p>
                 <p className="text-sm text-black">{step.value}</p>
               </div>
             ))}

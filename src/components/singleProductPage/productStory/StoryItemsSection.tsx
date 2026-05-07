@@ -40,7 +40,7 @@ export default function StoryItemsSection({
   return (
     <div className="space-y-6">
       {badge && (
-        <p className="text-[11px] tracking-[0.2em] uppercase text-black pb-4 border-b border-black/10">
+        <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black pb-4 border-b border-black/10">
           {badge}
         </p>
       )}
@@ -57,7 +57,7 @@ export default function StoryItemsSection({
                   <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                 </div>
               )}
-              <p className="text-[11px] tracking-[0.2em] uppercase text-black">{item.name}</p>
+              <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black">{item.name}</p>
               {item.action && (
                 <p className="text-xs text-olive/80 tracking-wide">{item.action}</p>
               )}
@@ -69,11 +69,11 @@ export default function StoryItemsSection({
         <div className="divide-y divide-black/5">
           {items.map((item, i) => (
             <div key={i} className="flex gap-6 py-5">
-              <span className="text-[11px] tracking-[0.2em] tabular-nums text-black pt-0.5 select-none shrink-0">
+              <span className="font-serif termina-11 tracking-[0.2em] tabular-nums text-black pt-0.5 select-none shrink-0">
                 {String(i + 1).padStart(2, '0')}
               </span>
               <div className="space-y-1">
-                <p className="text-[11px] tracking-[0.2em] uppercase text-black">{item.name}</p>
+                <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black">{item.name}</p>
                 {item.action && (
                   <p className="text-xs text-olive/80 tracking-wide">{item.action}</p>
                 )}
