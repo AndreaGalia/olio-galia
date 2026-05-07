@@ -56,8 +56,9 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="it">
+    <html lang="it" translate="no">
       <head>
+        <meta name="google" content="notranslate" />
         <meta name="format-detection" content="telephone=no" />
         <link rel="stylesheet" href="https://use.typekit.net/mew4ocs.css" />
       </head>
