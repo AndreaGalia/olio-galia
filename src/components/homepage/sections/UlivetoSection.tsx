@@ -4,14 +4,14 @@ import Image from 'next/image';
 
 export function UlivetoSection() {
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative w-full h-[60vh] flex items-center justify-center overflow-hidden">
       {/* Image Background */}
       <div className="absolute inset-0 w-full h-full">
         <Image
           src={process.env.NEXT_PUBLIC_ULIVETO_IMAGE_URL || "/uliveto.JPG"}
           alt="Uliveto Olio Galia"
           fill
-          className="object-cover"
+          className="object-cover object-[center_75%]"
           priority={false}
           quality={90}
         />
