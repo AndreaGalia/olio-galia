@@ -3,9 +3,10 @@ import { getPriceRange } from "@/utils/variantHelpers";
 
 interface HomepageProductCardFooterProps {
   product: Product;
+  isWaitingList?: boolean;
 }
 
-export default function HomepageProductCardFooter({ product }: HomepageProductCardFooterProps) {
+export default function HomepageProductCardFooter({ product, isWaitingList }: HomepageProductCardFooterProps) {
   const priceRange = getPriceRange(product);
 
   const priceDisplay = priceRange.hasRange
@@ -19,9 +20,12 @@ export default function HomepageProductCardFooter({ product }: HomepageProductCa
         <span className="font-serif termina-11 tracking-[1px] sm:tracking-[3.4px] uppercase text-black line-clamp-2 sm:whitespace-nowrap sm:truncate">
           {product.name}
         </span>
-        <span className="font-serif termina-11 tracking-[2.5px] sm:tracking-[3.4px] uppercase text-black whitespace-nowrap sm:flex-shrink-0">
-          {priceDisplay}
-        </span>
+        {/* Prezzo nascosto per prodotti waiting list */}
+        {!isWaitingList && (
+          <span className="font-serif termina-11 tracking-[2.5px] sm:tracking-[3.4px] uppercase text-black whitespace-nowrap sm:flex-shrink-0">
+            {priceDisplay}
+          </span>
+        )}
       </div>
 
       {/* Linea separatore */}

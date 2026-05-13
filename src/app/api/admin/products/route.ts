@@ -119,6 +119,7 @@ export async function POST(request: NextRequest) {
       stripeProductId,
       stripePriceId,
       featured,
+      isWaitingList,
       isSubscribable,
       stripeRecurringPriceIds,
       subscriptionPrices: rawSubscriptionPrices,
@@ -127,8 +128,8 @@ export async function POST(request: NextRequest) {
       variantLabel,
     } = data;
 
-    // Validazione dei dati richiesti
-    if (!categories?.length || !price || !size || !translations?.it?.name || !translations?.en?.name) {
+    // Validazione dei dati richiesti (price opzionale per prodotti waiting list)
+    if (!categories?.length || (!isWaitingList && !price) || !size || !translations?.it?.name || !translations?.en?.name) {
       return NextResponse.json(
         { error: 'Dati mancanti per la creazione del prodotto' },
         { status: 400 }
@@ -252,6 +253,7 @@ export async function POST(request: NextRequest) {
       images: images || [],
       media: media || undefined,
       nutritionalInfo: nutritionalInfo || {},
+      isWaitingList: isWaitingList || false,
       isSubscribable: isSubscribable || false,
       stripeRecurringPriceIds: stripeRecurringPriceIds || undefined,
       subscriptionPrices: validatedSubscriptionPrices || undefined,

@@ -8,6 +8,7 @@ import { useLocale } from '@/contexts/LocaleContext';
 import VariantSelector from './VariantSelector';
 import ProductAccordion from './ProductAccordion';
 import ProductStory from './productStory/ProductStory';
+import WaitingListSection from './WaitingListSection';
 import { buildCartItemId, getVariantOrProduct } from '@/utils/variantHelpers';
 import type { Product, ProductVariant } from '@/types/products';
 import type { RecurringPriceMap } from '@/types/subscription';
@@ -114,18 +115,20 @@ export default function ProductInfoSection({
         </button>
       )}
 
-      {/* 4 — Price */}
-      <div className={`flex items-baseline gap-3 ${effectiveOutOfStock ? 'opacity-60' : ''}`}>
-        {resolved.originalPrice && resolved.originalPrice !== 'null' && (
-          <span className="font-serif termina-13 text-black line-through">€{resolved.originalPrice}</span>
-        )}
-        <span className="font-serif termina-22 text-black tracking-wide">€{resolved.price}</span>
-        {effectiveOutOfStock && (
-          <span className="text-xs tracking-widest uppercase text-red-500 ml-1">
-            {t.productDetailPage.stockNotAvaible}
-          </span>
-        )}
-      </div>
+      {/* 4 — Price (nascosto per prodotti waiting list) */}
+      {!(product as any).isWaitingList && (
+        <div className={`flex items-baseline gap-3 ${effectiveOutOfStock ? 'opacity-60' : ''}`}>
+          {resolved.originalPrice && resolved.originalPrice !== 'null' && (
+            <span className="font-serif termina-13 text-black line-through">€{resolved.originalPrice}</span>
+          )}
+          <span className="font-serif termina-22 text-black tracking-wide">€{resolved.price}</span>
+          {effectiveOutOfStock && (
+            <span className="text-xs tracking-widest uppercase text-red-500 ml-1">
+              {t.productDetailPage.stockNotAvaible}
+            </span>
+          )}
+        </div>
+      )}
 
       {/* 5 — Short italic tagline (details field) */}
       {product.details && (
@@ -154,53 +157,60 @@ export default function ProductInfoSection({
         </div>
       )}
 
-      {/* 8 — Quantity */}
-      <div className={`flex items-center gap-4 border-t border-black/8 pt-5 ${effectiveOutOfStock ? 'opacity-40 pointer-events-none' : ''}`}>
-        <span className="font-serif termina-11 tracking-[0.15em] uppercase text-black">
-          {t.productDetailPage.product.quantity}
-        </span>
-        <div className="flex items-center border border-black/15">
+      {/* 8–10 — Waiting list OR acquisto normale */}
+      {(product as any).isWaitingList ? (
+        <WaitingListSection productId={product.id} />
+      ) : (
+        <>
+          {/* 8 — Quantity */}
+          <div className={`flex items-center gap-4 border-t border-black/8 pt-5 ${effectiveOutOfStock ? 'opacity-40 pointer-events-none' : ''}`}>
+            <span className="font-serif termina-11 tracking-[0.15em] uppercase text-black">
+              {t.productDetailPage.product.quantity}
+            </span>
+            <div className="flex items-center border border-black/15">
+              <button
+                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                className="w-9 h-9 flex items-center justify-center text-sm hover:bg-black/5 transition-colors cursor-pointer select-none"
+              >
+                −
+              </button>
+              <span className="w-9 h-9 flex items-center justify-center font-serif termina-13 border-x border-black/10">
+                {quantity}
+              </span>
+              <button
+                onClick={() => setQuantity(Math.min(resolved.stockQuantity, quantity + 1))}
+                className="w-9 h-9 flex items-center justify-center text-sm hover:bg-black/5 transition-colors cursor-pointer select-none"
+                disabled={quantity >= resolved.stockQuantity}
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          {/* 9 — Add to cart */}
           <button
-            onClick={() => setQuantity(Math.max(1, quantity - 1))}
-            className="w-9 h-9 flex items-center justify-center text-sm hover:bg-black/5 transition-colors cursor-pointer select-none"
+            onClick={handleAddToCart}
+            disabled={effectiveOutOfStock || isAdded}
+            className={`w-full py-4 font-serif termina-11 tracking-[3.4px] uppercase transition-all duration-200 cursor-pointer disabled:cursor-not-allowed border border-olive ${
+              isAdded
+                ? 'bg-sabbia text-olive'
+                : effectiveOutOfStock
+                  ? 'bg-sabbia/40 text-black/30 border-olive/30'
+                  : 'bg-olive text-beige hover:bg-sabbia hover:text-olive'
+            }`}
           >
-            −
+            {isAdded
+              ? (locale === 'it' ? 'Aggiunto al carrello ✓' : 'Added to cart ✓')
+              : (locale === 'it' ? 'Aggiungi al carrello' : 'Add to cart')}
           </button>
-          <span className="w-9 h-9 flex items-center justify-center font-serif termina-13 border-x border-black/10">
-            {quantity}
-          </span>
-          <button
-            onClick={() => setQuantity(Math.min(resolved.stockQuantity, quantity + 1))}
-            className="w-9 h-9 flex items-center justify-center text-sm hover:bg-black/5 transition-colors cursor-pointer select-none"
-            disabled={quantity >= resolved.stockQuantity}
-          >
-            +
-          </button>
-        </div>
-      </div>
 
-      {/* 9 — Add to cart */}
-      <button
-        onClick={handleAddToCart}
-        disabled={effectiveOutOfStock || isAdded}
-        className={`w-full py-4 font-serif termina-11 tracking-[3.4px] uppercase transition-all duration-200 cursor-pointer disabled:cursor-not-allowed border border-olive ${
-          isAdded
-            ? 'bg-sabbia text-olive'
-            : effectiveOutOfStock
-              ? 'bg-sabbia/40 text-black/30 border-olive/30'
-              : 'bg-olive text-beige hover:bg-sabbia hover:text-olive'
-        }`}
-      >
-        {isAdded
-          ? (locale === 'it' ? 'Aggiunto al carrello ✓' : 'Added to cart ✓')
-          : (locale === 'it' ? 'Aggiungi al carrello' : 'Add to cart')}
-      </button>
+          {/* 10 — Bulk proposal */}
+          <BulkProposalSection productName={product.name} />
+        </>
+      )}
 
-      {/* 10 — Bulk proposal */}
-      <BulkProposalSection productName={product.name} />
-
-      {/* 11 — Subscribe CTA */}
-      {(product as Product & { isSubscribable?: boolean; stripeRecurringPriceIds?: RecurringPriceMap }).isSubscribable && (
+      {/* 11 — Subscribe CTA (nascosto per prodotti waiting list) */}
+      {!(product as any).isWaitingList && (product as Product & { isSubscribable?: boolean; stripeRecurringPriceIds?: RecurringPriceMap }).isSubscribable && (
         <div className="border-t border-black/8 pt-5">
           <div className="flex items-start gap-3">
             <svg className="w-4 h-4 text-black/40 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">

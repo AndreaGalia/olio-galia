@@ -72,6 +72,7 @@ export interface BaseProduct {
   isSubscribable?: boolean; // Abilita abbonamento ricorrente
   stripeRecurringPriceIds?: RecurringPriceMap; // Price ID ricorrenti per zona × intervallo (legacy)
   subscriptionPrices?: QuantityPriceMap; // Prezzi abbonamento per quantità × zona × intervallo (nuovo)
+  isWaitingList?: boolean; // Se true: prodotto in lista d'attesa — non acquistabile, mostra form email "Avvisami"
   variants?: ProductVariant[]; // Varianti del prodotto (es: fragranze diverse)
   variantLabel?: { it: string; en: string }; // Label per il selettore varianti (es: "Fragranza")
 }

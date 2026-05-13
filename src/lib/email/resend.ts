@@ -1,5 +1,6 @@
 // lib/email/resend.ts
 import { EmailOrderData, ShippingNotificationData, DeliveryNotificationData, NewsletterWelcomeData, ReviewRequestData, QuoteEmailData } from '@/types/email';
+import { createWaitingListNotificationHTML, getWaitingListEmailSubject } from './waiting-list-template';
 import { Resend } from 'resend';
 import { createOrderConfirmationHTML, createShippingNotificationHTML } from './templates';
 import { createDeliveryNotificationHTML } from './delivery-template';
@@ -661,6 +662,39 @@ export class EmailService {
       return true;
     } catch (error) {
       console.error('Error sending portal access magic link:', error);
+      return false;
+    }
+  }
+
+  static async sendWaitingListNotification(
+    email: string,
+    productName: string,
+    productUrl: string,
+    locale: 'it' | 'en'
+  ): Promise<boolean> {
+    try {
+      const template = await this.getTemplate(
+        'waiting_list_notification',
+        locale,
+        createWaitingListNotificationHTML(locale),
+        getWaitingListEmailSubject(locale)
+      );
+
+      const templateData = { productName, productUrl };
+      const htmlContent = this.replaceVariables(template.htmlBody, templateData);
+      const subject = this.replaceVariables(template.subject, templateData);
+
+      const result = await resend.emails.send({
+        from: FROM_EMAIL,
+        to: [email],
+        subject,
+        html: htmlContent,
+        headers: { 'X-Email-Type': 'waiting-list-notification' },
+      });
+      if (result.error) return false;
+      return true;
+    } catch (error) {
+      console.error('Error sending waiting list notification:', error);
       return false;
     }
   }

@@ -523,6 +523,28 @@
       "climate": "Climate"
     }
   },
+  "waitingList": {
+    "badge": "Coming Soon",
+    "form": {
+      "title": "Notify me when available",
+      "description": "Enter your email and we'll let you know as soon as this product is available.",
+      "emailPlaceholder": "Your email",
+      "submitButton": "Notify me",
+      "submitting": "Sending...",
+      "successTitle": "You're on the list",
+      "successMessage": "We'll send you an email as soon as the product is available.",
+      "alreadySubscribed": "This email is already on the waiting list for this product.",
+      "error": "An error occurred. Please try again later.",
+      "invalidEmail": "Please enter a valid email address."
+    },
+    "email": {
+      "subject": "{{productName}} is now available — Olio Galia",
+      "title": "The product you were waiting for is here!",
+      "intro": "Hello! You're receiving this because you joined the waiting list for",
+      "cta": "Shop now",
+      "footer": "You received this email because you requested to be notified about this product's availability."
+    }
+  },
   "bulkProposal": {
     "section": {
       "title": "Bulk purchase?",

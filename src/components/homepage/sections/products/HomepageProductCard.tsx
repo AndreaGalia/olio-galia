@@ -17,6 +17,8 @@ export default function HomepageProductCard({ product, onAddToCart, compact = fa
   const { t } = useT();
   const [isAdding, setIsAdding] = useState(false);
 
+  const isWaitingList = !!(product as any).isWaitingList;
+
   const isOutOfStock = product.variants && product.variants.length > 0
     ? !product.variants.some(v => v.inStock && v.stockQuantity > 0)
     : !product.inStock || product.stockQuantity === 0;
@@ -34,12 +36,12 @@ export default function HomepageProductCard({ product, onAddToCart, compact = fa
     <div className="group">
       {/* Immagine + info → navigano alla pagina prodotto */}
       <Link href={`/products/${product.slug}`} className="block">
-        <HomepageProductCardImage product={product} isOutOfStock={isOutOfStock} />
-        <HomepageProductCardFooter product={product} />
+        <HomepageProductCardImage product={product} isOutOfStock={isOutOfStock} isWaitingList={isWaitingList} />
+        <HomepageProductCardFooter product={product} isWaitingList={isWaitingList} />
       </Link>
 
-      {/* ADD TO CART — fuori dal Link, non naviga */}
-      {!isOutOfStock && (
+      {/* ADD TO CART — solo per prodotti normali non esauriti */}
+      {!isWaitingList && !isOutOfStock && (
         <button
           onClick={handleAddToCart}
           className="w-full mt-2 py-2.5 text-center font-serif termina-card tracking-[1px] sm:tracking-[3.4px] uppercase whitespace-nowrap cursor-pointer transition-all duration-200 active:scale-95 border border-olive bg-olive text-beige hover:bg-sabbia hover:text-olive"
@@ -55,6 +57,7 @@ export default function HomepageProductCard({ product, onAddToCart, compact = fa
           }
         </button>
       )}
+
     </div>
   );
 }

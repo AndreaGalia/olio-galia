@@ -64,6 +64,12 @@ export default function AdminDashboardPage() {
       >
         Abbonamenti
       </button>
+      <button
+        onClick={() => router.push('/admin/waiting-list')}
+        className="px-3 md:px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer text-sm whitespace-nowrap"
+      >
+        Lista d&apos;attesa
+      </button>
     </div>
   );
 

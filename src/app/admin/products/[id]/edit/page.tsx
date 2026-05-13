@@ -341,6 +341,8 @@ export default function EditProductPage() {
             variants: undefined,
             variantLabel: undefined,
           }),
+          // Waiting List
+          isWaitingList: (product as any).isWaitingList || false,
           // Subscription
           isSubscribable: (product as any).isSubscribable || false,
           stripeRecurringPriceIds: (product as any).isSubscribable ? (product as any).stripeRecurringPriceIds : undefined,
@@ -642,6 +644,30 @@ export default function EditProductPage() {
                   </label>
                   <p className="text-sm text-gray-600 mt-1">
                     Seleziona questa opzione per mostrare il prodotto nella homepage (max 3 prodotti in evidenza).
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Waiting List */}
+          <section>
+            <h3 className="text-lg font-semibold text-olive mb-4">Lista d&apos;attesa</h3>
+            <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+              <div className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  id="isWaitingList"
+                  checked={(product as any).isWaitingList || false}
+                  onChange={(e) => setProduct(prev => prev ? { ...prev, isWaitingList: e.target.checked } as any : null)}
+                  className="mt-1 h-4 w-4 text-olive focus:ring-olive border-olive/30 rounded"
+                />
+                <div className="flex-1">
+                  <label htmlFor="isWaitingList" className="font-medium text-gray-900 cursor-pointer">
+                    🕐 Prodotto in lista d&apos;attesa (Prossimamente)
+                  </label>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Il prodotto sarà visibile nel catalogo con il badge &quot;Prossimamente&quot;. Al posto del carrello verrà mostrato un form per iscriversi alla lista d&apos;attesa. Prezzo e bottone acquisto saranno nascosti.
                   </p>
                 </div>
               </div>

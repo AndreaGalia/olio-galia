@@ -71,6 +71,7 @@ export const SYSTEM_TEMPLATE_KEYS = [
   'subscription_resumed',
   'subscription_upcoming_renewal',
   'portal_access_magic_link',
+  'waiting_list_notification',
 ] as const;
 
 export type SystemTemplateKey = typeof SYSTEM_TEMPLATE_KEYS[number];
@@ -205,6 +206,10 @@ export const TEMPLATE_VARIABLES: Record<string, string[]> = {
     'magicLink',
     'expirationMinutes',
   ],
+  waiting_list_notification: [
+    'productName',
+    'productUrl',
+  ],
 };
 
 /**
@@ -247,6 +252,7 @@ export const VARIABLE_DESCRIPTIONS: Record<string, string> = {
   amount: 'Importo abbonamento',
   magicLink: 'Link magico per accesso portale',
   expirationMinutes: 'Minuti di validità del link',
+  productUrl: 'URL completo alla pagina prodotto',
 };
 
 /**
@@ -268,4 +274,5 @@ export const TEMPLATE_NAMES: Record<SystemTemplateKey, string> = {
   subscription_resumed: 'Abbonamento Riattivato',
   subscription_upcoming_renewal: 'Prossimo Rinnovo Abbonamento',
   portal_access_magic_link: 'Link Accesso Portale',
+  waiting_list_notification: 'Notifica Lista d\'attesa',
 };

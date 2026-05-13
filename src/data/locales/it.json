@@ -523,6 +523,28 @@
       "climate": "Clima"
     }
   },
+  "waitingList": {
+    "badge": "Prossimamente",
+    "form": {
+      "title": "Avvisami quando disponibile",
+      "description": "Inserisci la tua email: ti avviseremo non appena questo prodotto sarà disponibile.",
+      "emailPlaceholder": "La tua email",
+      "submitButton": "Avvisami",
+      "submitting": "Invio in corso...",
+      "successTitle": "Iscrizione effettuata",
+      "successMessage": "Ti avviseremo via email non appena il prodotto sarà disponibile.",
+      "alreadySubscribed": "Questa email è già iscritta alla lista d'attesa per questo prodotto.",
+      "error": "Si è verificato un errore. Riprova più tardi.",
+      "invalidEmail": "Inserisci un indirizzo email valido."
+    },
+    "email": {
+      "subject": "{{productName}} è disponibile — Olio Galia",
+      "title": "Il prodotto che aspettavi è arrivato!",
+      "intro": "Ciao! Ti scriviamo perché ti sei iscritto alla lista d'attesa per",
+      "cta": "Acquista ora",
+      "footer": "Hai ricevuto questa email perché hai richiesto di essere avvisato sulla disponibilità di questo prodotto."
+    }
+  },
   "bulkProposal": {
     "section": {
       "title": "Acquisto in quantità?",
