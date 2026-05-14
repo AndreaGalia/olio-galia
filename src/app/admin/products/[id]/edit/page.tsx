@@ -11,6 +11,8 @@ import type { VariantData } from '@/components/admin/VariantFormFields';
 import { ProductDocument, ProductTranslations, MediaItem } from '@/types/products';
 import ProductStoryEditor from '@/components/admin/ProductStoryEditor';
 import type { ProductStory } from '@/types/productStory';
+import RelatedProductsSelector from '@/components/admin/RelatedProductsSelector';
+import type { SelectableProduct } from '@/components/admin/RelatedProductsSelector';
 
 interface Category {
   id: string;
@@ -43,6 +45,7 @@ export default function EditProductPage() {
   const [variantLabelIt, setVariantLabelIt] = useState('');
   const [variantLabelEn, setVariantLabelEn] = useState('');
   const [variants, setVariants] = useState<VariantData[]>([]);
+  const [availableProducts, setAvailableProducts] = useState<SelectableProduct[]>([]);
 
   const createEmptyVariant = (): VariantData => ({
     variantId: '',
@@ -116,6 +119,28 @@ export default function EditProductPage() {
 
     fetchCategories();
   }, []);
+
+  // Carica tutti i prodotti per il selettore dei prodotti correlati (escluso il corrente)
+  useEffect(() => {
+    if (!productId) return;
+    const fetchAvailableProducts = async () => {
+      try {
+        const response = await fetch('/api/admin/products');
+        if (!response.ok) return;
+        const data = await response.json();
+        setAvailableProducts(
+          (data as any[])
+            .filter(p => p.id !== productId)
+            .map(p => ({
+              id: p.id,
+              name: p.translations?.it?.name || p.id,
+              image: p.images?.[0],
+            }))
+        );
+      } catch {}
+    };
+    fetchAvailableProducts();
+  }, [productId]);
 
   const updateTranslation = (lang: 'it' | 'en', field: keyof ProductTranslations, value: string | string[] | ProductStory | undefined) => {
     if (!product) return;
@@ -341,6 +366,8 @@ export default function EditProductPage() {
             variants: undefined,
             variantLabel: undefined,
           }),
+          // Prodotti correlati
+          relatedProductIds: product.relatedProductIds?.length ? product.relatedProductIds : undefined,
           // Waiting List
           isWaitingList: (product as any).isWaitingList || false,
           // Subscription
@@ -1612,6 +1639,23 @@ export default function EditProductPage() {
                 </div>
               </div>
             </div>
+          </section>
+
+          {/* Prodotti Correlati */}
+          <section>
+            <h3 className="text-lg font-semibold text-olive mb-2">Prodotti Correlati</h3>
+            <p className="text-sm text-gray-500 mb-4">
+              Scegli quali prodotti mostrare nella sezione &ldquo;Potrebbe interessarti anche&rdquo;. Se non ne selezioni nessuno, la sezione non sarà visibile sulla pagina del prodotto.
+            </p>
+            <RelatedProductsSelector
+              allProducts={availableProducts}
+              selectedIds={product?.relatedProductIds || []}
+              onChange={ids =>
+                setProduct(prev =>
+                  prev ? { ...prev, relatedProductIds: ids.length ? ids : undefined } : null
+                )
+              }
+            />
           </section>
 
           {/* Pulsanti */}

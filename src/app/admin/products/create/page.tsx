@@ -10,6 +10,8 @@ import type { VariantData } from '@/components/admin/VariantFormFields';
 import { ProductTranslations, MediaItem } from '@/types/products';
 import ProductStoryEditor from '@/components/admin/ProductStoryEditor';
 import type { ProductStory } from '@/types/productStory';
+import RelatedProductsSelector from '@/components/admin/RelatedProductsSelector';
+import type { SelectableProduct } from '@/components/admin/RelatedProductsSelector';
 
 interface ProductFormData {
   categories: string[];
@@ -42,6 +44,7 @@ interface ProductFormData {
   isSubscribable: boolean;
   stripeRecurringPriceIds?: Record<string, Record<string, string>>;
   subscriptionPrices?: Record<string, Record<string, Record<string, string>>>;
+  relatedProductIds: string[];
 }
 
 interface Category {
@@ -62,6 +65,7 @@ export default function CreateProductPage() {
   const [variantLabelIt, setVariantLabelIt] = useState('');
   const [variantLabelEn, setVariantLabelEn] = useState('');
   const [variants, setVariants] = useState<VariantData[]>([]);
+  const [availableProducts, setAvailableProducts] = useState<SelectableProduct[]>([]);
 
   const createEmptyVariant = (): VariantData => ({
     variantId: '',
@@ -145,6 +149,8 @@ export default function CreateProductPage() {
     isWaitingList: false,
     // Subscription
     isSubscribable: false,
+    // Prodotti correlati
+    relatedProductIds: [],
     stripeRecurringPriceIds: {
       italia: { month: '', bimonth: '', quarter: '', semester: '' },
       europa: { month: '', bimonth: '', quarter: '', semester: '' },
@@ -181,6 +187,25 @@ export default function CreateProductPage() {
     };
 
     fetchCategories();
+  }, []);
+
+  // Carica tutti i prodotti per il selettore dei prodotti correlati
+  useEffect(() => {
+    const fetchAvailableProducts = async () => {
+      try {
+        const response = await fetch('/api/admin/products');
+        if (!response.ok) return;
+        const data = await response.json();
+        setAvailableProducts(
+          (data as any[]).map(p => ({
+            id: p.id,
+            name: p.translations?.it?.name || p.id,
+            image: p.images?.[0],
+          }))
+        );
+      } catch {}
+    };
+    fetchAvailableProducts();
   }, []);
 
   // Aggiorna automaticamente categoryDisplay con la prima categoria selezionata
@@ -364,6 +389,8 @@ export default function CreateProductPage() {
         } : {}),
         // Waiting List
         isWaitingList: formData.isWaitingList,
+        // Prodotti correlati
+        relatedProductIds: formData.relatedProductIds.length ? formData.relatedProductIds : undefined,
         // Subscription
         isSubscribable: formData.isSubscribable,
         stripeRecurringPriceIds: formData.isSubscribable ? formData.stripeRecurringPriceIds : undefined,
@@ -1540,6 +1567,19 @@ export default function CreateProductPage() {
                 </div>
               </div>
             </div>
+          </section>
+
+          {/* Prodotti Correlati */}
+          <section>
+            <h3 className="text-lg font-semibold text-olive mb-2">Prodotti Correlati</h3>
+            <p className="text-sm text-gray-500 mb-4">
+              Scegli quali prodotti mostrare nella sezione &ldquo;Potrebbe interessarti anche&rdquo;. Se non ne selezioni nessuno, la sezione non sarà visibile sulla pagina del prodotto.
+            </p>
+            <RelatedProductsSelector
+              allProducts={availableProducts}
+              selectedIds={formData.relatedProductIds}
+              onChange={ids => setFormData(prev => ({ ...prev, relatedProductIds: ids }))}
+            />
           </section>
 
           {/* Slug */}

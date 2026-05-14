@@ -39,7 +39,11 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
     }
   }, []);
 
-  const relatedProducts = allProducts.filter((p) => p.slug !== slug);
+  const relatedProducts = product?.relatedProductIds?.length
+    ? product.relatedProductIds
+        .map(id => allProducts.find(p => p.id === id))
+        .filter((p): p is typeof allProducts[number] => Boolean(p))
+    : [];
 
   if (loading) return <LoadingSpinner message={t.productDetailPage.loading} />;
   if (error) return <ErrorMessage error={error} />;
@@ -113,10 +117,10 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
           <ProductReviews productSlug={slug} />
         </div>
 
-        {/* Related products */}
-        <RelatedProductsSection products={relatedProducts} />
-
       </div>
+
+      {/* Related products — full-width section with its own container, same as ProductsGrid */}
+      <RelatedProductsSection products={relatedProducts} />
     </div>
   );
 }

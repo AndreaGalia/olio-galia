@@ -75,6 +75,7 @@ export interface BaseProduct {
   isWaitingList?: boolean; // Se true: prodotto in lista d'attesa — non acquistabile, mostra form email "Avvisami"
   variants?: ProductVariant[]; // Varianti del prodotto (es: fragranze diverse)
   variantLabel?: { it: string; en: string }; // Label per il selettore varianti (es: "Fragranza")
+  relatedProductIds?: string[]; // ID dei prodotti correlati (sezione "Potrebbe interessarti anche"), in ordine di visualizzazione
 }
 
 // Prodotto come salvato in MongoDB (con tutte le traduzioni)

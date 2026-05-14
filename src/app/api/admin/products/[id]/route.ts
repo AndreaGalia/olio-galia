@@ -125,6 +125,7 @@ export async function PUT(
       hasVariants,
       variants,
       variantLabel,
+      relatedProductIds,
     } = data;
 
     // Ottieni prodotto esistente da MongoDB
@@ -267,6 +268,7 @@ export async function PUT(
               variantLabel: hasVariants && variantLabel ? variantLabel : undefined,
               translations,
               slug,
+              relatedProductIds: relatedProductIds?.length ? relatedProductIds : undefined,
               'metadata.updatedAt': new Date(),
               'metadata.featured': metadata?.featured || false
             },
@@ -301,6 +303,7 @@ export async function PUT(
               variantLabel: hasVariants && variantLabel ? variantLabel : undefined,
               translations,
               slug,
+              relatedProductIds: relatedProductIds?.length ? relatedProductIds : undefined,
               'metadata.updatedAt': new Date(),
               'metadata.featured': metadata?.featured || false
             },
@@ -332,6 +335,7 @@ export async function PUT(
             subscriptionPrices: validatedSubscriptionPrices || undefined,
             translations,
             slug,
+            relatedProductIds: relatedProductIds?.length ? relatedProductIds : undefined,
             'metadata.updatedAt': new Date(),
             'metadata.featured': metadata?.featured || false
           },
@@ -362,6 +366,7 @@ export async function PUT(
             subscriptionPrices: validatedSubscriptionPrices || undefined,
             translations,
             slug,
+            relatedProductIds: relatedProductIds?.length ? relatedProductIds : undefined,
             'metadata.updatedAt': new Date(),
             'metadata.featured': metadata?.featured || false
           },

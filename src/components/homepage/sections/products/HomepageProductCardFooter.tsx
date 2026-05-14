@@ -17,7 +17,7 @@ export default function HomepageProductCardFooter({ product, isWaitingList }: Ho
     <>
       {/* Mobile: nome sopra, prezzo sotto — sm+: nome e prezzo sulla stessa riga */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center pt-3 pb-2 gap-0.5 sm:gap-2">
-        <span className="font-serif termina-11 tracking-[1px] sm:tracking-[3.4px] uppercase text-black line-clamp-2 sm:whitespace-nowrap sm:truncate">
+        <span className="font-serif termina-11 tracking-[1px] sm:tracking-[3.4px] uppercase text-black line-clamp-2">
           {product.name}
         </span>
         {/* Prezzo nascosto per prodotti waiting list */}

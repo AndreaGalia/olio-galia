@@ -126,6 +126,7 @@ export async function POST(request: NextRequest) {
       hasVariants,
       variants,
       variantLabel,
+      relatedProductIds,
     } = data;
 
     // Validazione dei dati richiesti (price opzionale per prodotti waiting list)
@@ -263,6 +264,7 @@ export async function POST(request: NextRequest) {
         variants: variants,
         variantLabel: variantLabel || undefined,
       } : {}),
+      relatedProductIds: relatedProductIds?.length ? relatedProductIds : undefined,
       metadata: {
         createdAt: new Date(),
         updatedAt: new Date(),
