@@ -81,6 +81,7 @@ export interface BaseProduct {
 // Prodotto come salvato in MongoDB (con tutte le traduzioni)
 export interface ProductDocument extends BaseProduct {
   _id?: string;
+  displayOrder?: number; // Ordine di visualizzazione (più basso = prima)
   slug: {
     it: string;
     en: string;
@@ -100,6 +101,7 @@ export interface ProductDocument extends BaseProduct {
 // Prodotto come restituito dalle API (localizzato)
 export interface Product extends BaseProduct, ProductTranslations {
   slug: string; // Slug localizzato per la lingua corrente
+  displayOrder?: number; // Ordine di visualizzazione (più basso = prima)
   metadata?: {
     createdAt?: Date;
     updatedAt?: Date;

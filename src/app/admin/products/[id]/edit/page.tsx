@@ -368,6 +368,8 @@ export default function EditProductPage() {
           }),
           // Prodotti correlati
           relatedProductIds: product.relatedProductIds?.length ? product.relatedProductIds : undefined,
+          // Ordine di visualizzazione
+          displayOrder: (product as any).displayOrder !== undefined ? Number((product as any).displayOrder) : undefined,
           // Waiting List
           isWaitingList: (product as any).isWaitingList || false,
           // Subscription
@@ -650,7 +652,7 @@ export default function EditProductPage() {
           {/* Visibilità Homepage */}
           <section>
             <h3 className="text-lg font-semibold text-olive mb-4">Visibilità Homepage</h3>
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 space-y-4">
               <div className="flex items-start space-x-3">
                 <input
                   type="checkbox"
@@ -673,6 +675,24 @@ export default function EditProductPage() {
                     Seleziona questa opzione per mostrare il prodotto nella homepage (max 3 prodotti in evidenza).
                   </p>
                 </div>
+              </div>
+              <div>
+                <label htmlFor="displayOrder" className="block text-sm font-medium text-gray-700 mb-1">
+                  Ordine di visualizzazione
+                </label>
+                <input
+                  type="number"
+                  id="displayOrder"
+                  min={0}
+                  value={(product as any).displayOrder ?? ''}
+                  onChange={(e) => setProduct(prev => prev ? {
+                    ...prev,
+                    displayOrder: e.target.value !== '' ? Number(e.target.value) : undefined
+                  } as any : null)}
+                  placeholder="Es: 1, 2, 3…"
+                  className="w-32 border border-olive/30 rounded-md px-3 py-1.5 text-sm focus:ring-olive focus:border-olive"
+                />
+                <p className="text-xs text-gray-500 mt-1">Numeri più bassi vengono mostrati prima. Lascia vuoto per ordinare per data.</p>
               </div>
             </div>
           </section>

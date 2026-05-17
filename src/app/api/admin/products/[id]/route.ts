@@ -122,6 +122,7 @@ export async function PUT(
       isSubscribable,
       stripeRecurringPriceIds,
       subscriptionPrices: rawSubscriptionPrices,
+      displayOrder,
       hasVariants,
       variants,
       variantLabel,
@@ -269,6 +270,7 @@ export async function PUT(
               translations,
               slug,
               relatedProductIds: relatedProductIds?.length ? relatedProductIds : undefined,
+              displayOrder: displayOrder !== undefined ? Number(displayOrder) : undefined,
               'metadata.updatedAt': new Date(),
               'metadata.featured': metadata?.featured || false
             },
@@ -304,6 +306,7 @@ export async function PUT(
               translations,
               slug,
               relatedProductIds: relatedProductIds?.length ? relatedProductIds : undefined,
+              displayOrder: displayOrder !== undefined ? Number(displayOrder) : undefined,
               'metadata.updatedAt': new Date(),
               'metadata.featured': metadata?.featured || false
             },

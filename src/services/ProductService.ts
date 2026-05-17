@@ -19,7 +19,7 @@ export class ProductService {
       const products = await db
         .collection<ProductDocument>('products')
         .find(filter)
-        .sort({ 'metadata.createdAt': -1 })
+        .sort({ displayOrder: 1, 'metadata.createdAt': -1 })
         .toArray();
       
       return products.map(product => this.localizeProduct(product, locale));
@@ -127,6 +127,7 @@ export class ProductService {
       // Preserva varianti e label varianti dal documento MongoDB
       variants: product.variants,
       variantLabel: product.variantLabel,
+      displayOrder: product.displayOrder,
       metadata: {
         featured: product.metadata?.featured || false
       }

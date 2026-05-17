@@ -119,6 +119,7 @@ export async function POST(request: NextRequest) {
       stripeProductId,
       stripePriceId,
       featured,
+      displayOrder,
       isWaitingList,
       isSubscribable,
       stripeRecurringPriceIds,
@@ -241,6 +242,7 @@ export async function POST(request: NextRequest) {
 
     const productDocument: ProductDocument = {
       id: localId, // SEMPRE l'ID locale, mai sovrascritto
+      displayOrder: displayOrder !== undefined ? Number(displayOrder) : undefined,
       categories,
       price: price.toString(),
       originalPrice: originalPrice ? originalPrice.toString() : undefined,

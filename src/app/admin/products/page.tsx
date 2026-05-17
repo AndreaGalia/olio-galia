@@ -70,6 +70,15 @@ export default function AdminProductsPage() {
         <span>Nuovo Prodotto</span>
       </button>
       <button
+        onClick={() => router.push('/admin/products/order')}
+        className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors flex items-center space-x-2 cursor-pointer"
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4" />
+        </svg>
+        <span>Ordine</span>
+      </button>
+      <button
         onClick={() => router.push('/admin/orders')}
         className="px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer"
       >
