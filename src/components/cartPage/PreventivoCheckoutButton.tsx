@@ -68,7 +68,7 @@ export default function PreventivoCheckoutButton() {
       <button
         onClick={() => setIsOpen(true)}
         disabled={totalItems === 0}
-        className="w-full bg-white border-2 border-olive text-olive py-3 px-4 font-medium disabled:opacity-50 disabled:cursor-not-allowed text-sm uppercase tracking-wider"
+        className="w-full py-4 bg-olive text-beige font-serif termina-11 tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-sabbia hover:text-olive border border-olive disabled:opacity-40 disabled:cursor-not-allowed"
       >
         Richiedi Preventivo
       </button>

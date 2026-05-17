@@ -150,7 +150,7 @@ export default function CheckoutWizard({
         {/* Bottone Continua */}
         <button
           onClick={() => setCurrentStep(2)}
-          className="w-full mt-6 py-4 bg-sabbia text-black font-serif termina-11 tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-olive hover:text-beige disabled:opacity-40 disabled:cursor-not-allowed"
+          className="w-full mt-6 py-4 bg-olive text-beige font-serif termina-11 tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-sabbia hover:text-olive border border-olive disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {t.cartPage.wizard?.continue || "CONTINUA"}
         </button>
@@ -220,7 +220,7 @@ export default function CheckoutWizard({
         <button
           onClick={() => selectedShippingZone && setCurrentStep(3)}
           disabled={!selectedShippingZone}
-          className="w-full mt-4 py-4 bg-sabbia text-black font-serif termina-11 tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-olive hover:text-beige disabled:opacity-40 disabled:cursor-not-allowed"
+          className="w-full mt-4 py-4 bg-olive text-beige font-serif termina-11 tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-sabbia hover:text-olive border border-olive disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {t.cartPage.wizard?.continue || "CONTINUA"}
         </button>
@@ -282,7 +282,7 @@ export default function CheckoutWizard({
         <button
           onClick={handleCheckout}
           disabled={checkoutLoading}
-          className="w-full py-4 bg-sabbia text-black font-serif termina-11 tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-olive hover:text-beige disabled:opacity-40 disabled:cursor-not-allowed"
+          className="w-full py-4 bg-olive text-beige font-serif termina-11 tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-sabbia hover:text-olive border border-olive disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {checkoutLoading ? (
             <span>{t.cartPage.summary.processing}</span>

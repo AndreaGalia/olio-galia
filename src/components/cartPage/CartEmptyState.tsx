@@ -26,7 +26,7 @@ export default function CartEmptyState() {
 
           <Link
             href="/products"
-            className="inline-block px-12 py-4 bg-sabbia text-black font-serif termina-11 tracking-[0.25em] uppercase hover:bg-olive hover:text-beige transition-all duration-300"
+            className="inline-block px-12 py-4 bg-olive text-beige font-serif termina-11 tracking-[0.25em] uppercase hover:bg-sabbia hover:text-olive border border-olive transition-all duration-300"
           >
             {t.cartPage.empty.button}
           </Link>

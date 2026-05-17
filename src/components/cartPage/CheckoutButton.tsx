@@ -17,7 +17,7 @@ export default function CheckoutButton({ onClick, totalItems, disabled = false, 
       <button
         onClick={onClick}
         disabled={disabled}
-        className="w-full py-4 bg-sabbia text-black font-serif termina-11 tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-olive hover:text-beige disabled:opacity-40 disabled:cursor-not-allowed"
+        className="w-full py-4 bg-olive text-beige font-serif termina-11 tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-sabbia hover:text-olive border border-olive disabled:opacity-40 disabled:cursor-not-allowed"
       >
         {t.torinoCheckout.button.subtitle}
       </button>
@@ -32,7 +32,7 @@ export default function CheckoutButton({ onClick, totalItems, disabled = false, 
       <button
         onClick={onClick}
         disabled={disabled}
-        className="w-full py-4 bg-sabbia text-black font-serif termina-11 tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-olive hover:text-beige disabled:opacity-40 disabled:cursor-not-allowed"
+        className="w-full py-4 bg-olive text-beige font-serif termina-11 tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-sabbia hover:text-olive border border-olive disabled:opacity-40 disabled:cursor-not-allowed"
       >
         {t.torinoCheckout.button.subtitle}
       </button>

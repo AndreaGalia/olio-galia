@@ -80,7 +80,7 @@ export default function ContactFormSection({ hideTitle }: { hideTitle?: boolean 
       <button
         type="submit"
         disabled={status === 'submitting'}
-        className="w-full py-4 bg-sabbia text-black font-serif termina-11 tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-olive hover:text-beige disabled:bg-sabbia/40 disabled:text-black/30 disabled:cursor-not-allowed"
+        className="w-full py-4 bg-olive text-beige font-serif termina-11 tracking-[0.25em] uppercase transition-all duration-300 cursor-pointer hover:bg-sabbia hover:text-olive border border-olive disabled:opacity-40 disabled:cursor-not-allowed"
       >
         {status === 'submitting' ? form.submitting : form.submit}
       </button>
