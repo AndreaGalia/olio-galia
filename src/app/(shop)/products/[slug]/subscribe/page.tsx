@@ -33,10 +33,10 @@ export default function SubscribePage({ params }: SubscribePageProps) {
 
   return (
     <div className="min-h-screen bg-sabbia-chiaro">
-      <div className="lg:grid lg:grid-cols-2 lg:items-start">
+      <div className="lg:grid lg:grid-cols-[2fr_3fr] lg:items-start">
 
         {/* Left: sticky image */}
-        <div className="h-[120vw] sm:h-[85vw] lg:sticky lg:top-0 lg:h-screen">
+        <div className="aspect-[3/4] lg:aspect-auto lg:sticky lg:top-0 lg:h-screen">
           <ProductImageGallery
             media={product.media?.length ? product.media : (product.images || []).map(url => ({ type: 'image' as const, url }))}
             productName={product.name}
