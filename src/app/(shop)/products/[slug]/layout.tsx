@@ -1,25 +1,19 @@
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import { generateProductMetadata } from '@/lib/seo/metadata';
 import { ProductDocument } from '@/types/products';
-
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://oliogalia.it';
+import { getDatabase } from '@/lib/mongodb';
 
 /**
- * Fetch product data per generateMetadata
- * Questa funzione viene eseguita solo al build time per SSG
+ * Fetch product data per generateMetadata direttamente da MongoDB
+ * (evita chiamate HTTP circolari che causano robots: index=false in caso di errore)
  */
 async function getProduct(slug: string): Promise<ProductDocument | null> {
   try {
-    const res = await fetch(`${BASE_URL}/api/products/${slug}`, {
-      cache: 'force-cache', // Cache per SSG
-      next: { revalidate: 3600 } // Revalidate ogni ora
-    });
-
-    if (!res.ok) return null;
-
-    const data = await res.json();
-    return data.product;
+    const db = await getDatabase();
+    const product = await db
+      .collection<ProductDocument>('products')
+      .findOne({ $or: [{ 'slug.it': slug }, { 'slug.en': slug }] });
+    return product;
   } catch (error) {
     console.error('Error fetching product for metadata:', error);
     return null;
