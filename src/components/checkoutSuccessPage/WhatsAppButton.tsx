@@ -36,7 +36,7 @@ export default function WhatsAppButton({ orderDetails, sessionId }: WhatsAppButt
   return (
     <button
       onClick={sendWhatsAppMessage}
-      className="w-full py-4 font-serif termina-11 tracking-[3.4px] uppercase border border-olive bg-olive text-beige hover:bg-sabbia hover:text-olive transition-all duration-200 cursor-pointer"
+      className="w-full py-4 font-serif termina-11 tracking-[3.4px] uppercase border border-olive bg-olive text-beige hover:bg-sabbia hover:text-olive transition-all duration-200 cursor-pointer whitespace-nowrap"
     >
       {t.checkoutSuccess.hero.whatsapp}
     </button>

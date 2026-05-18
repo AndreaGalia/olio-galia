@@ -26,7 +26,7 @@ export default function ReceiptButton({ receiptStatus, invoiceStatus }: ReceiptB
         className={`w-full py-4 font-serif termina-11 tracking-[3.4px] uppercase border border-olive transition-all duration-200 cursor-pointer disabled:cursor-not-allowed ${
           receiptStatus.checking
             ? 'bg-sabbia/40 text-black/30 border-olive/30'
-            : 'bg-sabbia text-olive hover:bg-olive hover:text-beige'
+            : 'bg-sabbia text-olive hover:bg-olive hover:text-beige whitespace-nowrap'
         }`}
       >
         {receiptStatus.checking

@@ -30,7 +30,7 @@ export default function CheckoutSuccessContent() {
   if (expired) return <ExpiredAccessMessage />;
 
   const currentIndex = STEP_KEYS.indexOf(CURRENT_STEP);
-  const hasActions = !!order?.paymentIntent;
+  const progressPct = Math.round(((currentIndex + 1) / STEP_KEYS.length) * 100);
 
   return (
     <div className="min-h-screen bg-sabbia-chiaro">
@@ -39,7 +39,6 @@ export default function CheckoutSuccessContent() {
       <section className="border-b border-olive/20 pt-14 pb-8 lg:pt-20 lg:pb-10">
         <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-[var(--container-wide)] mx-auto">
           <div className="lg:flex lg:items-end lg:justify-between lg:gap-12">
-
             <div>
               <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-3">
                 {t.checkoutSuccess.hero.subtitle}
@@ -51,7 +50,6 @@ export default function CheckoutSuccessContent() {
                 {t.checkoutSuccess.hero.description}
               </p>
             </div>
-
             {order?.paymentIntent && (
               <div className="mt-6 lg:mt-0 flex-shrink-0 lg:text-right">
                 <p className="font-serif termina-8 tracking-[0.2em] uppercase text-black mb-1">
@@ -62,17 +60,29 @@ export default function CheckoutSuccessContent() {
                 </p>
               </div>
             )}
-
           </div>
         </div>
       </section>
 
-      {/* ── MAIN ─────────────────────────────────────────────── */}
-      <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-[var(--container-wide)] mx-auto pt-8 pb-14 lg:pt-10 lg:pb-16 space-y-0">
+      <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-[var(--container-wide)] mx-auto pt-10 pb-16 lg:pt-14 lg:pb-20 space-y-0">
 
-        {/* ── BLOCCO 1: prodotti | cliente+spedizione ── */}
+        {/* ── BLOCCO 1: azioni ── */}
+        {order?.paymentIntent && (
+          <div className="pb-10 border-b border-olive/20 flex gap-3">
+            <div className="flex-1">
+              <WhatsAppButton orderDetails={order} sessionId={order.paymentIntent} />
+            </div>
+            {receiptStatus.hasReceipt && (
+              <div className="flex-1">
+                <ReceiptButton receiptStatus={receiptStatus} invoiceStatus={invoiceStatus} />
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── BLOCCO 2: prodotti | cliente+spedizione ── */}
         {(loading || order) && (
-          <div className="pb-6 border-b border-olive/20 lg:grid lg:grid-cols-[3fr_2fr] lg:gap-12 xl:gap-16">
+          <div className="pt-10 pb-10 border-b border-olive/20 lg:grid lg:grid-cols-[3fr_2fr] lg:gap-12 xl:gap-16">
 
             {/* Prodotti + Totali */}
             <div>
@@ -115,8 +125,6 @@ export default function CheckoutSuccessContent() {
                       </p>
                     )}
                   </div>
-
-                  {/* Totali */}
                   <div className="border-t border-olive/20 pt-4 space-y-2">
                     <div className="flex justify-between garamond-13">
                       <span>{t.checkoutSuccess.orderSummary.subtotal}</span>
@@ -179,52 +187,53 @@ export default function CheckoutSuccessContent() {
           </div>
         )}
 
-        {/* ── BLOCCO 2: timeline orizzontale ── */}
-        <div className="pt-6 pb-6 border-b border-olive/20">
-          <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-4">
+        {/* ── BLOCCO 3: timeline ── */}
+        <div className="pt-10 pb-10 border-b border-olive/20">
+          <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-5">
             {t.checkoutSuccess.timeline.title}
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3">
+
+          {/* Barra di progresso */}
+          <div className="relative h-[2px] bg-olive/15 mb-7">
+            <div
+              className="absolute left-0 top-0 h-full bg-olive transition-all duration-700 ease-out"
+              style={{ width: `${progressPct}%` }}
+            />
+          </div>
+
+          {/* Step */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4">
             {STEP_KEYS.map((key, index) => {
               const step = t.checkoutSuccess.timeline.steps[key];
               const isDone = index <= currentIndex;
+              const isActive = index === currentIndex;
               return (
-                <div
-                  key={key}
-                  className="border-t border-olive/20 pt-4 pb-4 sm:pb-0 sm:pr-8 flex items-start justify-between gap-3"
-                >
-                  <div className="flex-1">
-                    <p className={`font-serif termina-8 tracking-[0.2em] uppercase mb-1 ${isDone ? 'text-olive' : 'text-black/30'}`}>
-                      0{index + 1}
+                <div key={key}>
+                  <p
+                    className={`mb-2 leading-none ${isDone ? 'text-olive' : 'text-black/20'}`}
+                    style={{ fontFamily: '"termina", sans-serif', fontSize: 'clamp(1.4rem, 2.5vw, 1.8rem)', letterSpacing: '0.05em' }}
+                  >
+                    0{index + 1}
+                  </p>
+                  <p className={`font-serif termina-11 tracking-[0.15em] uppercase mb-1 ${isDone ? 'text-black' : 'text-black/25'}`}>
+                    {step.title}
+                  </p>
+                  <p className={`garamond-13 ${isDone ? 'text-black' : 'text-black/25'}`}>
+                    {step.description}
+                  </p>
+                  {isActive && (
+                    <p className="font-serif termina-8 tracking-[0.15em] uppercase text-olive mt-2">
+                      {step.status}
                     </p>
-                    <p className={`garamond-13 ${isDone ? 'text-black' : 'text-black/30'}`}>{step.title}</p>
-                    <p className={`garamond-13 mt-0.5 ${isDone ? 'text-black' : 'text-black/30'}`}>{step.description}</p>
-                  </div>
-                  <span className={`font-serif termina-8 tracking-[0.1em] uppercase px-2 py-1 border flex-shrink-0 mt-0.5 ${
-                    isDone ? 'border-olive/30 text-olive' : 'border-black/10 text-black/30'
-                  }`}>
-                    {step.status}
-                  </span>
+                  )}
                 </div>
               );
             })}
           </div>
         </div>
 
-        {/* ── BLOCCO 3: azioni ── */}
-        {hasActions && (
-          <div className="pt-6 border-b border-olive/20 pb-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl">
-              <WhatsAppButton orderDetails={order!} sessionId={order!.paymentIntent!} />
-              {receiptStatus.hasReceipt && (
-                <ReceiptButton receiptStatus={receiptStatus} invoiceStatus={invoiceStatus} />
-              )}
-            </div>
-          </div>
-        )}
-
         {/* ── BLOCCO 4: CTA ── */}
-        <div className="pt-6 lg:flex lg:items-center lg:justify-between lg:gap-12">
+        <div className="pt-10 lg:flex lg:items-center lg:justify-between lg:gap-12">
           <div className="mb-5 lg:mb-0">
             <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-1.5">
               {t.checkoutSuccess.cta.title}
