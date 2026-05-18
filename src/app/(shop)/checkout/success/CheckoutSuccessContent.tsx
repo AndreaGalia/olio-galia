@@ -68,7 +68,7 @@ export default function CheckoutSuccessContent() {
 
         {/* ── BLOCCO 1: azioni ── */}
         {order?.paymentIntent && (
-          <div className="pb-10 border-b border-olive/20 flex gap-3">
+          <div className="pb-10 border-b border-olive/20 flex flex-col sm:flex-row gap-3">
             <div className="flex-1">
               <WhatsAppButton orderDetails={order} sessionId={order.paymentIntent} />
             </div>
