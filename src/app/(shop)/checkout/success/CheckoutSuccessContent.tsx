@@ -30,6 +30,7 @@ export default function CheckoutSuccessContent() {
   if (expired) return <ExpiredAccessMessage />;
 
   const currentIndex = STEP_KEYS.indexOf(CURRENT_STEP);
+  const hasActions = !!order?.paymentIntent;
 
   return (
     <div className="min-h-screen bg-sabbia-chiaro">
@@ -67,97 +68,94 @@ export default function CheckoutSuccessContent() {
       </section>
 
       {/* ── MAIN ─────────────────────────────────────────────── */}
-      <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-[var(--container-wide)] mx-auto pt-8 pb-12 lg:pt-10 lg:pb-16">
-        <div className="lg:grid lg:grid-cols-[1fr_280px] lg:gap-12 xl:gap-16">
+      <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-[var(--container-wide)] mx-auto pt-8 pb-14 lg:pt-10 lg:pb-16 space-y-0">
 
-          {/* ── SINISTRA: prodotti + totali ── */}
-          <div>
-            {loading ? (
-              <div className="animate-pulse space-y-5">
-                <div className="h-3 bg-olive/10 w-32" />
-                <div className="h-14 bg-olive/10 w-full" />
-                <div className="h-14 bg-olive/10 w-full" />
-              </div>
-            ) : order ? (
-              <>
-                <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black pb-0">
-                  {t.checkoutSuccess.orderSummary.productsOrdered}
-                </p>
+        {/* ── BLOCCO 1: prodotti | cliente+spedizione ── */}
+        {(loading || order) && (
+          <div className="pb-6 border-b border-olive/20 lg:grid lg:grid-cols-[3fr_2fr] lg:gap-12 xl:gap-16">
 
-                {/* Lista prodotti */}
-                <div>
-                  {order.items?.map((item, index) => (
-                    <div key={index} className="border-t border-olive/20 py-4 flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-4">
-                        {item.image && (
-                          <div className="w-14 h-14 border border-olive/20 overflow-hidden flex-shrink-0">
-                            <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+            {/* Prodotti + Totali */}
+            <div>
+              {loading ? (
+                <div className="animate-pulse space-y-5">
+                  <div className="h-3 bg-olive/10 w-32" />
+                  <div className="h-14 bg-olive/10 w-full" />
+                </div>
+              ) : order ? (
+                <>
+                  <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black">
+                    {t.checkoutSuccess.orderSummary.productsOrdered}
+                  </p>
+                  <div>
+                    {order.items?.map((item, index) => (
+                      <div key={index} className="border-t border-olive/20 py-4 flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-4">
+                          {item.image && (
+                            <div className="w-14 h-14 border border-olive/20 overflow-hidden flex-shrink-0">
+                              <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                            </div>
+                          )}
+                          <div>
+                            <p className="garamond-13">{item.name}</p>
+                            <p className="font-serif termina-8 tracking-[0.1em] uppercase text-black mt-1">
+                              {t.checkoutSuccess.orderSummary.quantity} {item.quantity}
+                            </p>
                           </div>
-                        )}
-                        <div>
-                          <p className="garamond-13">{item.name}</p>
-                          <p className="font-serif termina-8 tracking-[0.1em] uppercase text-black mt-1">
-                            {t.checkoutSuccess.orderSummary.quantity} {item.quantity}
+                        </div>
+                        <div className="text-right flex-shrink-0">
+                          <p className="garamond-13">€{(item.price * item.quantity).toFixed(2)}</p>
+                          <p className="font-serif termina-8 text-black mt-1">
+                            €{item.price.toFixed(2)} / {t.checkoutSuccess.orderSummary.each}
                           </p>
                         </div>
                       </div>
-                      <div className="text-right flex-shrink-0">
-                        <p className="garamond-13">€{(item.price * item.quantity).toFixed(2)}</p>
-                        <p className="font-serif termina-8 text-black mt-1">
-                          €{item.price.toFixed(2)} / {t.checkoutSuccess.orderSummary.each}
-                        </p>
-                      </div>
+                    )) || (
+                      <p className="garamond-13 py-4 border-t border-olive/20">
+                        {t.checkoutSuccess.orderSummary.productDetailsNotAvailable}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Totali */}
+                  <div className="border-t border-olive/20 pt-4 space-y-2">
+                    <div className="flex justify-between garamond-13">
+                      <span>{t.checkoutSuccess.orderSummary.subtotal}</span>
+                      <span>
+                        €{order.pricing?.subtotal?.toFixed(2) ??
+                          ((order.total || 0) - (order.pricing?.shippingCost ?? (order.total || 0) * 0.1)).toFixed(2)}
+                      </span>
                     </div>
-                  )) || (
-                    <p className="garamond-13 py-4 border-t border-olive/20">
-                      {t.checkoutSuccess.orderSummary.productDetailsNotAvailable}
-                    </p>
-                  )}
-                </div>
-
-                {/* Totali */}
-                <div className="border-t border-olive/20 pt-4 space-y-2">
-                  <div className="flex justify-between garamond-13">
-                    <span>{t.checkoutSuccess.orderSummary.subtotal}</span>
-                    <span>
-                      €{order.pricing?.subtotal?.toFixed(2) ??
-                        ((order.total || 0) - (order.pricing?.shippingCost ?? (order.total || 0) * 0.1)).toFixed(2)}
-                    </span>
+                    <div className="flex justify-between garamond-13">
+                      <span className="flex items-center gap-2">
+                        {t.checkoutSuccess.orderSummary.shippingCost}
+                        {order.pricing?.shippingCost === 0 && (
+                          <span className="font-serif termina-8 tracking-[0.1em] uppercase text-olive border border-olive/30 px-1.5 py-0.5">
+                            {t.checkoutSuccess.freeShipping}
+                          </span>
+                        )}
+                      </span>
+                      <span>
+                        {order.pricing?.shippingCost !== undefined
+                          ? `€${order.pricing.shippingCost.toFixed(2)}`
+                          : `€${((order.total || 0) * 0.1).toFixed(2)}`}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-baseline border-t border-olive/20 pt-3">
+                      <span className="font-serif termina-11 tracking-[0.2em] uppercase text-black">
+                        {t.checkoutSuccess.orderSummary.total}
+                      </span>
+                      <span style={{ fontFamily: '"termina", sans-serif', fontSize: 'clamp(1rem, 1.8vw, 1.3rem)', letterSpacing: '0.05em' }}>
+                        €{(order.pricing?.total ?? order.total ?? 0).toFixed(2)}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex justify-between garamond-13">
-                    <span className="flex items-center gap-2">
-                      {t.checkoutSuccess.orderSummary.shippingCost}
-                      {order.pricing?.shippingCost === 0 && (
-                        <span className="font-serif termina-8 tracking-[0.1em] uppercase text-olive border border-olive/30 px-1.5 py-0.5">
-                          {t.checkoutSuccess.freeShipping}
-                        </span>
-                      )}
-                    </span>
-                    <span>
-                      {order.pricing?.shippingCost !== undefined
-                        ? `€${order.pricing.shippingCost.toFixed(2)}`
-                        : `€${((order.total || 0) * 0.1).toFixed(2)}`}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-baseline border-t border-olive/20 pt-3">
-                    <span className="font-serif termina-11 tracking-[0.2em] uppercase text-black">
-                      {t.checkoutSuccess.orderSummary.total}
-                    </span>
-                    <span style={{ fontFamily: '"termina", sans-serif', fontSize: 'clamp(1rem, 1.8vw, 1.3rem)', letterSpacing: '0.05em' }}>
-                      €{(order.pricing?.total ?? order.total ?? 0).toFixed(2)}
-                    </span>
-                  </div>
-                </div>
-              </>
-            ) : null}
-          </div>
+                </>
+              ) : null}
+            </div>
 
-          {/* ── DESTRA: dati + timeline + azioni ── */}
-          <div className="mt-10 lg:mt-0">
-
-            {/* Dati cliente + spedizione */}
+            {/* Cliente + Spedizione */}
             {order && (
-              <div className="pb-6 border-b border-olive/20 grid grid-cols-2 gap-5">
+              <div className="mt-8 lg:mt-0 grid grid-cols-2 gap-5 lg:block lg:space-y-6">
                 <div>
                   <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-2.5">
                     {t.checkoutSuccess.orderSummary.customerData}
@@ -178,52 +176,55 @@ export default function CheckoutSuccessContent() {
                 </div>
               </div>
             )}
+          </div>
+        )}
 
-            {/* Timeline */}
-            <div className="pt-6 pb-6 border-b border-olive/20">
-              <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-4">
-                {t.checkoutSuccess.timeline.title}
-              </p>
-              <div>
-                {STEP_KEYS.map((key, index) => {
-                  const step = t.checkoutSuccess.timeline.steps[key];
-                  const isDone = index <= currentIndex;
-                  return (
-                    <div key={key} className="border-t border-olive/20 py-3.5 flex items-start justify-between gap-3">
-                      <div className="flex-1">
-                        <p className={`font-serif termina-8 tracking-[0.2em] uppercase mb-1 ${isDone ? 'text-olive' : 'text-black/30'}`}>
-                          0{index + 1}
-                        </p>
-                        <p className={`garamond-13 ${isDone ? 'text-black' : 'text-black/30'}`}>{step.title}</p>
-                        <p className={`garamond-13 mt-0.5 ${isDone ? 'text-black' : 'text-black/30'}`}>{step.description}</p>
-                      </div>
-                      <span className={`font-serif termina-8 tracking-[0.1em] uppercase px-2 py-1 border flex-shrink-0 mt-0.5 ${
-                        isDone ? 'border-olive/30 text-olive' : 'border-black/10 text-black/30'
-                      }`}>
-                        {step.status}
-                      </span>
-                    </div>
-                  );
-                })}
-                <div className="border-t border-olive/20" />
-              </div>
-            </div>
-
-            {/* Azioni */}
-            {order?.paymentIntent && (
-              <div className="pt-6 space-y-3">
-                <WhatsAppButton orderDetails={order} sessionId={order.paymentIntent} />
-                {receiptStatus.hasReceipt && (
-                  <ReceiptButton receiptStatus={receiptStatus} invoiceStatus={invoiceStatus} />
-                )}
-              </div>
-            )}
-
+        {/* ── BLOCCO 2: timeline orizzontale ── */}
+        <div className="pt-6 pb-6 border-b border-olive/20">
+          <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-4">
+            {t.checkoutSuccess.timeline.title}
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3">
+            {STEP_KEYS.map((key, index) => {
+              const step = t.checkoutSuccess.timeline.steps[key];
+              const isDone = index <= currentIndex;
+              return (
+                <div
+                  key={key}
+                  className="border-t border-olive/20 pt-4 pb-4 sm:pb-0 sm:pr-8 flex items-start justify-between gap-3"
+                >
+                  <div className="flex-1">
+                    <p className={`font-serif termina-8 tracking-[0.2em] uppercase mb-1 ${isDone ? 'text-olive' : 'text-black/30'}`}>
+                      0{index + 1}
+                    </p>
+                    <p className={`garamond-13 ${isDone ? 'text-black' : 'text-black/30'}`}>{step.title}</p>
+                    <p className={`garamond-13 mt-0.5 ${isDone ? 'text-black' : 'text-black/30'}`}>{step.description}</p>
+                  </div>
+                  <span className={`font-serif termina-8 tracking-[0.1em] uppercase px-2 py-1 border flex-shrink-0 mt-0.5 ${
+                    isDone ? 'border-olive/30 text-olive' : 'border-black/10 text-black/30'
+                  }`}>
+                    {step.status}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* ── CTA ─────────────────────────────────────────────── */}
-        <div className="border-t border-olive/20 pt-7 mt-10 lg:mt-12 lg:flex lg:items-center lg:justify-between lg:gap-12">
+        {/* ── BLOCCO 3: azioni ── */}
+        {hasActions && (
+          <div className="pt-6 border-b border-olive/20 pb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl">
+              <WhatsAppButton orderDetails={order!} sessionId={order!.paymentIntent!} />
+              {receiptStatus.hasReceipt && (
+                <ReceiptButton receiptStatus={receiptStatus} invoiceStatus={invoiceStatus} />
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ── BLOCCO 4: CTA ── */}
+        <div className="pt-6 lg:flex lg:items-center lg:justify-between lg:gap-12">
           <div className="mb-5 lg:mb-0">
             <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-1.5">
               {t.checkoutSuccess.cta.title}
