@@ -48,6 +48,9 @@ export async function POST(request: NextRequest) {
 
     console.log(`✅ Webhook received: ${event.type}`);
 
+    // Verifica se le notifiche Telegram sono abilitate
+    const telegramEnabled = await TelegramService.isEnabled();
+
     // Gestisci eventi subscription
     if (event.type === 'customer.subscription.updated') {
       const subscription = event.data.object as Stripe.Subscription;
@@ -85,7 +88,7 @@ export async function POST(request: NextRequest) {
             };
             await EmailService.sendSubscriptionCancelScheduled(emailData);
             console.log(`✅ Subscription cancel scheduled email sent to: ${dbSub.customerEmail}`);
-            await TelegramService.sendSubscriptionCancelScheduledNotification(emailData);
+            if (telegramEnabled) await TelegramService.sendSubscriptionCancelScheduledNotification(emailData);
           }
         } catch (emailError) {
           console.error('⚠️ Error sending subscription cancel scheduled email:', emailError);
@@ -139,7 +142,7 @@ export async function POST(request: NextRequest) {
           };
           await EmailService.sendSubscriptionCanceled(emailData);
           console.log(`✅ Subscription canceled (win-back) email sent to: ${dbSub.customerEmail}`);
-          await TelegramService.sendSubscriptionCanceledNotification(emailData);
+          if (telegramEnabled) await TelegramService.sendSubscriptionCanceledNotification(emailData);
         }
       } catch (emailError) {
         console.error('⚠️ Error sending subscription canceled email:', emailError);
@@ -201,7 +204,7 @@ export async function POST(request: NextRequest) {
           };
           await EmailService.sendSubscriptionPaused(emailData);
           console.log(`✅ Subscription paused email sent to: ${dbSub.customerEmail}`);
-          await TelegramService.sendSubscriptionPausedNotification(emailData);
+          if (telegramEnabled) await TelegramService.sendSubscriptionPausedNotification(emailData);
         }
       } catch (emailError) {
         console.error('⚠️ Error sending subscription paused email:', emailError);
@@ -238,7 +241,7 @@ export async function POST(request: NextRequest) {
           };
           await EmailService.sendSubscriptionResumed(emailData);
           console.log(`✅ Subscription resumed email sent to: ${dbSub.customerEmail}`);
-          await TelegramService.sendSubscriptionResumedNotification(emailData);
+          if (telegramEnabled) await TelegramService.sendSubscriptionResumedNotification(emailData);
         }
       } catch (emailError) {
         console.error('⚠️ Error sending subscription resumed email:', emailError);
@@ -308,7 +311,7 @@ export async function POST(request: NextRequest) {
             };
             await EmailService.sendSubscriptionUpcomingRenewal(emailData);
             console.log(`✅ Upcoming renewal email sent to: ${dbSub.customerEmail}`);
-            await TelegramService.sendSubscriptionUpcomingRenewalNotification(emailData);
+            if (telegramEnabled) await TelegramService.sendSubscriptionUpcomingRenewalNotification(emailData);
           }
         } catch (emailError) {
           console.error('⚠️ Error sending upcoming renewal email:', emailError);
@@ -390,9 +393,11 @@ export async function POST(request: NextRequest) {
                 console.log(`✅ Subscription confirmation email sent to: ${dbSub.customerEmail}`);
               }
 
-              const telegramSent = await TelegramService.sendSubscriptionNotification(emailData);
-              if (telegramSent) {
-                console.log(`✅ Subscription Telegram notification sent`);
+              if (telegramEnabled) {
+                const telegramSent = await TelegramService.sendSubscriptionNotification(emailData);
+                if (telegramSent) {
+                  console.log(`✅ Subscription Telegram notification sent`);
+                }
               }
             }
           } catch (notifError) {
@@ -539,15 +544,17 @@ export async function POST(request: NextRequest) {
         }
 
         // Invia notifica Telegram
-        try {
-          const telegramSent = await TelegramService.sendOrderNotification(orderDetails, mongoId);
-          if (telegramSent) {
-            console.log(`✅ Telegram notification sent`);
-          } else {
-            console.error('⚠️ Failed to send Telegram notification');
+        if (telegramEnabled) {
+          try {
+            const telegramSent = await TelegramService.sendOrderNotification(orderDetails, mongoId);
+            if (telegramSent) {
+              console.log(`✅ Telegram notification sent`);
+            } else {
+              console.error('⚠️ Failed to send Telegram notification');
+            }
+          } catch (error) {
+            console.error('⚠️ Error sending Telegram notification:', error);
           }
-        } catch (error) {
-          console.error('⚠️ Error sending Telegram notification:', error);
         }
 
         // Invia email

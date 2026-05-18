@@ -2,6 +2,7 @@
 import { OrderDetails } from '@/types/checkoutSuccessTypes';
 import { GoalService } from '@/services/goalService';
 import { SubscriptionEmailData } from '@/types/subscription';
+import { getDatabase } from '@/lib/mongodb';
 
 interface TelegramConfig {
   botToken: string;
@@ -31,6 +32,17 @@ interface FormData {
 }
 
 export class TelegramService {
+  static async isEnabled(): Promise<boolean> {
+    try {
+      const db = await getDatabase();
+      const settings = await db.collection('admin_settings').findOne({});
+      // Default true per retrocompatibilità se il campo non esiste
+      return settings?.telegram?.enabled !== false;
+    } catch {
+      return true;
+    }
+  }
+
   private static getConfig(): TelegramConfig | null {
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;

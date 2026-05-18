@@ -333,11 +333,14 @@ export const PATCH = withAuth(async (request: NextRequest, { params }: { params:
           finalPricing: finalPricing || form.finalPricing,
         };
 
-        await TelegramService.sendQuotePaidNotification(
-          formDataWithPricing,
-          productsInfo,
-          formId
-        );
+        const telegramEnabled = await TelegramService.isEnabled();
+        if (telegramEnabled) {
+          await TelegramService.sendQuotePaidNotification(
+            formDataWithPricing,
+            productsInfo,
+            formId
+          );
+        }
       } catch (telegramError) {
         // Non bloccare il processo se c'è un errore nell'invio della notifica
         console.error('Errore invio notifica Telegram:', telegramError);

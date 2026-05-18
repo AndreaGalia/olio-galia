@@ -23,6 +23,10 @@ interface WhatsAppSettings {
   };
 }
 
+interface TelegramSettings {
+  enabled: boolean;
+}
+
 interface NewsletterPopupSettings {
   enabled: boolean;
   showOnHomepage: boolean;
@@ -34,6 +38,7 @@ interface NewsletterPopupSettings {
 interface AdminSettings {
   torino_checkout_enabled: boolean;
   stripe_enabled: boolean;
+  telegram: TelegramSettings;
   whatsapp: WhatsAppSettings;
   newsletter_popup: NewsletterPopupSettings;
 }
@@ -49,6 +54,9 @@ export default function AdminSettingsPage() {
   const [settings, setSettings] = useState<AdminSettings>({
     torino_checkout_enabled: false,
     stripe_enabled: true, // Default: Stripe abilitato
+    telegram: {
+      enabled: true
+    },
     whatsapp: {
       enabled: false,
       apiUrl: '',
@@ -95,6 +103,10 @@ export default function AdminSettingsPage() {
       const response = await fetch('/api/admin/settings');
       if (response.ok) {
         const data = await response.json();
+        // Fallback per campi che potrebbero mancare in documenti vecchi
+        if (!data.telegram) {
+          data.telegram = { enabled: true };
+        }
         setSettings(data);
       } else {
         throw new Error('Errore nel caricamento delle impostazioni');
@@ -332,6 +344,42 @@ export default function AdminSettingsPage() {
               Configura →
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* Sezione Notifiche Telegram */}
+      <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-olive/10 p-6 mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-xl font-semibold text-olive">Notifiche Telegram</h2>
+            <p className="text-sm text-gray-600 mt-1">
+              Invia messaggi Telegram al ricevimento di ordini, preventivi e aggiornamenti abbonamenti.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setSettings(prev => ({
+              ...prev,
+              telegram: { enabled: !prev.telegram.enabled }
+            }))}
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 ${
+              settings.telegram.enabled ? 'bg-olive' : 'bg-gray-200'
+            }`}
+          >
+            <span
+              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                settings.telegram.enabled ? 'translate-x-6' : 'translate-x-1'
+              }`}
+            />
+          </button>
+        </div>
+
+        <div className={`p-4 rounded-lg border ${settings.telegram.enabled ? 'bg-green-50 border-green-200' : 'bg-yellow-50 border-yellow-200'}`}>
+          <p className={`text-sm font-medium ${settings.telegram.enabled ? 'text-green-700' : 'text-yellow-700'}`}>
+            {settings.telegram.enabled
+              ? 'Attivo — i messaggi Telegram vengono inviati normalmente.'
+              : 'Disabilitato — nessun messaggio Telegram verrà inviato (utile in fase di test).'}
+          </p>
         </div>
       </div>
 

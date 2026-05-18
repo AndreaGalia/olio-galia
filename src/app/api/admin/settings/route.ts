@@ -18,6 +18,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         torino_checkout_enabled: false,
         stripe_enabled: true, // Default: Stripe abilitato
+        telegram: {
+          enabled: true
+        },
         whatsapp: {
           enabled: false,
           apiUrl: '',
@@ -35,6 +38,11 @@ export async function GET(request: NextRequest) {
           dismissDays: 7
         }
       });
+    }
+
+    // Assicura che esista la sezione telegram (default enabled per retrocompatibilità)
+    if (!settings.telegram) {
+      settings.telegram = { enabled: true };
     }
 
     // Assicura che esista la sezione whatsapp anche se il documento è vecchio
@@ -85,7 +93,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { torino_checkout_enabled, stripe_enabled, whatsapp, newsletter_popup } = body;
+    const { torino_checkout_enabled, stripe_enabled, telegram, whatsapp, newsletter_popup } = body;
 
     // Validazione
     if (torino_checkout_enabled !== undefined && typeof torino_checkout_enabled !== 'boolean') {
@@ -115,6 +123,10 @@ export async function PUT(request: NextRequest) {
 
     if (stripe_enabled !== undefined) {
       updateData.stripe_enabled = stripe_enabled;
+    }
+
+    if (telegram !== undefined) {
+      updateData.telegram = telegram;
     }
 
     if (whatsapp !== undefined) {
@@ -152,6 +164,7 @@ export async function PUT(request: NextRequest) {
       success: true,
       torino_checkout_enabled,
       stripe_enabled,
+      telegram,
       whatsapp,
       newsletter_popup
     });

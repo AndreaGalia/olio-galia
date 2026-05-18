@@ -149,9 +149,14 @@ try {
     let telegramSent = false;
     let telegramError = null;
     try {
-      telegramSent = await TelegramService.sendOrderNotification(orderDetails, mongoId);
-      if (!telegramSent) {
-        telegramError = 'Errore nell\'invio della notifica Telegram';
+      const telegramEnabled = await TelegramService.isEnabled();
+      if (telegramEnabled) {
+        telegramSent = await TelegramService.sendOrderNotification(orderDetails, mongoId);
+        if (!telegramSent) {
+          telegramError = 'Errore nell\'invio della notifica Telegram';
+        }
+      } else {
+        telegramError = 'Notifiche Telegram disabilitate nelle impostazioni';
       }
     } catch (error) {
       telegramError = error instanceof Error ? error.message : 'Errore sconosciuto nell\'invio notifica Telegram';

@@ -222,19 +222,22 @@ export const POST = withAuth(async (request: NextRequest) => {
 
       // Invia notifica Telegram (SENZA email)
       try {
-        const productIds = data.selectedProducts.map(sp => sp.productId);
-        const productNameMap = await getProductNames(db, productIds);
+        const telegramEnabled = await TelegramService.isEnabled();
+        if (telegramEnabled) {
+          const productIds = data.selectedProducts.map(sp => sp.productId);
+          const productNameMap = await getProductNames(db, productIds);
 
-        const totalQuantity = data.selectedProducts.reduce((sum, sp) => sum + sp.quantity, 0);
-        const avgPrice = totalQuantity > 0 ? data.finalPricing.finalSubtotal / totalQuantity : 0;
+          const totalQuantity = data.selectedProducts.reduce((sum, sp) => sum + sp.quantity, 0);
+          const avgPrice = totalQuantity > 0 ? data.finalPricing.finalSubtotal / totalQuantity : 0;
 
-        const productsInfo = prepareProductsInfo(data.selectedProducts, productNameMap, avgPrice);
+          const productsInfo = prepareProductsInfo(data.selectedProducts, productNameMap, avgPrice);
 
-        await TelegramService.sendQuoteConfirmedNotification(
-          preventivo,
-          productsInfo,
-          result.insertedId.toString()
-        );
+          await TelegramService.sendQuoteConfirmedNotification(
+            preventivo,
+            productsInfo,
+            result.insertedId.toString()
+          );
+        }
       } catch (telegramError) {
         console.error('Errore invio notifica Telegram:', telegramError);
       }
