@@ -35,28 +35,28 @@ export default function CheckoutSuccessContent() {
     <div className="min-h-screen bg-sabbia-chiaro">
 
       {/* ── HERO ─────────────────────────────────────────────── */}
-      <section className="border-b border-olive/20 pt-16 pb-10 lg:pt-24 lg:pb-14">
+      <section className="border-b border-olive/20 pt-14 pb-8 lg:pt-20 lg:pb-10">
         <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-[var(--container-wide)] mx-auto">
           <div className="lg:flex lg:items-end lg:justify-between lg:gap-12">
 
             <div>
-              <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-4">
+              <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-3">
                 {t.checkoutSuccess.hero.subtitle}
               </p>
-              <h1 style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', lineHeight: '1.1', letterSpacing: '0.15em' }}>
+              <h1 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', lineHeight: '1.1', letterSpacing: '0.15em' }}>
                 {t.checkoutSuccess.hero.title}
               </h1>
-              <p className="mt-5 garamond-13 max-w-xl">
+              <p className="mt-4 garamond-13 max-w-lg">
                 {t.checkoutSuccess.hero.description}
               </p>
             </div>
 
             {order?.paymentIntent && (
-              <div className="mt-8 lg:mt-0 flex-shrink-0 lg:text-right">
+              <div className="mt-6 lg:mt-0 flex-shrink-0 lg:text-right">
                 <p className="font-serif termina-8 tracking-[0.2em] uppercase text-black mb-1">
                   {t.checkoutSuccess.hero.orderNumber}
                 </p>
-                <p style={{ fontFamily: '"termina", sans-serif', fontSize: 'clamp(1.1rem, 2vw, 1.5rem)', letterSpacing: '0.1em' }}>
+                <p style={{ fontFamily: '"termina", sans-serif', fontSize: 'clamp(1rem, 1.8vw, 1.4rem)', letterSpacing: '0.1em' }}>
                   #{order.paymentIntent.slice(-8).toUpperCase()}
                 </p>
               </div>
@@ -67,10 +67,10 @@ export default function CheckoutSuccessContent() {
       </section>
 
       {/* ── MAIN ─────────────────────────────────────────────── */}
-      <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-[var(--container-wide)] mx-auto py-10 lg:py-14">
-        <div className="lg:grid lg:grid-cols-[1fr_300px] lg:gap-16 xl:gap-24">
+      <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-[var(--container-wide)] mx-auto pt-8 pb-12 lg:pt-10 lg:pb-16">
+        <div className="lg:grid lg:grid-cols-[1fr_280px] lg:gap-12 xl:gap-16">
 
-          {/* ── COLONNA SINISTRA: prodotti + totali ── */}
+          {/* ── SINISTRA: prodotti + totali ── */}
           <div>
             {loading ? (
               <div className="animate-pulse space-y-5">
@@ -80,19 +80,17 @@ export default function CheckoutSuccessContent() {
               </div>
             ) : order ? (
               <>
-                <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-0">
+                <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black pb-0">
                   {t.checkoutSuccess.orderSummary.productsOrdered}
                 </p>
 
+                {/* Lista prodotti */}
                 <div>
                   {order.items?.map((item, index) => (
-                    <div
-                      key={index}
-                      className="border-t border-olive/20 py-5 flex items-center justify-between gap-4"
-                    >
+                    <div key={index} className="border-t border-olive/20 py-4 flex items-center justify-between gap-4">
                       <div className="flex items-center gap-4">
                         {item.image && (
-                          <div className="w-14 h-14 sm:w-16 sm:h-16 border border-olive/20 overflow-hidden flex-shrink-0">
+                          <div className="w-14 h-14 border border-olive/20 overflow-hidden flex-shrink-0">
                             <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                           </div>
                         )}
@@ -111,14 +109,14 @@ export default function CheckoutSuccessContent() {
                       </div>
                     </div>
                   )) || (
-                    <p className="garamond-13 py-5 border-t border-olive/20">
+                    <p className="garamond-13 py-4 border-t border-olive/20">
                       {t.checkoutSuccess.orderSummary.productDetailsNotAvailable}
                     </p>
                   )}
                 </div>
 
                 {/* Totali */}
-                <div className="border-t border-olive/20 pt-4 space-y-2.5">
+                <div className="border-t border-olive/20 pt-4 space-y-2">
                   <div className="flex justify-between garamond-13">
                     <span>{t.checkoutSuccess.orderSummary.subtotal}</span>
                     <span>
@@ -145,7 +143,7 @@ export default function CheckoutSuccessContent() {
                     <span className="font-serif termina-11 tracking-[0.2em] uppercase text-black">
                       {t.checkoutSuccess.orderSummary.total}
                     </span>
-                    <span style={{ fontFamily: '"termina", sans-serif', fontSize: 'clamp(1.1rem, 2vw, 1.4rem)', letterSpacing: '0.05em' }}>
+                    <span style={{ fontFamily: '"termina", sans-serif', fontSize: 'clamp(1rem, 1.8vw, 1.3rem)', letterSpacing: '0.05em' }}>
                       €{(order.pricing?.total ?? order.total ?? 0).toFixed(2)}
                     </span>
                   </div>
@@ -154,26 +152,26 @@ export default function CheckoutSuccessContent() {
             ) : null}
           </div>
 
-          {/* ── COLONNA DESTRA: info + timeline + azioni ── */}
-          <div className="mt-12 lg:mt-0 space-y-0">
+          {/* ── DESTRA: dati + timeline + azioni ── */}
+          <div className="mt-10 lg:mt-0">
 
             {/* Dati cliente + spedizione */}
             {order && (
-              <div className="pb-8 border-b border-olive/20 grid grid-cols-2 gap-6">
+              <div className="pb-6 border-b border-olive/20 grid grid-cols-2 gap-5">
                 <div>
-                  <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-3">
+                  <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-2.5">
                     {t.checkoutSuccess.orderSummary.customerData}
                   </p>
-                  <div className="space-y-1.5 garamond-13">
+                  <div className="space-y-1 garamond-13">
                     <p>{order.customer?.name || '—'}</p>
                     <p>{order.customer?.email || '—'}</p>
                   </div>
                 </div>
                 <div>
-                  <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-3">
+                  <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-2.5">
                     {t.checkoutSuccess.orderSummary.shipping}
                   </p>
-                  <div className="space-y-1.5 garamond-13">
+                  <div className="space-y-1 garamond-13">
                     <p>{order.shipping?.address || t.checkoutSuccess.orderSummary.asPerCheckout}</p>
                     {order.shipping?.method && <p>{order.shipping.method}</p>}
                   </div>
@@ -182,8 +180,8 @@ export default function CheckoutSuccessContent() {
             )}
 
             {/* Timeline */}
-            <div className="pt-8 pb-8 border-b border-olive/20">
-              <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-5">
+            <div className="pt-6 pb-6 border-b border-olive/20">
+              <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-4">
                 {t.checkoutSuccess.timeline.title}
               </p>
               <div>
@@ -191,7 +189,7 @@ export default function CheckoutSuccessContent() {
                   const step = t.checkoutSuccess.timeline.steps[key];
                   const isDone = index <= currentIndex;
                   return (
-                    <div key={key} className="border-t border-olive/20 py-4 flex items-start justify-between gap-3">
+                    <div key={key} className="border-t border-olive/20 py-3.5 flex items-start justify-between gap-3">
                       <div className="flex-1">
                         <p className={`font-serif termina-8 tracking-[0.2em] uppercase mb-1 ${isDone ? 'text-olive' : 'text-black/30'}`}>
                           0{index + 1}
@@ -211,9 +209,9 @@ export default function CheckoutSuccessContent() {
               </div>
             </div>
 
-            {/* Pulsanti azione */}
+            {/* Azioni */}
             {order?.paymentIntent && (
-              <div className="pt-8 space-y-3">
+              <div className="pt-6 space-y-3">
                 <WhatsAppButton orderDetails={order} sessionId={order.paymentIntent} />
                 {receiptStatus.hasReceipt && (
                   <ReceiptButton receiptStatus={receiptStatus} invoiceStatus={invoiceStatus} />
@@ -225,9 +223,9 @@ export default function CheckoutSuccessContent() {
         </div>
 
         {/* ── CTA ─────────────────────────────────────────────── */}
-        <div className="border-t border-olive/20 pt-8 mt-14 lg:mt-16 lg:flex lg:items-center lg:justify-between lg:gap-12">
-          <div className="mb-6 lg:mb-0">
-            <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-2">
+        <div className="border-t border-olive/20 pt-7 mt-10 lg:mt-12 lg:flex lg:items-center lg:justify-between lg:gap-12">
+          <div className="mb-5 lg:mb-0">
+            <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-1.5">
               {t.checkoutSuccess.cta.title}
             </p>
             <p className="garamond-13 max-w-sm">
