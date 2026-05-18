@@ -8,7 +8,7 @@ export default function CallToAction({ className = "" }: CallToActionProps) {
   return (
     <section className={`pb-16 sm:pb-24 ${className}`}>
       <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-4xl mx-auto">
-        <div className="border-t border-olive/20 pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <div className="border-t border-olive/20 pt-8 space-y-6">
           <div>
             <p className="font-serif termina-11 tracking-[0.2em] uppercase text-black mb-2">
               {t.checkoutSuccess.cta.title}
@@ -18,16 +18,16 @@ export default function CallToAction({ className = "" }: CallToActionProps) {
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+          <div className="flex flex-col gap-3 max-w-sm">
             <Link
               href="/products"
-              className="font-serif termina-11 tracking-[0.25em] uppercase px-6 py-3 bg-sabbia text-black hover:bg-olive hover:text-beige transition-all duration-300 cursor-pointer whitespace-nowrap text-center"
+              className="w-full py-4 font-serif termina-11 tracking-[3.4px] uppercase border border-olive bg-olive text-beige hover:bg-sabbia hover:text-olive transition-all duration-200 cursor-pointer text-center block"
             >
               {t.checkoutSuccess.cta.discoverProducts}
             </Link>
             <Link
               href="/"
-              className="font-serif termina-11 tracking-[0.25em] uppercase px-6 py-3 border border-olive/20 text-black hover:bg-olive hover:text-beige hover:border-olive transition-all duration-300 cursor-pointer whitespace-nowrap text-center"
+              className="w-full py-4 font-serif termina-11 tracking-[3.4px] uppercase border border-olive bg-sabbia text-olive hover:bg-olive hover:text-beige transition-all duration-200 cursor-pointer text-center block"
             >
               {t.checkoutSuccess.cta.backToHome}
             </Link>

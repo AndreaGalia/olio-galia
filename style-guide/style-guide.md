@@ -171,19 +171,34 @@ className="absolute left-5 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacit
 ### Stile
 
 ```tsx
-className="w-full py-4 bg-sabbia text-black text-[11px] tracking-[0.25em] uppercase
-           transition-all duration-300 cursor-pointer
-           hover:bg-olive hover:text-beige"
+className={`w-full py-4 font-serif termina-11 tracking-[3.4px] uppercase border border-olive
+            transition-all duration-200 cursor-pointer disabled:cursor-not-allowed ${
+  isAdded
+    ? 'bg-sabbia text-olive'
+    : isDisabled
+      ? 'bg-sabbia/40 text-black/30 border-olive/30'
+      : 'bg-olive text-beige hover:bg-sabbia hover:text-olive'
+}`}
 ```
 
 ### Regole
 
 - **Full-width** sempre (`w-full`)
-- Sfondo `bg-sabbia` (beige caldo) — mai `bg-olive` di default
-- Hover: `bg-olive text-beige`
+- Sfondo `bg-olive text-beige` di default — hover `bg-sabbia text-olive`
+- Bordo sempre presente: `border border-olive`
 - Nessuna icona nel bottone, solo testo
-- Stato "aggiunto": `bg-olive/80 text-beige` con testo "Aggiunto al carrello ✓"
-- Stato disabilitato: `bg-sabbia/40 text-black/30`
+- Stato "aggiunto": `bg-sabbia text-olive` con testo "Aggiunto al carrello ✓"
+- Stato disabilitato: `bg-sabbia/40 text-black/30 border-olive/30`
+
+### Bottone secondario (azione inversa)
+
+```tsx
+className="w-full py-4 font-serif termina-11 tracking-[3.4px] uppercase border border-olive
+           bg-sabbia text-olive hover:bg-olive hover:text-beige
+           transition-all duration-200 cursor-pointer"
+```
+
+Usare quando si affiancano due bottoni: il primario usa `bg-olive`, il secondario usa `bg-sabbia`.
 
 ---
 

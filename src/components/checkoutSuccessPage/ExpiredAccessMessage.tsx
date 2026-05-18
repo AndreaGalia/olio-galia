@@ -27,16 +27,16 @@ export default function ExpiredAccessMessage() {
           </p>
         </div>
 
-        <div className="mt-8 flex flex-col sm:flex-row gap-3">
+        <div className="mt-8 flex flex-col gap-3 max-w-sm">
           <Link
             href="/"
-            className="font-serif termina-11 tracking-[0.25em] uppercase px-6 py-3 bg-sabbia text-black hover:bg-olive hover:text-beige transition-all duration-300 cursor-pointer whitespace-nowrap text-center"
+            className="w-full py-4 font-serif termina-11 tracking-[3.4px] uppercase border border-olive bg-olive text-beige hover:bg-sabbia hover:text-olive transition-all duration-200 cursor-pointer text-center block"
           >
             {t.checkoutSuccess.expired.backToHome}
           </Link>
           <Link
             href="/products"
-            className="font-serif termina-11 tracking-[0.25em] uppercase px-6 py-3 border border-olive/20 text-black hover:bg-olive hover:text-beige hover:border-olive transition-all duration-300 cursor-pointer whitespace-nowrap text-center"
+            className="w-full py-4 font-serif termina-11 tracking-[3.4px] uppercase border border-olive bg-sabbia text-olive hover:bg-olive hover:text-beige transition-all duration-200 cursor-pointer text-center block"
           >
             {t.checkoutSuccess.expired.exploreProducts}
           </Link>

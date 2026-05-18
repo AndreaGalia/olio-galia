@@ -9,7 +9,7 @@ function CheckoutSuccessLoading() {
 
   return (
     <div className="min-h-screen bg-sabbia-chiaro">
-      <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-4xl mx-auto pt-16 lg:pt-24">
+      <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-[var(--container-wide)] mx-auto pt-16 lg:pt-24">
         <div className="animate-pulse space-y-4">
           <div className="h-3 bg-olive/10 w-32" />
           <div className="h-8 bg-olive/10 w-64" />

@@ -25,7 +25,7 @@ export default function SuccessHeroSection({
         </p>
 
         {orderDetails?.paymentIntent && (
-          <div className="mt-8 flex flex-col sm:flex-row gap-3">
+          <div className="mt-8 flex flex-col gap-3 max-w-sm">
             <WhatsAppButton
               orderDetails={orderDetails}
               sessionId={orderDetails.paymentIntent}
