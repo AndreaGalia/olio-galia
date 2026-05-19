@@ -65,10 +65,11 @@ const validateSessionId = (sessionId: string | null) => {
 const retrieveSessionData = async (sessionId: string) => {
   return await stripe.checkout.sessions.retrieve(sessionId, {
     expand: [
-      'line_items', 
-      'line_items.data.price.product', 
+      'line_items',
+      'line_items.data.price.product',
       'customer',
-      'shipping_cost'
+      'shipping_cost',
+      'total_details.breakdown.discounts',
     ]
   });
 };
@@ -131,10 +132,23 @@ const extractOrderItems = (session: Stripe.Checkout.Session): OrderItem[] => {
 };
 
 const calculatePricing = (session: Stripe.Checkout.Session) => {
+  // Estrai codice sconto e importo da total_details (disponibile con expand)
+  const discounts = (session.total_details as any)?.breakdown?.discounts;
+  const firstDiscount = Array.isArray(discounts) && discounts.length > 0 ? discounts[0] : null;
+  const discountAmount = firstDiscount ? (firstDiscount.amount || 0) / 100 : 0;
+  const discountCode =
+    firstDiscount?.discount?.promotion_code?.code ||
+    firstDiscount?.discount?.coupon?.name ||
+    firstDiscount?.discount?.coupon?.id ||
+    null;
+
   return {
     subtotal: (session.amount_subtotal || 0) / 100,
     shippingCost: (session.shipping_cost?.amount_total || 0) / 100,
     total: (session.amount_total || 0) / 100,
+    ...(discountAmount > 0 && discountCode
+      ? { discount: { code: discountCode, amount: discountAmount } }
+      : {}),
   };
 };
 

@@ -133,6 +133,17 @@ export default function CheckoutSuccessContent() {
                           ((order.total || 0) - (order.pricing?.shippingCost ?? (order.total || 0) * 0.1)).toFixed(2)}
                       </span>
                     </div>
+                    {order.pricing?.discount && (
+                      <div className="flex justify-between garamond-13 text-olive">
+                        <span className="flex items-center gap-2">
+                          Sconto
+                          <span className="font-serif termina-8 tracking-[0.1em] uppercase border border-olive/40 px-1.5 py-0.5">
+                            {order.pricing.discount.code}
+                          </span>
+                        </span>
+                        <span>−€{order.pricing.discount.amount.toFixed(2)}</span>
+                      </div>
+                    )}
                     <div className="flex justify-between garamond-13">
                       <span className="flex items-center gap-2">
                         {t.checkoutSuccess.orderSummary.shippingCost}

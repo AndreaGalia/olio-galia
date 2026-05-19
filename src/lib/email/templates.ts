@@ -17,17 +17,18 @@ interface QuoteEmailData {
 }
 
 export const createOrderConfirmationHTML = (orderData: EmailOrderDataExtended): string => {
-  const { 
-    customerName, 
-    orderNumber, 
-    orderDate, 
-    items, 
-    subtotal, 
-    shipping, 
-    total, 
+  const {
+    customerName,
+    orderNumber,
+    orderDate,
+    items,
+    subtotal,
+    shipping,
+    total,
+    discount,
     shippingAddress,
     receiptUrl,
-    hasInvoice 
+    hasInvoice
   } = orderData;
   
   return `
@@ -409,6 +410,12 @@ export const createOrderConfirmationHTML = (orderData: EmailOrderDataExtended): 
                       <span class="total-label">Subtotale:</span>
                       <span class="total-value">€${subtotal.toFixed(2)}</span>
                     </div>
+                    ${discount ? `
+                    <div class="total-row clearfix">
+                      <span class="total-label">Sconto (${discount.code}):</span>
+                      <span class="total-value">−€${discount.amount.toFixed(2)}</span>
+                    </div>
+                    ` : ''}
                     <div class="total-row clearfix">
                       <span class="total-label">Spedizione:</span>
                       <span class="total-value">€${shipping.toFixed(2)}</span>

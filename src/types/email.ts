@@ -13,6 +13,10 @@ export interface EmailOrderData {
   subtotal: number;
   shipping: number;
   total: number;
+  discount?: {
+    code: string;
+    amount: number; // importo scontato in EUR (es. 5.00)
+  };
   shippingAddress: {
     name: string;
     street: string;

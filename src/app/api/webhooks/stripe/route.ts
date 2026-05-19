@@ -489,6 +489,9 @@ export async function POST(request: NextRequest) {
           subtotal: orderDetails.pricing?.subtotal || 0,
           shipping: orderDetails.pricing?.shippingCost || 0,
           total: orderDetails.pricing?.total || orderDetails.total || 0,
+          ...(orderDetails.pricing?.discount
+            ? { discount: orderDetails.pricing.discount }
+            : {}),
           shippingAddress: {
             name: orderDetails.customer?.name || '',
             street: orderDetails.shipping?.address || '',

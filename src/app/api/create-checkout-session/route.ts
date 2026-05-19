@@ -374,6 +374,9 @@ const createSessionConfig = async (
     // Usa shipping_options con riferimento alle shipping rates già create
     shipping_options: shippingOptions,
 
+    // Abilita i codici promozionali Stripe
+    allow_promotion_codes: true,
+
     // Metadata per salvare la zona selezionata
     metadata: {
       shipping_zone: shippingZone,

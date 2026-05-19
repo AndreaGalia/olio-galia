@@ -17,6 +17,7 @@ export interface OrderSummary {
   shippingStatus: OrderShippingStatus;
   created: string;
   itemCount: number;
+  discountCode?: string;
   hasFeedback?: boolean;
 }
 

@@ -42,6 +42,10 @@ export interface Pricing {
   subtotal: number;
   shippingCost: number;
   total: number;
+  discount?: {
+    code: string;
+    amount: number; // importo scontato in EUR (es. 5.00)
+  };
 }
 
 // ===== ORDER DETAILS =====

@@ -28,6 +28,10 @@ interface AdminOrderDetails {
     subtotal: number;
     shippingCost: number;
     total: number;
+    discount?: {
+      code: string;
+      amount: number;
+    };
   };
   shipping?: {
     address: string;
@@ -1049,7 +1053,19 @@ export default function AdminOrderDetailsPage({
                     <span className="text-nocciola">Subtotale:</span>
                     <span className="text-olive font-semibold">€{orderDetails.pricing.subtotal.toFixed(2)}</span>
                   </div>
-                  
+
+                  {orderDetails.pricing.discount && (
+                    <div className="flex justify-between items-center text-sm sm:text-base">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-nocciola">Sconto:</span>
+                        <span className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full font-medium border border-amber-300">
+                          {orderDetails.pricing.discount.code}
+                        </span>
+                      </div>
+                      <span className="text-amber-700 font-semibold">−€{orderDetails.pricing.discount.amount.toFixed(2)}</span>
+                    </div>
+                  )}
+
                   <div className="flex justify-between items-center text-sm sm:text-base">
                     <div className="flex items-center space-x-2">
                       <span className="text-nocciola">Spedizione:</span>
@@ -1061,7 +1077,7 @@ export default function AdminOrderDetailsPage({
                     </div>
                     <span className="text-olive font-semibold">€{orderDetails.pricing.shippingCost.toFixed(2)}</span>
                   </div>
-                  
+
                   <div className="border-t border-olive/20 pt-3">
                     <div className="flex justify-between items-center">
                       <span className="text-lg sm:text-xl font-serif text-olive font-bold">Totale:</span>

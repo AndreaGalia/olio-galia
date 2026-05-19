@@ -200,6 +200,11 @@ export default function AdminOrdersPage() {
                           <div className="text-sm font-bold text-olive">
                             €{order.total.toFixed(2)}
                           </div>
+                          {order.discountCode && (
+                            <div className="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-medium border border-amber-300 inline-block mt-1">
+                              {order.discountCode}
+                            </div>
+                          )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <StatusBadge status={order.paymentStatus} type="payment" />
@@ -272,10 +277,15 @@ export default function AdminOrdersPage() {
                       </div>
                       
                       <div className="flex justify-between items-center">
-                        <div>
+                        <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-sm font-bold text-olive">
                             €{order.total.toFixed(2)}
                           </span>
+                          {order.discountCode && (
+                            <span className="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-medium border border-amber-300">
+                              {order.discountCode}
+                            </span>
+                          )}
                         </div>
                         <div className="text-xs text-nocciola">
                           {new Date(order.created).toLocaleDateString('it-IT')}

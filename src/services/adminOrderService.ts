@@ -18,6 +18,7 @@ export interface AdminOrderSummary {
   created: string;
   itemCount: number;
   shippingTrackingId?: string;
+  discountCode?: string;
   shipping?: {
     address: string;
     method: string;
@@ -37,6 +38,10 @@ export interface AdminOrderDetails extends AdminOrderSummary {
     subtotal: number;
     shippingCost: number;
     total: number;
+    discount?: {
+      code: string;
+      amount: number;
+    };
   };
   paymentIntent: string | null;
   mongoId?: string;
@@ -217,6 +222,7 @@ export class AdminOrderService {
           created: order.createdAt?.toISOString() || new Date().toISOString(),
           itemCount: order.items?.length || 0,
           shippingTrackingId: order.shippingTrackingId,
+          discountCode: order.pricing?.discount?.code,
           shipping: order.shipping,
           hasFeedback: feedbackMap.has(order._id.toString()),
         }));
