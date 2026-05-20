@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 
 import { useOrderPolling } from '@/hooks/useOrderPolling';
 import { useInvoiceStatus } from '@/hooks/useInvoiceStatus';
@@ -26,6 +27,19 @@ export default function CheckoutSuccessContent() {
   const receiptStatus = useReceiptStatus(sessionId);
 
   useCartCleanup(sessionId);
+
+  const pixelFired = useRef(false);
+  useEffect(() => {
+    if (order && !pixelFired.current && typeof window !== 'undefined' && window.fbq) {
+      pixelFired.current = true;
+      window.fbq('track', 'Purchase', {
+        value: order.pricing?.total ?? order.total ?? 0,
+        currency: 'EUR',
+        content_type: 'product',
+        content_ids: order.items?.map((item: { productId?: string; name: string }) => item.productId ?? item.name) ?? [],
+      });
+    }
+  }, [order]);
 
   if (expired) return <ExpiredAccessMessage />;
 

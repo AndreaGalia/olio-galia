@@ -9,6 +9,7 @@ import { Roboto, Libre_Baskerville } from 'next/font/google';
 import localFont from 'next/font/local';
 import { Analytics } from "@vercel/analytics/next"
 import { GoogleAnalytics } from '@next/third-parties/google'
+import MetaPixel from '@/components/analytics/MetaPixel'
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -76,6 +77,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Analytics />
         {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+        )}
+        {process.env.NEXT_PUBLIC_META_PIXEL_ID && (
+          <MetaPixel pixelId={process.env.NEXT_PUBLIC_META_PIXEL_ID} />
         )}
       </body>
     </html>
