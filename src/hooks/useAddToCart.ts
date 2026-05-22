@@ -4,6 +4,7 @@
 import { useCart } from "@/contexts/CartContext";
 import { Product } from "@/types/products";
 import { parseCartItemId, getVariantOrProduct } from "@/utils/variantHelpers";
+import { trackAddToCart } from "@/utils/analytics";
 
 interface UseAddToCartProps {
   products: Product[];
@@ -26,6 +27,15 @@ export const useAddToCart = ({ products }: UseAddToCartProps) => {
     }
 
     addToCart(cartItemId, quantity);
+
+    trackAddToCart({
+      productId,
+      variantId,
+      productName: product.name,
+      price: parseFloat(resolved.price),
+      quantity,
+    });
+
     return true;
   };
 

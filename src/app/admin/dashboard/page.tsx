@@ -70,6 +70,12 @@ export default function AdminDashboardPage() {
       >
         Lista d&apos;attesa
       </button>
+      <button
+        onClick={() => router.push('/admin/cart-analytics')}
+        className="px-3 md:px-4 py-2 bg-olive text-white rounded-lg hover:bg-salvia transition-colors cursor-pointer text-sm whitespace-nowrap"
+      >
+        Analisi Carrello
+      </button>
     </div>
   );
 
@@ -577,6 +583,33 @@ export default function AdminDashboardPage() {
             </h3>
             <p className="text-nocciola text-xs sm:text-sm">
               Migrazioni e operazioni sul database
+            </p>
+          </button>
+
+          <button
+            onClick={() => router.push('/admin/cart-analytics')}
+            className="p-4 sm:p-5 lg:p-6 border-2 border-olive/20 rounded-xl hover:border-olive hover:bg-olive/5 transition-all duration-300 group cursor-pointer text-left"
+          >
+            <div className="flex items-center mb-3 sm:mb-4">
+              <svg
+                className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-olive group-hover:scale-110 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-base sm:text-lg font-semibold text-olive mb-1 sm:mb-2">
+              Analisi Carrello
+            </h3>
+            <p className="text-nocciola text-xs sm:text-sm">
+              Prodotti aggiunti al carrello e trend
             </p>
           </button>
 
