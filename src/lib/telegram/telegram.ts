@@ -405,6 +405,95 @@ ${quoteUrl ? `🔗 <a href="${quoteUrl}">Visualizza preventivo nel pannello admi
   }
 
   /**
+   * Invia il report giornaliero (visite interne + carrello)
+   * Rispetta il flag telegram.enabled nelle impostazioni admin.
+   */
+  static async sendDailyReport(): Promise<boolean> {
+    const enabled = await this.isEnabled();
+    if (!enabled) {
+      console.info('ℹ️ Telegram disabilitato da admin — report giornaliero non inviato');
+      return false;
+    }
+
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayKey = yesterday.toISOString().slice(0, 10);
+
+    const dateLabel = yesterday.toLocaleDateString('it-IT', {
+      weekday: 'long',
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    });
+
+    const db = await getDatabase();
+
+    const startOfYesterday = new Date(yesterday);
+    startOfYesterday.setHours(0, 0, 0, 0);
+    const endOfYesterday = new Date(yesterday);
+    endOfYesterday.setHours(23, 59, 59, 999);
+    const cartFilter = { timestamp: { $gte: startOfYesterday, $lte: endOfYesterday } };
+
+    // Recupera dati visite e carrello in parallelo
+    const [pageViewDoc, totalCartAdds, topCartProducts] = await Promise.all([
+      db.collection('page_views').findOne({ date: yesterdayKey }),
+      db.collection('cart_events').countDocuments(cartFilter),
+      db.collection('cart_events').aggregate([
+        { $match: cartFilter },
+        { $group: { _id: '$productId', productName: { $last: '$productName' }, totalQuantity: { $sum: '$quantity' }, totalAdds: { $sum: 1 } } },
+        { $sort: { totalAdds: -1 } },
+        { $limit: 5 },
+      ]).toArray(),
+    ]);
+
+    // Sezione visite
+    let visitSection = '';
+    if (pageViewDoc && pageViewDoc.total > 0) {
+      const pages = pageViewDoc.pages as Record<string, number> ?? {};
+      const topPages = Object.entries(pages)
+        .sort(([, a], [, b]) => b - a)
+        .slice(0, 5)
+        .map(([p, v], i) => `  ${i + 1}. <code>${p.replace(/_/g, '.')}</code> (${v} visite)`)
+        .join('\n');
+
+      visitSection = `
+🌐 <b>VISITE IERI</b>
+  • Pagine viste: <b>${pageViewDoc.total}</b>
+
+📄 <b>Pagine più visitate:</b>
+${topPages || '  Nessun dato'}
+`;
+    } else {
+      visitSection = `\n🌐 <b>VISITE IERI</b>\n  Nessuna visita registrata\n`;
+    }
+
+    // Sezione carrello
+    let cartSection = '';
+    if (totalCartAdds === 0) {
+      cartSection = `\n🛒 <b>CARRELLO IERI</b>\n  Nessuna aggiunta al carrello\n`;
+    } else {
+      const productsText = topCartProducts
+        .map((p, i) => `  ${i + 1}. ${p.productName} (${p.totalAdds} aggiunte, ${p.totalQuantity} unità)`)
+        .join('\n');
+
+      cartSection = `
+🛒 <b>CARRELLO IERI</b>
+  • Aggiunte totali: <b>${totalCartAdds}</b>
+
+🏆 <b>Prodotti più aggiunti:</b>
+${productsText}
+`;
+    }
+
+    const message = `
+📊 <b>REPORT GIORNALIERO</b>
+📅 ${dateLabel}
+${visitSection}${cartSection}`.trim();
+
+    return this.sendMessageToAllChats(message, 'report giornaliero');
+  }
+
+  /**
    * Test per verificare la configurazione Telegram
    */
   static async testConnection(): Promise<boolean> {
