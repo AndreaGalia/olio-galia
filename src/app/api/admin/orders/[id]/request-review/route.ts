@@ -98,7 +98,8 @@ export const POST = withAuth(async (
       customerName,
       customerEmail,
       orderNumber: orderNumber.slice(-8).toUpperCase(),
-      orderType: 'order'
+      orderType: 'order',
+      locale: order.locale
     };
 
     // 7. Invia email

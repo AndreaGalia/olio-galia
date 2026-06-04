@@ -39,6 +39,7 @@ export interface ShippingNotificationData {
   trackingUrl: string;  // URL completo per tracking (non più solo ID)
   shippingCarrier?: string;
   expectedDelivery?: string;
+  locale?: 'it' | 'en';
 }
 
 export interface DeliveryNotificationData {
@@ -48,6 +49,7 @@ export interface DeliveryNotificationData {
   orderId?: string;  // MongoDB _id per link feedback
   shippingTrackingId?: string;
   deliveryDate?: string;
+  locale?: 'it' | 'en';
 }
 
 export interface NewsletterWelcomeData {
@@ -61,6 +63,7 @@ export interface ReviewRequestData {
   customerEmail: string;
   orderNumber: string;
   orderType?: 'order' | 'quote';
+  locale?: 'it' | 'en';
 }
 
 export interface QuoteEmailData {

@@ -117,7 +117,8 @@ export const PUT = withAuth(async (
           orderNumber: orderNumber.slice(-8).toUpperCase(),
           trackingUrl,  // Passa il link completo invece del solo ID
           shippingCarrier: carrierName,
-          expectedDelivery: body.expectedDelivery || undefined
+          expectedDelivery: body.expectedDelivery || undefined,
+          locale: updatedOrder.locale
         };
 
         const emailSent = await EmailService.sendShippingNotification(shippingNotificationData);
@@ -175,7 +176,8 @@ export const PUT = withAuth(async (
           orderNumber: orderNumber.slice(-8).toUpperCase(), // Prende gli ultimi 8 caratteri
           orderId: id, // MongoDB _id per link feedback
           shippingTrackingId: updatedOrder.shippingTrackingId,
-          deliveryDate: new Date().toLocaleDateString('it-IT')
+          deliveryDate: new Date().toLocaleDateString('it-IT'),
+          locale: updatedOrder.locale
         };
 
         const emailSent = await EmailService.sendDeliveryNotification(deliveryNotificationData, feedbackUrl);

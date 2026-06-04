@@ -444,6 +444,10 @@ export async function POST(request: NextRequest) {
 
         const orderDetails: OrderDetails = await orderDetailsResponse.json();
 
+        // Aggiungi il locale dell'utente all'ordine (salvato nei metadata Stripe al momento del checkout)
+        const emailLocale = (session.metadata?.locale || 'it') as 'it' | 'en';
+        orderDetails.locale = emailLocale;
+
         // Salva l'ordine in MongoDB
         const mongoId = await OrderService.createOrder(orderDetails);
         console.log(`✅ Order saved with ID: ${mongoId}`);
@@ -469,7 +473,6 @@ export async function POST(request: NextRequest) {
         }
 
         // Prepara dati per l'email
-        const emailLocale = (session.metadata?.locale || 'it') as 'it' | 'en';
         const emailData: EmailOrderDataExtended = {
           customerName: orderDetails.customer?.name || 'Cliente',
           customerEmail: orderDetails.customer?.email || '',
@@ -502,7 +505,7 @@ export async function POST(request: NextRequest) {
           },
           receiptUrl: null,
           hasInvoice: false,
-          locale: emailLocale
+          locale: orderDetails.locale
         };
 
         emailData.orderNumber = emailData.orderNumber.slice(-8).toUpperCase();

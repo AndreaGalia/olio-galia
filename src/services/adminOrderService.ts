@@ -53,6 +53,7 @@ export interface AdminOrderDetails extends AdminOrderSummary {
   };
   createdAt?: string;
   updatedAt?: string;
+  locale?: 'it' | 'en';
 }
 
 export class AdminOrderService {
@@ -378,6 +379,7 @@ export class AdminOrderService {
           createdAt: mongoOrder.createdAt?.toISOString(),
           updatedAt: mongoOrder.updatedAt?.toISOString(),
           shippingTrackingId: mongoOrder.shippingTrackingId,
+          locale: mongoOrder.locale,
         };
       }
 

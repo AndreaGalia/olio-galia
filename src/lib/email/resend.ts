@@ -124,7 +124,7 @@ export class EmailService {
 
   static async sendShippingNotification(shippingData: ShippingNotificationData): Promise<boolean> {
     try {
-      const locale = 'it';
+      const locale = shippingData.locale ?? 'it';
 
       const template = await this.getTemplate(
         'shipping_notification',
@@ -169,7 +169,7 @@ export class EmailService {
 
   static async sendDeliveryNotification(deliveryData: DeliveryNotificationData, feedbackUrl?: string): Promise<boolean> {
     try {
-      const locale = 'it';
+      const locale = deliveryData.locale ?? 'it';
 
       const template = await this.getTemplate(
         'delivery_notification',
@@ -257,7 +257,7 @@ export class EmailService {
 
   static async sendReviewRequest(reviewData: ReviewRequestData, feedbackUrl: string): Promise<boolean> {
     try {
-      const locale = 'it';
+      const locale = reviewData.locale ?? 'it';
 
       const template = await this.getTemplate(
         'review_request',
