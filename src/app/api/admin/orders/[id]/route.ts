@@ -44,7 +44,7 @@ export const PUT = withAuth(async (
     const { id } = await params;
     const body = await request.json();
     
-    const { shippingTrackingId, shippingStatus } = body;
+    const { shippingTrackingId, shippingStatus, shippingTrackingUrl } = body;
 
     if (!shippingStatus) {
       return NextResponse.json(
@@ -63,6 +63,7 @@ export const PUT = withAuth(async (
 
     const updatedOrder = await AdminOrderService.updateOrderShipping(id, {
       shippingTrackingId,
+      shippingTrackingUrl,
       shippingStatus
     });
 
@@ -83,32 +84,36 @@ export const PUT = withAuth(async (
         const carrierName = body.shippingCarrier || 'DHL'; // Prendi dal body o default
         let trackingUrl = '';
 
-        switch (carrierName.toUpperCase()) {
-          case 'DHL':
-            trackingUrl = `https://www.dhl.it/it/it/tracking-privati.html?submit=1&tracking-id=${shippingTrackingId}`;
-            break;
-          case 'UPS':
-            trackingUrl = `https://www.ups.com/track?tracknum=${shippingTrackingId}`;
-            break;
-          case 'FEDEX':
-            trackingUrl = `https://www.fedex.com/fedextrack/?tracknumbers=${shippingTrackingId}`;
-            break;
-          case 'POSTE ITALIANE':
-          case 'POSTE':
-            trackingUrl = `https://www.poste.it/cerca/index.html#/risultati-spedizioni/${shippingTrackingId}`;
-            break;
-          case 'SDA':
-            trackingUrl = `https://www.sda.it/wps/portal/Servizi_online/dettaglio-spedizione?locale=it&tracing.letteraVettura=${shippingTrackingId}`;
-            break;
-          case 'BRT':
-            trackingUrl = `https://vas.brt.it/vas/sped_det_show.hsm?referer=sped_numspe_par.htm&Nspediz=${shippingTrackingId}`;
-            break;
-          case 'GLS':
-            trackingUrl = `https://gls-group.com/IT/it/ricerca-pacchi?match=${shippingTrackingId}`;
-            break;
-          default:
-            // Fallback: se non riconosciuto, usa un generico o lascia vuoto
-            trackingUrl = `https://parcelsapp.com/en/tracking/${shippingTrackingId}`;
+        // Se l'admin ha inserito un link diretto, usa quello; altrimenti costruisci l'URL dal corriere
+        if (shippingTrackingUrl && shippingTrackingUrl.trim()) {
+          trackingUrl = shippingTrackingUrl.trim();
+        } else {
+          switch (carrierName.toUpperCase()) {
+            case 'DHL':
+              trackingUrl = `https://www.dhl.it/it/it/tracking-privati.html?submit=1&tracking-id=${shippingTrackingId}`;
+              break;
+            case 'UPS':
+              trackingUrl = `https://www.ups.com/track?tracknum=${shippingTrackingId}`;
+              break;
+            case 'FEDEX':
+              trackingUrl = `https://www.fedex.com/fedextrack/?tracknumbers=${shippingTrackingId}`;
+              break;
+            case 'POSTE ITALIANE':
+            case 'POSTE':
+              trackingUrl = `https://www.poste.it/cerca/index.html#/risultati-spedizioni/${shippingTrackingId}`;
+              break;
+            case 'SDA':
+              trackingUrl = `https://www.sda.it/wps/portal/Servizi_online/dettaglio-spedizione?locale=it&tracing.letteraVettura=${shippingTrackingId}`;
+              break;
+            case 'BRT':
+              trackingUrl = `https://vas.brt.it/vas/sped_det_show.hsm?referer=sped_numspe_par.htm&Nspediz=${shippingTrackingId}`;
+              break;
+            case 'GLS':
+              trackingUrl = `https://gls-group.com/IT/it/ricerca-pacchi?match=${shippingTrackingId}`;
+              break;
+            default:
+              trackingUrl = `https://parcelsapp.com/en/tracking/${shippingTrackingId}`;
+          }
         }
 
         const shippingNotificationData = {

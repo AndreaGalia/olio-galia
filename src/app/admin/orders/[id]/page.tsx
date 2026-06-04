@@ -62,6 +62,7 @@ export default function AdminOrderDetailsPage({
   const [loading, setLoading] = useState(true);
   const [shippingForm, setShippingForm] = useState({
     trackingId: '',
+    trackingUrl: '',
     carrier: 'DHL',
     status: 'shipping'
   });
@@ -222,6 +223,7 @@ export default function AdminOrderDetailsPage({
         body: JSON.stringify({
           shippingTrackingId: shippingForm.status === 'shipped' ? shippingForm.trackingId.trim() : undefined,
           shippingCarrier: shippingForm.status === 'shipped' ? shippingForm.carrier : undefined,
+          shippingTrackingUrl: shippingForm.status === 'shipped' && shippingForm.trackingUrl.trim() ? shippingForm.trackingUrl.trim() : undefined,
           shippingStatus: shippingForm.status,
         }),
       });
@@ -234,7 +236,7 @@ export default function AdminOrderDetailsPage({
 
       setOrderDetails(data.order);
       setShippingSuccess(true);
-      setShippingForm({ trackingId: '', carrier: 'DHL', status: 'shipping' });
+      setShippingForm({ trackingId: '', trackingUrl: '', carrier: 'DHL', status: 'shipping' });
 
       // Nascondi il messaggio di successo dopo 3 secondi
       setTimeout(() => {
@@ -595,6 +597,27 @@ export default function AdminOrderDetailsPage({
                             />
                             <p className="text-xs text-nocciola mt-2 font-medium">
                               🔗 Il cliente riceverà un link per tracciare automaticamente la spedizione con {shippingForm.carrier}
+                            </p>
+                          </div>
+
+                          {/* Link Diretto Spedizione */}
+                          <div>
+                            <label htmlFor="trackingUrl" className="block text-sm font-semibold text-olive mb-2">
+                              🔗 Link Diretto Spedizione <span className="font-normal text-nocciola">(opzionale)</span>
+                            </label>
+                            <input
+                              type="url"
+                              id="trackingUrl"
+                              value={shippingForm.trackingUrl}
+                              onChange={(e) => setShippingForm(prev => ({ ...prev, trackingUrl: e.target.value }))}
+                              placeholder="https://..."
+                              className="w-full px-4 py-3 border-2 border-nocciola/30 rounded-xl focus:ring-2 focus:ring-olive focus:border-olive text-olive"
+                              disabled={isSubmittingShipping}
+                            />
+                            <p className="text-xs text-nocciola mt-2 font-medium">
+                              {shippingForm.trackingUrl.trim()
+                                ? '✅ Questo link verrà usato nel bottone della mail al posto di quello generato automaticamente'
+                                : 'Se compilato, sostituisce il link automatico del corriere nella mail al cliente'}
                             </p>
                           </div>
                         </div>

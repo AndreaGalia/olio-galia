@@ -543,6 +543,7 @@ export class AdminOrderService {
   // Aggiorna informazioni di spedizione dell'ordine
   static async updateOrderShipping(sessionId: string, updateData: {
     shippingTrackingId?: string;
+    shippingTrackingUrl?: string;
     shippingStatus: string;
   }): Promise<AdminOrderDetails | null> {
     try {
@@ -571,6 +572,11 @@ export class AdminOrderService {
       // Solo se viene fornito l'ID spedizione, aggiornalo
       if (updateData.shippingTrackingId) {
         updateFields.shippingTrackingId = updateData.shippingTrackingId;
+      }
+
+      // Solo se viene fornito il link diretto di tracking, aggiornalo
+      if (updateData.shippingTrackingUrl) {
+        updateFields.shippingTrackingUrl = updateData.shippingTrackingUrl;
       }
 
       const updateResult = await collection.updateOne(
