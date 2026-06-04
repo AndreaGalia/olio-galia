@@ -469,6 +469,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Prepara dati per l'email
+        const emailLocale = (session.metadata?.locale || 'it') as 'it' | 'en';
         const emailData: EmailOrderDataExtended = {
           customerName: orderDetails.customer?.name || 'Cliente',
           customerEmail: orderDetails.customer?.email || '',
@@ -500,7 +501,8 @@ export async function POST(request: NextRequest) {
             country: 'IT'
           },
           receiptUrl: null,
-          hasInvoice: false
+          hasInvoice: false,
+          locale: emailLocale
         };
 
         emailData.orderNumber = emailData.orderNumber.slice(-8).toUpperCase();

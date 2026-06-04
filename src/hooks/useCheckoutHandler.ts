@@ -1,11 +1,13 @@
 // hooks/useCheckoutHandler.ts
 import { useState } from 'react';
 import { useCheckout } from '@/hooks/useCheckout';
+import { useLocale } from '@/contexts/LocaleContext';
 import { CartItem } from '@/types/cart';
 import { ShippingZone } from '@/types/shipping';
 
 export function useCheckoutHandler() {
   const { startCheckout, loading: checkoutLoading, error: checkoutError, clearError } = useCheckout();
+  const { locale } = useLocale();
   const [needsInvoice, setNeedsInvoice] = useState<boolean>(false);
   const [showCheckoutError, setShowCheckoutError] = useState<boolean>(false);
 
@@ -16,7 +18,7 @@ export function useCheckoutHandler() {
     setShowCheckoutError(false);
 
     try {
-      await startCheckout(cart, needsInvoice, shippingZone);
+      await startCheckout(cart, needsInvoice, shippingZone, locale);
     } catch (err) {
       setShowCheckoutError(true);
     }

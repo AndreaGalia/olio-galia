@@ -1,5 +1,5 @@
 // lib/email/resend.ts
-import { EmailOrderData, ShippingNotificationData, DeliveryNotificationData, NewsletterWelcomeData, ReviewRequestData, QuoteEmailData } from '@/types/email';
+import { EmailOrderData, EmailOrderDataExtended, ShippingNotificationData, DeliveryNotificationData, NewsletterWelcomeData, ReviewRequestData, QuoteEmailData } from '@/types/email';
 import { createWaitingListNotificationHTML, getWaitingListEmailSubject } from './waiting-list-template';
 import { Resend } from 'resend';
 import { createOrderConfirmationHTML, createShippingNotificationHTML } from './templates';
@@ -68,9 +68,9 @@ export class EmailService {
       htmlBody: fallbackHtml
     };
   }
-  static async sendOrderConfirmation(orderData: EmailOrderData): Promise<boolean> {
+  static async sendOrderConfirmation(orderData: EmailOrderDataExtended): Promise<boolean> {
     try {
-      const locale = 'it'; // Default italiano
+      const locale = orderData.locale ?? 'it';
 
       // Ottieni template (DB o fallback hardcoded)
       const template = await this.getTemplate(

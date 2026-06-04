@@ -15,7 +15,8 @@ export const useCheckout = () => {
   const startCheckout = async (
     items: CartItem[],
     needsInvoice: boolean = false,
-    shippingZone?: ShippingZone
+    shippingZone?: ShippingZone,
+    locale?: 'it' | 'en'
   ) => {
     setLoading(true);
     setError(null);
@@ -30,7 +31,8 @@ export const useCheckout = () => {
         body: JSON.stringify({
           items,
           needsInvoice,
-          shippingZone, // Passa solo la zona
+          shippingZone,
+          locale,
         }),
       });
 

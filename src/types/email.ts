@@ -29,6 +29,7 @@ export interface EmailOrderData {
 export interface EmailOrderDataExtended extends EmailOrderData {
   receiptUrl?: string | null;
   hasInvoice?: boolean;
+  locale?: 'it' | 'en';
 }
 
 export interface ShippingNotificationData {

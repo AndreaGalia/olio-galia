@@ -20,7 +20,8 @@ interface CartItem {
 interface RequestBody {
   items: CartItem[];
   needsInvoice?: boolean;
-  shippingZone?: ShippingZone; // Zona di spedizione selezionata
+  shippingZone?: ShippingZone;
+  locale?: 'it' | 'en';
 }
 
 // Constants
@@ -354,7 +355,8 @@ const createSessionConfig = async (
   shippingZone: ShippingZone,
   items: CartItem[],
   totalAmount: number,
-  needsInvoice: boolean
+  needsInvoice: boolean,
+  locale: 'it' | 'en' = 'it'
 ): Promise<Stripe.Checkout.SessionCreateParams> => {
   // Ottiene le shipping options basate su zona e peso/totale carrello
   const shippingOptions = await getShippingOptionsForZone(shippingZone, items, totalAmount);
@@ -365,7 +367,7 @@ const createSessionConfig = async (
     mode: 'payment',
     success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/cart?payment_canceled=true`,
-    locale: 'it',
+    locale: locale,
 
     shipping_address_collection: {
       allowed_countries: getAllowedCountriesForZone(shippingZone),
@@ -377,9 +379,10 @@ const createSessionConfig = async (
     // Abilita i codici promozionali Stripe
     allow_promotion_codes: true,
 
-    // Metadata per salvare la zona selezionata
+    // Metadata per salvare la zona selezionata e il locale dell'utente
     metadata: {
       shipping_zone: shippingZone,
+      locale: locale,
     },
 
     ...createInvoiceConfig(needsInvoice),
@@ -390,7 +393,7 @@ const createSessionConfig = async (
 export async function POST(request: NextRequest) {
   try {
     const body: RequestBody = await request.json();
-    const { items, needsInvoice = false, shippingZone } = body;
+    const { items, needsInvoice = false, shippingZone, locale = 'it' } = body;
 
     // Validazioni
     validateCartItems(items);
@@ -408,7 +411,8 @@ export async function POST(request: NextRequest) {
       shippingZone!,
       items, // Passa items originali (con ID locali) per calcolo peso
       totalAmount,
-      needsInvoice
+      needsInvoice,
+      locale
     );
 
     // Create Stripe session
