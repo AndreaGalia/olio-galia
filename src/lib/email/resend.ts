@@ -680,7 +680,7 @@ export class EmailService {
         getWaitingListEmailSubject(locale)
       );
 
-      const templateData = { productName, productUrl };
+      const templateData = { logoUrl: LOGO_URL, productName, productUrl };
       const htmlContent = this.replaceVariables(template.htmlBody, templateData);
       const subject = this.replaceVariables(template.subject, templateData);
 
