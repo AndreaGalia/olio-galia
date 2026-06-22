@@ -258,10 +258,10 @@ export class AdminOrderService {
             shippingStatus: 'pending', // Default per ordini da Stripe
             created: new Date(session.created * 1000).toISOString(),
             itemCount: session.line_items?.data?.length || 0,
-            shipping: session.customer_details?.address ? {
-              address: this.formatAddress(session.customer_details.address),
-              method: 'Standard'
-            } : undefined,
+            shipping: (() => {
+              const addr = session.collected_information?.shipping_details?.address || session.customer_details?.address || null;
+              return addr ? { address: this.formatAddress(addr), method: 'Standard' } : undefined;
+            })(),
           }));
 
           // Filtra gli ordini Stripe che non sono già in MongoDB
@@ -421,10 +421,10 @@ export class AdminOrderService {
           shippingCost: (session.shipping_cost?.amount_total || 0) / 100,
           total: (session.amount_total || 0) / 100,
         },
-        shipping: session.customer_details?.address ? {
-          address: this.formatAddress(session.customer_details.address),
-          method: 'Standard'
-        } : undefined,
+        shipping: (() => {
+          const addr = session.collected_information?.shipping_details?.address || session.customer_details?.address || null;
+          return addr ? { address: this.formatAddress(addr), method: 'Standard' } : undefined;
+        })(),
         paymentIntent: typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id || null,
       };
     } catch (error) {

@@ -85,12 +85,12 @@ const extractCustomerInfo = (session: Stripe.Checkout.Session) => {
   };
 };
 
-const formatShippingAddress = (customerDetails: Stripe.Checkout.Session.CustomerDetails | null) => {
-  if (!customerDetails?.address) {
+const formatShippingAddress = (address: Stripe.Address | null | undefined) => {
+  if (!address) {
     return 'Come da checkout';
   }
 
-  const { line1, line2, city, postal_code, country } = customerDetails.address;
+  const { line1, line2, city, postal_code, country } = address;
   return `${line1} ${line2 || ''}, ${city} ${postal_code}, ${country}`.trim();
 };
 
@@ -158,13 +158,19 @@ const buildOrderDetails = async (session: Stripe.Checkout.Session): Promise<Orde
   const items = extractOrderItems(session);
   const shippingMethod = await getShippingMethodName(session, pricing.shippingCost);
 
+  // Indirizzo di spedizione: collected_information (raccolto nel checkout) ha la precedenza
+  // su customer_details.address (indirizzo di fatturazione/wallet, es. Apple Pay)
+  const shippingAddress = session.collected_information?.shipping_details?.address ||
+    session.customer_details?.address ||
+    null;
+
   // Estrai dettagli indirizzo strutturati
-  const addressDetails = session.customer_details?.address ? {
-    line1: session.customer_details.address.line1 || undefined,
-    city: session.customer_details.address.city || undefined,
-    postal_code: session.customer_details.address.postal_code || undefined,
-    country: session.customer_details.address.country || undefined,
-    state: session.customer_details.address.state || undefined,
+  const addressDetails = shippingAddress ? {
+    line1: shippingAddress.line1 || undefined,
+    city: shippingAddress.city || undefined,
+    postal_code: shippingAddress.postal_code || undefined,
+    country: shippingAddress.country || undefined,
+    state: shippingAddress.state || undefined,
   } : undefined;
 
   // Estrai dati shipping dai metadata (se presenti)
@@ -174,7 +180,7 @@ const buildOrderDetails = async (session: Stripe.Checkout.Session): Promise<Orde
     id: session.id,
     customer,
     shipping: {
-      address: formatShippingAddress(session.customer_details),
+      address: formatShippingAddress(shippingAddress),
       method: shippingMethod,
       addressDetails,
       // Nuovi campi dal sistema zone
