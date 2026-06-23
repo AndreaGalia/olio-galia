@@ -229,6 +229,10 @@ export class EmailTemplateService {
       beneficiary: process.env.BANK_BENEFICIARY || 'OLIO GALIA S.r.l.',
       supportEmail: process.env.SUPPORT_EMAIL || process.env.FROM_EMAIL || 'info@oliogalia.com',
       supportPhone: process.env.SUPPORT_PHONE || '+39 123 456 7890',
+      discountCode: 'ESTATE10',
+      discountDescription: '10% di sconto su tutti i prodotti',
+      expiryRow: '<p style="margin: 12px 0 0; color: #000; font-family: \'EB Garamond\', Georgia, serif; font-size: 13px; letter-spacing: 0.03em; text-align: center; font-style: italic;">Valido fino al 31/12/2025</p>',
+      customMessage: 'Come ringraziamento per la sua fedeltà, le offriamo uno sconto esclusivo sul prossimo ordine.',
     };
 
     variables.forEach(variable => {

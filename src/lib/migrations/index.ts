@@ -2,6 +2,7 @@ import type { Migration } from './types';
 import { seedProductStories } from './seedProductStories';
 import { seedMoreProductStories } from './seedMoreProductStories';
 import { seedWaitingListTemplate } from './seedWaitingListTemplate';
+import { seedDiscountCodeTemplate } from './seedDiscountCodeTemplate';
 
 /**
  * Registry di tutte le migrazioni disponibili.
@@ -12,7 +13,7 @@ export const migrations: Migration[] = [
   seedProductStories,
   seedMoreProductStories,
   seedWaitingListTemplate,
-  // future migrations go here
+  seedDiscountCodeTemplate,
 ];
 
 export function getMigration(id: string): Migration | undefined {
