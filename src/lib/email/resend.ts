@@ -1,6 +1,7 @@
 // lib/email/resend.ts
-import { EmailOrderData, EmailOrderDataExtended, ShippingNotificationData, DeliveryNotificationData, NewsletterWelcomeData, ReviewRequestData, QuoteEmailData } from '@/types/email';
+import { EmailOrderData, EmailOrderDataExtended, ShippingNotificationData, DeliveryNotificationData, NewsletterWelcomeData, ReviewRequestData, QuoteEmailData, DiscountCodeEmailData } from '@/types/email';
 import { createWaitingListNotificationHTML, getWaitingListEmailSubject } from './waiting-list-template';
+import { createDiscountCodeHTML, getDiscountCodeEmailSubject } from './discount-template';
 import { Resend } from 'resend';
 import { createOrderConfirmationHTML, createShippingNotificationHTML } from './templates';
 import { createDeliveryNotificationHTML } from './delivery-template';
@@ -662,6 +663,50 @@ export class EmailService {
       return true;
     } catch (error) {
       console.error('Error sending portal access magic link:', error);
+      return false;
+    }
+  }
+
+  static async sendDiscountCode(data: DiscountCodeEmailData): Promise<boolean> {
+    try {
+      const locale = data.locale ?? 'it';
+      const expiryPrefix = locale === 'it' ? 'Valido fino al' : 'Valid until';
+      const expiryRow = data.expiryDate
+        ? `<p style="margin: 12px 0 0; color: #000; font-family: 'EB Garamond', Georgia, serif; font-size: 13px; letter-spacing: 0.03em; text-align: center; font-style: italic;">${expiryPrefix} ${data.expiryDate}</p>`
+        : '';
+
+      const template = await this.getTemplate(
+        'discount_code',
+        locale,
+        createDiscountCodeHTML(locale),
+        getDiscountCodeEmailSubject(locale)
+      );
+
+      const templateData = {
+        logoUrl: LOGO_URL,
+        customerName: data.customerName || '',
+        discountCode: data.discountCode,
+        discountDescription: data.discountDescription,
+        expiryRow,
+        customMessage: data.customMessage,
+        siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://oliogalia.com',
+      };
+
+      const htmlContent = this.replaceVariables(template.htmlBody, templateData);
+      const subject = this.replaceVariables(template.subject, templateData);
+
+      const result = await resend.emails.send({
+        from: FROM_EMAIL,
+        to: [data.customerEmail],
+        subject,
+        html: htmlContent,
+        headers: { 'X-Email-Type': 'discount-code' },
+      });
+
+      if (result.error) return false;
+      return true;
+    } catch (error) {
+      console.error('Error sending discount code email:', error);
       return false;
     }
   }

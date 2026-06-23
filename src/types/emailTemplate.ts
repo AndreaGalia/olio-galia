@@ -72,6 +72,7 @@ export const SYSTEM_TEMPLATE_KEYS = [
   'subscription_upcoming_renewal',
   'portal_access_magic_link',
   'waiting_list_notification',
+  'discount_code',
 ] as const;
 
 export type SystemTemplateKey = typeof SYSTEM_TEMPLATE_KEYS[number];
@@ -210,6 +211,15 @@ export const TEMPLATE_VARIABLES: Record<string, string[]> = {
     'productName',
     'productUrl',
   ],
+  discount_code: [
+    'logoUrl',
+    'customerName',
+    'discountCode',
+    'discountDescription',
+    'expiryRow',
+    'customMessage',
+    'siteUrl',
+  ],
 };
 
 /**
@@ -253,6 +263,10 @@ export const VARIABLE_DESCRIPTIONS: Record<string, string> = {
   magicLink: 'Link magico per accesso portale',
   expirationMinutes: 'Minuti di validità del link',
   productUrl: 'URL completo alla pagina prodotto',
+  discountCode: 'Codice coupon da inserire al checkout',
+  discountDescription: 'Descrizione dello sconto (es. "10% su tutti i prodotti")',
+  expiryRow: 'Blocco HTML con data scadenza; stringa vuota se nessuna scadenza',
+  customMessage: 'Messaggio personalizzato scritto dall\'admin',
 };
 
 /**
@@ -275,4 +289,5 @@ export const TEMPLATE_NAMES: Record<SystemTemplateKey, string> = {
   subscription_upcoming_renewal: 'Prossimo Rinnovo Abbonamento',
   portal_access_magic_link: 'Link Accesso Portale',
   waiting_list_notification: 'Notifica Lista d\'attesa',
+  discount_code: 'Codice Sconto',
 };

@@ -66,6 +66,16 @@ export interface ReviewRequestData {
   locale?: 'it' | 'en';
 }
 
+export interface DiscountCodeEmailData {
+  customerName?: string;
+  customerEmail: string;
+  discountCode: string;
+  discountDescription: string;
+  expiryDate?: string;
+  customMessage: string;
+  locale?: 'it' | 'en';
+}
+
 export interface QuoteEmailData {
   customerName: string;
   customerEmail: string;
