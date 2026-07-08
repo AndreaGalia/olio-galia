@@ -20,7 +20,8 @@ export default function HomepageProductCardFooter({ product, isWaitingList }: Ho
         <span className="font-serif termina-11 tracking-[1px] sm:tracking-[3.4px] uppercase text-black line-clamp-2">
           {product.name}
         </span>
-        {/* Prezzo nascosto per prodotti waiting list */}
+        {/* Prezzo nascosto per prodotti waiting list — mostra solo il prezzo finale
+            (eventuale sconto campagna già applicato, il barrato vive solo sulla PDP) */}
         {!isWaitingList && (
           <span className="font-serif termina-11 tracking-[2.5px] sm:tracking-[3.4px] uppercase text-black whitespace-nowrap sm:flex-shrink-0">
             {priceDisplay}

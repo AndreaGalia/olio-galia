@@ -32,6 +32,12 @@ interface AdminOrderDetails {
       code: string;
       amount: number;
     };
+    // Campagne promozionali applicate (sconto già incluso nel subtotal)
+    promotions?: Array<{
+      campaignId: string;
+      productId?: string;
+      amount?: number;
+    }>;
   };
   shipping?: {
     address: string;
@@ -1076,6 +1082,40 @@ export default function AdminOrderDetailsPage({
                     <span className="text-nocciola">Subtotale:</span>
                     <span className="text-olive font-semibold">€{orderDetails.pricing.subtotal.toFixed(2)}</span>
                   </div>
+
+                  {orderDetails.pricing.promotions && orderDetails.pricing.promotions.length > 0 && (
+                    <div className="space-y-1">
+                      {/* Aggrega per campagna: più righe dello stesso prodotto/campagna sommate */}
+                      {Array.from(
+                        orderDetails.pricing.promotions.reduce((acc, promo) => {
+                          const current = acc.get(promo.campaignId);
+                          acc.set(promo.campaignId, {
+                            campaignId: promo.campaignId,
+                            amount:
+                              promo.amount !== undefined
+                                ? (current?.amount ?? 0) + promo.amount
+                                : current?.amount,
+                          });
+                          return acc;
+                        }, new Map<string, { campaignId: string; amount?: number }>()).values()
+                      ).map(promo => (
+                        <div key={promo.campaignId} className="flex justify-between items-center text-sm sm:text-base">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-nocciola">Promozione:</span>
+                            <span className="text-xs bg-olive/10 text-olive px-2 py-1 rounded-full font-medium border border-olive/30">
+                              {promo.campaignId}
+                            </span>
+                          </div>
+                          <span className="text-olive font-semibold">
+                            {promo.amount !== undefined ? `−€${promo.amount.toFixed(2)}` : '—'}
+                          </span>
+                        </div>
+                      ))}
+                      <p className="text-xs text-nocciola/70">
+                        Sconto campagna già incluso nel subtotale
+                      </p>
+                    </div>
+                  )}
 
                   {orderDetails.pricing.discount && (
                     <div className="flex justify-between items-center text-sm sm:text-base">

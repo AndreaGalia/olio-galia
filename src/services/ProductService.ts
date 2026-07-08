@@ -1,5 +1,12 @@
 import { connectToDatabase } from '@/lib/mongodb';
 import { Product, Category, ProductDocument, CategoryDocument, SupportedLocale } from '@/types/products';
+import { PromotionCampaignDocument } from '@/types/promotionCampaign';
+import {
+  getActivePromotionCampaigns,
+  resolveCampaignForProduct,
+  getDiscountedPriceString,
+  toActivePromotion,
+} from '@/lib/promotions/getActivePromotions';
 
 export class ProductService {
   
@@ -22,12 +29,15 @@ export class ProductService {
         .sort({ displayOrder: 1, 'metadata.createdAt': -1 })
         .toArray();
       
-      return products.map(product => this.localizeProduct(product, locale));
+      const campaigns = await this.getCampaignsSafe();
+      return products.map(product =>
+        this.applyPromotion(this.localizeProduct(product, locale), campaigns, locale)
+      );
     } catch (error) {
       throw new Error('Failed to fetch products');
     }
   }
-  
+
   static async getProductById(id: string, locale: SupportedLocale = 'it'): Promise<Product | null> {
     try {
       const { db } = await connectToDatabase();
@@ -42,7 +52,10 @@ export class ProductService {
           'metadata.isActive': true
         });
 
-      return product ? this.localizeProduct(product, locale) : null;
+      if (!product) return null;
+
+      const campaigns = await this.getCampaignsSafe();
+      return this.applyPromotion(this.localizeProduct(product, locale), campaigns, locale);
     } catch (error) {
       throw new Error('Failed to fetch product');
     }
@@ -99,11 +112,57 @@ export class ProductService {
           ]
         })
         .toArray();
-      
-      return products.map(product => this.localizeProduct(product, locale));
+
+      const campaigns = await this.getCampaignsSafe();
+      return products.map(product =>
+        this.applyPromotion(this.localizeProduct(product, locale), campaigns, locale)
+      );
     } catch (error) {
       throw new Error('Failed to search products');
     }
+  }
+
+  // Carica le campagne attive senza mai far fallire il catalogo:
+  // se la lettura promozioni fallisce, il sito mostra i prezzi di listino.
+  private static async getCampaignsSafe(): Promise<PromotionCampaignDocument[]> {
+    try {
+      return await getActivePromotionCampaigns();
+    } catch (error) {
+      console.error('Failed to fetch promotion campaigns:', error);
+      return [];
+    }
+  }
+
+  // Applica l'eventuale campagna attiva al prodotto localizzato:
+  // prezzo scontato su prodotto e su tutte le varianti, prezzo di listino
+  // in originalPrice (la campagna vince su un eventuale originalPrice manuale),
+  // payload activePromotion per badge e countdown.
+  private static applyPromotion(
+    product: Product,
+    campaigns: PromotionCampaignDocument[],
+    locale: SupportedLocale
+  ): Product {
+    if (campaigns.length === 0) return product;
+
+    const basePriceCents = Math.round(parseFloat(product.price) * 100);
+    const campaign = resolveCampaignForProduct(
+      campaigns,
+      product.id,
+      Number.isFinite(basePriceCents) ? basePriceCents : 0
+    );
+    if (!campaign) return product;
+
+    return {
+      ...product,
+      originalPrice: product.price,
+      price: getDiscountedPriceString(product.price, campaign),
+      variants: product.variants?.map(variant => ({
+        ...variant,
+        originalPrice: variant.price,
+        price: getDiscountedPriceString(variant.price, campaign),
+      })),
+      activePromotion: toActivePromotion(campaign, locale),
+    };
   }
   
   // Helper per localizzazione

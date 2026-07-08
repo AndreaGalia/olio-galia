@@ -1511,5 +1511,13 @@
       "subtitle": "From grove to table",
       "description": "From harvesting to pressing, every stage takes place within a few hours. The brevity of the supply chain guarantees freshness: no long journeys, no waiting. Our family mill processes the olives within 24 hours of harvesting, maximising the polyphenols and beneficial properties of the oil. A virtuous cycle that respects the environment and offers the consumer an authentic product."
     }
+  },
+  "promo": {
+    "until": "Until {date}",
+    "endsIn": "Ends in",
+    "lastDay": "Last day",
+    "days": "d",
+    "hours": "h",
+    "minutes": "min"
   }
 }

@@ -42,6 +42,12 @@ export interface AdminOrderDetails extends AdminOrderSummary {
       code: string;
       amount: number;
     };
+    // Campagne promozionali applicate (sconto già incluso nel subtotal)
+    promotions?: Array<{
+      campaignId: string;
+      productId?: string;
+      amount?: number;
+    }>;
   };
   paymentIntent: string | null;
   mongoId?: string;

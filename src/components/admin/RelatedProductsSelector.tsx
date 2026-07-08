@@ -12,12 +12,16 @@ interface RelatedProductsSelectorProps {
   allProducts: SelectableProduct[];
   selectedIds: string[];
   onChange: (ids: string[]) => void;
+  selectedLabel?: string; // label sopra la lista selezionati
+  addLabel?: string;      // label sopra la ricerca
 }
 
 export default function RelatedProductsSelector({
   allProducts,
   selectedIds,
   onChange,
+  selectedLabel = 'Selezionati ({count}) — in ordine di visualizzazione',
+  addLabel = 'Aggiungi prodotti correlati',
 }: RelatedProductsSelectorProps) {
   const [search, setSearch] = useState('');
 
@@ -55,7 +59,7 @@ export default function RelatedProductsSelector({
       {selectedProducts.length > 0 && (
         <div>
           <p className="text-sm font-medium text-gray-700 mb-2">
-            Selezionati ({selectedProducts.length}) — in ordine di visualizzazione
+            {selectedLabel.replace('{count}', String(selectedProducts.length))}
           </p>
           <div className="space-y-2">
             {selectedProducts.map((product, index) => (
@@ -112,7 +116,7 @@ export default function RelatedProductsSelector({
 
       {/* Ricerca e aggiunta prodotti */}
       <div>
-        <p className="text-sm font-medium text-gray-700 mb-2">Aggiungi prodotti correlati</p>
+        <p className="text-sm font-medium text-gray-700 mb-2">{addLabel}</p>
         <input
           type="text"
           value={search}

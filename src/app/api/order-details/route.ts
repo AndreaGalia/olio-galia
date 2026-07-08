@@ -45,6 +45,12 @@ interface OrderDetails {
     subtotal: number;
     shippingCost: number;
     total: number;
+    discount?: {
+      code: string;
+      amount: number;
+    };
+    // Campagne promozionali applicate alle righe (sconto già incluso nel subtotal)
+    promotions?: AppliedPromotionSummary[];
   };
   total: number;
   status: string;
@@ -53,6 +59,43 @@ interface OrderDetails {
   paymentStatus: string;
   paymentIntent: string | Stripe.PaymentIntent | null;
 }
+
+interface AppliedPromotionSummary {
+  campaignId: string;
+  productId?: string;
+  amount?: number; // risparmio totale in € per la riga (se disponibile)
+}
+
+// Legge le promozioni applicate dai metadata sessione (scritti da
+// create-checkout-session). Formato compatto {c,p,o,d,q} in centesimi,
+// oppure fallback con soli id campagna se il carrello era molto grande.
+const extractAppliedPromotions = (session: Stripe.Checkout.Session): AppliedPromotionSummary[] => {
+  const raw = session.metadata?.applied_promotions;
+  if (!raw) return [];
+
+  try {
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+
+    // Fallback: array di soli id campagna
+    if (parsed.every(entry => typeof entry === 'string')) {
+      return parsed.map(campaignId => ({ campaignId }));
+    }
+
+    return parsed
+      .map((entry): AppliedPromotionSummary => ({
+        campaignId: entry?.c,
+        productId: typeof entry?.p === 'string' ? entry.p : undefined,
+        amount:
+          typeof entry?.o === 'number' && typeof entry?.d === 'number' && typeof entry?.q === 'number'
+            ? ((entry.o - entry.d) * entry.q) / 100
+            : undefined,
+      }))
+      .filter(entry => typeof entry.campaignId === 'string');
+  } catch {
+    return [];
+  }
+};
 
 // Utilities
 const validateSessionId = (sessionId: string | null) => {
@@ -142,6 +185,8 @@ const calculatePricing = (session: Stripe.Checkout.Session) => {
     firstDiscount?.discount?.coupon?.id ||
     null;
 
+  const promotions = extractAppliedPromotions(session);
+
   return {
     subtotal: (session.amount_subtotal || 0) / 100,
     shippingCost: (session.shipping_cost?.amount_total || 0) / 100,
@@ -149,6 +194,7 @@ const calculatePricing = (session: Stripe.Checkout.Session) => {
     ...(discountAmount > 0 && discountCode
       ? { discount: { code: discountCode, amount: discountAmount } }
       : {}),
+    ...(promotions.length > 0 ? { promotions } : {}),
   };
 };
 

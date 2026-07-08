@@ -8,12 +8,34 @@ import {
   getShippingCostForZoneAndWeight as getShippingCostForZoneAndWeightService,
   getItalyShippingCost as getItalyShippingCostService,
 } from '@/lib/shipping/shippingConfigService';
+import {
+  getActivePromotionCampaigns,
+  resolveCampaignForProduct,
+  getDiscountedUnitAmount,
+} from '@/lib/promotions/getActivePromotions';
+import type { PromotionCampaignDocument } from '@/types/promotionCampaign';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 // Types
 interface CartItem {
   id: string;
+  quantity: number;
+}
+
+// Item mappato su Stripe che conserva anche l'id Mongo del prodotto,
+// necessario per risolvere le campagne promozionali al checkout
+interface MappedCartItem extends CartItem {
+  localProductId?: string;
+}
+
+// Promozione applicata a una riga del checkout — salvata nei metadata
+// della sessione per la riconciliazione ordini
+interface AppliedPromotion {
+  campaignId: string;
+  productId: string;
+  originalUnitAmount: number;
+  discountedUnitAmount: number;
   quantity: number;
 }
 
@@ -108,9 +130,9 @@ const parseCartItemId = (id: string): { productId: string; variantId?: string } 
 };
 
 // Mappa gli ID locali agli ID Stripe (supporta varianti con separatore ::)
-const mapLocalIdsToStripeIds = async (items: CartItem[]) => {
+const mapLocalIdsToStripeIds = async (items: CartItem[]): Promise<MappedCartItem[]> => {
   const { db } = await connectToDatabase();
-  const mappedItems: CartItem[] = [];
+  const mappedItems: MappedCartItem[] = [];
 
   for (const item of items) {
     const { productId, variantId } = parseCartItemId(item.id);
@@ -135,7 +157,8 @@ const mapLocalIdsToStripeIds = async (items: CartItem[]) => {
         }
         mappedItems.push({
           ...item,
-          id: variant.stripeProductId
+          id: variant.stripeProductId,
+          localProductId: productId
         });
       } else {
         // Prodotto senza variante
@@ -144,7 +167,8 @@ const mapLocalIdsToStripeIds = async (items: CartItem[]) => {
         }
         mappedItems.push({
           ...item,
-          id: mongoProduct.stripeProductId
+          id: mongoProduct.stripeProductId,
+          localProductId: productId
         });
       }
     } else if (variantId) {
@@ -166,11 +190,22 @@ const mapLocalIdsToStripeIds = async (items: CartItem[]) => {
       }
       mappedItems.push({
         ...item,
-        id: variant.stripeProductId
+        id: variant.stripeProductId,
+        localProductId: mongoProduct.id
       });
     } else {
-      // È già un ID Stripe senza variante, usa così com'è
-      mappedItems.push(item);
+      // È già un ID Stripe senza variante — reverse-lookup dell'id Mongo
+      // per poter risolvere eventuali campagne promozionali
+      const mongoProduct = await db.collection('products').findOne({
+        $or: [
+          { stripeProductId: productId },
+          { 'variants.stripeProductId': productId }
+        ]
+      });
+      mappedItems.push({
+        ...item,
+        localProductId: mongoProduct?.id
+      });
     }
   }
 
@@ -199,10 +234,20 @@ const calculateCartWeight = async (items: CartItem[]): Promise<number> => {
 };
 
 const buildLineItems = async (
-  items: CartItem[],
+  items: MappedCartItem[],
 ) => {
   const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
   let totalAmount = 0;
+  const appliedPromotions: AppliedPromotion[] = [];
+
+  // Campagne attive caricate una sola volta — se la lettura fallisce si
+  // procede senza sconti (mai bloccare il checkout per colpa delle promo)
+  let campaigns: PromotionCampaignDocument[] = [];
+  try {
+    campaigns = await getActivePromotionCampaigns();
+  } catch (error) {
+    console.error('Failed to fetch promotion campaigns for checkout:', error);
+  }
 
   for (const item of items) {
     // Fetch chirurgico: solo il prodotto e i suoi prezzi
@@ -219,16 +264,46 @@ const buildLineItems = async (
 
     const price = prices.data[0];
     if (price?.id && price.unit_amount) {
-      lineItems.push({
-        price: price.id,
-        quantity: item.quantity,
-      });
+      // Campagna promozionale attiva sul prodotto Mongo corrispondente?
+      const campaign = item.localProductId
+        ? resolveCampaignForProduct(campaigns, item.localProductId, price.unit_amount)
+        : null;
 
-      totalAmount += price.unit_amount * item.quantity;
+      if (campaign) {
+        // Prezzo scontato calcolato server-side, passato inline via price_data:
+        // Stripe crea un Price ad-hoc (active=false) per questa sola sessione,
+        // il Price di catalogo resta intatto
+        const discountedUnitAmount = getDiscountedUnitAmount(price.unit_amount, campaign);
+
+        lineItems.push({
+          price_data: {
+            currency: price.currency,
+            unit_amount: discountedUnitAmount,
+            product: item.id,
+          },
+          quantity: item.quantity,
+        });
+
+        totalAmount += discountedUnitAmount * item.quantity;
+        appliedPromotions.push({
+          campaignId: campaign.id,
+          productId: item.localProductId!,
+          originalUnitAmount: price.unit_amount,
+          discountedUnitAmount,
+          quantity: item.quantity,
+        });
+      } else {
+        lineItems.push({
+          price: price.id,
+          quantity: item.quantity,
+        });
+
+        totalAmount += price.unit_amount * item.quantity;
+      }
     }
   }
 
-  return { lineItems, totalAmount };
+  return { lineItems, totalAmount, appliedPromotions };
 };
 
 // Vecchia funzione - mantenuta per compatibilità ma non più usata con nuovo sistema zone
@@ -350,16 +425,39 @@ const createInvoiceConfig = (needsInvoice: boolean) => {
   };
 };
 
+// Serializza le promozioni applicate per i metadata sessione (limite Stripe:
+// 500 caratteri per valore). Formato compatto; se sfora, salva solo gli id campagna.
+const serializeAppliedPromotions = (appliedPromotions: AppliedPromotion[]): string | null => {
+  if (appliedPromotions.length === 0) return null;
+
+  const compact = JSON.stringify(
+    appliedPromotions.map(p => ({
+      c: p.campaignId,
+      p: p.productId,
+      o: p.originalUnitAmount,
+      d: p.discountedUnitAmount,
+      q: p.quantity,
+    }))
+  );
+  if (compact.length <= 500) return compact;
+
+  const idsOnly = JSON.stringify([...new Set(appliedPromotions.map(p => p.campaignId))]);
+  return idsOnly.length <= 500 ? idsOnly : null;
+};
+
 const createSessionConfig = async (
   lineItems: Stripe.Checkout.SessionCreateParams.LineItem[],
   shippingZone: ShippingZone,
   items: CartItem[],
   totalAmount: number,
   needsInvoice: boolean,
-  locale: 'it' | 'en' = 'it'
+  locale: 'it' | 'en' = 'it',
+  appliedPromotions: AppliedPromotion[] = []
 ): Promise<Stripe.Checkout.SessionCreateParams> => {
   // Ottiene le shipping options basate su zona e peso/totale carrello
   const shippingOptions = await getShippingOptionsForZone(shippingZone, items, totalAmount);
+
+  const promotionsMetadata = serializeAppliedPromotions(appliedPromotions);
 
   return {
     payment_method_types: ['card'],
@@ -383,6 +481,8 @@ const createSessionConfig = async (
     metadata: {
       shipping_zone: shippingZone,
       locale: locale,
+      // Campagne promozionali applicate alle righe (per riconciliazione ordini)
+      ...(promotionsMetadata ? { applied_promotions: promotionsMetadata } : {}),
     },
 
     ...createInvoiceConfig(needsInvoice),
@@ -403,7 +503,7 @@ export async function POST(request: NextRequest) {
     const mappedItems = await mapLocalIdsToStripeIds(items);
 
     // Build line items — fetch chirurgico per ogni prodotto
-    const { lineItems, totalAmount } = await buildLineItems(mappedItems);
+    const { lineItems, totalAmount, appliedPromotions } = await buildLineItems(mappedItems);
 
     // Create session configuration con zona selezionata + calcolo shipping basato su peso/totale
     const sessionConfig = await createSessionConfig(
@@ -412,7 +512,8 @@ export async function POST(request: NextRequest) {
       items, // Passa items originali (con ID locali) per calcolo peso
       totalAmount,
       needsInvoice,
-      locale
+      locale,
+      appliedPromotions
     );
 
     // Create Stripe session

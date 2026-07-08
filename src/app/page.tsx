@@ -5,6 +5,7 @@ import HeroSection from "@/components/homepage/sections/HeroSection";
 import OlivaSection from "@/components/homepage/sections/OlivaSection";
 import CasaSection from "@/components/homepage/sections/CasaSection";
 import ProductsSection from "@/components/homepage/sections/ProductSection";
+import PromoBanner from "@/components/homepage/sections/PromoBanner";
 import { UlivetoSection } from "@/components/homepage/sections/UlivetoSection";
 import ProductsPageBanner from "@/components/productsPage/ProductsPageBanner";
 import { generateBaseMetadata } from '@/lib/seo/metadata';
@@ -24,6 +25,7 @@ export default function HomePage() {
       <StructuredData data={websiteSchema} />
 
       <HeroSection />
+      <PromoBanner />
       <ProductsSection />
       <UlivetoSection />
       <OlivaSection />

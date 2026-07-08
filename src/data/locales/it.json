@@ -1511,5 +1511,13 @@
       "subtitle": "Dal campo alla tavola",
       "description": "Dalla raccolta alla frangitura, ogni fase avviene entro poche ore. La brevità della filiera è garanzia di freschezza: nessun trasporto lungo, nessuna attesa. Il nostro frantoio di famiglia lavora le olive entro 24 ore dalla raccolta, conservando al massimo i polifenoli e le proprietà benefiche dell'olio. Un ciclo virtuoso che rispetta l'ambiente e offre al consumatore un prodotto autentico."
     }
+  },
+  "promo": {
+    "until": "Fino al {date}",
+    "endsIn": "Termina tra",
+    "lastDay": "Ultimo giorno",
+    "days": "g",
+    "hours": "h",
+    "minutes": "min"
   }
-}   
+}

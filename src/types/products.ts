@@ -1,4 +1,5 @@
 import type { ProductStory } from './productStory';
+import type { ActivePromotion } from './promotionCampaign';
 
 export interface MediaItem {
   type: 'image' | 'video';
@@ -102,6 +103,7 @@ export interface ProductDocument extends BaseProduct {
 export interface Product extends BaseProduct, ProductTranslations {
   slug: string; // Slug localizzato per la lingua corrente
   displayOrder?: number; // Ordine di visualizzazione (più basso = prima)
+  activePromotion?: ActivePromotion; // Campagna promozionale attiva, calcolata a runtime (mai salvata in Mongo)
   metadata?: {
     createdAt?: Date;
     updatedAt?: Date;

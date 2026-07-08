@@ -24,6 +24,15 @@ export default function HomepageProductCardImage({ product, isOutOfStock, isWait
         sizes="(max-width: 640px) 85vw, (max-width: 1200px) 45vw, 31vw"
       />
 
+      {/* Badge promozione: angolo alto-sinistra — nascosto per sold out / waiting list */}
+      {product.activePromotion && !isOutOfStock && !isWaitingList && (
+        <div className="absolute top-2 left-2 bg-olive px-2.5 py-1.5">
+          <span className="font-serif termina-card text-beige tracking-[1px] sm:tracking-[3.4px] uppercase">
+            {product.activePromotion.label}
+          </span>
+        </div>
+      )}
+
       {/* Waiting list: overlay fisso — stesso stile sold out */}
       {isWaitingList && (
         <div className="absolute inset-0 flex items-center justify-center bg-olive/70">

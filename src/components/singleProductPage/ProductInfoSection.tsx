@@ -30,7 +30,7 @@ export default function ProductInfoSection({
   const [reviewCount, setReviewCount] = useState<number | null>(null);
 
   const { addToCart } = useCart();
-  const { t } = useT();
+  const { t, translate } = useT();
   const { locale } = useLocale();
 
   const hasVariants = product.variants && product.variants.length > 0;
@@ -117,15 +117,32 @@ export default function ProductInfoSection({
 
       {/* 4 — Price (nascosto per prodotti waiting list) */}
       {!(product as any).isWaitingList && (
-        <div className={`flex items-baseline gap-3 ${effectiveOutOfStock ? 'opacity-60' : ''}`}>
-          {resolved.originalPrice && resolved.originalPrice !== 'null' && (
-            <span className="font-serif termina-13 text-black line-through">€{resolved.originalPrice}</span>
-          )}
-          <span className="font-serif termina-22 text-black tracking-wide">€{resolved.price}</span>
-          {effectiveOutOfStock && (
-            <span className="text-xs tracking-widest uppercase text-red-500 ml-1">
-              {t.productDetailPage.stockNotAvaible}
-            </span>
+        <div className={effectiveOutOfStock ? 'opacity-60' : ''}>
+          <div className="flex items-baseline gap-3">
+            {resolved.originalPrice && resolved.originalPrice !== 'null' && (
+              <span className="font-serif termina-13 text-black line-through">€{resolved.originalPrice}</span>
+            )}
+            <span className="font-serif termina-22 text-black tracking-wide">€{resolved.price}</span>
+            {product.activePromotion && (
+              <span className="bg-olive text-beige font-serif termina-9 tracking-[2px] uppercase px-2 py-1">
+                {product.activePromotion.label}
+              </span>
+            )}
+            {effectiveOutOfStock && (
+              <span className="text-xs tracking-widest uppercase text-red-500 ml-1">
+                {t.productDetailPage.stockNotAvaible}
+              </span>
+            )}
+          </div>
+          {product.activePromotion && (
+            <p className="mt-1.5 text-[11px] tracking-[0.2em] uppercase text-black/40">
+              {translate('promo.until', {
+                date: new Date(product.activePromotion.endsAt).toLocaleDateString(
+                  locale === 'it' ? 'it-IT' : 'en-GB',
+                  { day: '2-digit', month: '2-digit' }
+                ),
+              })}
+            </p>
           )}
         </div>
       )}
