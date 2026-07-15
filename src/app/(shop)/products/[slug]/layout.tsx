@@ -41,8 +41,15 @@ export async function generateMetadata({
     };
   }
 
-  // Genera metadata usando i campi SEO del prodotto
-  return generateProductMetadata(product, 'it');
+  try {
+    // Genera metadata usando i campi SEO del prodotto
+    return generateProductMetadata(product, 'it');
+  } catch (error) {
+    console.error('Error generating product metadata:', error);
+    return {
+      title: 'Olio Galia',
+    };
+  }
 }
 
 export default function ProductLayout({
