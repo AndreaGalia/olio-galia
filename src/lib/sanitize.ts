@@ -1,14 +1,18 @@
-import DOMPurify from 'isomorphic-dompurify';
+import sanitizeHtml from 'sanitize-html';
 
 /**
- * Configurazione centralizzata per la sanitizzazione HTML
- * Utilizzata sia per la preview nell'editor che per il rendering pubblico
+ * Sanitizzazione HTML lato server per il rendering pubblico.
+ *
+ * Usa sanitize-html (basato su htmlparser2, CommonJS puro) invece di
+ * isomorphic-dompurify: quest'ultimo dipende da jsdom → parse5 (ESM-only),
+ * che crasha con ERR_REQUIRE_ESM nel runtime serverless di Vercel.
+ *
+ * Per la preview nell'editor admin (lato client) vedi sanitize-client.ts.
  */
 
 // Configurazione completa per il rendering pubblico
-export const FULL_SANITIZE_CONFIG = {
-  // Tag HTML permessi
-  ALLOWED_TAGS: [
+export const FULL_SANITIZE_CONFIG: sanitizeHtml.IOptions = {
+  allowedTags: [
     // Struttura
     'div', 'span', 'section', 'article', 'aside', 'header', 'footer', 'nav', 'main',
     // Testo
@@ -26,43 +30,23 @@ export const FULL_SANITIZE_CONFIG = {
     'a', 'br', 'hr', 'abbr', 'address', 'cite', 'q', 'time', 'button',
   ],
 
-  // Attributi permessi
-  ALLOWED_ATTR: [
-    'href', 'src', 'alt', 'title', 'class', 'id', 'style',
-    'width', 'height', 'target', 'rel', 'type',
-    'data-*', 'aria-*', 'role',
-    'controls', 'autoplay', 'loop', 'muted', 'poster',
-    'frameborder', 'allowfullscreen', 'allow',
-    'download', 'srcset', 'sizes', 'loading',
-  ],
+  // Attributi permessi su tutti i tag (script/style e handler on* sono
+  // bloccati implicitamente: tutto ciò che non è in whitelist viene rimosso)
+  allowedAttributes: {
+    '*': [
+      'href', 'src', 'alt', 'title', 'class', 'id', 'style',
+      'width', 'height', 'target', 'rel', 'type',
+      'data-*', 'aria-*', 'role',
+      'controls', 'autoplay', 'loop', 'muted', 'poster',
+      'frameborder', 'allowfullscreen', 'allow',
+      'download', 'srcset', 'sizes', 'loading',
+    ],
+  },
 
-  // Permetti iframe per embed video
-  ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
-
-  // Permetti data URIs per immagini inline (base64)
-  ALLOW_DATA_ATTR: true,
-
-  // Blocca script e style tag
-  FORBID_TAGS: ['script', 'style'],
-
-  // Blocca event handlers
-  FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onmouseout', 'onfocus', 'onblur'],
-};
-
-// Configurazione base per la preview nell'editor admin
-export const PREVIEW_SANITIZE_CONFIG = {
-  ALLOWED_TAGS: [
-    'div', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-    'ul', 'ol', 'li', 'a', 'strong', 'em', 'u', 'br', 'hr',
-    'img', 'video', 'iframe', 'table', 'thead', 'tbody', 'tr', 'th', 'td',
-    'blockquote', 'pre', 'code', 'section', 'article', 'aside', 'nav',
-  ],
-  ALLOWED_ATTR: [
-    'href', 'src', 'alt', 'title', 'class', 'id', 'style',
-    'width', 'height', 'target', 'rel', 'data-*',
-  ],
-  FORBID_TAGS: ['script', 'style'],
-  FORBID_ATTR: ['onerror', 'onload', 'onclick'],
+  // Schemi URI permessi (equivalente di ALLOWED_URI_REGEXP di DOMPurify);
+  // 'data' consente immagini inline base64
+  allowedSchemes: ['http', 'https', 'ftp', 'mailto', 'tel', 'callto', 'cid', 'xmpp', 'data'],
+  allowProtocolRelative: true,
 };
 
 /**
@@ -71,14 +55,5 @@ export const PREVIEW_SANITIZE_CONFIG = {
  * @returns HTML sanitizzato
  */
 export function sanitizeHTML(html: string): string {
-  return DOMPurify.sanitize(html, FULL_SANITIZE_CONFIG);
-}
-
-/**
- * Sanitizza HTML per la preview nell'editor
- * @param html - HTML da sanitizzare
- * @returns HTML sanitizzato per preview
- */
-export function sanitizeHTMLPreview(html: string): string {
-  return DOMPurify.sanitize(html, PREVIEW_SANITIZE_CONFIG);
+  return sanitizeHtml(html, FULL_SANITIZE_CONFIG);
 }

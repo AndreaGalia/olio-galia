@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useCallback } from 'react';
-import { sanitizeHTMLPreview } from '@/lib/sanitize';
+import { sanitizeHTMLPreview } from '@/lib/sanitize-client';
 
 interface HTMLEditorProps {
   value: string;

@@ -1,6 +1,3 @@
-'use client';
-
-import { useMemo } from 'react';
 import { sanitizeHTML } from '@/lib/sanitize';
 
 interface CustomHTMLRendererProps {
@@ -9,12 +6,11 @@ interface CustomHTMLRendererProps {
 }
 
 /**
- * Componente per il rendering sicuro di HTML personalizzato
- * Utilizza DOMPurify per sanitizzare l'HTML e prevenire XSS
+ * Componente server per il rendering sicuro di HTML personalizzato
+ * Utilizza sanitize-html per sanitizzare l'HTML e prevenire XSS
  */
 export default function CustomHTMLRenderer({ html, className = '' }: CustomHTMLRendererProps) {
-  // Memoizza l'HTML sanitizzato per evitare ricalcoli ad ogni render
-  const sanitizedHTML = useMemo(() => sanitizeHTML(html), [html]);
+  const sanitizedHTML = sanitizeHTML(html);
 
   return (
     <div
