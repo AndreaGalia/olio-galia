@@ -11,6 +11,7 @@ import {
   generateReviewsForProduct,
   generateComment,
   totalFromDistribution,
+  getPoolSize,
 } from '@/lib/fakeReviews/generator';
 
 interface ProductOption {
@@ -39,6 +40,7 @@ export default function GenerateFeedbacksPage() {
 
   const [productsLoading, setProductsLoading] = useState(true);
   const [products, setProducts] = useState<ProductOption[]>([]);
+  const [existingComments, setExistingComments] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   // Selezione prodotti
@@ -69,6 +71,7 @@ export default function GenerateFeedbacksPage() {
         const data = await response.json();
         if (data.success) {
           setProducts(data.products);
+          setExistingComments(data.existingComments || []);
         } else {
           setError(data.error || 'Errore nel caricamento dei prodotti');
         }
@@ -150,22 +153,56 @@ export default function GenerateFeedbacksPage() {
     [selectedProducts, perProduct, globalDistribution]
   );
 
+  // Avvisa se, per una fascia di stelle, le recensioni richieste superano i commenti
+  // unici del pool (contando anche i prodotti che condividono lo stesso pool)
+  const poolWarnings = useMemo(() => {
+    const requested: Record<string, number> = {}; // chiave: `${poolType}-${star}`
+    selectedProducts.forEach((product) => {
+      const dist = perProduct[product.id]?.distribution || globalDistribution;
+      const poolType = perProduct[product.id]?.poolType || detectPoolType(product);
+      STARS.forEach((star) => {
+        const key = `${poolType}-${star}`;
+        requested[key] = (requested[key] || 0) + Math.max(0, dist[star] || 0);
+      });
+    });
+
+    const warnings: string[] = [];
+    Object.entries(requested).forEach(([key, count]) => {
+      const [poolType, starStr] = key.split('-');
+      const star = parseInt(starStr, 10);
+      const poolSize = getPoolSize(star, poolType as CommentPoolType);
+      if (count > poolSize) {
+        const label = poolType === 'beauty' ? 'Beauty' : 'Olio EVO';
+        warnings.push(
+          `${star}★ ${label}: richieste ${count} recensioni ma il pool ha ${poolSize} commenti unici`
+        );
+      }
+    });
+    return warnings;
+  }, [selectedProducts, perProduct, globalDistribution]);
+
   const handleGeneratePreview = useCallback(() => {
     const result: Record<string, GeneratedReview[]> = {};
+    // Set condiviso tra tutti i prodotti del batch, pre-caricato con i commenti
+    // già salvati nel DB: nessuna ripetizione tra prodotti né tra sessioni
+    const usedComments = new Set(existingComments);
     selectedProducts.forEach((product) => {
-      result[product.id] = generateReviewsForProduct({
-        productId: product.id,
-        productName: product.name,
-        distribution: perProduct[product.id]?.distribution || globalDistribution,
-        anonymousPercent,
-        monthsBack,
-        poolType: perProduct[product.id]?.poolType || detectPoolType(product),
-      });
+      result[product.id] = generateReviewsForProduct(
+        {
+          productId: product.id,
+          productName: product.name,
+          distribution: perProduct[product.id]?.distribution || globalDistribution,
+          anonymousPercent,
+          monthsBack,
+          poolType: perProduct[product.id]?.poolType || detectPoolType(product),
+        },
+        usedComments
+      );
     });
     setPreview(result);
     setCollapsed(new Set());
     setSaveResult(null);
-  }, [selectedProducts, perProduct, globalDistribution, anonymousPercent, monthsBack]);
+  }, [selectedProducts, perProduct, globalDistribution, anonymousPercent, monthsBack, existingComments]);
 
   const updateReview = useCallback(
     (productId: string, index: number, patch: Partial<GeneratedReview>) => {
@@ -186,7 +223,9 @@ export default function GenerateFeedbacksPage() {
         if (!prev) return prev;
         const list = [...prev[productId]];
         const review = list[index];
-        const used = new Set(list.map((r) => r.comment));
+        // Evita i commenti del DB e tutti quelli dell'intera anteprima (tutti i prodotti)
+        const used = new Set(existingComments);
+        Object.values(prev).forEach((reviews) => reviews.forEach((r) => used.add(r.comment)));
         list[index] = {
           ...review,
           comment: generateComment(review.rating, review.productName, poolType, used),
@@ -194,7 +233,7 @@ export default function GenerateFeedbacksPage() {
         return { ...prev, [productId]: list };
       });
     },
-    [perProduct]
+    [perProduct, existingComments]
   );
 
   const removeReview = useCallback((productId: string, index: number) => {
@@ -239,6 +278,8 @@ export default function GenerateFeedbacksPage() {
 
       if (data.success) {
         setSaveResult({ success: true, message: data.message });
+        // Registra i commenti appena salvati: le prossime generazioni li escluderanno
+        setExistingComments((prev) => [...prev, ...reviews.map((r) => r.comment)]);
         setPreview(null);
       } else {
         setSaveResult({ success: false, message: data.error || 'Errore nel salvataggio' });
@@ -476,6 +517,19 @@ export default function GenerateFeedbacksPage() {
                   </tbody>
                 </table>
               </div>
+              {poolWarnings.length > 0 && (
+                <div className="mt-4 bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-lg text-sm">
+                  <p className="font-medium mb-1">⚠️ Alcuni commenti potrebbero ripetersi:</p>
+                  <ul className="list-disc list-inside space-y-0.5">
+                    {poolWarnings.map((warning) => (
+                      <li key={warning}>{warning}</li>
+                    ))}
+                  </ul>
+                  <p className="mt-1">
+                    Riduci le quantità oppure modifica a mano i commenti duplicati nell'anteprima.
+                  </p>
+                </div>
+              )}
               <div className="mt-4 flex items-center justify-between">
                 <p className="text-sm text-gray-600">
                   Totale complessivo: <strong className="text-olive">{totalToGenerate}</strong> recensioni

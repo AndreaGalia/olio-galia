@@ -17,7 +17,13 @@ const MAX_REVIEWS_PER_REQUEST = 500;
  */
 export const GET = withAuth(async (_request: NextRequest) => {
   try {
-    const products = await ProductService.getProducts('it');
+    const db = await getDatabase();
+
+    // Commenti già presenti nel DB: la pagina li usa per non generare mai duplicati
+    const [products, existingComments] = await Promise.all([
+      ProductService.getProducts('it'),
+      db.collection<FeedbackDocument>('feedbacks').distinct('comment'),
+    ]);
 
     return NextResponse.json({
       success: true,
@@ -27,6 +33,7 @@ export const GET = withAuth(async (_request: NextRequest) => {
         slug: product.slug,
         categories: product.categories || [],
       })),
+      existingComments,
     });
   } catch (error) {
     console.error('[Admin Feedbacks Generate] Errore recupero prodotti:', error);

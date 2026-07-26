@@ -104,7 +104,12 @@ function generateDate(monthsBack: number): Date {
   return date;
 }
 
-/** Genera un commento per il rating dato, evitando i commenti già usati se possibile */
+/**
+ * Genera un commento per il rating dato, evitando i commenti già usati se possibile.
+ * Il set `used` può contenere sia template che commenti finali (es. quelli già nel DB):
+ * il confronto avviene su entrambe le forme, e ogni commento usato viene registrato
+ * in entrambe le forme per evitare ripetizioni tra prodotti e tra sessioni.
+ */
 export function generateComment(
   rating: number,
   productName: string,
@@ -113,20 +118,34 @@ export function generateComment(
 ): string {
   const pools = COMMENT_POOLS_BY_TYPE[poolType] || COMMENT_POOLS_BY_TYPE.food;
   const pool = pools[rating] || pools[5];
-  const available = pool.filter((c) => !used.has(c));
+  const available = pool.filter(
+    (c) => !used.has(c) && !used.has(c.replace(/\{prodotto\}/g, productName))
+  );
   const template = pick(available.length > 0 ? available : pool);
+  const rendered = template.replace(/\{prodotto\}/g, productName);
   used.add(template);
-  return template.replace(/\{prodotto\}/g, productName);
+  used.add(rendered);
+  return rendered;
+}
+
+/** Quanti commenti unici offre il pool per una fascia di stelle */
+export function getPoolSize(rating: number, poolType: CommentPoolType): number {
+  const pools = COMMENT_POOLS_BY_TYPE[poolType] || COMMENT_POOLS_BY_TYPE.food;
+  return (pools[rating] || []).length;
 }
 
 /**
  * Genera le recensioni per un prodotto in base alla configurazione.
- * Nomi e commenti non si ripetono all'interno dello stesso prodotto (finché il pool lo consente).
+ * `sharedUsedComments` (opzionale) permette di evitare ripetizioni anche tra prodotti
+ * diversi dello stesso batch e con i commenti già salvati nel DB.
  */
-export function generateReviewsForProduct(config: GenerateConfig): GeneratedReview[] {
+export function generateReviewsForProduct(
+  config: GenerateConfig,
+  sharedUsedComments?: Set<string>
+): GeneratedReview[] {
   const { productId, productName, distribution, anonymousPercent, monthsBack, poolType } = config;
   const reviews: GeneratedReview[] = [];
-  const usedComments = new Set<string>();
+  const usedComments = sharedUsedComments ?? new Set<string>();
   const usedNames = new Set<string>();
 
   const ratings: number[] = [];
