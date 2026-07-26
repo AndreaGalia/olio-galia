@@ -17,6 +17,7 @@ export interface FeedbackDocument {
   isAnonymous: boolean;        // Se true, nome nascosto nella visualizzazione pubblica
   orderType: 'order' | 'quote'; // Tipo: ordine o preventivo
   createdAt: Date;             // Data creazione feedback
+  source?: 'customer' | 'admin'; // 'admin' = generato dal pannello admin (assente = cliente reale)
 }
 
 /**

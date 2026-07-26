@@ -26,6 +26,7 @@ interface FeedbackItem {
   customerName: string;
   customerEmail: string;
   isAnonymous: boolean;
+  source?: 'customer' | 'admin';
   createdAt: Date;
   orderInfo?: {
     orderNumber: string;
@@ -162,12 +163,20 @@ export default function AdminFeedbacksPage() {
   }, []);
 
   const headerActions = (
-    <button
-      onClick={() => router.push('/admin/dashboard')}
-      className="px-2 sm:px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap"
-    >
-      Dashboard
-    </button>
+    <div className="flex gap-2">
+      <button
+        onClick={() => router.push('/admin/feedbacks/generate')}
+        className="px-2 sm:px-4 py-2 bg-olive text-white rounded-lg hover:bg-olive/90 transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap"
+      >
+        Genera Recensioni
+      </button>
+      <button
+        onClick={() => router.push('/admin/dashboard')}
+        className="px-2 sm:px-4 py-2 text-olive border border-olive rounded-lg hover:bg-olive hover:text-white transition-colors cursor-pointer text-xs sm:text-base whitespace-nowrap"
+      >
+        Dashboard
+      </button>
+    </div>
   );
 
   return (
@@ -381,6 +390,11 @@ export default function AdminFeedbacksPage() {
                       }`}>
                         {feedback.orderType === 'order' ? 'Ordine' : 'Preventivo'}
                       </span>
+                      {feedback.source === 'admin' && (
+                        <span className="px-2 py-1 rounded text-xs font-medium bg-amber-100 text-amber-800">
+                          Generata
+                        </span>
+                      )}
                       {feedback.isAnonymous && (
                         <span className="px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700 flex items-center gap-1">
                           <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

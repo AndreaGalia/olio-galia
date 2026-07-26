@@ -91,6 +91,7 @@ export const GET = withAuth(async (request: NextRequest) => {
           customerName: feedback.customerName,
           customerEmail: feedback.customerEmail,
           isAnonymous: feedback.isAnonymous || false, // Default false per retrocompatibilità
+          source: feedback.source || 'customer', // 'admin' = recensione generata dal pannello
           createdAt: feedback.createdAt,
           orderInfo,
         };
