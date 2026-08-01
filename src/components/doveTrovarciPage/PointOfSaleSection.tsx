@@ -1,13 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useT } from '@/hooks/useT';
 import { useLocale } from '@/contexts/LocaleContext';
 import { PointOfSalePublic, POSCategoryPublic, PointsOfSaleResponse } from '@/types/pointOfSale';
-import CategoryFilter from './CategoryFilter';
 import PointOfSaleList from './PointOfSaleList';
 
 // Leaflet accede a `window` a import-time: caricamento solo lato client
@@ -31,7 +30,6 @@ export default function PointOfSaleSection() {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
 
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
@@ -91,14 +89,6 @@ export default function PointOfSaleSection() {
     deepLinkApplied.current = true;
   }, [pointsOfSale, searchParams]);
 
-  const filteredPointsOfSale = useMemo(
-    () =>
-      activeCategory
-        ? pointsOfSale.filter(pos => pos.categoryId === activeCategory)
-        : pointsOfSale,
-    [pointsOfSale, activeCategory]
-  );
-
   // Porta la card in vista quando la selezione arriva dalla mappa o dal deep link
   useEffect(() => {
     if (!selectedId || !shouldScrollToCard.current) return;
@@ -108,7 +98,7 @@ export default function PointOfSaleSection() {
       node.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
     shouldScrollToCard.current = false;
-  }, [selectedId, filteredPointsOfSale]);
+  }, [selectedId, pointsOfSale]);
 
   const handleSelectFromList = (id: string) => {
     // Ri-cliccando la stessa card si deseleziona
@@ -127,11 +117,6 @@ export default function PointOfSaleSection() {
     setSelectedId(id);
   }, []);
 
-  const handleCategorySelect = (categoryId: string | null) => {
-    setActiveCategory(categoryId);
-    setSelectedId(null);
-  };
-
   const listLabels = {
     productsHere: d.productsHere,
     directions: d.directions,
@@ -139,9 +124,9 @@ export default function PointOfSaleSection() {
   };
 
   const resultsLabel =
-    filteredPointsOfSale.length === 1
+    pointsOfSale.length === 1
       ? d.resultsCountOne
-      : translate('doveTrovarciPage.resultsCount', { count: filteredPointsOfSale.length });
+      : translate('doveTrovarciPage.resultsCount', { count: pointsOfSale.length });
 
   /* ----------------------------- Stati speciali ---------------------------- */
 
@@ -149,11 +134,6 @@ export default function PointOfSaleSection() {
     return (
       <section className="pb-16 sm:pb-24">
         <div className="px-6 sm:px-12 lg:px-16 xl:px-24 max-w-4xl mx-auto">
-          <div className="flex gap-2 mb-8">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="h-7 w-24 bg-olive/10 animate-pulse" />
-            ))}
-          </div>
           {[1, 2, 3, 4].map(i => (
             <div key={i} className="border-t border-olive/20 py-6 animate-pulse">
               <div className="h-3 bg-olive/10 w-20 mb-3" />
@@ -209,16 +189,8 @@ export default function PointOfSaleSection() {
 
   return (
     <section className="pb-16 sm:pb-24">
-      {/* Filtri: larghezza piena, sopra la griglia mappa/lista */}
       <div className="px-6 sm:px-12 lg:px-16 xl:px-24 pb-8">
-        <CategoryFilter
-          categories={categories}
-          activeCategory={activeCategory}
-          allLabel={d.allCategories}
-          totalCount={pointsOfSale.length}
-          onSelect={handleCategorySelect}
-        />
-        <p className="mt-4 text-[11px] tracking-[0.2em] uppercase text-black/40">{resultsLabel}</p>
+        <p className="text-[11px] tracking-[0.2em] uppercase text-black/40">{resultsLabel}</p>
       </div>
 
       <div className="lg:grid lg:grid-cols-2 lg:gap-0">
@@ -226,7 +198,7 @@ export default function PointOfSaleSection() {
         <div ref={mapWrapperRef} className="lg:sticky lg:top-0 lg:h-screen">
           <div className="h-[50vh] lg:h-full border-t border-b lg:border-b-0 border-olive/20">
             <StoreMap
-              pointsOfSale={filteredPointsOfSale}
+              pointsOfSale={pointsOfSale}
               selectedId={selectedId}
               ariaLabel={d.mapLabel}
               onSelect={handleSelectFromMap}
@@ -236,28 +208,14 @@ export default function PointOfSaleSection() {
 
         {/* Lista */}
         <div className="px-6 sm:px-12 lg:px-12 xl:px-16 py-8 lg:py-12">
-          {filteredPointsOfSale.length === 0 ? (
-            <div className="border-t border-olive/20 pt-8">
-              <p
-                className="text-black"
-                style={{ fontSize: '15px', letterSpacing: '0.12em', lineHeight: '1.5' }}
-              >
-                {d.emptyFiltered.title}
-              </p>
-              <p className="mt-3 text-sm text-black/60 leading-relaxed">
-                {d.emptyFiltered.description}
-              </p>
-            </div>
-          ) : (
-            <PointOfSaleList
-              pointsOfSale={filteredPointsOfSale}
-              categories={categories}
-              selectedId={selectedId}
-              labels={listLabels}
-              onSelect={handleSelectFromList}
-              registerCardRef={registerCardRef}
-            />
-          )}
+          <PointOfSaleList
+            pointsOfSale={pointsOfSale}
+            categories={categories}
+            selectedId={selectedId}
+            labels={listLabels}
+            onSelect={handleSelectFromList}
+            registerCardRef={registerCardRef}
+          />
         </div>
       </div>
     </section>

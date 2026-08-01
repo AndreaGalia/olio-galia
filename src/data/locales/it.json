@@ -1529,24 +1529,17 @@
       "line2": "trovarci"
     },
     "description": "I nostri oli non vivono solo online. Ecco i supermercati, le macellerie, i negozi di alimentari e i mercati dove puoi trovarli di persona.",
-    "allCategories": "Tutti",
     "resultsCount": "{count} punti vendita",
     "resultsCountOne": "1 punto vendita",
     "productsHere": "Prodotti disponibili qui",
-    "notesLabel": "Nota",
     "directions": "Indicazioni stradali",
     "showOnMap": "Mostra sulla mappa",
     "mapLabel": "Mappa dei punti vendita",
-    "loading": "Caricamento punti vendita...",
     "error": "Non è stato possibile caricare i punti vendita. Riprova tra qualche istante.",
     "empty": {
       "title": "Nessun punto vendita disponibile",
       "description": "Stiamo aggiornando l'elenco dei rivenditori. Nel frattempo puoi acquistare i nostri prodotti direttamente online.",
       "cta": "Vai allo shop"
-    },
-    "emptyFiltered": {
-      "title": "Nessun punto vendita in questa categoria",
-      "description": "Prova a selezionare un'altra tipologia."
     }
   }
 }
