@@ -3,6 +3,7 @@ import { seedProductStories } from './seedProductStories';
 import { seedMoreProductStories } from './seedMoreProductStories';
 import { seedWaitingListTemplate } from './seedWaitingListTemplate';
 import { seedDiscountCodeTemplate } from './seedDiscountCodeTemplate';
+import { seedPointOfSaleCategories } from './seedPointOfSaleCategories';
 
 /**
  * Registry di tutte le migrazioni disponibili.
@@ -14,6 +15,7 @@ export const migrations: Migration[] = [
   seedMoreProductStories,
   seedWaitingListTemplate,
   seedDiscountCodeTemplate,
+  seedPointOfSaleCategories,
 ];
 
 export function getMigration(id: string): Migration | undefined {

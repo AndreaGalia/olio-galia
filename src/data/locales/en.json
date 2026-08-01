@@ -241,6 +241,7 @@
       "extraVirginOil": "Extra Virgin Olive Oil",
       "bodyOil": "Body Oil",
       "sustainability": "Sustainability",
+      "whereToFind": "Where to find us",
       "faq": "FAQ"
     },
     "mobile": {
@@ -275,6 +276,7 @@
       "shipping": "Shipping",
       "manageSubscription": "Manage Subscription",
       "sustainability": "Sustainability",
+      "whereToFind": "Where to Find Us",
       "faq": "FAQ"
     },
     "contact": {
@@ -1519,5 +1521,32 @@
     "days": "d",
     "hours": "h",
     "minutes": "min"
+  },
+  "doveTrovarciPage": {
+    "badge": "Stockists",
+    "title": {
+      "line1": "Where to",
+      "line2": "find us"
+    },
+    "description": "Our oils do not live online only. Here are the supermarkets, butcher shops, grocery stores and markets where you can find them in person.",
+    "allCategories": "All",
+    "resultsCount": "{count} stockists",
+    "resultsCountOne": "1 stockist",
+    "productsHere": "Products available here",
+    "notesLabel": "Note",
+    "directions": "Get directions",
+    "showOnMap": "Show on map",
+    "mapLabel": "Map of stockists",
+    "loading": "Loading stockists...",
+    "error": "We could not load the stockists. Please try again in a moment.",
+    "empty": {
+      "title": "No stockists available",
+      "description": "We are updating our list of retailers. In the meantime you can buy our products directly online.",
+      "cta": "Go to shop"
+    },
+    "emptyFiltered": {
+      "title": "No stockists in this category",
+      "description": "Try selecting another type."
+    }
   }
 }

@@ -200,3 +200,55 @@ export function StructuredData({ data }: { data: object }) {
     />
   );
 }
+
+/**
+ * Genera structured data JSON-LD per l'elenco dei punti vendita.
+ *
+ * I punti vendita sono negozi terzi, non sedi dell'azienda: li descriviamo come
+ * ItemList di Store così Google li interpreta come luoghi dove il prodotto è
+ * reperibile, senza dichiararli come sedi di Olio Galia.
+ */
+export function generatePointsOfSaleSchema(
+  pointsOfSale: Array<{
+    slug: string;
+    name: string;
+    address: {
+      street: string;
+      city: string;
+      province: string;
+      postalCode?: string;
+      country: string;
+    };
+    coordinates: { lat: number; lng: number };
+  }>,
+  locale: 'it' | 'en' = 'it'
+) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: locale === 'it' ? 'Punti vendita Olio Galia' : 'Olio Galia stockists',
+    numberOfItems: pointsOfSale.length,
+    itemListElement: pointsOfSale.map((pos, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'Store',
+        name: pos.name,
+        url: `${BASE_URL}/dove-trovarci?punto=${pos.slug}`,
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: pos.address.street || undefined,
+          addressLocality: pos.address.city || undefined,
+          addressRegion: pos.address.province || undefined,
+          postalCode: pos.address.postalCode || undefined,
+          addressCountry: pos.address.country || 'IT'
+        },
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: pos.coordinates.lat,
+          longitude: pos.coordinates.lng
+        }
+      }
+    }))
+  };
+}

@@ -40,6 +40,7 @@ export default function Footer() {
                 <ul className="space-y-2 sm:space-y-3">
                   <li><a href="/about" className="garamond-font text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.story}</a></li>
                   <li><a href="/sostenibilita" className="garamond-font text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.sustainability}</a></li>
+                  <li><a href="/dove-trovarci" className="garamond-font text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.whereToFind}</a></li>
                   <li><a href="#" className="garamond-font text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.shipping}</a></li>
                   <li><a href="/manage-subscription" className="garamond-font text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.manageSubscription || 'Gestisci Abbonamento'}</a></li>
                   <li><a href="/faq" className="garamond-font text-beige/80 hover:text-beige transition-colors duration-300 hover:underline">{t.footer.info.faq}</a></li>

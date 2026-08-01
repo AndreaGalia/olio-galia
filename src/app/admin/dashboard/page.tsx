@@ -368,6 +368,39 @@ export default function AdminDashboardPage() {
           </button>
 
           <button
+            onClick={() => router.push('/admin/dove-trovarci')}
+            className="p-4 sm:p-5 lg:p-6 border-2 border-olive/20 rounded-xl hover:border-olive hover:bg-olive/5 transition-all duration-300 group cursor-pointer text-left"
+          >
+            <div className="flex items-center mb-3 sm:mb-4">
+              <svg
+                className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-olive group-hover:scale-110 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-base sm:text-lg font-semibold text-olive mb-1 sm:mb-2">
+              Dove Trovarci
+            </h3>
+            <p className="text-nocciola text-xs sm:text-sm">
+              Gestisci i punti vendita sulla mappa
+            </p>
+          </button>
+
+          <button
             onClick={() => router.push('/admin/faqs')}
             className="p-4 sm:p-5 lg:p-6 border-2 border-olive/20 rounded-xl hover:border-olive hover:bg-olive/5 transition-all duration-300 group cursor-pointer text-left"
           >

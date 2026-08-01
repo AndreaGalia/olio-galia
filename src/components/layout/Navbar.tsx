@@ -40,6 +40,7 @@ export default function Navbar() {
     { name: t.navbar.menu.products, href: '/products', translationKey: 'products' },
     { name: t.navbar.menu.about, href: '/about', translationKey: 'about' },
     { name: t.navbar.menu.sustainability, href: '/sostenibilita', translationKey: 'sustainability' },
+    { name: t.navbar.menu.whereToFind, href: '/dove-trovarci', translationKey: 'whereToFind' },
     { name: t.navbar.menu.contact, href: '/contact', translationKey: 'contact' }
   ];
 
@@ -165,6 +166,9 @@ export default function Navbar() {
               </Link>
               <Link href="/sostenibilita" onClick={toggleMenu} className={`block py-3 mobile-menu-link ${isActive('/sostenibilita') ? 'text-olive' : 'text-black'}`}>
                 {t.navbar.menu.sustainability}
+              </Link>
+              <Link href="/dove-trovarci" onClick={toggleMenu} className={`block py-3 mobile-menu-link ${isActive('/dove-trovarci') ? 'text-olive' : 'text-black'}`}>
+                {t.navbar.menu.whereToFind}
               </Link>
               <Link href="/contact" onClick={toggleMenu} className={`block py-3 mobile-menu-link ${isActive('/contact') ? 'text-olive' : 'text-black'}`}>
                 {t.navbar.menu.contact}
