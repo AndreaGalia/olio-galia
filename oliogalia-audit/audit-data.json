@@ -1,0 +1,352 @@
+{
+  "summary": {
+    "health_score": 36,
+    "business_type": "E-commerce + Local Producer (Premium Sicilian Extra Virgin Olive Oil)",
+    "audit_date": "2026-06-28",
+    "domain": "oliogalia.com",
+    "stack": "Next.js 15 App Router / Vercel / MongoDB / Cloudflare R2 / Stripe",
+    "top_findings": [
+      "All 6 product pages return HTTP 500 — site not indexed by Google (site: query returns 0 results)",
+      "Product page.tsx is 'use client' — product content invisible to crawlers",
+      "JSON-LD injected via next/script afterInteractive + Math.random() ID (hydration mismatch)",
+      "www/non-www split with 307 TEMPORARY redirects contradicting canonical tags",
+      "Hero video is 29 MB 4K MP4 with no poster + hero text has opacity-0 on SSR — zero LCP candidate"
+    ],
+    "quick_wins": [
+      "Fix 'Cassaro' → 'Ferla' in layout.tsx:47 (5 min)",
+      "Replace placeholder address in it.json:282 (5 min)",
+      "Fix metadataBase fallback .it → .com in layout.tsx:45 (5 min)",
+      "Add OG image and logo to /public/images/ (10 min)",
+      "Create /public/llms.txt for AI search readiness (30 min)"
+    ]
+  },
+  "categories": [
+    {
+      "name": "Technical SEO",
+      "score": 41,
+      "what_works": ["HTTP/2 enabled", "Mobile-responsive", "HTTPS with HSTS", "Next.js Image component serving WebP"],
+      "findings": [
+        {
+          "title": "Product pages are fully Client-Side Rendered",
+          "severity": "Critical",
+          "description": "src/app/(shop)/products/[slug]/page.tsx opens with 'use client'. All product content fetched via useProductBySlug() hook after JS hydration. Initial HTML = loading spinner only.",
+          "recommendation": "Convert to Server Component. Remove 'use client', use getProduct() already available in layout.tsx. Isolate interactive children as separate Client Components."
+        },
+        {
+          "title": "JSON-LD structured data never in server-rendered HTML",
+          "severity": "Critical",
+          "description": "StructuredData component uses next/script without strategy prop (defaults to afterInteractive). Also uses Math.random() for ID causing React hydration mismatch.",
+          "recommendation": "Use inline <script type='application/ld+json' dangerouslySetInnerHTML> in Server Components. Use stable deterministic IDs."
+        },
+        {
+          "title": "www/non-www 307 temporary redirect contradicting canonicals",
+          "severity": "Critical",
+          "description": "oliogalia.com/products → 307 (temporary) → www.oliogalia.com/products. Canonical on www points back to non-www. 307 does not pass PageRank.",
+          "recommendation": "Add permanent redirect in vercel.json: www.oliogalia.com → oliogalia.com with permanent: true."
+        },
+        {
+          "title": "OG image and logo return 404",
+          "severity": "Critical",
+          "description": "/images/og-image.jpg and /images/logo.png both return 404. Every social share shows blank image. Organization schema invalid.",
+          "recommendation": "Add files to /public/images/ or update paths to R2 CDN URLs in metadata.ts and structured-data.tsx."
+        },
+        {
+          "title": "English content completely uncrawlable — zero hreflang",
+          "severity": "Critical",
+          "description": "Locale stored in localStorage, never in URL. /en → 404. No hreflang tags anywhere. html lang='it' translate='no' globally.",
+          "recommendation": "Implement Next.js App Router [locale] segment routing (/en/products, /it/products). Add hreflang alternates. Submit EN sitemap."
+        },
+        {
+          "title": "HTTP 500 on all 6 product pages",
+          "severity": "Critical",
+          "description": "All product URLs in sitemap return HTTP 500. Next.js injects noindex on 500 pages. Google actively de-indexes them.",
+          "recommendation": "Debug Vercel function logs for /api/products/[slug]. Check MongoDB connection string and environment variables."
+        },
+        {
+          "title": "metadataBase fallback uses wrong TLD (.it instead of .com)",
+          "severity": "High",
+          "description": "layout.tsx:45 and subscribe/layout.tsx:3 both fallback to 'https://oliogalia.it'.",
+          "recommendation": "Change both fallbacks to 'https://oliogalia.com'. Confirm NEXT_PUBLIC_SITE_URL=https://oliogalia.com in Vercel settings."
+        },
+        {
+          "title": "Missing critical security headers",
+          "severity": "High",
+          "description": "Missing: X-Frame-Options, X-Content-Type-Options, Content-Security-Policy, Referrer-Policy, Permissions-Policy. HSTS present but missing includeSubDomains and preload.",
+          "recommendation": "Add headers configuration to next.config.ts for all 5 missing headers."
+        }
+      ]
+    },
+    {
+      "name": "Content Quality",
+      "score": 46,
+      "what_works": ["Strong 1940 family heritage narrative", "Tonda Iblea cultivar specificity", "Milling within 24 hours claim", "Certified organic farming mentioned", "Three-brother team with credentials in data"],
+      "findings": [
+        {
+          "title": "FAQ Q&A content exists in it.json but FaqListSection component doesn't render it",
+          "severity": "Critical",
+          "description": "8 fully-written Q&A pairs in src/data/locales/it.json (production method, DOP claim, certifications, farm visits) are not displayed. Live page shows only heading.",
+          "recommendation": "Debug FaqListSection component — fix data-prop passing or rendering guard that prevents Q&A from displaying."
+        },
+        {
+          "title": "Hero description fields are empty strings",
+          "severity": "Critical",
+          "description": "hero.description.main and hero.description.secondary = '' in both it.json and en.json. Above-the-fold shows only three single-word headings.",
+          "recommendation": "Fill description fields with actual marketing copy describing the brand and product."
+        },
+        {
+          "title": "Contact info placeholders never replaced",
+          "severity": "Critical",
+          "description": "FAQ contact block in it.json contains info@example.it and +39 XXX XXX XXXX — may render as live contact information.",
+          "recommendation": "Replace with actual contact info: info@oliogalia.it and +39 3793475975."
+        },
+        {
+          "title": "Homepage H1 is brand name only — no keyword",
+          "severity": "High",
+          "description": "H1 = 'Olio Galia' with no keyword. Search engine cannot determine primary topic.",
+          "recommendation": "Change to: 'Olio Extravergine di Oliva Biologico Siciliano — Olio Galia'"
+        },
+        {
+          "title": "No blog or informational content — zero top-of-funnel coverage",
+          "severity": "High",
+          "description": "No blog section exists. Zero pages target informational queries (EVO benefits, production process, Tonda Iblea guide, DOP Monti Iblei).",
+          "recommendation": "Create minimum 3 blog posts: EVO benefits, production process, Tonda Iblea/DOP guide."
+        },
+        {
+          "title": "Family photos are code TODOs — not inserted",
+          "severity": "High",
+          "description": "/nonno-paolo-1940.jpg and other family photos referenced as TODOs in source code. Strongest E-E-A-T lever for a family producer is not deployed.",
+          "recommendation": "Insert actual family/production photos throughout the About page."
+        }
+      ]
+    },
+    {
+      "name": "On-Page SEO",
+      "score": 32,
+      "what_works": ["Homepage has meta title", "Privacy policy, T&C, cookie policy present", "VAT number visible"],
+      "findings": [
+        {
+          "title": "Wrong town in root layout description — NAP contradiction",
+          "severity": "Critical",
+          "description": "layout.tsx:47 description: '100% Olio Extravergine da Cassaro, Sicilia'. Cassaro is a different comune ~10km from Ferla. Every other page correctly says Ferla (SR).",
+          "recommendation": "Change to: 'Olio extravergine di oliva Tonda Iblea prodotto a Ferla (SR), Sicilia, dal 1940.'"
+        },
+        {
+          "title": "Footer address is an unreplaced placeholder",
+          "severity": "Critical",
+          "description": "src/data/locales/it.json:282 = 'Via Example 123, Città'. If NEXT_PUBLIC_CONTACT_ADDRESS env var not set, every page footer shows fictional address.",
+          "recommendation": "Replace with: 'Via Umberto I, n.121 — 96010 Ferla (SR), Sicilia'"
+        },
+        {
+          "title": "Transactional pages not noindexed",
+          "severity": "High",
+          "description": "/checkout/success, /checkout/subscription-success, /conferma-ordine, /feedback/[orderId], /manage-subscription are all indexable.",
+          "recommendation": "Create layout.tsx with generateNoIndexMetadata() for each page — pattern already exists in /cart/layout.tsx."
+        }
+      ]
+    },
+    {
+      "name": "Schema / Structured Data",
+      "score": 20,
+      "what_works": ["BreadcrumbList schema structure is valid", "Product and Organization schema generators exist in codebase"],
+      "findings": [
+        {
+          "title": "Product schema injected via JavaScript — never in initial HTML",
+          "severity": "Critical",
+          "description": "next/script afterInteractive strategy means structured data is client-side only. Googlebot first-wave crawl sees zero structured data.",
+          "recommendation": "Use inline <script type='application/ld+json'> in Server Components instead."
+        },
+        {
+          "title": "Math.random() used for schema script ID",
+          "severity": "Critical",
+          "description": "id={`structured-data-${Math.random()}`} causes guaranteed React hydration mismatch on every render.",
+          "recommendation": "Use stable caller-provided IDs (e.g., 'sd-organization', 'sd-product')."
+        },
+        {
+          "title": "Organization schema incomplete",
+          "severity": "High",
+          "description": "address has only addressCountry: 'IT'. sameAs array is empty/commented out. telephone absent.",
+          "recommendation": "Add full PostalAddress, telephone, email, vatID, sameAs with actual social profile URLs."
+        },
+        {
+          "title": "No LocalBusiness schema",
+          "severity": "High",
+          "description": "No LocalBusiness or FoodEstablishment schema anywhere on the site. Complete template provided in findings/local.md.",
+          "recommendation": "Add LocalBusiness / FoodEstablishment JSON-LD to homepage."
+        },
+        {
+          "title": "aggregateRating never passed to Product schema",
+          "severity": "High",
+          "description": "generateProductSchema() accepts rating data but the call site in layout.tsx always passes undefined. No star ratings in SERPs.",
+          "recommendation": "Fetch review aggregate from MongoDB and pass to generateProductSchema() in layout.tsx."
+        },
+        {
+          "title": "6 pages with zero schema",
+          "severity": "Medium",
+          "description": "/products, /about, /contact, /faq, /sostenibilita, /smaltimento-rifiuti have no JSON-LD.",
+          "recommendation": "Add appropriate schema types: FAQPage (faq), ContactPage (contact), AboutPage or Organization (about)."
+        }
+      ]
+    },
+    {
+      "name": "Performance (CWV)",
+      "score": 35,
+      "what_works": ["HTTP/2 enabled", "Next.js Image serving WebP", "Self-hosted fonts with font-display:swap and calibrated fallback metrics", "Below-fold images using loading=lazy"],
+      "findings": [
+        {
+          "title": "29 MB 4K hero video with no poster — estimated LCP 10–30s on mobile",
+          "severity": "Critical",
+          "description": "Hero video served from R2 CDN with no poster attribute. No preconnect for R2 origin. Browser must buffer first video frame before any above-fold LCP candidate exists.",
+          "recommendation": "Add WebP poster image (60–80 KB still from first frame). Add R2 preconnect. Encode 1080p VP9 version (~80% size reduction)."
+        },
+        {
+          "title": "Hero text has opacity-0 on SSR — zero LCP candidate",
+          "severity": "Critical",
+          "description": "HeroSection uses useState(false) + useEffect(() => setIsVisible(true)). SSR HTML ships with opacity-0 on all hero text. Combined with posterless video = zero LCP candidate for seconds.",
+          "recommendation": "Replace JS visibility state with CSS animation (animation-fill-mode: forwards) so text is visible in SSR HTML."
+        },
+        {
+          "title": "Adobe Typekit CSS is render-blocking",
+          "severity": "High",
+          "description": "Synchronous <link> to use.typekit.net with font-display:auto. No preconnect. Adds 200–600ms to FCP on every page.",
+          "recommendation": "Add preconnect for use.typekit.net and p.typekit.net. Long-term: self-host via next/font/local."
+        },
+        {
+          "title": "70 KB loading spinner PNG preloaded at high priority",
+          "severity": "High",
+          "description": "Loading spinner preloaded at fetchpriority='high', displacing genuinely critical LCP resources from the preload queue.",
+          "recommendation": "Remove fetchpriority='high' from spinner image preload."
+        }
+      ]
+    },
+    {
+      "name": "AI Search Readiness",
+      "score": 28,
+      "what_works": ["AI crawlers implicitly allowed via wildcard robots.txt", "1940 founding year is citable", "Tonda Iblea cultivar specificity", "Physical address present"],
+      "findings": [
+        {
+          "title": "No llms.txt file",
+          "severity": "High",
+          "description": "Both /llms.txt and /llms-full.txt return 404. AI systems must infer brand facts from sparse crawl content.",
+          "recommendation": "Create /public/llms.txt. Complete template provided in findings/geo.md."
+        },
+        {
+          "title": "FAQ page invisible to AI crawlers",
+          "severity": "High",
+          "description": "All Q&A content loads via client-side JavaScript. AI crawlers (static HTML parsers) see zero FAQ content from the site's highest-value citable asset.",
+          "recommendation": "Fix FaqListSection rendering bug (server-side render the Q&A pairs). Add FAQPage JSON-LD schema."
+        },
+        {
+          "title": "No Wikipedia entity, YouTube channel, or Reddit mentions",
+          "severity": "High",
+          "description": "Three highest-correlation AI citation signals are absent. AI systems have no canonical entity reference for the brand.",
+          "recommendation": "Build off-site authority anchors in parallel with on-site fixes. Target Wikipedia citation once 3 notable press citations exist."
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "score": 30,
+      "what_works": ["Next.js Image component configured", "WebP serving via /_next/image"],
+      "findings": [
+        {
+          "title": "OG image returns 404",
+          "severity": "Critical",
+          "description": "/images/og-image.jpg → 404. Every social share on all platforms shows blank image.",
+          "recommendation": "Add 1200×630px OG image to /public/images/ or update path to R2 CDN URL."
+        },
+        {
+          "title": "Product images inaccessible (500 errors on product pages)",
+          "severity": "Critical",
+          "description": "Cannot audit product image alt text or quality — all product pages return HTTP 500.",
+          "recommendation": "Fix product page 500 errors first, then audit image alt text and file sizes."
+        }
+      ]
+    }
+  ],
+  "action_plan": {
+    "phases": [
+      {
+        "name": "Phase 1: Emergency Fixes",
+        "timeframe": "Week 1",
+        "items": [
+          "Debug and fix HTTP 500 on all product pages (Vercel logs, MongoDB connection)",
+          "Convert product page.tsx from CSR to SSR",
+          "Fix hero text opacity-0 SSR bug (useState → CSS animation)",
+          "Fix www → non-www permanent redirect in vercel.json",
+          "Add OG image and logo to /public/images/",
+          "Fix metadataBase fallback .it → .com in layout.tsx:45 and subscribe/layout.tsx:3",
+          "Fix wrong town 'Cassaro' → 'Ferla' in layout.tsx:47",
+          "Replace footer address placeholder in it.json:282",
+          "Replace contact info placeholders (info@example.it, +39 XXX) in it.json",
+          "Fix FAQ rendering bug in FaqListSection component",
+          "Fill hero.description.main and hero.description.secondary in it.json and en.json",
+          "Submit to Google Search Console and request indexation"
+        ]
+      },
+      {
+        "name": "Phase 2: High-Impact Improvements",
+        "timeframe": "Weeks 2–3",
+        "items": [
+          "Move JSON-LD to SSR <script> tags, fix Math.random() IDs",
+          "Add security headers in next.config.ts",
+          "Add video poster + R2 preconnect for LCP",
+          "Add Typekit preconnect or self-host fonts",
+          "Populate Organization schema (address, telephone, email, vatID, sameAs)",
+          "Add LocalBusiness / FoodEstablishment schema to homepage",
+          "Wire aggregateRating data to Product schema call site",
+          "Noindex transactional pages (checkout/success, conferma-ordine, feedback, manage-subscription)",
+          "Create /public/llms.txt",
+          "Fix sitemap (add /faq and /sostenibilita, remove 500-error products, fix canonical domain)",
+          "Update homepage H1 to include keywords",
+          "Remove translate='no' from root layout",
+          "Replace social <button> elements with <a> tags, populate sameAs array",
+          "Create Google Business Profile for Ferla (SR)"
+        ]
+      },
+      {
+        "name": "Phase 3: Content & International Authority",
+        "timeframe": "Month 2",
+        "items": [
+          "Implement Next.js App Router i18n routing with /en/ and /it/ URL prefixes",
+          "Add hreflang alternates to all pages",
+          "Submit EN sitemap",
+          "Convert About page from client to server component with proper metadata",
+          "Insert family photos (currently code TODOs)",
+          "Add polyphenol data, acidity %, harvest year to product pages",
+          "State certification body name and certificate number explicitly",
+          "Publish blog post 1: Benefits of Sicilian extra virgin olive oil",
+          "Publish blog post 2: How Olio Galia is produced",
+          "Create EN gift landing page for international buyers",
+          "Add Google Shopping required schema fields",
+          "Submit to Gambero Rosso, FLOS OLEI, Slow Food Presidia, Olive Oil Times"
+        ]
+      },
+      {
+        "name": "Phase 4: Monitoring & Iteration",
+        "timeframe": "Ongoing",
+        "items": [
+          "Weekly: Monitor GSC Coverage report for crawl errors",
+          "Implement IndexNow for Bing/Yandex",
+          "Monitor Core Web Vitals in GSC after video and font fixes",
+          "Request Google reviews from existing customers",
+          "Monthly: Run /seo drift baseline to track SEO changes",
+          "Rebuild full audit at 90 days — target: 65/100"
+        ]
+      }
+    ]
+  },
+  "scores": {
+    "technical": 41,
+    "content": 46,
+    "onpage": 32,
+    "schema": 20,
+    "performance": 35,
+    "ai_readiness": 28,
+    "images": 30,
+    "overall": 36
+  },
+  "artifacts": {
+    "findings_dir": "findings/",
+    "screenshots_dir": "screenshots/"
+  }
+}
